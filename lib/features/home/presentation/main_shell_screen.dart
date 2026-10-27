@@ -46,25 +46,37 @@ class _MainShellScreenState extends State<MainShellScreen> {
           elevation: 0,
           indicatorColor: AppColors.primaryLight,
           onDestinationSelected: (idx) => setState(() => _currentIndex = idx),
-          destinations: const [
+          destinations: [
             NavigationDestination(
-              icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home_rounded, color: AppColors.primary),
+              icon: Opacity(
+                opacity: 0.65,
+                child: Image.asset('assets/icons/ic_nav_home.png', width: 24, height: 24),
+              ),
+              selectedIcon: Image.asset('assets/icons/ic_nav_home.png', width: 26, height: 26),
               label: 'Home',
             ),
             NavigationDestination(
-              icon: Icon(Icons.video_library_outlined),
-              selectedIcon: Icon(Icons.video_library_rounded, color: AppColors.primary),
+              icon: Opacity(
+                opacity: 0.65,
+                child: Image.asset('assets/icons/ic_nav_library.png', width: 24, height: 24),
+              ),
+              selectedIcon: Image.asset('assets/icons/ic_nav_library.png', width: 26, height: 26),
               label: 'Library',
             ),
             NavigationDestination(
-              icon: Icon(Icons.quiz_outlined),
-              selectedIcon: Icon(Icons.quiz_rounded, color: AppColors.primary),
+              icon: Opacity(
+                opacity: 0.65,
+                child: Image.asset('assets/icons/ic_nav_mock_test.png', width: 24, height: 24),
+              ),
+              selectedIcon: Image.asset('assets/icons/ic_nav_mock_test.png', width: 26, height: 26),
               label: 'Mock Test',
             ),
             NavigationDestination(
-              icon: Icon(Icons.person_outline_rounded),
-              selectedIcon: Icon(Icons.person_rounded, color: AppColors.primary),
+              icon: Opacity(
+                opacity: 0.65,
+                child: Image.asset('assets/icons/ic_nav_profile.png', width: 24, height: 24),
+              ),
+              selectedIcon: Image.asset('assets/icons/ic_nav_profile.png', width: 26, height: 26),
               label: 'Profile',
             ),
           ],

@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     subtitle: 'Class 12',
                     semester: 3,
                     isUserSemester: currentSem == 3,
-                    icon: Icons.menu_book_rounded,
+                    iconAsset: 'assets/icons/ic_sem3.png',
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     subtitle: 'Class 12',
                     semester: 4,
                     isUserSemester: currentSem == 4,
-                    icon: Icons.school_rounded,
+                    iconAsset: 'assets/icons/ic_sem4.png',
                   ),
                 ),
               ],
@@ -168,9 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildActionTile(
               title: 'Previous Year Questions',
               subtitle: 'গত বছরের প্রশ্নপত্র ও সমাধান',
-              icon: Icons.assignment_outlined,
-              iconColor: AppColors.primary,
-              iconBgColor: AppColors.primaryLight,
+              iconAsset: 'assets/icons/ic_pyq.png',
               onTap: () {
                 Navigator.push(
                   context,
@@ -184,9 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildActionTile(
               title: 'Book Notes (বইয়ের নোটস)',
               subtitle: 'গুরুত্বপূর্ণ অধ্যায়ভিত্তিক হ্যান্ডনোটস',
-              icon: Icons.auto_stories_outlined,
-              iconColor: AppColors.primaryDark,
-              iconBgColor: AppColors.primaryLight,
+              iconAsset: 'assets/icons/ic_book_notes.png',
               onTap: () {
                 Navigator.push(
                   context,
@@ -300,11 +296,15 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 width: 48,
                 height: 48,
+                padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: const Icon(Icons.alarm_rounded, color: AppColors.primary, size: 26),
+                child: Image.asset(
+                  'assets/icons/ic_reminder.png',
+                  fit: BoxFit.contain,
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -336,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
     required String subtitle,
     required int semester,
     required bool isUserSemester,
-    required IconData icon,
+    required String iconAsset,
   }) {
     return Card(
       color: isUserSemester ? AppColors.primaryLight.withOpacity(0.4) : AppColors.surface,
@@ -364,13 +364,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 44,
+                    height: 44,
+                    padding: const EdgeInsets.all(2),
                     decoration: BoxDecoration(
                       color: AppColors.primaryLight,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(icon, color: AppColors.primary, size: 22),
+                    child: Image.asset(iconAsset, fit: BoxFit.contain),
                   ),
                   const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: AppColors.textMuted),
                 ],
@@ -395,9 +396,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildActionTile({
     required String title,
     required String subtitle,
-    required IconData icon,
-    required Color iconColor,
-    required Color iconBgColor,
+    required String iconAsset,
     required VoidCallback onTap,
   }) {
     return Card(
@@ -415,11 +414,12 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 width: 48,
                 height: 48,
+                padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: iconBgColor,
+                  color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: Icon(icon, color: iconColor, size: 26),
+                child: Image.asset(iconAsset, fit: BoxFit.contain),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -477,10 +477,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildSocialButton(Icons.play_circle_fill_rounded, 'YouTube', AppColors.wrongRed, ApiConstants.youtubeChannelUrl),
-              _buildSocialButton(Icons.facebook_rounded, 'Facebook', const Color(0xFF1877F2), ApiConstants.facebookPageUrl),
-              _buildSocialButton(Icons.camera_alt_rounded, 'Instagram', const Color(0xFFE4405F), ApiConstants.instagramUrl),
-              _buildSocialButton(Icons.telegram_rounded, 'Telegram', const Color(0xFF0088CC), ApiConstants.telegramChannelUrl),
+              _buildSocialButton('assets/icons/ic_youtube.png', 'YouTube', ApiConstants.youtubeChannelUrl),
+              _buildSocialButton('assets/icons/ic_facebook.png', 'Facebook', ApiConstants.facebookPageUrl),
+              _buildSocialButton('assets/icons/ic_telegram.png', 'Telegram', ApiConstants.telegramChannelUrl),
+              _buildSocialButton('assets/icons/ic_whatsapp.png', 'WhatsApp', ApiConstants.whatsappUrl),
             ],
           ),
         ],
@@ -488,17 +488,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSocialButton(IconData icon, String label, Color color, String url) {
+  Widget _buildSocialButton(String iconAsset, String label, String url) {
     return Column(
       children: [
         Container(
-          width: 48,
-          height: 48,
+          width: 50,
+          height: 50,
+          padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: AppColors.surfaceMuted,
             shape: BoxShape.circle,
+            border: Border.all(color: AppColors.border),
           ),
-          child: Icon(icon, color: color, size: 26),
+          child: Image.asset(iconAsset, fit: BoxFit.contain),
         ),
         const SizedBox(height: 6),
         Text(

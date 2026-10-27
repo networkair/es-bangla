@@ -24,6 +24,7 @@ class ApiConstants {
 
   // Social & Support links
   static const String defaultWhatsappNumber = '+919876543210';
+  static const String whatsappUrl = 'https://wa.me/919876543210';
   static const String youtubeChannelUrl = 'https://youtube.com/@EsBangla';
   static const String facebookPageUrl = 'https://facebook.com/EsBangla';
   static const String instagramUrl = 'https://instagram.com/EsBangla';
