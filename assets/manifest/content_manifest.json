@@ -16,6 +16,11 @@
               "topic_id": "topic_adorini",
               "title": "আদরিণী - সারসংক্ষেপ ও গুরুত্বপূর্ণ প্রশ্ন",
               "file_path": "assets/notes/sem3/bengali_adorini.dat"
+            },
+            {
+              "topic_id": "topic_bharatbarsho",
+              "title": "ভারতবর্ষ - মূলভাব ও গুরুত্বপূর্ণ প্রশ্নোত্তর",
+              "file_path": "assets/notes/sem3/bengali_bharatbarsho.dat"
             }
           ]
         },
@@ -25,9 +30,19 @@
           "subject_name_en": "English",
           "topics": [
             {
-              "topic_id": "topic_eng_prose",
+              "topic_id": "topic_eyes_have_it",
               "title": "The Eyes Have It - Comprehensive Study Note",
               "file_path": "assets/notes/sem3/english_eyes_have_it.dat"
+            },
+            {
+              "topic_id": "topic_strong_roots",
+              "title": "Strong Roots - In-depth Character & QA",
+              "file_path": "assets/notes/sem3/english_strong_roots.dat"
+            },
+            {
+              "topic_id": "topic_thank_you_maam",
+              "title": "Thank You Ma'am - Key Questions & Summary",
+              "file_path": "assets/notes/sem3/english_thank_you.dat"
             }
           ]
         },
@@ -40,6 +55,28 @@
               "topic_id": "topic_hist_1",
               "title": "ঔপনিবেশিক আধিপত্যের প্রকৃতি",
               "file_path": "assets/notes/sem3/history_chap1.dat"
+            },
+            {
+              "topic_id": "topic_hist_2",
+              "title": "উপনিবেশিক সমাজ ও সংস্কৃতির প্রতিক্রিয়া",
+              "file_path": "assets/notes/sem3/history_chap2.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "geography",
+          "subject_name": "ভূগোল",
+          "subject_name_en": "Geography",
+          "topics": [
+            {
+              "topic_id": "topic_geo_1",
+              "title": "ভূমিরূপ গঠনকারী প্রক্রিয়া ও সংশ্লিষ্ট ভূমিরূপ",
+              "file_path": "assets/notes/sem3/geography_chap1.dat"
+            },
+            {
+              "topic_id": "topic_geo_2",
+              "title": "ভৌমজলের কাজ ও কাৰ্স্ট ভূমিরূপ",
+              "file_path": "assets/notes/sem3/geography_chap2.dat"
             }
           ]
         },
@@ -50,8 +87,98 @@
           "topics": [
             {
               "topic_id": "topic_pol_1",
-              "title": "আন্তর্জাতিক সম্পর্ক ও বিশ্বরাজনীতি",
+              "title": "আন্তর্জাতিক সম্পর্ক ও বিশ্বরাজনীতির রূপরেখা",
               "file_path": "assets/notes/sem3/polscience_chap1.dat"
+            },
+            {
+              "topic_id": "topic_pol_2",
+              "title": "আন্তর্জাতিক সম্পর্কের কয়েকটি মূল ধারণা",
+              "file_path": "assets/notes/sem3/polscience_chap2.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "education",
+          "subject_name": "শিক্ষাবিজ্ঞান",
+          "subject_name_en": "Education",
+          "topics": [
+            {
+              "topic_id": "topic_edu_1",
+              "title": "শিখন প্রক্রিয়া ও পরিণমন",
+              "file_path": "assets/notes/sem3/education_chap1.dat"
+            },
+            {
+              "topic_id": "topic_edu_2",
+              "title": "শিখনের কৌশল ও প্রাচীন অনুবর্তন",
+              "file_path": "assets/notes/sem3/education_chap2.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "sanskrit",
+          "subject_name": "সংস্কৃত",
+          "subject_name_en": "Sanskrit",
+          "topics": [
+            {
+              "topic_id": "topic_san_1",
+              "title": "বনগতা গুহা - সম্পূর্ণ বিষয়সংক্ষেপ ও বঙ্গানুবাদ",
+              "file_path": "assets/notes/sem3/sanskrit_chap1.dat"
+            },
+            {
+              "topic_id": "topic_san_2",
+              "title": "শ্রীমদ্ভগবদ্গীতা - কর্মযোগ অধ্যায়ভিত্তিক প্রশ্ন",
+              "file_path": "assets/notes/sem3/sanskrit_chap2.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "philosophy",
+          "subject_name": "দর্শন",
+          "subject_name_en": "Philosophy",
+          "topics": [
+            {
+              "topic_id": "topic_phi_1",
+              "title": "যুক্তি ও অবরোহ অনুমানের স্বরূপ",
+              "file_path": "assets/notes/sem3/philosophy_chap1.dat"
+            },
+            {
+              "topic_id": "topic_phi_2",
+              "title": "বচনের শ্রেণিবিভাগ ও পদের ব্যাপ্যতা",
+              "file_path": "assets/notes/sem3/philosophy_chap2.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "sociology",
+          "subject_name": "সমাজতত্ত্ব",
+          "subject_name_en": "Sociology",
+          "topics": [
+            {
+              "topic_id": "topic_soc_1",
+              "title": "ভারতীয় সমাজ কাঠামোর বৈশিষ্ট্য",
+              "file_path": "assets/notes/sem3/sociology_chap1.dat"
+            },
+            {
+              "topic_id": "topic_soc_2",
+              "title": "সামাজিক প্রতিষ্ঠান ও পরিবার ব্যবস্থা",
+              "file_path": "assets/notes/sem3/sociology_chap2.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "evs",
+          "subject_name": "পরিবেশবিদ্যা",
+          "subject_name_en": "EVS",
+          "topics": [
+            {
+              "topic_id": "topic_evs_1",
+              "title": "পরিবেশ ব্যবস্থাপনা ও স্থিতিশীল উন্নয়ন",
+              "file_path": "assets/notes/sem3/evs_chap1.dat"
+            },
+            {
+              "topic_id": "topic_evs_2",
+              "title": "পরিবেশ দূষণ ও জীববৈচিত্র্য সংরক্ষণ",
+              "file_path": "assets/notes/sem3/evs_chap2.dat"
             }
           ]
         }
@@ -94,9 +221,127 @@
           "subject_name_en": "Bengali",
           "topics": [
             {
-              "topic_id": "topic_sem4_bengali_1",
-              "title": "সেমিস্টার ৪ বাংলা সাহিত্য ও নাটক নোটস",
-              "file_path": "assets/notes/sem4/bengali_notes.dat"
+              "topic_id": "topic_sem4_ben_1",
+              "title": "নানা রঙের দিন - নাটক বিশদ আলোচনা ও প্রশ্নোত্তর",
+              "file_path": "assets/notes/sem4/bengali_nana_ranger_din.dat"
+            },
+            {
+              "topic_id": "topic_sem4_ben_2",
+              "title": "বিভাব - নাট্যরূপ ও চরিত্র বিশ্লেষণ",
+              "file_path": "assets/notes/sem4/bengali_bibhab.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "english",
+          "subject_name": "English",
+          "subject_name_en": "English",
+          "topics": [
+            {
+              "topic_id": "topic_sem4_eng_1",
+              "title": "Asleep in the Valley - Comprehensive Analysis",
+              "file_path": "assets/notes/sem4/english_asleep_valley.dat"
+            },
+            {
+              "topic_id": "topic_sem4_eng_2",
+              "title": "Shall I Compare Thee - Sonnet 18 Study Guide",
+              "file_path": "assets/notes/sem4/english_sonnet_18.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "history",
+          "subject_name": "ইতিহাস",
+          "subject_name_en": "History",
+          "topics": [
+            {
+              "topic_id": "topic_sem4_hist_1",
+              "title": "দ্বিতীয় বিশ্বযুদ্ধ ও ঔপনিবেশিক ভারতের রাজনীতি",
+              "file_path": "assets/notes/sem4/history_sem4_chap1.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "geography",
+          "subject_name": "ভূগোল",
+          "subject_name_en": "Geography",
+          "topics": [
+            {
+              "topic_id": "topic_sem4_geo_1",
+              "title": "আঞ্চলিক অর্থনৈতিক উন্নয়ন ও পরিকল্পনা",
+              "file_path": "assets/notes/sem4/geography_sem4_chap1.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "polscience",
+          "subject_name": "রাষ্ট্রবিজ্ঞান",
+          "subject_name_en": "Political Science",
+          "topics": [
+            {
+              "topic_id": "topic_sem4_pol_1",
+              "title": "ভারতীয় সংবিধান ও শাসনব্যবস্থা",
+              "file_path": "assets/notes/sem4/polscience_sem4_chap1.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "education",
+          "subject_name": "শিক্ষাবিজ্ঞান",
+          "subject_name_en": "Education",
+          "topics": [
+            {
+              "topic_id": "topic_sem4_edu_1",
+              "title": "স্বাধীন ভারতে শিক্ষা কমিশন ও আধুনিক শিক্ষানীতি",
+              "file_path": "assets/notes/sem4/education_sem4_chap1.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "sanskrit",
+          "subject_name": "সংস্কৃত",
+          "subject_name_en": "Sanskrit",
+          "topics": [
+            {
+              "topic_id": "topic_sem4_san_1",
+              "title": "শ্রীগঙ্গাস্তোত্রম্ - শ্লোকভিত্তিক অর্থ ও প্রশ্নোত্তর",
+              "file_path": "assets/notes/sem4/sanskrit_sem4_chap1.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "philosophy",
+          "subject_name": "দর্শন",
+          "subject_name_en": "Philosophy",
+          "topics": [
+            {
+              "topic_id": "topic_sem4_phi_1",
+              "title": "আরোহ অনুমান ও মিলের পরীক্ষণমূলক পদ্ধতি",
+              "file_path": "assets/notes/sem4/philosophy_sem4_chap1.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "sociology",
+          "subject_name": "সমাজতত্ত্ব",
+          "subject_name_en": "Sociology",
+          "topics": [
+            {
+              "topic_id": "topic_sem4_soc_1",
+              "title": "সামাজিক পরিবর্তন ও ভারতের সামাজিক আন্দোলন",
+              "file_path": "assets/notes/sem4/sociology_sem4_chap1.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "evs",
+          "subject_name": "পরিবেশবিদ্যা",
+          "subject_name_en": "EVS",
+          "topics": [
+            {
+              "topic_id": "topic_sem4_evs_1",
+              "title": "পরিবেশ আইন ও আন্তর্জাতিক পরিবেশ সম্মেলন",
+              "file_path": "assets/notes/sem4/evs_sem4_chap1.dat"
             }
           ]
         }

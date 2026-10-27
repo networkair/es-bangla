@@ -19,12 +19,14 @@ class NoteSubject {
   final String subjectId;
   final String subjectName;
   final String subjectNameEn;
+  final String? iconAsset;
   final List<NoteTopic> topics;
 
   NoteSubject({
     required this.subjectId,
     required this.subjectName,
     required this.subjectNameEn,
+    this.iconAsset,
     required this.topics,
   });
 
@@ -36,6 +38,7 @@ class NoteSubject {
       subjectId: json['subject_id'] ?? '',
       subjectName: json['subject_name'] ?? '',
       subjectNameEn: json['subject_name_en'] ?? '',
+      iconAsset: json['icon_asset'],
       topics: list,
     );
   }
