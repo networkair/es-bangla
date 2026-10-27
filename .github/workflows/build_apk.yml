@@ -45,9 +45,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.3
-          name: "Es Bangla v1.0.3 (Release)"
-          body: "Release APK for Es Bangla with tall portrait subject cards, prominent 3D icons, and isolated Book Notes screen."
+          tag_name: v1.0.4
+          name: "Es Bangla v1.0.4 (Release)"
+          body: "Release APK for Es Bangla with real-time Firestore news slider, updated study reminders (English UI, quiet local notifications, inline history), enlarged semester icons, and refined home cards."
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
