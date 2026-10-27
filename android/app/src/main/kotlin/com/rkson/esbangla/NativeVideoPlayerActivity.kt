@@ -1,62 +1,61 @@
 package com.rkson.esbangla
 
+import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 class NativeVideoPlayerActivity : AppCompatActivity() {
 
     private val TAG = "NativeVideoPlayer"
-    private lateinit var youtubePlayerView: YouTubePlayerView
+    private lateinit var videoWebView: WebView
+    private lateinit var playerLoading: ProgressBar
     private lateinit var normalLayout: LinearLayout
     private lateinit var fullscreenContainer: FrameLayout
     private lateinit var headerLayout: LinearLayout
     private lateinit var contentScrollView: ScrollView
     private lateinit var tvPlayerStatus: TextView
 
-    private val timeoutHandler = Handler(Looper.getMainLooper())
-    private var timeoutRunnable: Runnable? = null
+    private var customView: View? = null
+    private var customViewCallback: WebChromeClient.CustomViewCallback? = null
 
-    private var currentFullscreenView: View? = null
-    private var currentExitFullscreen: (() -> Unit)? = null
-
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Note: FLAG_SECURE is omitted so Chromium WebView hardware video acceleration can render YouTube frames cleanly without blackouts
         setContentView(R.layout.activity_native_video_player)
 
         val title = intent.getStringExtra("title") ?: "Es Bangla Video Lecture"
         val rawVideoId = intent.getStringExtra("videoId") ?: ""
         val cleanVideoId = extractCleanId(rawVideoId)
 
-        Log.d(TAG, "Starting Native Video Player for videoId: $cleanVideoId (title: $title)")
+        Log.d(TAG, "Starting Direct Native Video Player for videoId: $cleanVideoId (title: $title)")
 
         // Bind layout views
         normalLayout = findViewById(R.id.normalLayout)
         fullscreenContainer = findViewById(R.id.fullscreenContainer)
         headerLayout = findViewById(R.id.headerLayout)
         contentScrollView = findViewById(R.id.contentScrollView)
-        youtubePlayerView = findViewById(R.id.youtubePlayerView)
+        videoWebView = findViewById(R.id.videoWebView)
+        playerLoading = findViewById(R.id.playerLoading)
 
         val tvHeaderTitle: TextView = findViewById(R.id.tvHeaderTitle)
         val tvVideoTitle: TextView = findViewById(R.id.tvVideoTitle)
@@ -66,36 +65,55 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
         tvHeaderTitle.text = title
         tvVideoTitle.text = title
 
-        if (cleanVideoId.isEmpty()) {
-            tvPlayerStatus.text = "⚠️ কোনো ভিডিও লিঙ্ক যুক্ত করা হয়নি"
-            tvPlayerStatus.setTextColor(Color.parseColor("#F87171"))
-        } else {
-            tvPlayerStatus.text = "⏳ ভিডিও প্রস্তুত হচ্ছে... (ID: $cleanVideoId)"
-            tvPlayerStatus.setTextColor(Color.parseColor("#93C5FD"))
-        }
-
         btnBack.setOnClickListener {
             finish()
         }
 
-        // Explicitly disable automatic initialization so manual initialize with options takes effect
-        youtubePlayerView.enableAutomaticInitialization = false
+        if (cleanVideoId.isEmpty()) {
+            playerLoading.visibility = View.GONE
+            tvPlayerStatus.text = "⚠️ কোনো ভিডিও লিঙ্ক যুক্ত করা হয়নি"
+            tvPlayerStatus.setTextColor(Color.parseColor("#F87171"))
+            return
+        }
 
-        // Register lifecycle observer
-        lifecycle.addObserver(youtubePlayerView)
+        tvPlayerStatus.text = "⏳ ভিডিও লোড হচ্ছে..."
+        tvPlayerStatus.setTextColor(Color.parseColor("#93C5FD"))
 
-        // Configure Fullscreen listener
-        youtubePlayerView.addFullscreenListener(object : FullscreenListener {
-            override fun onEnterFullscreen(fullscreenView: View, exitFullscreen: () -> Unit) {
-                Log.d(TAG, "onEnterFullscreen")
-                currentFullscreenView = fullscreenView
-                currentExitFullscreen = exitFullscreen
+        setupWebView(cleanVideoId)
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun setupWebView(videoId: String) {
+        // Hardware acceleration for ultra-smooth video playback
+        videoWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        videoWebView.setBackgroundColor(Color.BLACK)
+
+        val settings = videoWebView.settings
+        settings.javaScriptEnabled = true
+        settings.domStorageEnabled = true
+        settings.databaseEnabled = true
+        settings.mediaPlaybackRequiresUserGesture = false
+        settings.cacheMode = WebSettings.LOAD_DEFAULT
+        settings.allowFileAccess = true
+        settings.allowContentAccess = true
+        settings.loadWithOverviewMode = true
+        settings.useWideViewPort = true
+        settings.userAgentString = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+
+        videoWebView.webChromeClient = object : WebChromeClient() {
+            override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+                if (customView != null) {
+                    callback?.onCustomViewHidden()
+                    return
+                }
+                customView = view
+                customViewCallback = callback
 
                 normalLayout.visibility = View.GONE
                 fullscreenContainer.visibility = View.VISIBLE
                 fullscreenContainer.removeAllViews()
                 fullscreenContainer.addView(
-                    fullscreenView,
+                    view,
                     ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
@@ -106,99 +124,113 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                 hideSystemUI()
             }
 
-            override fun onExitFullscreen() {
-                Log.d(TAG, "onExitFullscreen")
+            override fun onHideCustomView() {
+                if (customView == null) return
+
                 fullscreenContainer.removeAllViews()
                 fullscreenContainer.visibility = View.GONE
                 normalLayout.visibility = View.VISIBLE
 
-                currentFullscreenView = null
-                currentExitFullscreen = null
+                customView = null
+                customViewCallback?.onCustomViewHidden()
+                customViewCallback = null
 
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 showSystemUI()
             }
-        })
 
-        // Build explicit IFrame player options
-        val iFrameOptions = IFramePlayerOptions.Builder()
-            .controls(1)
-            .fullscreen(1)
-            .build()
-
-        var isPlayerReady = false
-        timeoutRunnable = Runnable {
-            if (!isPlayerReady && !isFinishing) {
-                tvPlayerStatus.text = "⚠️ প্লেয়ার লোড হতে অতিরিক্ত সময় নিচ্ছে। ইন্টারনেট সংযোগ পরীক্ষা করে পুনরায় চেষ্টা করুন।"
-                tvPlayerStatus.setTextColor(Color.parseColor("#FBBF24"))
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                if (newProgress > 70) {
+                    playerLoading.visibility = View.GONE
+                }
             }
         }
-        timeoutRunnable?.let { timeoutHandler.postDelayed(it, 8000) }
 
-        // Initialize YouTube player manually with listener & custom IFrame options
-        youtubePlayerView.initialize(object : AbstractYouTubePlayerListener() {
-            override fun onReady(player: YouTubePlayer) {
-                isPlayerReady = true
-                timeoutRunnable?.let { timeoutHandler.removeCallbacks(it) }
-                Log.d(TAG, "Native YouTube player onReady! Loading video: $cleanVideoId")
-                if (cleanVideoId.isNotEmpty()) {
-                    // Load video directly like Safollo app so stream starts immediately
-                    player.loadVideo(cleanVideoId, 0f)
-                    tvPlayerStatus.text = "🟢 ভিডিও প্রস্তুত ও লোড হচ্ছে..."
-                    tvPlayerStatus.setTextColor(Color.parseColor("#4ADE80"))
-                } else {
-                    tvPlayerStatus.text = "⚠️ কোনো ভিডিও লিঙ্ক যুক্ত করা হয়নি"
+        videoWebView.webViewClient = object : WebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+                playerLoading.visibility = View.VISIBLE
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                playerLoading.visibility = View.GONE
+                tvPlayerStatus.text = "🟢 ভিডিও প্রস্তুত ও লোড হয়েছে"
+                tvPlayerStatus.setTextColor(Color.parseColor("#4ADE80"))
+            }
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                super.onReceivedError(view, request, error)
+                if (request?.isForMainFrame == true) {
+                    playerLoading.visibility = View.GONE
+                    tvPlayerStatus.text = "⚠️ ভিডিও লোড হতে ব্যর্থ হয়েছে। ইন্টারনেট সংযোগ পরীক্ষা করুন।"
                     tvPlayerStatus.setTextColor(Color.parseColor("#F87171"))
                 }
             }
+        }
 
-            override fun onError(player: YouTubePlayer, error: PlayerConstants.PlayerError) {
-                Log.e(TAG, "Native YouTube player error: $error")
-                when (error) {
-                    PlayerConstants.PlayerError.VIDEO_NOT_PLAYABLE_IN_EMBEDDED_PLAYER -> {
-                        tvPlayerStatus.text = "⚠️ এই ভিডিওটিতে চ্যানেল মালিক Embedding বন্ধ রেখেছেন (Error 150)। নিজের চ্যানেলের ভিডিওতে 'Allow embedding' চালু রাখলে সমস্যাটি আর হবে না।"
+        // Standard, high-performance HTML5 YouTube embed wrapper
+        val htmlData = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    html, body {
+                        width: 100%;
+                        height: 100%;
+                        background-color: #000000;
+                        overflow: hidden;
                     }
-                    PlayerConstants.PlayerError.VIDEO_NOT_FOUND -> {
-                        tvPlayerStatus.text = "⚠️ ভিডিওটি ইউটিউবে খুঁজে পাওয়া যায়নি (Invalid ID)"
+                    .video-wrapper {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
                     }
-                    else -> {
-                        tvPlayerStatus.text = "⚠️ ভিডিও লোড সমস্যা: $error"
+                    iframe {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        border: 0;
                     }
-                }
-                tvPlayerStatus.setTextColor(Color.parseColor("#F87171"))
-            }
+                </style>
+            </head>
+            <body>
+                <div class="video-wrapper">
+                    <iframe
+                        src="https://www.youtube-nocookie.com/embed/$videoId?autoplay=1&playsinline=1&enablejsapi=1&rel=0&modestbranding=1&fs=1"
+                        title="YouTube Video Player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </body>
+            </html>
+        """.trimIndent()
 
-            override fun onStateChange(player: YouTubePlayer, state: PlayerConstants.PlayerState) {
-                Log.d(TAG, "Native YouTube player state: $state")
-                when (state) {
-                    PlayerConstants.PlayerState.PLAYING -> {
-                        tvPlayerStatus.text = "🟢 ভিডিও চলছে"
-                        tvPlayerStatus.setTextColor(Color.parseColor("#4ADE80"))
-                    }
-                    PlayerConstants.PlayerState.PAUSED -> {
-                        tvPlayerStatus.text = "⏸️ ভিডিও সাময়িকভাবে বন্ধ আছে"
-                        tvPlayerStatus.setTextColor(Color.parseColor("#FCD34D"))
-                    }
-                    PlayerConstants.PlayerState.BUFFERING -> {
-                        tvPlayerStatus.text = "⏳ বাফারিং হচ্ছে..."
-                        tvPlayerStatus.setTextColor(Color.parseColor("#93C5FD"))
-                    }
-                    PlayerConstants.PlayerState.VIDEO_CUED -> {
-                        tvPlayerStatus.text = "▶️ ভিডিও প্রস্তুত! প্লে করতে ভিডিওতে ট্যাপ করুন"
-                        tvPlayerStatus.setTextColor(Color.parseColor("#4ADE80"))
-                    }
-                    PlayerConstants.PlayerState.ENDED -> {
-                        tvPlayerStatus.text = "✅ ভিডিও সমাপ্ত হয়েছে"
-                        tvPlayerStatus.setTextColor(Color.parseColor("#94A3B8"))
-                    }
-                    else -> {}
-                }
-            }
-        }, true, iFrameOptions)
+        videoWebView.loadDataWithBaseURL("https://www.youtube-nocookie.com", htmlData, "text/html", "UTF-8", null)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        videoWebView.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        videoWebView.onResume()
     }
 
     override fun onDestroy() {
-        timeoutRunnable?.let { timeoutHandler.removeCallbacks(it) }
+        if (customView != null) {
+            customViewCallback?.onCustomViewHidden()
+        }
+        videoWebView.stopLoading()
+        videoWebView.loadUrl("about:blank")
+        videoWebView.destroy()
         super.onDestroy()
     }
 
@@ -232,9 +264,18 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
 
     @Suppress("DEPRECATION")
     override fun onBackPressed() {
-        if (currentExitFullscreen != null) {
-            currentExitFullscreen?.invoke()
-            currentExitFullscreen = null
+        if (customView != null) {
+            // Exit fullscreen if currently in fullscreen view
+            if (customViewCallback != null) {
+                videoWebView.webChromeClient?.onHideCustomView()
+            } else {
+                fullscreenContainer.removeAllViews()
+                fullscreenContainer.visibility = View.GONE
+                normalLayout.visibility = View.VISIBLE
+                customView = null
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                showSystemUI()
+            }
             return
         }
         super.onBackPressed()

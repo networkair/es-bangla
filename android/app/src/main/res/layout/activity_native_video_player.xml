@@ -84,12 +84,25 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- 16:9 Aspect Ratio YouTubePlayerView Container -->
-        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-            android:id="@+id/youtubePlayerView"
+        <!-- 16:9 Aspect Ratio Video Player Container -->
+        <FrameLayout
+            android:id="@+id/playerContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:enableAutomaticInitialization="false" />
+            android:layout_height="225dp"
+            android:background="#000000">
+
+            <WebView
+                android:id="@+id/videoWebView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ProgressBar
+                android:id="@+id/playerLoading"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="#3B82F6" />
+        </FrameLayout>
 
         <!-- Status Banner Below Player -->
         <LinearLayout
