@@ -38,7 +38,6 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
   void dispose() {
     // Unblock when leaving
     SecurityManager.disableSecureScreen();
-    _controller.dispose();
     super.dispose();
   }
 
@@ -138,6 +137,7 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
 
     return PdfViewer.data(
       _pdfBytes!,
+      sourceName: widget.assetPath,
       controller: _controller,
       passwordProvider: () => SecurityManager.getDecryptedPdfPassword(),
       params: PdfViewerParams(

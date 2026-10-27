@@ -98,7 +98,7 @@ class _PyqScreenState extends State<PyqScreen> {
                                     decoration: BoxDecoration(
                                       color: AppColors.surfaceMuted,
                                       borderRadius: BorderRadius.circular(8),
-                                      border: BorderSide(color: AppColors.border),
+                                      border: Border.all(color: AppColors.border),
                                     ),
                                     child: Text(
                                       paper.year,
@@ -144,7 +144,7 @@ class _PyqScreenState extends State<PyqScreen> {
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primaryLight : AppColors.surfaceMuted,
           borderRadius: BorderRadius.circular(12),
-          border: BorderSide(
+          border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.border,
             width: isSelected ? 1.5 : 1,
           ),

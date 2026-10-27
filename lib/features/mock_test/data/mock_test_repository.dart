@@ -192,7 +192,7 @@ class MockTestRepository {
 }
 
 // Background isolate JSON parser to maintain 60 FPS
-TestPaperModel _parseTestPaperJson(String jsonStr) {
-  final decoded = jsonDecode(jsonStr);
+TestPaperModel _parseTestPaperJson(dynamic jsonStr) {
+  final decoded = jsonDecode(jsonStr as String);
   return TestPaperModel.fromJson(Map<String, dynamic>.from(decoded));
 }

@@ -119,7 +119,7 @@ class MockAnalyticsScreen extends StatelessWidget {
                   minY: 0,
                   maxY: 100,
                   lineBarsData: [
-                    LineBarData(
+                    LineChartBarData(
                       spots: attempts.asMap().entries.map((e) {
                         final val = (e.value['accuracy'] as num?)?.toDouble() ?? 0;
                         return FlSpot(e.key.toDouble(), val);
