@@ -12,6 +12,15 @@ class MainActivity: FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
+        // Register Native YouTube PlatformView Factory
+        flutterEngine
+            .platformViewsController
+            .registry
+            .registerViewFactory(
+                "com.rkson.esbangla/youtube_player",
+                NativeYouTubePlayerFactory(this, flutterEngine.dartExecutor.binaryMessenger)
+            )
+
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SECURE_CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
                 "enableSecureScreen" -> {
@@ -42,5 +51,15 @@ class MainActivity: FlutterActivity() {
                 }
             }
         }
+    }
+
+    @Suppress("DEPRECATION")
+    override fun onBackPressed() {
+        if (NativeYouTubePlatformView.activeExitFullscreen != null) {
+            NativeYouTubePlatformView.activeExitFullscreen?.invoke()
+            NativeYouTubePlatformView.activeExitFullscreen = null
+            return
+        }
+        super.onBackPressed()
     }
 }
