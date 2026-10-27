@@ -22,6 +22,16 @@ class SecurityManager {
     }
   }
 
+  /// Launch external URL via native Android intent
+  static Future<bool> openExternalUrl(String url) async {
+    try {
+      final res = await _channel.invokeMethod('openUrl', {'url': url});
+      return res == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// Hidden/obfuscated PDF password decoder
   /// Avoids plain text in string tables or decompiled code
   static String getDecryptedPdfPassword() {

@@ -45,9 +45,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.5
-          name: "Es Bangla v1.0.5 (Release)"
-          body: "Release APK for Es Bangla with redesigned Video Library (clean reference card design, custom thumbnails, full-screen video player with security protection), course subscription and locked video access, and WhatsApp invite code activation."
+          tag_name: v1.0.6
+          name: "Es Bangla v1.0.6 (Release)"
+          body: "Release APK for Es Bangla with real-time news image rendering (16:9 auto-fit with contrast overlay), YouTube video player origin fixes and direct fallback, improved invite code activation UX, and cleartext traffic support."
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

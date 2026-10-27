@@ -35,17 +35,11 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
     super.dispose();
   }
 
-  Future<void> _redeemCode(String inputCode) async {
+  Future<String?> _redeemCode(String inputCode) async {
     final code = inputCode.trim().toUpperCase();
     if (code.isEmpty) {
-      setState(() => _errorMessage = 'দয়া করে ইনভাইট কোডটি লিখুন');
-      return;
+      return 'দয়া করে ইনভাইট কোডটি লিখুন';
     }
-
-    setState(() {
-      _isRedeeming = true;
-      _errorMessage = null;
-    });
 
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -107,7 +101,7 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
           'status': 'active',
         });
 
-        // Save locally to cache
+        // Save locally to cache immediately
         final currentEntitlements = LocalStorageService().getEntitlements();
         for (final g in grants) {
           if (!currentEntitlements.contains(g)) {
@@ -117,50 +111,45 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
         await LocalStorageService().setEntitlements(currentEntitlements);
       });
 
-      if (!mounted) return;
+      return null; // Success!
+    } catch (e) {
+      return e.toString().replaceAll('Exception:', '').trim();
+    }
+  }
 
-      setState(() => _isRedeeming = false);
-
-      // Show congratulations modal
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (ctx) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Row(
-            children: const [
-              Icon(Icons.check_circle_rounded, color: AppColors.correctGreen, size: 28),
-              SizedBox(width: 10),
-              Text('অভিনন্দন!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            ],
-          ),
-          content: Text(
-            'আপনার সেমিস্টার ${widget.semester}-এর ভিডিও কোর্স সফলভাবে সক্রিয় হয়েছে। এখন আপনি সমস্ত ভিডিও লেকচার সরাসরি দেখতে পারবেন।',
-            style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.4),
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(ctx); // Close dialog
-                Navigator.pop(context, true); // Close subscription screen and trigger refresh
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: const Text('ভিডিও দেখুন'),
-            ),
+  void _showCelebrationDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+        title: Row(
+          children: const [
+            Icon(Icons.check_circle_rounded, color: AppColors.correctGreen, size: 28),
+            SizedBox(width: 10),
+            Text('অভিনন্দন!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ],
         ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _isRedeeming = false;
-        _errorMessage = e.toString().replaceAll('Exception:', '').trim();
-      });
-    }
+        content: Text(
+          'আপনার সেমিস্টার ${widget.semester}-এর কোর্স সফলভাবে সক্রিয় হয়েছে। এখন আপনি সমস্ত ভিডিও লেকচার সরাসরি দেখতে পারবেন।',
+          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.4),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(ctx); // Close dialog
+              Navigator.pop(context, true); // Close subscription screen and trigger refresh in topics
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: const Text('ভিডিও দেখুন'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showRedeemBottomSheet() {
@@ -171,9 +160,9 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (ctx) {
+      builder: (modalCtx) {
         return StatefulBuilder(
-          builder: (ctx, setModalState) {
+          builder: (modalCtx, setModalState) {
             return Container(
               decoration: const BoxDecoration(
                 color: AppColors.surface,
@@ -183,7 +172,7 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
                 left: 20,
                 right: 20,
                 top: 20,
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+                bottom: MediaQuery.of(modalCtx).viewInsets.bottom + 24,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -259,12 +248,33 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
                       onPressed: _isRedeeming
                           ? null
                           : () async {
-                              final code = _codeController.text;
-                              await _redeemCode(code);
-                              if (_errorMessage == null && ctx.mounted) {
-                                Navigator.pop(ctx);
+                              final code = _codeController.text.trim().toUpperCase();
+                              if (code.isEmpty) {
+                                setModalState(() => _errorMessage = 'দয়া করে ইনভাইট কোডটি লিখুন');
+                                return;
+                              }
+
+                              setModalState(() {
+                                _isRedeeming = true;
+                                _errorMessage = null;
+                              });
+
+                              final error = await _redeemCode(code);
+                              if (error != null) {
+                                if (modalCtx.mounted) {
+                                  setModalState(() {
+                                    _isRedeeming = false;
+                                    _errorMessage = error;
+                                  });
+                                }
                               } else {
-                                setModalState(() {});
+                                if (modalCtx.mounted) {
+                                  Navigator.pop(modalCtx); // Close sheet first
+                                }
+                                if (mounted) {
+                                  setState(() => _isRedeeming = false);
+                                  _showCelebrationDialog();
+                                }
                               }
                             },
                       style: ElevatedButton.styleFrom(

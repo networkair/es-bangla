@@ -36,9 +36,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       params: const YoutubePlayerParams(
         showControls: true,
         showFullscreenButton: true,
-        strictRelatedVideos: true,
+        strictRelatedVideos: false,
         playsInline: true,
         enableCaption: false,
+        origin: 'https://www.youtube.com',
       ),
     );
   }
@@ -172,6 +173,34 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             style: TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
                           ),
                         ],
+                      ),
+                      const SizedBox(height: 20),
+                      // Fallback Watch on YouTube button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 46,
+                        child: OutlinedButton.icon(
+                          onPressed: () {
+                            final cleanId = YoutubeHelper.extractVideoId(widget.youtubeVideoId);
+                            if (cleanId.isNotEmpty) {
+                              SecurityManager.openExternalUrl('https://www.youtube.com/watch?v=$cleanId');
+                            }
+                          },
+                          icon: const Icon(Icons.play_circle_fill_rounded, color: Colors.red, size: 20),
+                          label: const Text(
+                            'সরাসরি ইউটিউবে ভিডিও দেখুন',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            side: const BorderSide(color: AppColors.border),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                        ),
                       ),
                     ],
                   ),
