@@ -174,34 +174,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20),
-                      // Fallback Watch on YouTube button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 46,
-                        child: OutlinedButton.icon(
-                          onPressed: () {
-                            final cleanId = YoutubeHelper.extractVideoId(widget.youtubeVideoId);
-                            if (cleanId.isNotEmpty) {
-                              SecurityManager.openExternalUrl('https://www.youtube.com/watch?v=$cleanId');
-                            }
-                          },
-                          icon: const Icon(Icons.play_circle_fill_rounded, color: Colors.red, size: 20),
-                          label: const Text(
-                            'সরাসরি ইউটিউবে ভিডিও দেখুন',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            side: const BorderSide(color: AppColors.border),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
