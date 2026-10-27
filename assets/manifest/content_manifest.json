@@ -1,0 +1,119 @@
+{
+  "semesters": {
+    "3": {
+      "notes": [
+        {
+          "subject_id": "bengali",
+          "subject_name": "বাংলা",
+          "subject_name_en": "Bengali",
+          "topics": [
+            {
+              "topic_id": "topic_potraj",
+              "title": "পোটরাজ - সম্পূর্ণ সংক্ষিপ্ত ও বিশদ আলোচনা",
+              "file_path": "assets/notes/sem3/bengali_potraj.dat"
+            },
+            {
+              "topic_id": "topic_adorini",
+              "title": "আদরিণী - সারসংক্ষেপ ও গুরুত্বপূর্ণ প্রশ্ন",
+              "file_path": "assets/notes/sem3/bengali_adorini.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "english",
+          "subject_name": "English",
+          "subject_name_en": "English",
+          "topics": [
+            {
+              "topic_id": "topic_eng_prose",
+              "title": "The Eyes Have It - Comprehensive Study Note",
+              "file_path": "assets/notes/sem3/english_eyes_have_it.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "history",
+          "subject_name": "ইতিহাস",
+          "subject_name_en": "History",
+          "topics": [
+            {
+              "topic_id": "topic_hist_1",
+              "title": "ঔপনিবেশিক আধিপত্যের প্রকৃতি",
+              "file_path": "assets/notes/sem3/history_chap1.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "polscience",
+          "subject_name": "রাষ্ট্রবিজ্ঞান",
+          "subject_name_en": "Political Science",
+          "topics": [
+            {
+              "topic_id": "topic_pol_1",
+              "title": "আন্তর্জাতিক সম্পর্ক ও বিশ্বরাজনীতি",
+              "file_path": "assets/notes/sem3/polscience_chap1.dat"
+            }
+          ]
+        }
+      ],
+      "pyq": [
+        {
+          "subject_id": "bengali",
+          "subject_name": "বাংলা",
+          "papers": [
+            {
+              "year": "2025",
+              "title": "WBCHSE Class 12 Sem 3 বাংলা প্রশ্নপত্র ২০২৫",
+              "file_path": "assets/pyq/sem3/bengali_2025.dat"
+            },
+            {
+              "year": "2024",
+              "title": "WBCHSE Class 12 Sem 3 বাংলা প্রশ্নপত্র ২০২৪",
+              "file_path": "assets/pyq/sem3/bengali_2024.dat"
+            }
+          ]
+        },
+        {
+          "subject_id": "english",
+          "subject_name": "English",
+          "papers": [
+            {
+              "year": "2025",
+              "title": "WBCHSE Class 12 Sem 3 English Question Paper 2025",
+              "file_path": "assets/pyq/sem3/english_2025.dat"
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "notes": [
+        {
+          "subject_id": "bengali",
+          "subject_name": "বাংলা",
+          "subject_name_en": "Bengali",
+          "topics": [
+            {
+              "topic_id": "topic_sem4_bengali_1",
+              "title": "সেমিস্টার ৪ বাংলা সাহিত্য ও নাটক নোটস",
+              "file_path": "assets/notes/sem4/bengali_notes.dat"
+            }
+          ]
+        }
+      ],
+      "pyq": [
+        {
+          "subject_id": "bengali",
+          "subject_name": "বাংলা",
+          "papers": [
+            {
+              "year": "2025",
+              "title": "WBCHSE Class 12 Sem 4 বাংলা নমুনা প্রশ্নপত্র",
+              "file_path": "assets/pyq/sem4/bengali_sample.dat"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

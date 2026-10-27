@@ -1,0 +1,63 @@
+name: es_bangla
+description: "Es Bangla - Class 12 Study & Mock Test App (Semester 3 & 4)"
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State Management & Routing
+  flutter_riverpod: ^2.5.1
+  go_router: ^14.2.0
+
+  # Networking & Cache
+  dio: ^5.4.3+1
+  connectivity_plus: ^6.0.3
+  uuid: ^4.4.0
+  intl: ^0.19.0
+
+  # Firebase Suite
+  firebase_core: ^3.1.0
+  firebase_auth: ^5.1.0
+  cloud_firestore: ^5.0.1
+  firebase_messaging: ^15.0.1
+  google_sign_in: ^6.2.1
+
+  # Local Storage & Database
+  shared_preferences: ^2.2.3
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Media, PDF & Viewer
+  cached_network_image: ^3.3.1
+  pdfrx: ^1.0.67
+  youtube_player_iframe: ^5.1.2
+
+  # Notifications & Alarms
+  flutter_local_notifications: ^17.1.2
+  timezone: ^0.9.3
+
+  # Analytics & Charts
+  fl_chart: ^0.68.0
+  in_app_review: ^2.0.9
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/manifest/
+    - assets/icons/
+    - assets/images/
