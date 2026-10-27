@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdfrx/pdfrx.dart';
@@ -25,6 +26,7 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
   bool _isLoading = true;
   String? _errorMessage;
   Uint8List? _pdfBytes;
+  bool _isHeaderVisible = true;
 
   @override
   void initState() {
@@ -59,7 +61,7 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
       if (mounted) {
         setState(() {
           _isLoading = false;
-          _errorMessage = 'নোটস ফাইলটি লোড করা সম্ভব হয়নি। অনুগ্রহ করে আবার চেষ্টা করুন।';
+          _errorMessage = 'নোটস লোড করা সম্ভব হয়নি। অনুগ্রহ করে আবার চেষ্টা করুন।';
         });
       }
     }
@@ -67,40 +69,148 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final topPadding = MediaQuery.of(context).padding.top;
+
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        actions: [
-          if (_totalPages > 0)
+      body: Stack(
+        children: [
+          // 1. Full Screen Viewer
+          Positioned.fill(
+            child: _buildViewerContent(),
+          ),
+
+          // 2. Animated Top Full Header (Slides up/down)
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 240),
+            curve: Curves.easeInOut,
+            top: _isHeaderVisible ? 0 : -(topPadding + 70),
+            left: 0,
+            right: 0,
+            child: _buildFullHeader(context, topPadding),
+          ),
+
+          // 3. Compact Floating Back Button (Visible when full header is hidden)
+          Positioned(
+            top: topPadding + 10,
+            left: 16,
+            child: AnimatedScale(
+              scale: _isHeaderVisible ? 0.0 : 1.0,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOutBack,
+              child: AnimatedOpacity(
+                opacity: _isHeaderVisible ? 0.0 : 1.0,
+                duration: const Duration(milliseconds: 180),
+                child: _buildCompactBackButton(context),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFullHeader(BuildContext context, double topPadding) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(16, topPadding + 8, 16, 12),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        border: const Border(bottom: BorderSide(color: AppColors.border, width: 1)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.border),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary, size: 20),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              widget.title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          if (_totalPages > 0) ...[
+            const SizedBox(width: 10),
             Container(
-              margin: const EdgeInsets.only(right: 16),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: AppColors.primaryLight,
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.primary.withOpacity(0.15)),
               ),
               child: Text(
                 '$_currentPage / $_totalPages',
                 style: const TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 13,
+                  color: AppColors.primaryDark,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
                 ),
               ),
             ),
+          ],
         ],
       ),
-      body: _buildBody(),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildCompactBackButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.pop(context),
+      child: Container(
+        width: 38,
+        height: 38,
+        decoration: BoxDecoration(
+          color: AppColors.surface.withOpacity(0.92),
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.border),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.12),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: const Icon(
+          Icons.arrow_back_rounded,
+          color: AppColors.textPrimary,
+          size: 19,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildViewerContent() {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(
@@ -119,7 +229,7 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
               const Icon(Icons.error_outline_rounded, size: 48, color: AppColors.wrongRed),
               const SizedBox(height: 16),
               Text(
-                _errorMessage ?? 'ফাইল পাওয়া যায়নি',
+                _errorMessage ?? 'নোটস লোড করা সম্ভব হয়নি',
                 style: const TextStyle(fontSize: 15, color: AppColors.textSecondary),
                 textAlign: TextAlign.center,
               ),
@@ -135,27 +245,60 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
       );
     }
 
-    return PdfViewer.data(
-      _pdfBytes!,
-      sourceName: widget.assetPath,
-      controller: _controller,
-      passwordProvider: () => SecurityManager.getDecryptedPdfPassword(),
-      params: PdfViewerParams(
-        enableTextSelection: false, // Text copying disabled
-        onPageChanged: (page) {
-          if (mounted && page != null) {
-            setState(() {
-              _currentPage = page;
-            });
+    return Listener(
+      onPointerMove: (event) {
+        if (event.delta.dy < -7) {
+          // Dragging up = scrolling down to read -> hide header
+          if (_isHeaderVisible) {
+            setState(() => _isHeaderVisible = false);
           }
-        },
-        onViewerReady: (document, controller) {
-          if (mounted) {
-            setState(() {
-              _totalPages = document.pages.length;
-            });
+        } else if (event.delta.dy > 7) {
+          // Dragging down = scrolling up -> show header
+          if (!_isHeaderVisible) {
+            setState(() => _isHeaderVisible = true);
           }
+        }
+      },
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (scrollInfo) {
+          if (scrollInfo is ScrollUpdateNotification && scrollInfo.scrollDelta != null) {
+            if (scrollInfo.scrollDelta! > 10) {
+              if (_isHeaderVisible) {
+                setState(() => _isHeaderVisible = false);
+              }
+            } else if (scrollInfo.scrollDelta! < -10) {
+              if (!_isHeaderVisible) {
+                setState(() => _isHeaderVisible = true);
+              }
+            }
+          }
+          return false;
         },
+        child: GestureDetector(
+          onTap: () {
+            // Tap to toggle header visibility
+            setState(() => _isHeaderVisible = !_isHeaderVisible);
+          },
+          child: PdfViewer.data(
+            _pdfBytes!,
+            sourceName: widget.assetPath,
+            controller: _controller,
+            passwordProvider: () => SecurityManager.getDecryptedPdfPassword(),
+            params: PdfViewerParams(
+              enableTextSelection: false,
+              onPageChanged: (page) {
+                if (mounted && page != null) {
+                  setState(() => _currentPage = page);
+                }
+              },
+              onViewerReady: (document, controller) {
+                if (mounted) {
+                  setState(() => _totalPages = document.pages.length);
+                }
+              },
+            ),
+          ),
+        ),
       ),
     );
   }

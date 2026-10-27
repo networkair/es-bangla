@@ -92,65 +92,12 @@ class NotesTopicsScreen extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            // Info Card
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: AppColors.border),
-                  boxShadow: AppColors.softCardShadow,
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryLight,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(Icons.menu_book_rounded, color: AppColors.primary, size: 24),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${subject.subjectName} স্টাডি মেটেরিয়াল',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          const Text(
-                            'যেকোনো অধ্যায়ে ট্যাপ করে সরাসরি সম্পূর্ণ পিডিএফ নোটস পড়ুন',
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
             // Topics List
             Expanded(
               child: subject.topics.isEmpty
                   ? _buildComingSoonState()
                   : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                       itemCount: subject.topics.length,
                       separatorBuilder: (_, __) => const SizedBox(height: 12),
                       itemBuilder: (context, index) {
@@ -180,7 +127,7 @@ class NotesTopicsScreen extends StatelessWidget {
                                 );
                               },
                               child: Padding(
-                                padding: const EdgeInsets.all(16),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                                 child: Row(
                                   children: [
                                     Container(
@@ -188,7 +135,8 @@ class NotesTopicsScreen extends StatelessWidget {
                                       height: 44,
                                       decoration: BoxDecoration(
                                         color: AppColors.primaryLight,
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(14),
+                                        border: Border.all(color: AppColors.primary.withOpacity(0.12)),
                                       ),
                                       child: Center(
                                         child: Text(
@@ -196,43 +144,24 @@ class NotesTopicsScreen extends StatelessWidget {
                                           style: const TextStyle(
                                             color: AppColors.primaryDark,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 14,
+                                            fontSize: 15,
                                           ),
                                         ),
                                       ),
                                     ),
                                     const SizedBox(width: 14),
                                     Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            topic.title,
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.textPrimary,
-                                              height: 1.3,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Row(
-                                            children: const [
-                                              Icon(Icons.picture_as_pdf_rounded, size: 14, color: AppColors.primary),
-                                              SizedBox(width: 4),
-                                              Text(
-                                                'অফিসিয়াল হ্যান্ডনোটস • PDF',
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: AppColors.textSecondary,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                      child: Text(
+                                        topic.title,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.textPrimary,
+                                          height: 1.35,
+                                        ),
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
+                                    const SizedBox(width: 10),
                                     Container(
                                       width: 34,
                                       height: 34,
@@ -342,7 +271,7 @@ class NotesTopicsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             const Text(
-              'এই বিষয়ের অধ্যায়ভিত্তিক হ্যান্ডনোটস ও সাজেশনস তৈরির কাজ চলছে। খুব শীঘ্রই অ্যাপে সমস্ত পিডিএফ ও নোটস পেয়ে যাবেন।',
+              'এই বিষয়ের অধ্যায়ভিত্তিক হ্যান্ডনোটস ও সাজেশনস তৈরির কাজ চলছে। খুব শীঘ্রই অ্যাপে সমস্ত অধ্যায়ের নোটস পেয়ে যাবেন।',
               style: TextStyle(
                 fontSize: 13,
                 color: AppColors.textSecondary,

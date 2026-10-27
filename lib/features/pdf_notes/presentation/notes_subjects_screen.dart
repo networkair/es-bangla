@@ -60,7 +60,7 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 14,
                             mainAxisSpacing: 14,
-                            childAspectRatio: 1.15,
+                            childAspectRatio: 1.12,
                           ),
                           itemCount: _subjects.length,
                           itemBuilder: (context, index) {
@@ -177,118 +177,69 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
               ),
             );
           },
-          child: Stack(
-            children: [
-              // Subtle background floating bubble effect (matching reference image)
-              Positioned(
-                top: 8,
-                right: 12,
-                child: Container(
-                  width: 32,
-                  height: 32,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Top: Enlarged Subject Icon Container
+                Container(
+                  width: 56,
+                  height: 56,
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.primary.withOpacity(0.08), width: 2),
+                    color: AppColors.primaryLight.withOpacity(0.45),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.primary.withOpacity(0.12)),
+                  ),
+                  child: Center(
+                    child: _buildSubjectEmblem(subject),
                   ),
                 ),
-              ),
 
-              Padding(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // Bottom Row: Subject Title on left, Circular Arrow Button on right
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    // Top: Subject Icon & Title
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Subject Icon Container
-                        Container(
-                          width: 48,
-                          height: 48,
-                          padding: const EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryLight.withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: AppColors.primary.withOpacity(0.12)),
-                          ),
-                          child: Center(
-                            child: _buildSubjectEmblem(subject),
-                          ),
+                    Expanded(
+                      child: Text(
+                        subject.subjectName,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                          height: 1.25,
                         ),
-                        const SizedBox(width: 10),
-
-                        // Subject Title & Semester
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                subject.subjectName,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textPrimary,
-                                  height: 1.2,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Semester ${widget.semester}',
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  color: AppColors.textSecondary,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-
-                    // Bottom Row: Topic count on left, Arrow Button on right
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${subject.topics.length} টি অধ্যায়',
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: AppColors.textSecondary,
-                            fontWeight: FontWeight.w500,
+                    const SizedBox(width: 6),
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(0.35),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
                           ),
-                        ),
-                        // Circular Arrow Button
-                        Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withOpacity(0.35),
-                                blurRadius: 8,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.arrow_forward_rounded,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.arrow_forward_rounded,
+                        color: Colors.white,
+                        size: 16,
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -299,8 +250,8 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
     if (subject.iconAsset != null && subject.iconAsset!.isNotEmpty) {
       return Image.asset(
         subject.iconAsset!,
-        width: 28,
-        height: 28,
+        width: 44,
+        height: 44,
         fit: BoxFit.contain,
       );
     }
