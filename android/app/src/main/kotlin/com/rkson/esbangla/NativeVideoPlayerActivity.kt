@@ -88,6 +88,17 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
         videoWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
         videoWebView.setBackgroundColor(Color.BLACK)
 
+        // Disable long click and context menu (blocks "Copy embed code", "Copy video link")
+        videoWebView.isLongClickable = false
+        videoWebView.isHapticFeedbackEnabled = false
+        videoWebView.setOnLongClickListener { true }
+
+        // Native touch guard overlays to absorb touches on sensitive areas
+        findViewById<View>(R.id.overlayChannelGuard)?.setOnClickListener { /* Consume touch */ }
+        findViewById<View>(R.id.overlayLinkGuard)?.setOnClickListener { /* Consume touch */ }
+        findViewById<View>(R.id.overlayRelatedShelfGuard)?.setOnClickListener { /* Consume touch */ }
+        findViewById<View>(R.id.overlayYtLogoGuard)?.setOnClickListener { /* Consume touch */ }
+
         val settings = videoWebView.settings
         settings.javaScriptEnabled = true
         settings.domStorageEnabled = true
@@ -147,6 +158,20 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
         }
 
         videoWebView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                val url = request?.url?.toString() ?: ""
+                Log.d(TAG, "Navigation requested: $url")
+                // Allow the player embed itself to load
+                if (url.startsWith("https://www.youtube-nocookie.com/embed/") ||
+                    url.startsWith("https://www.youtube.com/embed/") ||
+                    url.startsWith("about:blank")) {
+                    return false
+                }
+                // BLOCK ALL external links (Channel page, Share link, YouTube app, etc.)
+                Log.d(TAG, "Blocked external link navigation: $url")
+                return true
+            }
+
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 playerLoading.visibility = View.VISIBLE
@@ -155,8 +180,46 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 playerLoading.visibility = View.GONE
-                tvPlayerStatus.text = "🟢 ভিডিও প্রস্তুত ও লোড হয়েছে"
+                tvPlayerStatus.text = "🟢 সুরক্ষিত শিক্ষা ভিডিও চলছে"
                 tvPlayerStatus.setTextColor(Color.parseColor("#4ADE80"))
+
+                // Inject CSS to hide all YouTube external branding, share buttons, pause overlays & popups
+                val cleanupJs = """
+                    (function() {
+                        try {
+                            var css = `
+                                .ytp-chrome-top, 
+                                .ytp-title, 
+                                .ytp-title-link, 
+                                .ytp-title-channel,
+                                .ytp-share-button, 
+                                .ytp-copylink-button,
+                                .ytp-pause-overlay, 
+                                .ytp-pause-overlay-container,
+                                .ytp-ce-element, 
+                                .ytp-youtube-button, 
+                                .ytp-watermark,
+                                .ytp-contextmenu, 
+                                .ytp-overflow-button, 
+                                .ytp-cards-button,
+                                .ytp-impression-link {
+                                    display: none !important;
+                                    visibility: hidden !important;
+                                    opacity: 0 !important;
+                                    pointer-events: none !important;
+                                    max-height: 0 !important;
+                                    max-width: 0 !important;
+                                }
+                            `;
+                            var head = document.head || document.getElementsByTagName('head')[0];
+                            var style = document.createElement('style');
+                            style.type = 'text/css';
+                            style.appendChild(document.createTextNode(css));
+                            head.appendChild(style);
+                        } catch(e) {}
+                    })();
+                """.trimIndent()
+                view?.evaluateJavascript(cleanupJs, null)
             }
 
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
@@ -169,14 +232,21 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
             }
         }
 
-        // Standard, high-performance HTML5 YouTube embed wrapper
+        // Standard, high-performance HTML5 YouTube embed wrapper with multi-layered touch blockers
         val htmlData = """
             <!DOCTYPE html>
             <html>
             <head>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
                 <style>
-                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    * {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                        -webkit-touch-callout: none !important;
+                        -webkit-user-select: none !important;
+                        user-select: none !important;
+                    }
                     html, body {
                         width: 100%;
                         height: 100%;
@@ -196,16 +266,57 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                         height: 100%;
                         border: 0;
                     }
+                    /* Transparent guard over channel avatar & title in top-left */
+                    .guard-top-left {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 65%;
+                        height: 65px;
+                        z-index: 9999;
+                    }
+                    /* Transparent guard over copy link button in bottom-left */
+                    .guard-bottom-left {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 75px;
+                        height: 55px;
+                        z-index: 9999;
+                    }
+                    /* Transparent guard over bottom "more videos" related cards shelf */
+                    .guard-bottom-center {
+                        position: absolute;
+                        bottom: 25px;
+                        left: 75px;
+                        right: 140px;
+                        height: 50px;
+                        z-index: 9999;
+                    }
+                    /* Transparent guard over YouTube logo (keeps fullscreen button accessible) */
+                    .guard-bottom-right {
+                        position: absolute;
+                        bottom: 0;
+                        right: 45px;
+                        width: 100px;
+                        height: 45px;
+                        z-index: 9999;
+                    }
                 </style>
             </head>
             <body>
                 <div class="video-wrapper">
                     <iframe
+                        id="ytPlayerFrame"
                         src="https://www.youtube-nocookie.com/embed/$videoId?autoplay=1&playsinline=1&enablejsapi=1&rel=0&modestbranding=1&fs=1"
                         title="YouTube Video Player"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                         allowfullscreen>
                     </iframe>
+                    <div class="guard-top-left"></div>
+                    <div class="guard-bottom-left"></div>
+                    <div class="guard-bottom-center"></div>
+                    <div class="guard-bottom-right"></div>
                 </div>
             </body>
             </html>

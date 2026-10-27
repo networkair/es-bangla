@@ -45,9 +45,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.1.3
-          name: "Es Bangla v1.1.3 (Official Direct HTML5 YouTube Engine - Permanent Fix)"
-          body: "Release APK v1.1.3 featuring the official Direct HTML5 YouTube Engine with zero third-party bridge dependencies, hardware acceleration, full landscape fullscreen, and complete embed compatibility."
+          tag_name: v1.1.4
+          name: "Es Bangla v1.1.4 (Secured Player: Blocked Channel, Share, Copy Link & More Videos)"
+          body: "Release APK v1.1.4 with complete security lockdowns: blocked channel avatar/title clicks, removed copy link button, disabled more videos / related shelf popups, blocked context menus, and preserved full player controls & fullscreen."
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
