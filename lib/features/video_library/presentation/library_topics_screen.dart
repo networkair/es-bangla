@@ -6,6 +6,7 @@ import '../../../core/storage/local_storage_service.dart';
 import '../data/youtube_helper.dart';
 import 'video_player_screen.dart';
 import 'course_subscription_screen.dart';
+import 'native_video_helper.dart';
 
 class LibraryTopicsScreen extends StatefulWidget {
   final int semester;
@@ -388,14 +389,9 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
               return;
             }
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => VideoPlayerScreen(
-                  title: title.isNotEmpty ? title : widget.subjectName,
-                  youtubeVideoId: videoId,
-                ),
-              ),
+            NativeVideoHelper.playVideo(
+              title: title.isNotEmpty ? title : widget.subjectName,
+              videoId: videoId,
             );
           },
           borderRadius: BorderRadius.circular(16),

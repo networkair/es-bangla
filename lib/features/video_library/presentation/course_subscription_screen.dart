@@ -7,6 +7,7 @@ import '../../../core/storage/local_storage_service.dart';
 import '../../../core/constants/api_constants.dart';
 import '../data/youtube_helper.dart';
 import 'video_player_screen.dart';
+import 'native_video_helper.dart';
 
 class CourseSubscriptionScreen extends StatefulWidget {
   final int semester;
@@ -650,14 +651,9 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
         child: InkWell(
           onTap: () {
             final videoId = YoutubeHelper.extractVideoId(youtubeId);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => VideoPlayerScreen(
-                  title: '$title ($subtitle)',
-                  youtubeVideoId: videoId,
-                ),
-              ),
+            NativeVideoHelper.playVideo(
+              title: '$title ($subtitle)',
+              videoId: videoId,
             );
           },
           borderRadius: BorderRadius.circular(16),

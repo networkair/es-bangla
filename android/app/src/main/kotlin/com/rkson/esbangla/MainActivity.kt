@@ -51,6 +51,29 @@ class MainActivity: FlutterActivity() {
                 }
             }
         }
+
+        val VIDEO_CHANNEL = "com.rkson.esbangla/video"
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, VIDEO_CHANNEL).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "playVideo" -> {
+                    val videoId = call.argument<String>("videoId") ?: ""
+                    val title = call.argument<String>("title") ?: ""
+                    try {
+                        val intent = android.content.Intent(this, NativeVideoPlayerActivity::class.java).apply {
+                            putExtra("videoId", videoId)
+                            putExtra("title", title)
+                        }
+                        startActivity(intent)
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.error("ACTIVITY_ERROR", e.message, null)
+                    }
+                }
+                else -> {
+                    result.notImplemented()
+                }
+            }
+        }
     }
 
     @Suppress("DEPRECATION")
