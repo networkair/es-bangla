@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener
@@ -34,9 +35,7 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Enable screen security against screenshots & screen recording natively
-        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-
+        // Note: FLAG_SECURE is omitted so Chromium WebView hardware video acceleration can render YouTube frames cleanly without blackouts
         setContentView(R.layout.activity_native_video_player)
 
         val title = intent.getStringExtra("title") ?: "Es Bangla Video Lecture"
@@ -109,6 +108,14 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                 if (cleanVideoId.isNotEmpty()) {
                     player.loadVideo(cleanVideoId, 0f)
                 }
+            }
+
+            override fun onError(player: YouTubePlayer, error: PlayerConstants.PlayerError) {
+                Log.e(TAG, "Native YouTube player error: $error")
+            }
+
+            override fun onStateChange(player: YouTubePlayer, state: PlayerConstants.PlayerState) {
+                Log.d(TAG, "Native YouTube player state: $state")
             }
         })
     }

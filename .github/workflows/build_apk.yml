@@ -45,9 +45,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.9
-          name: "Es Bangla v1.0.9 (Native Android Video Player Activity)"
-          body: "Release APK for Es Bangla with 100% Native Android Video Player Activity (NativeVideoPlayerActivity). Completely eliminates Flutter PlatformView / SurfaceTexture black screen, features instant YouTubePlayerView playback, native fullscreen rotation, and full screenshot/screen-recording security without any video blackout."
+          tag_name: v1.1.0
+          name: "Es Bangla v1.1.0 (Safollo Verified Native YouTube Player)"
+          body: "Release APK v1.1.0 with Safollo-verified native YouTube player implementation. Completely eliminates FLAG_SECURE black screen on WebView video compositor, allows smooth playback of unlisted YouTube lectures natively with full 16:9 ratio and landscape fullscreen."
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
