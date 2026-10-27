@@ -356,6 +356,15 @@ class _ReminderScreenState extends State<ReminderScreen> with SingleTickerProvid
 
     return Scaffold(
       backgroundColor: AppColors.background,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _addOrEditReminder(),
+        backgroundColor: AppColors.primary,
+        icon: const Icon(Icons.add_rounded, color: Colors.white),
+        label: const Text(
+          'Add Reminder',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -426,79 +435,17 @@ class _ReminderScreenState extends State<ReminderScreen> with SingleTickerProvid
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
                         child: Column(
                           children: [
-                            // 3D Hero Reminder Banner (Prominent centered 3D icon)
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: AppColors.surface,
-                                borderRadius: BorderRadius.circular(22),
-                                border: Border.all(color: AppColors.border),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.primary.withOpacity(0.06),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 6),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  // Prominent 3D Reminder Image
-                                  Container(
-                                    width: 100,
-                                    height: 100,
-                                    padding: const EdgeInsets.all(4),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primaryLight.withOpacity(0.4),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Image.asset(
-                                      'assets/icons/ic_reminder.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text(
-                                    'Plan Your Study Routine',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimary,
-                                      letterSpacing: -0.3,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 6),
-                                  const Text(
-                                    'Set topic alerts and receive notifications when it is time to study.',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: AppColors.textSecondary,
-                                      height: 1.4,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 18),
-                                  ElevatedButton.icon(
-                                    onPressed: () => _addOrEditReminder(),
-                                    icon: const Icon(Icons.add_rounded, size: 20),
-                                    label: const Text('Add Study Reminder', style: TextStyle(fontWeight: FontWeight.bold)),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.primary,
-                                      foregroundColor: Colors.white,
-                                      elevation: 0,
-                                      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                            // Centered Prominent 3D Reminder Icon
+                            const SizedBox(height: 12),
+                            Center(
+                              child: Image.asset(
+                                'assets/icons/ic_reminder.png',
+                                width: 125,
+                                height: 125,
+                                fit: BoxFit.contain,
                               ),
                             ),
-
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 20),
 
                             // Segmented Tab Switcher (Upcoming vs History)
                             Container(
