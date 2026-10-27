@@ -9,9 +9,9 @@
           "icon_asset": "assets/icons/subjects/ic_sub_bangla.png",
           "topics": [
             {
-              "topic_id": "topic_adorini",
-              "title": "আদরিণী - সম্পূর্ণ সংক্ষিপ্ত ও বিশদ আলোচনা",
-              "file_path": "assets/notes/sem3/bengali_adorini.dat"
+              "topic_id": "topic_sem3_ben_dhormo",
+              "title": "ধর্ম - কবিতা (শ্রীজাত)",
+              "file_path": "assets/notes/sem3/bengali_dhormo.pdf"
             }
           ]
         },
@@ -22,9 +22,9 @@
           "icon_asset": "assets/icons/subjects/ic_sub_english.png",
           "topics": [
             {
-              "topic_id": "topic_eyes_have_it",
-              "title": "The Eyes Have It - Comprehensive Study Note",
-              "file_path": "assets/notes/sem3/english_eyes_have_it.dat"
+              "topic_id": "topic_sem3_eng_night_train",
+              "title": "The Night Train at Deoli - Ruskin Bond",
+              "file_path": "assets/notes/sem3/english_night_train.pdf"
             }
           ]
         },
@@ -35,9 +35,9 @@
           "icon_asset": "assets/icons/subjects/ic_sub_history.png",
           "topics": [
             {
-              "topic_id": "topic_hist_1",
-              "title": "ঔপনিবেশিক আধিপত্যের প্রকৃতি",
-              "file_path": "assets/notes/sem3/history_chap1.dat"
+              "topic_id": "topic_sem3_hist_foreign_travelers",
+              "title": "বৈদেশিক পর্যটকদের বিবরণ - ইউনিট ১.১",
+              "file_path": "assets/notes/sem3/history_unit1_1.pdf"
             }
           ]
         },
@@ -48,9 +48,9 @@
           "icon_asset": "assets/icons/subjects/ic_sub_geography.png",
           "topics": [
             {
-              "topic_id": "topic_geo_1",
-              "title": "ভূমিরূপ গঠনকারী প্রক্রিয়া ও সংশ্লিষ্ট ভূমিরূপ",
-              "file_path": "assets/notes/sem3/geography_chap1.dat"
+              "topic_id": "topic_sem3_geo_plate_tectonics",
+              "title": "প্রথম অধ্যায়: ভূসংস্থান - মহীসঞ্চরণ ও পাতসংস্থান তত্ত্ব",
+              "file_path": "assets/notes/sem3/geography_unit1.pdf"
             }
           ]
         },
@@ -61,9 +61,9 @@
           "icon_asset": "assets/icons/subjects/ic_sub_polscience.png",
           "topics": [
             {
-              "topic_id": "topic_pol_1",
-              "title": "আন্তর্জাতিক সম্পর্ক ও বিশ্বরাজনীতি",
-              "file_path": "assets/notes/sem3/polscience_chap1.dat"
+              "topic_id": "topic_sem3_pol_post_ww2",
+              "title": "প্রথম অধ্যায়: দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক",
+              "file_path": "assets/notes/sem3/polscience_unit1.pdf"
             }
           ]
         },
@@ -74,9 +74,9 @@
           "icon_asset": "assets/icons/subjects/ic_sub_education.png",
           "topics": [
             {
-              "topic_id": "topic_edu_1",
-              "title": "শিখন প্রক্রিয়া ও পরিণমন",
-              "file_path": "assets/notes/sem3/education_chap1.dat"
+              "topic_id": "topic_sem3_edu_nep",
+              "title": "প্রথম অধ্যায় (খণ্ড-খ): জাতীয় শিক্ষানীতি - ১৯৮৬ ও ২০২০",
+              "file_path": "assets/notes/sem3/education_unit1.pdf"
             }
           ]
         },
@@ -87,9 +87,9 @@
           "icon_asset": "assets/icons/subjects/ic_sub_philosophy.png",
           "topics": [
             {
-              "topic_id": "topic_phi_1",
-              "title": "যুক্তি ও অবরোহ অনুমানের স্বরূপ",
-              "file_path": "assets/notes/sem3/philosophy_chap1.dat"
+              "topic_id": "topic_sem3_phi_mind_body",
+              "title": "দেহমন সমস্যা - বিশদ আলোচনা ও প্রশ্নোত্তর",
+              "file_path": "assets/notes/sem3/philosophy_dehomon.pdf"
             }
           ]
         },
@@ -100,9 +100,9 @@
           "icon_asset": "assets/icons/subjects/ic_sub_sanskrit.png",
           "topics": [
             {
-              "topic_id": "topic_san_1",
-              "title": "বনগতা গুহা - বিষয়সংক্ষেপ ও বঙ্গানুবাদ",
-              "file_path": "assets/notes/sem3/sanskrit_chap1.dat"
+              "topic_id": "topic_sem3_san_rajbahan",
+              "title": "গদ্য: রাজবাহনচরিতম্ (দণ্ডী)",
+              "file_path": "assets/notes/sem3/sanskrit_rajbahan.pdf"
             }
           ]
         },
@@ -113,9 +113,9 @@
           "icon_asset": "assets/icons/subjects/ic_sub_computer.png",
           "topics": [
             {
-              "topic_id": "topic_comp_1",
-              "title": "লজিক গেট ও কম্বিনেশনাল লজিক সার্কিট",
-              "file_path": "assets/notes/sem3/computer_chap1.dat"
+              "topic_id": "topic_sem3_comp_python",
+              "title": "পাইথন প্রোগ্রামিং (Python Programming) - হ্যান্ডনোটস",
+              "file_path": "assets/notes/sem3/computer_python.pdf"
             }
           ]
         }
@@ -132,8 +132,8 @@
           "topics": [
             {
               "topic_id": "topic_sem4_ben_1",
-              "title": "নানা রঙের দিন - নাটক বিশদ আলোচনা ও প্রশ্নোত্তর",
-              "file_path": "assets/notes/sem4/bengali_nana_ranger_din.dat"
+              "title": "ধর্ম - কবিতা (শ্রীজাত)",
+              "file_path": "assets/notes/sem4/bengali_dhormo.pdf"
             }
           ]
         },
@@ -145,8 +145,8 @@
           "topics": [
             {
               "topic_id": "topic_sem4_eng_1",
-              "title": "Asleep in the Valley - Comprehensive Analysis",
-              "file_path": "assets/notes/sem4/english_asleep_valley.dat"
+              "title": "The Night Train at Deoli - Ruskin Bond",
+              "file_path": "assets/notes/sem4/english_night_train.pdf"
             }
           ]
         },
@@ -158,8 +158,8 @@
           "topics": [
             {
               "topic_id": "topic_sem4_hist_1",
-              "title": "দ্বিতীয় বিশ্বযুদ্ধ ও ঔপনিবেশিক ভারতের রাজনীতি",
-              "file_path": "assets/notes/sem4/history_sem4_chap1.dat"
+              "title": "বৈদেশিক পর্যটকদের বিবরণ - ইউনিট ১.১",
+              "file_path": "assets/notes/sem4/history_unit1_1.pdf"
             }
           ]
         },
@@ -171,8 +171,8 @@
           "topics": [
             {
               "topic_id": "topic_sem4_geo_1",
-              "title": "আঞ্চলিক অর্থনৈতিক উন্নয়ন ও পরিকল্পনা",
-              "file_path": "assets/notes/sem4/geography_sem4_chap1.dat"
+              "title": "প্রথম অধ্যায়: ভূসংস্থান - মহীসঞ্চরণ ও পাতসংস্থান তত্ত্ব",
+              "file_path": "assets/notes/sem4/geography_unit1.pdf"
             }
           ]
         },
@@ -184,8 +184,8 @@
           "topics": [
             {
               "topic_id": "topic_sem4_pol_1",
-              "title": "ভারতীয় সংবিধান ও শাসনব্যবস্থা",
-              "file_path": "assets/notes/sem4/polscience_sem4_chap1.dat"
+              "title": "প্রথম অধ্যায়: দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক",
+              "file_path": "assets/notes/sem4/polscience_unit1.pdf"
             }
           ]
         },
@@ -197,8 +197,8 @@
           "topics": [
             {
               "topic_id": "topic_sem4_edu_1",
-              "title": "স্বাধীন ভারতে শিক্ষা কমিশন ও আধুনিক শিক্ষানীতি",
-              "file_path": "assets/notes/sem4/education_sem4_chap1.dat"
+              "title": "প্রথম অধ্যায় (খণ্ড-খ): জাতীয় শিক্ষানীতি - ১৯৮৬ ও ২০২০",
+              "file_path": "assets/notes/sem4/education_unit1.pdf"
             }
           ]
         },
@@ -210,8 +210,8 @@
           "topics": [
             {
               "topic_id": "topic_sem4_phi_1",
-              "title": "আরোহ অনুমান ও মিলের পরীক্ষণমূলক পদ্ধতি",
-              "file_path": "assets/notes/sem4/philosophy_sem4_chap1.dat"
+              "title": "দেহমন সমস্যা - বিশদ আলোচনা ও প্রশ্নোত্তর",
+              "file_path": "assets/notes/sem4/philosophy_dehomon.pdf"
             }
           ]
         },
@@ -223,8 +223,8 @@
           "topics": [
             {
               "topic_id": "topic_sem4_san_1",
-              "title": "শ্রীগঙ্গাস্তোত্রম্ - শ্লোকভিত্তিক অর্থ ও প্রশ্নোত্তর",
-              "file_path": "assets/notes/sem4/sanskrit_sem4_chap1.dat"
+              "title": "গদ্য: রাজবাহনচরিতম্ (দণ্ডী)",
+              "file_path": "assets/notes/sem4/sanskrit_rajbahan.pdf"
             }
           ]
         },
@@ -236,8 +236,8 @@
           "topics": [
             {
               "topic_id": "topic_sem4_comp_1",
-              "title": "ডাটাবেস ম্যানেজমেন্ট সিস্টেম ও এসকিউএল (SQL)",
-              "file_path": "assets/notes/sem4/computer_sem4_chap1.dat"
+              "title": "পাইথন প্রোগ্রামিং (Python Programming) - হ্যান্ডনোটস",
+              "file_path": "assets/notes/sem4/computer_python.pdf"
             }
           ]
         }

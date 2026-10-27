@@ -25,10 +25,10 @@ class SecurityManager {
   /// Hidden/obfuscated PDF password decoder
   /// Avoids plain text in string tables or decompiled code
   static String getDecryptedPdfPassword() {
-    // Encoded parts assembled at runtime
-    final List<int> part1 = [69, 115, 66];
-    final List<int> part2 = [97, 110, 103];
-    final List<int> part3 = [108, 97, 50, 48, 50, 54];
+    // Obfuscated master password for all PDFs: com.rkson.esbangla.free
+    final List<int> part1 = [99, 111, 109, 46, 114, 107, 115, 111]; // com.rkso
+    final List<int> part2 = [110, 46, 101, 115, 98, 97, 110]; // n.esban
+    final List<int> part3 = [103, 108, 97, 46, 102, 114, 101, 101]; // gla.free
     return utf8.decode([...part1, ...part2, ...part3]);
   }
 }
