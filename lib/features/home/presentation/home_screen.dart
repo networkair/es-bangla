@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
@@ -24,37 +25,48 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageController _sliderController = PageController();
   int _currentSlide = 0;
   Timer? _sliderTimer;
+  int _sliderItemCount = 0;
 
   final List<Map<String, dynamic>> _fallbackSlides = [
     {
       'title': 'উচ্চ মাধ্যমিকের নতুন নির্দেশিকা প্রকাশ!',
       'subtitle': 'পরীক্ষা, রুটিন, সিলেবাস ও অন্যান্য সকল আপডেট জানুন',
+      'tag': 'LATEST NEWS',
       'redirectUrl': '',
+      'imageUrl': '',
+      'order': 1,
     },
     {
       'title': 'সেমিস্টার ৩ ও ৪-এর মক টেস্ট শুরু!',
       'subtitle': 'অধ্যায়ভিত্তিক প্রতিটি সেটে অংশ নিয়ে প্রস্তুতি যাচাই করুন',
+      'tag': 'MOCK TEST',
       'redirectUrl': '',
+      'imageUrl': '',
+      'order': 2,
     },
   ];
 
   @override
   void initState() {
     super.initState();
-    _startSliderTimer();
   }
 
-  void _startSliderTimer() {
-    _sliderTimer = Timer.periodic(const Duration(seconds: 4), (_) {
-      if (_sliderController.hasClients) {
-        final nextPage = (_currentSlide + 1) % _fallbackSlides.length;
-        _sliderController.animateToPage(
-          nextPage,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
+  void _syncSliderTimer(int count) {
+    if (_sliderItemCount == count) return;
+    _sliderItemCount = count;
+    _sliderTimer?.cancel();
+    if (count > 1) {
+      _sliderTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+        if (_sliderController.hasClients && mounted) {
+          final nextPage = (_currentSlide + 1) % count;
+          _sliderController.animateToPage(
+            nextPage,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -132,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 1. News Slider
-            _buildNewsSlider(),
+            _buildNewsSlider(currentSem),
             const SizedBox(height: 18),
 
             // 2. Study Reminder Tile
@@ -202,77 +214,361 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildNewsSlider() {
-    return Container(
-      height: 150,
-      decoration: BoxDecoration(
-        color: AppColors.primaryLight,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.primary.withOpacity(0.15)),
-      ),
-      child: Stack(
-        children: [
-          PageView.builder(
-            controller: _sliderController,
-            onPageChanged: (idx) => setState(() => _currentSlide = idx),
-            itemCount: _fallbackSlides.length,
-            itemBuilder: (context, index) {
-              final item = _fallbackSlides[index];
-              return Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Text(
-                        'LATEST NEWS',
-                        style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      item['title']!,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      item['subtitle']!,
-                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              );
-            },
+  Widget _buildNewsSlider(int currentSem) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('news').snapshots(),
+      builder: (context, snapshot) {
+        List<Map<String, dynamic>> newsList = [];
+
+        if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+          for (final doc in snapshot.data!.docs) {
+            final data = doc.data() as Map<String, dynamic>? ?? {};
+            final bool isActive = data['isActive'] ?? true;
+            if (!isActive) continue;
+
+            final targetSem = data['targetSemester'];
+            if (targetSem != null &&
+                targetSem != 0 &&
+                targetSem != '0' &&
+                targetSem != 'all' &&
+                targetSem != currentSem) {
+              continue;
+            }
+
+            final title = (data['title'] ?? '').toString().trim();
+            if (title.isEmpty) continue;
+
+            newsList.add({
+              'id': doc.id,
+              'title': title,
+              'subtitle': (data['subtitle'] ?? data['description'] ?? '').toString().trim(),
+              'tag': (data['tag'] ?? 'LATEST NEWS').toString().toUpperCase().trim(),
+              'redirectUrl': (data['redirectUrl'] ?? data['link'] ?? data['url'] ?? '').toString().trim(),
+              'imageUrl': (data['imageUrl'] ?? data['image'] ?? '').toString().trim(),
+              'order': data['order'] is num ? (data['order'] as num).toInt() : 0,
+            });
+          }
+
+          // Sort by order ascending
+          newsList.sort((a, b) => (a['order'] as int).compareTo(b['order'] as int));
+        }
+
+        // Fallback default slides if collection is empty or offline
+        if (newsList.isEmpty) {
+          newsList = _fallbackSlides;
+        }
+
+        // Sync slider timer smoothly with current item count
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _syncSliderTimer(newsList.length);
+        });
+
+        final safeSlideIndex = _currentSlide >= newsList.length ? 0 : _currentSlide;
+
+        return Container(
+          height: 156,
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: AppColors.primary.withOpacity(0.18), width: 1.2),
+            boxShadow: AppColors.softCardShadow,
           ),
-          Positioned(
-            bottom: 12,
-            right: 20,
-            child: Row(
-              children: List.generate(_fallbackSlides.length, (idx) {
-                return Container(
-                  width: _currentSlide == idx ? 16 : 6,
-                  height: 6,
-                  margin: const EdgeInsets.only(left: 4),
-                  decoration: BoxDecoration(
-                    color: _currentSlide == idx ? AppColors.primary : AppColors.textMuted.withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(3),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(22),
+            child: Stack(
+              children: [
+                // Background subtle graphic icon
+                Positioned(
+                  top: -15,
+                  right: -15,
+                  child: Container(
+                    width: 110,
+                    height: 110,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.primaryLight.withOpacity(0.4),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.campaign_rounded,
+                        size: 48,
+                        color: AppColors.primary.withOpacity(0.2),
+                      ),
+                    ),
                   ),
-                );
-              }),
+                ),
+
+                // PageView with real-time news cards
+                PageView.builder(
+                  controller: _sliderController,
+                  onPageChanged: (idx) => setState(() => _currentSlide = idx),
+                  itemCount: newsList.length,
+                  itemBuilder: (context, index) {
+                    final item = newsList[index];
+                    final tag = (item['tag'] ?? 'LATEST NEWS').toString();
+                    final title = item['title'] ?? '';
+                    final subtitle = item['subtitle'] ?? '';
+
+                    return Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () => _showNewsDetailsModal(item),
+                        borderRadius: BorderRadius.circular(22),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Top Tag & Live Indicator
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primary,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      tag,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10.5,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 0.4,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    width: 6,
+                                    height: 6,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.correctGreen,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  const Text(
+                                    'LIVE',
+                                    style: TextStyle(
+                                      color: AppColors.correctGreen,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              // Title & Subtitle
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    title,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textPrimary,
+                                      height: 1.25,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  if (subtitle.isNotEmpty) ...[
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      subtitle,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: AppColors.textSecondary,
+                                        height: 1.25,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ],
+                              ),
+
+                              // Bottom action hint
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  Text(
+                                    'বিস্তারিত দেখতে ট্যাপ করুন',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(width: 3),
+                                  Icon(Icons.arrow_forward_rounded, size: 12, color: AppColors.primary),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+                // Slide Indicator Dots (Bottom Right)
+                if (newsList.length > 1)
+                  Positioned(
+                    bottom: 14,
+                    right: 18,
+                    child: Row(
+                      children: List.generate(newsList.length, (idx) {
+                        final isSelected = safeSlideIndex == idx;
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 250),
+                          width: isSelected ? 16 : 6,
+                          height: 6,
+                          margin: const EdgeInsets.only(left: 4),
+                          decoration: BoxDecoration(
+                            color: isSelected ? AppColors.primary : AppColors.textMuted.withOpacity(0.35),
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+              ],
             ),
           ),
-        ],
-      ),
+        );
+      },
+    );
+  }
+
+  void _showNewsDetailsModal(Map<String, dynamic> item) {
+    final title = item['title'] ?? '';
+    final subtitle = item['subtitle'] ?? '';
+    final tag = item['tag'] ?? 'LATEST NEWS';
+    final redirectUrl = (item['redirectUrl'] ?? '').toString().trim();
+    final imageUrl = (item['imageUrl'] ?? '').toString().trim();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 28,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 18),
+
+              // Category Tag
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  tag,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.4,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Title
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                  height: 1.3,
+                ),
+              ),
+
+              if (subtitle.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textSecondary,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+
+              if (imageUrl.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  ),
+                ),
+              ],
+
+              if (redirectUrl.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: redirectUrl));
+                      Navigator.pop(ctx);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('লিঙ্ক ক্লিপবোর্ডে কপি করা হয়েছে!'),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.copy_rounded, size: 18),
+                    label: const Text('লিঙ্ক কপি করুন (Copy Link)', style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                ),
+              ],
+              const SizedBox(height: 10),
+            ],
+          ),
+        );
+      },
     );
   }
 
