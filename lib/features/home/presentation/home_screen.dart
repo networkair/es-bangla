@@ -157,9 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: _buildSemesterTile(
                     title: 'Semester 3',
-                    subtitle: 'Class 12',
                     semester: 3,
-                    isUserSemester: currentSem == 3,
                     iconAsset: 'assets/icons/ic_sem3.png',
                   ),
                 ),
@@ -167,9 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: _buildSemesterTile(
                     title: 'Semester 4',
-                    subtitle: 'Class 12',
                     semester: 4,
-                    isUserSemester: currentSem == 4,
                     iconAsset: 'assets/icons/ic_sem4.png',
                   ),
                 ),
@@ -630,18 +626,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSemesterTile({
     required String title,
-    required String subtitle,
     required int semester,
-    required bool isUserSemester,
     required String iconAsset,
   }) {
     return Card(
-      color: isUserSemester ? AppColors.primaryLight.withOpacity(0.4) : AppColors.surface,
+      color: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        side: BorderSide(
-          color: isUserSemester ? AppColors.primary.withOpacity(0.5) : AppColors.border,
-          width: isUserSemester ? 1.5 : 1,
+        side: const BorderSide(
+          color: AppColors.border,
+          width: 1,
         ),
       ),
       child: InkWell(
@@ -662,21 +656,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 58,
-                    height: 58,
+                    width: 70,
+                    height: 70,
+                    padding: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
-                      color: AppColors.primaryLight.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(16),
+                      color: AppColors.primaryLight.withOpacity(0.45),
+                      borderRadius: BorderRadius.circular(18),
                       border: Border.all(color: AppColors.primary.withOpacity(0.12)),
                     ),
-                    clipBehavior: Clip.antiAlias,
                     child: Center(
-                      child: Transform.scale(
-                        scale: 1.25,
-                        child: Image.asset(
-                          iconAsset,
-                          fit: BoxFit.contain,
-                        ),
+                      child: Image.asset(
+                        iconAsset,
+                        width: 62,
+                        height: 62,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
@@ -701,15 +694,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
               Text(
                 title,
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textPrimary),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
               ),
             ],
           ),
