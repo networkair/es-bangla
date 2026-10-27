@@ -217,12 +217,13 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
                       children: [
                         // Subject Icon Container
                         Container(
-                          width: 44,
-                          height: 44,
+                          width: 48,
+                          height: 48,
+                          padding: const EdgeInsets.all(3),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryLight,
+                            color: AppColors.primaryLight.withOpacity(0.4),
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: AppColors.primary.withOpacity(0.15)),
+                            border: Border.all(color: AppColors.primary.withOpacity(0.12)),
                           ),
                           child: Center(
                             child: _buildSubjectEmblem(subject),

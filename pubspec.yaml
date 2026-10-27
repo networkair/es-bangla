@@ -60,4 +60,5 @@ flutter:
   assets:
     - assets/manifest/
     - assets/icons/
+    - assets/icons/subjects/
     - assets/images/
