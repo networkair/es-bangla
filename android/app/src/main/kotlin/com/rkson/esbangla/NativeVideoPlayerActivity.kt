@@ -12,6 +12,7 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.graphics.Color
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
@@ -53,10 +54,19 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
 
         val tvHeaderTitle: TextView = findViewById(R.id.tvHeaderTitle)
         val tvVideoTitle: TextView = findViewById(R.id.tvVideoTitle)
+        val tvPlayerStatus: TextView = findViewById(R.id.tvPlayerStatus)
         val btnBack: View = findViewById(R.id.btnBack)
 
         tvHeaderTitle.text = title
         tvVideoTitle.text = title
+
+        if (cleanVideoId.isEmpty()) {
+            tvPlayerStatus.text = "⚠️ কোনো ভিডিও লিঙ্ক যুক্ত করা হয়নি"
+            tvPlayerStatus.setTextColor(Color.parseColor("#F87171"))
+        } else {
+            tvPlayerStatus.text = "⏳ ভিডিও প্রস্তুত হচ্ছে... (ID: $cleanVideoId)"
+            tvPlayerStatus.setTextColor(Color.parseColor("#93C5FD"))
+        }
 
         btnBack.setOnClickListener {
             finish()
@@ -101,21 +111,59 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
             }
         })
 
-        // Standard canonical YouTube player listener
+        // Standard canonical YouTube player listener with cueVideo & status updates
         youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(player: YouTubePlayer) {
-                Log.d(TAG, "Native YouTube player onReady! Loading video: $cleanVideoId")
+                Log.d(TAG, "Native YouTube player onReady! Cueing video: $cleanVideoId")
                 if (cleanVideoId.isNotEmpty()) {
-                    player.loadVideo(cleanVideoId, 0f)
+                    // Cue video so YouTube thumbnail and red play button show up immediately
+                    player.cueVideo(cleanVideoId, 0f)
+                    tvPlayerStatus.text = "▶️ ভিডিও প্রস্তুত! প্লে করতে ভিডিওতে ট্যাপ করুন"
+                    tvPlayerStatus.setTextColor(Color.parseColor("#4ADE80"))
                 }
             }
 
             override fun onError(player: YouTubePlayer, error: PlayerConstants.PlayerError) {
                 Log.e(TAG, "Native YouTube player error: $error")
+                when (error) {
+                    PlayerConstants.PlayerError.VIDEO_NOT_PLAYABLE_IN_EMBEDDED_PLAYER -> {
+                        tvPlayerStatus.text = "⚠️ এই ভিডিওটিতে চ্যানেল মালিক Embedding বন্ধ রেখেছেন (Error 150)। নিজের আনলিস্টেড ভিডিওতে 'Allow embedding' চালু রাখলে তা চলবে।"
+                    }
+                    PlayerConstants.PlayerError.VIDEO_NOT_FOUND -> {
+                        tvPlayerStatus.text = "⚠️ ভিডিওটি ইউটিউবে খুঁজে পাওয়া যায়নি (Invalid ID)"
+                    }
+                    else -> {
+                        tvPlayerStatus.text = "⚠️ ভিডিও লোড হতে সমস্যা: $error"
+                    }
+                }
+                tvPlayerStatus.setTextColor(Color.parseColor("#F87171"))
             }
 
             override fun onStateChange(player: YouTubePlayer, state: PlayerConstants.PlayerState) {
                 Log.d(TAG, "Native YouTube player state: $state")
+                when (state) {
+                    PlayerConstants.PlayerState.PLAYING -> {
+                        tvPlayerStatus.text = "🟢 ভিডিও চলছে"
+                        tvPlayerStatus.setTextColor(Color.parseColor("#4ADE80"))
+                    }
+                    PlayerConstants.PlayerState.PAUSED -> {
+                        tvPlayerStatus.text = "⏸️ ভিডিও সাময়িকভাবে বন্ধ আছে"
+                        tvPlayerStatus.setTextColor(Color.parseColor("#FCD34D"))
+                    }
+                    PlayerConstants.PlayerState.BUFFERING -> {
+                        tvPlayerStatus.text = "⏳ লোডিং হচ্ছে..."
+                        tvPlayerStatus.setTextColor(Color.parseColor("#93C5FD"))
+                    }
+                    PlayerConstants.PlayerState.CUED -> {
+                        tvPlayerStatus.text = "▶️ ভিডিও প্রস্তুত! প্লে করতে ভিডিওতে ট্যাপ করুন"
+                        tvPlayerStatus.setTextColor(Color.parseColor("#4ADE80"))
+                    }
+                    PlayerConstants.PlayerState.ENDED -> {
+                        tvPlayerStatus.text = "✅ ভিডিও সমাপ্ত হয়েছে"
+                        tvPlayerStatus.setTextColor(Color.parseColor("#94A3B8"))
+                    }
+                    else -> {}
+                }
             }
         })
     }

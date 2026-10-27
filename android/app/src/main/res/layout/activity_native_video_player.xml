@@ -89,6 +89,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- Status Banner Below Player -->
+        <LinearLayout
+            android:id="@+id/statusContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#1E293B"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvPlayerStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="⏳ ভিডিও প্রস্তুত হচ্ছে..."
+                android:textColor="#93C5FD"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
         <!-- Content Details Area Below Video -->
         <ScrollView
             android:id="@+id/contentScrollView"
