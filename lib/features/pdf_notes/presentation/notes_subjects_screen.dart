@@ -52,19 +52,7 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
                       ),
                     )
                   : _subjects.isEmpty
-                      ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.folder_open_rounded, size: 56, color: AppColors.textMuted.withOpacity(0.5)),
-                              const SizedBox(height: 12),
-                              Text(
-                                'সেমিস্টার ${widget.semester}-এর কোনো বিষয় পাওয়া যায়নি',
-                                style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
-                              ),
-                            ],
-                          ),
-                        )
+                      ? _buildComingSoonState()
                       : GridView.builder(
                           padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                           physics: const BouncingScrollPhysics(),
@@ -365,5 +353,121 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
     }
 
     return const Icon(Icons.menu_book_rounded, color: AppColors.primaryDark, size: 22);
+  }
+
+  Widget _buildComingSoonState() {
+    return Center(
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: AppColors.primaryLight,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.primary.withOpacity(0.18), width: 1.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withOpacity(0.08),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: const Icon(
+                Icons.auto_awesome_rounded,
+                color: AppColors.primary,
+                size: 38,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.primaryLight,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 7,
+                    height: 7,
+                    decoration: const BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'কামিং সুন • COMING SOON',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryDark,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'সেমিস্টার ${widget.semester}-এর নোটস শীঘ্রই আসছে',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+                letterSpacing: -0.3,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'এই সেমিস্টারের অধ্যায়ভিত্তিক হ্যান্ডনোটস ও সাজেশনস তৈরির কাজ চলছে। খুব শীঘ্রই অ্যাপে সমস্ত বিষয়ের নোটস যুক্ত করা হবে।',
+              style: TextStyle(
+                fontSize: 13,
+                color: AppColors.textSecondary,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            if (widget.semester == 4) ...[
+              const SizedBox(height: 24),
+              OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const NotesSubjectsScreen(semester: 3),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.arrow_back_rounded, size: 18, color: AppColors.primary),
+                label: const Text(
+                  'সেমিস্টার ৩-এর নোটস দেখুন',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: AppColors.primary, width: 1.2),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  backgroundColor: AppColors.surface,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 }
