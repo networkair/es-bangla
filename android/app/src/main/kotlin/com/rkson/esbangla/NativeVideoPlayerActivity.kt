@@ -154,7 +154,7 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                         tvPlayerStatus.text = "⏳ লোডিং হচ্ছে..."
                         tvPlayerStatus.setTextColor(Color.parseColor("#93C5FD"))
                     }
-                    PlayerConstants.PlayerState.CUED -> {
+                    PlayerConstants.PlayerState.VIDEO_CUED -> {
                         tvPlayerStatus.text = "▶️ ভিডিও প্রস্তুত! প্লে করতে ভিডিওতে ট্যাপ করুন"
                         tvPlayerStatus.setTextColor(Color.parseColor("#4ADE80"))
                     }
