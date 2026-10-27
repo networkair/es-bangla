@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/storage/local_storage_service.dart';
 import '../data/youtube_helper.dart';
 import 'video_player_screen.dart';
+import 'course_subscription_screen.dart';
 
 class LibraryTopicsScreen extends StatefulWidget {
   final int semester;
@@ -331,11 +333,21 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
     final String youtubeInput = video['youtubeInput'] ?? '';
     final bool isFree = video['isFree'] ?? true;
 
+    final entitlements = LocalStorageService().getEntitlements();
+    final bool hasAccess = isFree ||
+        entitlements.contains('video_library_all') ||
+        entitlements.contains('video_library_sem${widget.semester}') ||
+        entitlements.contains('combo_sem${widget.semester}') ||
+        entitlements.contains('subject_${widget.subjectId}') ||
+        entitlements.contains('subject_${widget.subjectName}');
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(
+          color: hasAccess ? AppColors.border : AppColors.primary.withOpacity(0.25),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -347,7 +359,24 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
+          onTap: () async {
+            if (!hasAccess) {
+              final bool? unlocked = await Navigator.push<bool>(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CourseSubscriptionScreen(
+                    semester: widget.semester,
+                    subjectName: widget.subjectName,
+                    subjectId: widget.subjectId,
+                  ),
+                ),
+              );
+              if (unlocked == true && mounted) {
+                setState(() {});
+              }
+              return;
+            }
+
             final String videoId = YoutubeHelper.extractVideoId(youtubeInput);
             if (videoId.isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -395,7 +424,13 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                 else
                   _buildFallbackTopicCard(title),
 
-                // Top-Right FREE Badge (Matching Reference Image 2)
+                // Subtle dark overlay if locked
+                if (!hasAccess)
+                  Container(
+                    color: Colors.black.withOpacity(0.32),
+                  ),
+
+                // Top-Right Badge (FREE / UNLOCKED / LOCKED)
                 Positioned(
                   top: 8,
                   right: 8,
@@ -405,30 +440,43 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: isFree ? AppColors.correctGreen : AppColors.premiumGold,
+                        color: hasAccess
+                            ? (isFree ? AppColors.correctGreen : AppColors.primary)
+                            : AppColors.wrongRed,
                         width: 1.2,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
+                          color: Colors.black.withOpacity(0.12),
                           blurRadius: 4,
                           offset: const Offset(0, 1),
                         ),
                       ],
                     ),
-                    child: Text(
-                      isFree ? 'FREE' : 'PRO',
-                      style: TextStyle(
-                        fontSize: 9.5,
-                        fontWeight: FontWeight.bold,
-                        color: isFree ? AppColors.correctGreen : AppColors.premiumGold,
-                        letterSpacing: 0.3,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (!hasAccess) ...[
+                          const Icon(Icons.lock_rounded, size: 10, color: AppColors.wrongRed),
+                          const SizedBox(width: 3),
+                        ],
+                        Text(
+                          hasAccess ? (isFree ? 'FREE' : 'UNLOCKED') : 'LOCKED',
+                          style: TextStyle(
+                            fontSize: 9.5,
+                            fontWeight: FontWeight.bold,
+                            color: hasAccess
+                                ? (isFree ? AppColors.correctGreen : AppColors.primary)
+                                : AppColors.wrongRed,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
 
-                // Bottom-Right Circular White Play Button (Matching Reference Image 2)
+                // Bottom-Right Circular Button (Play or Lock)
                 Positioned(
                   bottom: 8,
                   right: 8,
@@ -436,7 +484,7 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: hasAccess ? Colors.white : AppColors.primary,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
@@ -446,11 +494,11 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                         ),
                       ],
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Icon(
-                        Icons.play_arrow_rounded,
-                        color: AppColors.primary,
-                        size: 20,
+                        hasAccess ? Icons.play_arrow_rounded : Icons.lock_rounded,
+                        color: hasAccess ? AppColors.primary : Colors.white,
+                        size: hasAccess ? 20 : 16,
                       ),
                     ),
                   ),
