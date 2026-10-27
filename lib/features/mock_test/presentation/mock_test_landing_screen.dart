@@ -110,7 +110,7 @@ class MockTestLandingScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.Border.all(
+        border: Border.all(
           color: isPremium ? AppColors.premiumGold.withOpacity(0.3) : AppColors.border,
           width: isPremium ? 1.5 : 1,
         ),

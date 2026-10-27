@@ -121,7 +121,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.Border.all(color: AppColors.border),
+                border: Border.all(color: AppColors.border),
                 boxShadow: AppColors.softCardShadow,
               ),
               child: Column(
@@ -231,7 +231,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.Border.all(
+                    border: Border.all(
                       color: userAns == null
                           ? AppColors.border
                           : (isCorrect ? AppColors.correctGreen.withOpacity(0.4) : AppColors.wrongRed.withOpacity(0.4)),

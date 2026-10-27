@@ -80,7 +80,7 @@ class MockAnalyticsScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.Border.all(color: AppColors.border),
+                border: Border.all(color: AppColors.border),
                 boxShadow: AppColors.softCardShadow,
               ),
               child: Row(
@@ -106,7 +106,7 @@ class MockAnalyticsScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.Border.all(color: AppColors.border),
+                border: Border.all(color: AppColors.border),
               ),
               child: LineChart(
                 LineChartData(
@@ -156,7 +156,7 @@ class MockAnalyticsScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.Border.all(color: AppColors.border),
+                  border: Border.all(color: AppColors.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

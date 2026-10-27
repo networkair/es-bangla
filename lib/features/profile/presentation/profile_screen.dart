@@ -124,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.Border.all(color: AppColors.border),
+                border: Border.all(color: AppColors.border),
                 boxShadow: AppColors.softCardShadow,
               ),
               child: Row(
@@ -280,7 +280,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.border),
         boxShadow: AppColors.softCardShadow,
       ),
       child: Column(

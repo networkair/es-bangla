@@ -121,7 +121,7 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.Border.all(color: AppColors.border),
+            border: Border.all(color: AppColors.border),
             boxShadow: AppColors.softCardShadow,
           ),
           padding: const EdgeInsets.all(16),
@@ -205,7 +205,7 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
                       decoration: BoxDecoration(
                         color: isUnlocked ? AppColors.surface : AppColors.surfaceMuted,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.Border.all(
+                        border: Border.all(
                           color: isUnlocked ? AppColors.border : AppColors.premiumGold.withOpacity(0.4),
                         ),
                       ),

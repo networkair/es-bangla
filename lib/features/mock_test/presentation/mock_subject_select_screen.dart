@@ -105,7 +105,7 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
           decoration: BoxDecoration(
             color: widget.isPremiumMode ? AppColors.premiumLight : AppColors.primaryLight,
             borderRadius: BorderRadius.circular(16),
-            border: Border.Border.all(
+            border: Border.all(
               color: widget.isPremiumMode ? AppColors.premiumGold.withOpacity(0.3) : AppColors.primary.withOpacity(0.3),
             ),
           ),
@@ -178,7 +178,7 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.Border.all(color: AppColors.border),
+          border: Border.all(color: AppColors.border),
           boxShadow: AppColors.softCardShadow,
         ),
         padding: const EdgeInsets.all(16),

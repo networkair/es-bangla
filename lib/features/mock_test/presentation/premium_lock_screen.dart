@@ -122,7 +122,7 @@ class _PremiumLockScreenState extends State<PremiumLockScreen> {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.Border.all(color: AppColors.premiumGold.withOpacity(0.3)),
+                border: Border.all(color: AppColors.premiumGold.withOpacity(0.3)),
                 boxShadow: AppColors.softCardShadow,
               ),
               child: Column(
@@ -203,7 +203,7 @@ class _PremiumLockScreenState extends State<PremiumLockScreen> {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.Border.all(color: AppColors.border),
+                border: Border.all(color: AppColors.border),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

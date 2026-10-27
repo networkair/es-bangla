@@ -180,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.Border.all(color: AppColors.border),
+                    border: Border.all(color: AppColors.border),
                     boxShadow: AppColors.softCardShadow,
                   ),
                   child: Column(
@@ -263,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 decoration: BoxDecoration(
                                   color: AppColors.surfaceMuted,
                                   borderRadius: BorderRadius.circular(12),
-                                  border: Border.Border.all(color: AppColors.border),
+                                  border: Border.all(color: AppColors.border),
                                 ),
                                 child: const Text(
                                   'Class 12',

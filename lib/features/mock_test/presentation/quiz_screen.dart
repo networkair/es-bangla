@@ -241,7 +241,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.Border.all(color: AppColors.border),
+                    border: Border.all(color: AppColors.border),
                     boxShadow: AppColors.softCardShadow,
                   ),
                   child: Column(
@@ -306,7 +306,7 @@ class _QuizScreenState extends State<QuizScreen> {
                         decoration: BoxDecoration(
                           color: optionBg,
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.Border.all(color: borderColor, width: isAnswered && (key == currentQ.correctOption || key == selectedOpt) ? 1.5 : 1),
+                          border: Border.all(color: borderColor, width: isAnswered && (key == currentQ.correctOption || key == selectedOpt) ? 1.5 : 1),
                         ),
                         child: Row(
                           children: [
@@ -360,7 +360,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.primaryLight.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.Border.all(color: AppColors.primary.withOpacity(0.2)),
+                      border: Border.all(color: AppColors.primary.withOpacity(0.2)),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
