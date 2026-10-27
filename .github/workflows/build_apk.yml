@@ -45,9 +45,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.7
-          name: "Es Bangla v1.0.7 (Native Android YouTube Player)"
-          body: "Release APK for Es Bangla with Native Android YouTubePlayerView integration (com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1) for 100% in-app video playback without webview block, fullscreen support with orientation toggle, and zero external links or channel discovery."
+          tag_name: v1.0.8
+          name: "Es Bangla v1.0.8 (Instant Native Playback & Spinner Fix)"
+          body: "Release APK for Es Bangla with instant native playback (removed Flutter overlay blocking spinner, canonical addYouTubePlayerListener, quick action play/pause bar, and direct 16:9 view rendering)."
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
