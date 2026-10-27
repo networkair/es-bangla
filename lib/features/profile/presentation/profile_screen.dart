@@ -5,7 +5,6 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import 'mock_analytics_screen.dart';
 import 'saved_questions_screen.dart';
-import '../../reminder/presentation/reminder_history_screen.dart';
 import '../../auth/presentation/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -191,12 +190,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: 'সংরক্ষিত প্রশ্নাবলি (Saved Questions)',
                   subtitle: 'আপনার বুকমার্ক করা প্রশ্ন তালিকা',
                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SavedQuestionsScreen())),
-                ),
-                _buildTile(
-                  icon: Icons.history_rounded,
-                  title: 'রিমাইন্ডার ইতিহাস',
-                  subtitle: 'সম্পন্ন ও মিসড স্টাডি টাস্ক',
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReminderHistoryScreen())),
                 ),
               ],
             ),
