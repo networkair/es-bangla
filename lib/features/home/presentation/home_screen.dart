@@ -362,18 +362,46 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 44,
-                    height: 44,
-                    padding: const EdgeInsets.all(2),
+                    width: 58,
+                    height: 58,
                     decoration: BoxDecoration(
-                      color: AppColors.primaryLight,
-                      borderRadius: BorderRadius.circular(12),
+                      color: AppColors.primaryLight.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.primary.withOpacity(0.12)),
                     ),
-                    child: Image.asset(iconAsset, fit: BoxFit.contain),
+                    clipBehavior: Clip.antiAlias,
+                    child: Center(
+                      child: Transform.scale(
+                        scale: 1.25,
+                        child: Image.asset(
+                          iconAsset,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
                   ),
-                  const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: AppColors.textMuted),
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.border.withOpacity(0.8)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.03),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Icon(Icons.arrow_forward_ios_rounded, size: 11, color: AppColors.primary),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 14),
@@ -384,7 +412,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 2),
               Text(
                 subtitle,
-                style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.w500),
               ),
             ],
           ),
