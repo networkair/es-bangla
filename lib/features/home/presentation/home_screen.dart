@@ -8,6 +8,7 @@ import '../../pdf_notes/presentation/notes_subjects_screen.dart';
 import '../../pdf_notes/presentation/pyq_screen.dart';
 import '../../reminder/presentation/reminder_screen.dart';
 import '../../notifications/presentation/notification_inbox_screen.dart';
+import '../../book_notes/presentation/book_notes_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback onSemesterChanged;
@@ -186,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => NotesSubjectsScreen(semester: currentSem)),
+                  MaterialPageRoute(builder: (_) => const BookNotesScreen()),
                 );
               },
             ),

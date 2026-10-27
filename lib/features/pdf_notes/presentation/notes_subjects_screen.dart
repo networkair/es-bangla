@@ -60,7 +60,7 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 14,
                             mainAxisSpacing: 14,
-                            childAspectRatio: 1.12,
+                            childAspectRatio: 0.78,
                           ),
                           itemCount: _subjects.length,
                           itemBuilder: (context, index) {
@@ -178,65 +178,58 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.fromLTRB(14, 18, 14, 14),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Top: Enlarged Subject Icon Container
-                Container(
-                  width: 56,
-                  height: 56,
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryLight.withOpacity(0.45),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.12)),
-                  ),
+                // 1. Large, prominent 3D Icon (Centered, open and spacious)
+                Expanded(
                   child: Center(
                     child: _buildSubjectEmblem(subject),
                   ),
                 ),
 
-                // Bottom Row: Subject Title on left, Circular Arrow Button on right
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        subject.subjectName,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                          height: 1.25,
+                const SizedBox(height: 10),
+
+                // 2. Subject Title
+                Text(
+                  subject.subjectName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                    height: 1.25,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+
+                const SizedBox(height: 12),
+
+                // 3. Bottom Row: Sleek right-aligned circular arrow button
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.35),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      ],
                     ),
-                    const SizedBox(width: 6),
-                    Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withOpacity(0.35),
-                            blurRadius: 8,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Colors.white,
-                        size: 16,
-                      ),
+                    child: const Icon(
+                      Icons.arrow_forward_rounded,
+                      color: Colors.white,
+                      size: 16,
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -250,8 +243,8 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
     if (subject.iconAsset != null && subject.iconAsset!.isNotEmpty) {
       return Image.asset(
         subject.iconAsset!,
-        width: 44,
-        height: 44,
+        width: 86,
+        height: 86,
         fit: BoxFit.contain,
       );
     }
@@ -266,7 +259,7 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
         style: TextStyle(
           color: AppColors.primaryDark,
           fontWeight: FontWeight.bold,
-          fontSize: 20,
+          fontSize: 48,
         ),
       );
     } else if (nameLower.contains('english') || nameEnLower.contains('english')) {
@@ -275,35 +268,35 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
         style: TextStyle(
           color: AppColors.primaryDark,
           fontWeight: FontWeight.bold,
-          fontSize: 18,
+          fontSize: 40,
         ),
       );
     } else if (nameLower.contains('ইতিহাস') || nameEnLower.contains('history')) {
-      return const Icon(Icons.account_balance_rounded, color: AppColors.primaryDark, size: 22);
+      return const Icon(Icons.account_balance_rounded, color: AppColors.primary, size: 56);
     } else if (nameLower.contains('ভূগোল') || nameEnLower.contains('geography')) {
-      return const Icon(Icons.public_rounded, color: AppColors.primaryDark, size: 22);
+      return const Icon(Icons.public_rounded, color: AppColors.primary, size: 56);
     } else if (nameLower.contains('রাষ্ট্র') || nameEnLower.contains('political') || nameEnLower.contains('polscience')) {
-      return const Icon(Icons.gavel_rounded, color: AppColors.primaryDark, size: 22);
+      return const Icon(Icons.gavel_rounded, color: AppColors.primary, size: 56);
     } else if (nameLower.contains('শিক্ষা') || nameEnLower.contains('education')) {
-      return const Icon(Icons.school_rounded, color: AppColors.primaryDark, size: 22);
+      return const Icon(Icons.school_rounded, color: AppColors.primary, size: 56);
     } else if (nameLower.contains('সংস্কৃত') || nameEnLower.contains('sanskrit')) {
       return const Text(
         'ॐ',
         style: TextStyle(
           color: AppColors.primaryDark,
           fontWeight: FontWeight.bold,
-          fontSize: 20,
+          fontSize: 48,
         ),
       );
     } else if (nameLower.contains('দর্শন') || nameEnLower.contains('philosophy')) {
-      return const Icon(Icons.psychology_rounded, color: AppColors.primaryDark, size: 22);
+      return const Icon(Icons.psychology_rounded, color: AppColors.primary, size: 56);
     } else if (nameLower.contains('সমাজ') || nameEnLower.contains('sociology')) {
-      return const Icon(Icons.groups_rounded, color: AppColors.primaryDark, size: 22);
+      return const Icon(Icons.groups_rounded, color: AppColors.primary, size: 56);
     } else if (nameLower.contains('পরিবেশ') || nameEnLower.contains('evs')) {
-      return const Icon(Icons.eco_rounded, color: AppColors.primaryDark, size: 22);
+      return const Icon(Icons.eco_rounded, color: AppColors.primary, size: 56);
     }
 
-    return const Icon(Icons.menu_book_rounded, color: AppColors.primaryDark, size: 22);
+    return const Icon(Icons.menu_book_rounded, color: AppColors.primary, size: 56);
   }
 
   Widget _buildComingSoonState() {
