@@ -153,41 +153,62 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. News Slider
+            // 1. Academic Selector Pill (Class 12 Semester Indicator)
+            _buildAcademicHeaderPill(currentSem),
+            const SizedBox(height: 14),
+
+            // 2. News Slider (16:9 Banner)
             _buildNewsSlider(currentSem),
-            const SizedBox(height: 18),
+            const SizedBox(height: 14),
 
-            // 2. Study Reminder Tile
+            // 3. Study Reminder Banner (Warm Soft-Amber 3D Card)
             _buildStudyReminderTile(),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
 
-            // 3. Semester 3 & Semester 4 Tiles
-            Row(
-              children: [
-                Expanded(
-                  child: _buildSemesterTile(
-                    title: 'Semester 3',
-                    semester: 3,
-                    iconAsset: 'assets/icons/ic_sem3.png',
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildSemesterTile(
-                    title: 'Semester 4',
-                    semester: 4,
-                    iconAsset: 'assets/icons/ic_sem4.png',
-                  ),
-                ),
-              ],
+            // 4. Primary Academic Action Cards (Cohesive Full-Width 3D Cards)
+            _buildModernFeatureCard(
+              tag: 'SEMESTER 3',
+              title: 'Semester 3',
+              subtitle: 'অধ্যায়ভিত্তিক সাজেশন, হ্যান্ডনোটস ও প্র্যাকটিস',
+              iconAsset: 'assets/icons/ic_sem3.png',
+              emblemBgColor: const Color(0xFFEFF6FF),
+              emblemBorderColor: const Color(0xFFBFDBFE),
+              tagColor: const Color(0xFF0369A1),
+              trailingBadge: _buildPillBadge('WBCHSE', const Color(0xFF0284C7), const Color(0xFFE0F2FE)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const NotesSubjectsScreen(semester: 3)),
+                );
+              },
             ),
-            const SizedBox(height: 16),
 
-            // 4. Previous Year Questions Tile
-            _buildActionTile(
-              title: 'Previous Year Questions',
-              subtitle: 'গত বছরের প্রশ্নপত্র ও সমাধান',
+            _buildModernFeatureCard(
+              tag: 'SEMESTER 4',
+              title: 'Semester 4',
+              subtitle: 'অধ্যায়ভিত্তিক সাজেশন, হ্যান্ডনোটস ও প্র্যাকটিস',
+              iconAsset: 'assets/icons/ic_sem4.png',
+              emblemBgColor: const Color(0xFFFAF5FF),
+              emblemBorderColor: const Color(0xFFDDD6FE),
+              tagColor: const Color(0xFF6D28D9),
+              trailingBadge: _buildPillBadge('WBCHSE', const Color(0xFF7C3AED), const Color(0xFFEDE9FE)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const NotesSubjectsScreen(semester: 4)),
+                );
+              },
+            ),
+
+            _buildModernFeatureCard(
+              tag: 'PREVIOUS YEARS QUESTIONS',
+              title: 'PYQ',
+              subtitle: 'উচ্চ মাধ্যমিক বিগত বছরের প্রশ্নপত্র ও সমাধান',
               iconAsset: 'assets/icons/ic_pyq.png',
+              emblemBgColor: const Color(0xFFFFF7ED),
+              emblemBorderColor: const Color(0xFFFED7AA),
+              tagColor: const Color(0xFFC2410C),
+              trailingBadge: _buildPillBadge('SOLVED', const Color(0xFFEA580C), const Color(0xFFFFEDD5)),
               onTap: () {
                 Navigator.push(
                   context,
@@ -195,13 +216,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-            const SizedBox(height: 14),
 
-            // 5. Book Notes / Buy Notes Tile
-            _buildActionTile(
-              title: 'Book Notes (বইয়ের নোটস)',
-              subtitle: 'গুরুত্বপূর্ণ অধ্যায়ভিত্তিক হ্যান্ডনোটস',
+            _buildModernFeatureCard(
+              tag: 'BOOK NOTES (বইয়ের নোটস)',
+              title: 'Book Notes',
+              subtitle: 'গুরুত্বপূর্ণ অধ্যায়ভিত্তিক হ্যান্ডনোটস ও সাজেশন',
               iconAsset: 'assets/icons/ic_book_notes.png',
+              emblemBgColor: const Color(0xFFECFDF5),
+              emblemBorderColor: const Color(0xFFA7F3D0),
+              tagColor: const Color(0xFF047857),
+              trailingBadge: _buildPillBadge('PDF', const Color(0xFF059669), const Color(0xFFD1FAE5)),
               onTap: () {
                 Navigator.push(
                   context,
@@ -209,11 +233,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 6),
 
-            // 6. Social Media Tile
-            _buildSocialMediaSection(),
-            const SizedBox(height: 20),
+            // 5. WhatsApp Community Hero Banner
+            _buildWhatsAppCommunityBanner(),
+
+            // 6. Social Media Channels
+            _buildSocialChannelsSection(),
+
+            // 7. Trust Badge Footer
+            _buildTrustBadge(),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -225,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
       stream: FirebaseFirestore.instance.collection('news').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
-          return AppShimmer.banner16x9(borderRadius: 4);
+          return AppShimmer.banner16x9(borderRadius: 16);
         }
 
         List<Map<String, dynamic>> newsList = [];
@@ -280,18 +310,18 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             decoration: BoxDecoration(
               color: AppColors.surface,
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: AppColors.border, width: 1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.border, width: 1.2),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(16),
               child: Stack(
               children: [
                 // Background subtle graphic icon (for cards without image)
@@ -333,7 +363,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () => _showNewsDetailsModal(item),
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(16),
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
@@ -341,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               CachedNetworkImage(
                                 imageUrl: imageUrl,
                                 fit: BoxFit.cover,
-                                placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 4),
+                                placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 16),
                                 errorWidget: (context, url, error) => Container(
                                   color: AppColors.surfaceMuted,
                                   child: const Center(
@@ -425,7 +455,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () => _showNewsDetailsModal(item),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(16),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                           child: Column(
@@ -707,66 +737,48 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildStudyReminderTile() {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-        side: const BorderSide(color: AppColors.border),
-      ),
+  Widget _buildAcademicHeaderPill(int currentSem) {
+    return Center(
       child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ReminderScreen()),
-          );
-        },
-        borderRadius: BorderRadius.circular(18),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+        onTap: () => _showSemesterSelectionSheet(currentSem),
+        borderRadius: BorderRadius.circular(24),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: AppColors.border, width: 1.2),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.03),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryLight,
                   shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
                 ),
-                child: Center(
-                  child: Image.asset(
-                    'assets/icons/ic_reminder.png',
-                    width: 38,
-                    height: 38,
-                    fit: BoxFit.contain,
-                  ),
+                child: const Icon(Icons.school_rounded, size: 14, color: AppColors.primary),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'CLASS 12 (Semester $currentSem)',
+                style: const TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                  letterSpacing: 0.3,
                 ),
               ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      'Study Reminder',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textPrimary),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      'আজকের পড়াশোনা শেষ হয়েছে? রুটিন দেখুন',
-                      style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.textMuted),
+              const SizedBox(width: 4),
+              const Icon(Icons.keyboard_arrow_down_rounded, size: 18, color: AppColors.textSecondary),
             ],
           ),
         ),
@@ -774,223 +786,735 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSemesterTile({
-    required String title,
-    required int semester,
-    required String iconAsset,
-  }) {
-    return Card(
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-        side: const BorderSide(
-          color: AppColors.border,
-          width: 1,
-        ),
-      ),
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => NotesSubjectsScreen(semester: semester)),
-          );
-        },
-        borderRadius: BorderRadius.circular(18),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+  void _showSemesterSelectionSheet(int currentSem) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 78,
-                    height: 78,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF8FAFC),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        iconAsset,
-                        width: 56,
-                        height: 56,
-                        fit: BoxFit.contain,
+              Center(
+                child: Container(
+                  width: 38,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'সেমিস্টার নির্বাচন করুন',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'আপনার প্রয়োজনীয় সেমিস্টার বেছে নিন',
+                style: TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+              ),
+              const SizedBox(height: 16),
+              _buildSemesterChoiceTile(
+                semester: 3,
+                title: 'Semester 3 (সেমিস্টার ৩)',
+                subtitle: 'উচ্চ মাধ্যমিক প্রথম পর্ব',
+                isSelected: currentSem == 3,
+                onTap: () {
+                  _storage.semester = 3;
+                  setState(() {});
+                  widget.onSemesterChanged();
+                  Navigator.pop(ctx);
+                },
+              ),
+              const SizedBox(height: 10),
+              _buildSemesterChoiceTile(
+                semester: 4,
+                title: 'Semester 4 (সেমিস্টার ৪)',
+                subtitle: 'উচ্চ মাধ্যমিক দ্বিতীয় পর্ব',
+                isSelected: currentSem == 4,
+                onTap: () {
+                  _storage.semester = 4;
+                  setState(() {});
+                  widget.onSemesterChanged();
+                  Navigator.pop(ctx);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSemesterChoiceTile({
+    required int semester,
+    required String title,
+    required String subtitle,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isSelected ? AppColors.primaryLight.withOpacity(0.4) : AppColors.surfaceMuted,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: isSelected ? AppColors.primary : AppColors.border,
+          width: isSelected ? 1.6 : 1,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(14),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppColors.primary : Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '$semester',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: isSelected ? Colors.white : AppColors.textPrimary,
                       ),
                     ),
                   ),
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.border.withOpacity(0.8)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 4,
-                          offset: const Offset(0, 1),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w700,
+                          color: isSelected ? AppColors.primaryDark : AppColors.textPrimary,
                         ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Icon(Icons.arrow_forward_ios_rounded, size: 11, color: AppColors.primary),
-                    ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textPrimary),
-              ),
-            ],
+                ),
+                if (isSelected)
+                  const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 22),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildActionTile({
-    required String title,
-    required String subtitle,
-    required String iconAsset,
-    required VoidCallback onTap,
-  }) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-        side: const BorderSide(color: AppColors.border),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
-                  shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Image.asset(
-                    iconAsset,
-                    width: 38,
-                    height: 38,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.textMuted),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialMediaSection() {
+  Widget _buildPillBadge(String label, Color textColor, Color bgColor) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.border),
-        boxShadow: AppColors.softCardShadow,
+        color: bgColor,
+        borderRadius: BorderRadius.circular(6),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Icon(Icons.share_rounded, size: 20, color: AppColors.primary),
-              SizedBox(width: 8),
-              Text(
-                'আমাদের সাথে যুক্ত থাকুন',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            'সকল নতুন আপডেট, সাজেশন ও ক্লাস সবার আগে পেতে যুক্ত হোন',
-            style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildSocialButton('assets/icons/ic_youtube.png', 'YouTube', ApiConstants.youtubeChannelUrl),
-              _buildSocialButton('assets/icons/ic_facebook.png', 'Facebook', ApiConstants.facebookPageUrl),
-              _buildSocialButton('assets/icons/ic_telegram.png', 'Telegram', ApiConstants.telegramChannelUrl),
-              _buildSocialButton('assets/icons/ic_whatsapp.png', 'WhatsApp', ApiConstants.whatsappUrl),
-            ],
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 9.5,
+          fontWeight: FontWeight.w800,
+          color: textColor,
+          letterSpacing: 0.4,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStudyReminderTile() {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFBEB),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFFDE68A), width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFD97706).withOpacity(0.06),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ReminderScreen()),
+            );
+          },
+          borderRadius: BorderRadius.circular(18),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                // 3D Reminder Bell Icon Emblem
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEF3C7),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFFFDE68A), width: 1.2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFD97706).withOpacity(0.08),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/icons/ic_reminder.png',
+                      width: 34,
+                      height: 34,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                // Text Column
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'SET STUDY REMINDER',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 13.5,
+                          color: Color(0xFF78350F),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'দৈনিক পড়ার রুটিন ও অ্যালার্ম সেট করুন',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF92400E),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Forward chevron circle
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEF3C7),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFFFDE68A)),
+                  ),
+                  child: const Center(
+                    child: Icon(Icons.arrow_forward_ios_rounded, size: 11.5, color: Color(0xFF92400E)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _buildSocialButton(String iconAsset, String label, String url) {
-    return Column(
-      children: [
-        Container(
-          width: 50,
-          height: 50,
-          padding: const EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceMuted,
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.border),
+  Widget _buildModernFeatureCard({
+    required String tag,
+    required String title,
+    required String subtitle,
+    required String iconAsset,
+    required Color emblemBgColor,
+    required Color emblemBorderColor,
+    required Color tagColor,
+    required VoidCallback onTap,
+    Widget? trailingBadge,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0F172A).withOpacity(0.035),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
-          child: Image.asset(iconAsset, fit: BoxFit.contain),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(18),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                // 3D Circular Emblem
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: emblemBgColor,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: emblemBorderColor, width: 1.2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.03),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      iconAsset,
+                      width: 44,
+                      height: 44,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+
+                // Title, Tag & Subtitle
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            tag,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                              color: tagColor,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          if (trailingBadge != null) ...[
+                            const SizedBox(width: 8),
+                            trailingBadge,
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(width: 8),
+
+                // Chevron Action Circle
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF8FAFC),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 11.5,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        const SizedBox(height: 6),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+      ),
+    );
+  }
+
+  Widget _buildWhatsAppCommunityBanner() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0FDF4),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFBBF7D0), width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF16A34A).withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            SecurityManager.openExternalUrl(ApiConstants.whatsappUrl);
+          },
+          borderRadius: BorderRadius.circular(18),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                // WhatsApp 3D Emblem
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDCFCE7),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFF86EFAC), width: 1.2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF16A34A).withOpacity(0.08),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/icons/ic_whatsapp.png',
+                      width: 36,
+                      height: 36,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+
+                // Text Info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'GET ALL LATEST UPDATES',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 13,
+                          color: Color(0xFF14532D),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'যুক্ত হন আমাদের অফিসিয়াল হোয়াটসঅ্যাপে',
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          color: Color(0xFF166534),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(width: 10),
+
+                // Join Now Button
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF22C55E),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF22C55E).withOpacity(0.35),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Text(
+                    'JOIN NOW',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 11,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSocialChannelsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: const [
+            Icon(Icons.public_rounded, size: 16, color: AppColors.textSecondary),
+            SizedBox(width: 6),
+            Text(
+              'আমাদের সাথে যুক্ত থাকুন',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textSecondary,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            // YouTube Card
+            Expanded(
+              child: _buildSocialPillCard(
+                title: 'YouTube',
+                subtitle: 'ফ্রি ক্লাস ও টিপস',
+                iconAsset: 'assets/icons/ic_youtube.png',
+                bgColor: const Color(0xFFFEF2F2),
+                borderColor: const Color(0xFFFECACA),
+                titleColor: const Color(0xFFB91C1C),
+                url: ApiConstants.youtubeChannelUrl,
+              ),
+            ),
+            const SizedBox(width: 10),
+            // Telegram Card
+            Expanded(
+              child: _buildSocialPillCard(
+                title: 'Telegram',
+                subtitle: 'নোটস ও পিডিএফ',
+                iconAsset: 'assets/icons/ic_telegram.png',
+                bgColor: const Color(0xFFF0F9FF),
+                borderColor: const Color(0xFFBAE6FD),
+                titleColor: const Color(0xFF0369A1),
+                url: ApiConstants.telegramChannelUrl,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        // Facebook Card
+        _buildFacebookBannerCard(),
       ],
+    );
+  }
+
+  Widget _buildSocialPillCard({
+    required String title,
+    required String subtitle,
+    required String iconAsset,
+    required Color bgColor,
+    required Color borderColor,
+    required Color titleColor,
+    required String url,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: borderColor, width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => SecurityManager.openExternalUrl(url),
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            child: Row(
+              children: [
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Image.asset(iconAsset, width: 24, height: 24, fit: BoxFit.contain),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          color: titleColor,
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(fontSize: 10.5, color: AppColors.textSecondary),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFacebookBannerCard() {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFFEFF6FF),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFDBEAFE), width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => SecurityManager.openExternalUrl(ApiConstants.facebookPageUrl),
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Row(
+              children: [
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/icons/ic_facebook.png',
+                      width: 24,
+                      height: 24,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Facebook Page',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF1D4ED8),
+                        ),
+                      ),
+                      Text(
+                        'আমাদের অফিশিয়াল পেজে যুক্ত হয়ে আপডেট থাকুন',
+                        style: TextStyle(fontSize: 10.5, color: AppColors.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: Color(0xFF1D4ED8)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTrustBadge() {
+    return Container(
+      margin: const EdgeInsets.only(top: 14, bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0F9FF),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFBAE6FD), width: 1.2),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Icon(Icons.verified_rounded, size: 20, color: Color(0xFF0284C7)),
+          SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              'Trusted by over 10,000+ Class 12 Students',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF0369A1),
+                letterSpacing: 0.3,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
