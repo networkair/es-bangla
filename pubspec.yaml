@@ -46,6 +46,9 @@ dependencies:
   fl_chart: ^0.68.0
   in_app_review: ^2.0.9
 
+  # Animations
+  lottie: ^3.1.2
+
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
@@ -64,3 +67,4 @@ flutter:
     - assets/notes/sem3/
     - assets/notes/sem4/
     - assets/audio/
+    - assets/animations/
