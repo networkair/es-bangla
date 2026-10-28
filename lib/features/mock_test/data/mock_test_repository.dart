@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/storage/local_storage_service.dart';
@@ -249,7 +250,7 @@ class MockTestRepository {
     throw Exception('Failed to load test paper');
   }
 
-  /// Submit Question Report or Feedback (Firestore Real-time + API Fallback)
+  /// Submit Question Report or Feedback (Firebase Realtime DB + Firestore + API Fallback)
   Future<bool> sendReport({
     required String type,
     required String name,
@@ -259,7 +260,7 @@ class MockTestRepository {
     Map<String, dynamic>? meta,
   }) async {
     final clientRequestId = const Uuid().v4();
-    final payload = {
+    final jsonPayload = {
       'client_request_id': clientRequestId,
       'type': type,
       'name': name.isEmpty ? 'Student' : name,
@@ -267,33 +268,66 @@ class MockTestRepository {
       'message': message,
       'context': contextSummary,
       if (meta != null) 'meta': meta,
-      'created_at': FieldValue.serverTimestamp(),
       'timestamp': DateTime.now().toIso8601String(),
       'status': 'pending',
     };
 
-    bool firestoreSuccess = false;
+    bool delivered = false;
 
-    // 1. Direct Firestore Submission (Real-time and guaranteed delivery)
+    // 1. Firebase Realtime Database (100% open write & guaranteed real-time delivery to Admin Panel)
     try {
-      await FirebaseFirestore.instance.collection('question_reports').add(payload);
-      firestoreSuccess = true;
-    } catch (_) {}
-
-    // 2. HTTP Endpoint Fallback / Sync
-    try {
-      final response = await _dio.post(
-        ApiConstants.reportEndpoint,
-        data: payload,
+      final rtdbResponse = await _dio.post(
+        'https://es-bangla-225f2-default-rtdb.firebaseio.com/question_reports.json',
+        data: jsonPayload,
         options: Options(
           headers: {'Content-Type': 'application/json'},
           validateStatus: (status) => status != null && status < 500,
         ),
       );
-      if (response.statusCode == 200) return true;
+      if (rtdbResponse.statusCode == 200) {
+        delivered = true;
+      }
     } catch (_) {}
 
-    return firestoreSuccess;
+    // 2. Direct Firestore Submission (to question_reports and users subcollection)
+    try {
+      final firestorePayload = {
+        ...jsonPayload,
+        'created_at': FieldValue.serverTimestamp(),
+      };
+      await FirebaseFirestore.instance.collection('question_reports').add(firestorePayload);
+      delivered = true;
+    } catch (_) {}
+
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .collection('reports')
+            .add({
+          ...jsonPayload,
+          'created_at': FieldValue.serverTimestamp(),
+        });
+        delivered = true;
+      }
+    } catch (_) {}
+
+    // 3. HTTP Endpoint Sync
+    try {
+      final response = await _dio.post(
+        ApiConstants.reportEndpoint,
+        data: jsonPayload,
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+          validateStatus: (status) => status != null && status < 500,
+        ),
+      );
+      if (response.statusCode == 200) delivered = true;
+    } catch (_) {}
+
+    return delivered;
   }
 }
 

@@ -76,16 +76,22 @@ class MainActivity: FlutterActivity() {
         }
 
         val AUDIO_CHANNEL = "com.rkson.esbangla/audio"
-        var correctPlayer: android.media.MediaPlayer? = null
-        var wrongPlayer: android.media.MediaPlayer? = null
+        val audioAttributes = android.media.AudioAttributes.Builder()
+            .setUsage(android.media.AudioAttributes.USAGE_GAME)
+            .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
+        val soundPool = android.media.SoundPool.Builder()
+            .setMaxStreams(4)
+            .setAudioAttributes(audioAttributes)
+            .build()
+        val correctSoundId = soundPool.load(this, R.raw.quiz_correct, 1)
+        val wrongSoundId = soundPool.load(this, R.raw.quiz_wrong, 1)
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, AUDIO_CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
                 "playCorrect" -> {
                     try {
-                        correctPlayer?.release()
-                        correctPlayer = android.media.MediaPlayer.create(this, R.raw.quiz_correct)
-                        correctPlayer?.start()
+                        soundPool.play(correctSoundId, 1f, 1f, 1, 0, 1f)
                         result.success(true)
                     } catch (e: Exception) {
                         result.error("AUDIO_ERROR", e.message, null)
@@ -93,9 +99,7 @@ class MainActivity: FlutterActivity() {
                 }
                 "playWrong" -> {
                     try {
-                        wrongPlayer?.release()
-                        wrongPlayer = android.media.MediaPlayer.create(this, R.raw.quiz_wrong)
-                        wrongPlayer?.start()
+                        soundPool.play(wrongSoundId, 1f, 1f, 1, 0, 1f)
                         result.success(true)
                     } catch (e: Exception) {
                         result.error("AUDIO_ERROR", e.message, null)

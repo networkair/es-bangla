@@ -76,16 +76,16 @@ class _QuizScreenState extends State<QuizScreen> {
     final currentQ = _testPaper!.questions[_currentIndex];
     final isCorrect = optionKey == currentQ.correctOption;
 
-    setState(() {
-      _userAnswers[_currentIndex] = optionKey;
-    });
-
-    // Play native buzzer sound effect
+    // Play native buzzer sound effect immediately on tap (zero latency)
     if (isCorrect) {
       QuizAudioService.playCorrectSound();
     } else {
       QuizAudioService.playWrongSound();
     }
+
+    setState(() {
+      _userAnswers[_currentIndex] = optionKey;
+    });
   }
 
   void _onNext() {
@@ -206,86 +206,99 @@ class _QuizScreenState extends State<QuizScreen> {
     final isLast = _currentIndex == questions.length - 1;
     final progress = (_currentIndex + 1) / questions.length;
 
-    return Column(
-      children: [
-        // 1. Clean Top Header: Only sleek Back Button at top-left (no title, no cross, no percentage text)
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 6),
-          child: Row(
-            children: [
-              InkWell(
-                onTap: () async {
-                  final shouldLeave = await _onWillPop();
-                  if (shouldLeave && context.mounted) {
-                    Navigator.pop(context);
-                  }
-                },
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  width: 38,
-                  height: 38,
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.border),
-                    boxShadow: AppColors.softCardShadow,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      size: 16,
-                      color: AppColors.textPrimary,
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutCubic,
+      builder: (context, animVal, child) {
+        return Opacity(
+          opacity: animVal,
+          child: Transform.translate(
+            offset: Offset(0, 16 * (1 - animVal)),
+            child: child,
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          // 1. Clean Top Header: Only sleek Back Button at top-left (no title, no cross, no percentage text)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 6),
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () async {
+                    final shouldLeave = await _onWillPop();
+                    if (shouldLeave && context.mounted) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.border),
+                      boxShadow: AppColors.softCardShadow,
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 16,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-
-        // 2. Animated Smooth Linear Progress Bar (Smoothly animates forward as user progresses)
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: TweenAnimationBuilder<double>(
-              tween: Tween<double>(begin: 0.0, end: progress),
-              duration: const Duration(milliseconds: 380),
-              curve: Curves.easeInOutCubic,
-              builder: (context, val, _) {
-                return LinearProgressIndicator(
-                  value: val,
-                  minHeight: 6,
-                  backgroundColor: AppColors.border.withOpacity(0.5),
-                  valueColor: const AlwaysStoppedAnimation(AppColors.primary),
-                );
-              },
+              ],
             ),
           ),
-        ),
 
-        const SizedBox(height: 8),
+          // 2. Animated Smooth Linear Progress Bar (Smoothly animates forward as user progresses)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0.0, end: progress),
+                duration: const Duration(milliseconds: 380),
+                curve: Curves.easeInOutCubic,
+                builder: (context, val, _) {
+                  return LinearProgressIndicator(
+                    value: val,
+                    minHeight: 6,
+                    backgroundColor: AppColors.border.withOpacity(0.5),
+                    valueColor: const AlwaysStoppedAnimation(AppColors.primary),
+                  );
+                },
+              ),
+            ),
+          ),
 
-        // 3. Question & Options Content with Smooth Advanced Transitions
-        Expanded(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 350),
-            switchInCurve: Curves.easeOutCubic,
-            switchOutCurve: Curves.easeInCubic,
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              final slideAnimation = Tween<Offset>(
-                begin: const Offset(0.25, 0.0),
-                end: Offset.zero,
-              ).animate(animation);
+          const SizedBox(height: 8),
 
-              return FadeTransition(
-                opacity: animation,
-                child: SlideTransition(
-                  position: slideAnimation,
-                  child: child,
-                ),
-              );
-            },
+          // 3. Question & Options Content with Smooth Advanced Transitions
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                final slideAnimation = Tween<Offset>(
+                  begin: const Offset(0.12, 0.0),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic));
+
+                return FadeTransition(
+                  opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+                  child: SlideTransition(
+                    position: slideAnimation,
+                    child: child,
+                  ),
+                );
+              },
             child: SingleChildScrollView(
               key: ValueKey<int>(_currentIndex),
               padding: const EdgeInsets.fromLTRB(18, 10, 18, 20),
@@ -539,6 +552,7 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
 }
