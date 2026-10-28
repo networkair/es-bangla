@@ -83,39 +83,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final currentSem = _storage.semester;
-    final userName = _storage.userName.isNotEmpty ? _storage.userName : 'Student';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: 20,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'Es Bangla',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w900,
-                letterSpacing: -0.3,
-                color: Color(0xFF0F172A), // Pure crisp black
-              ),
-            ),
-            const SizedBox(height: 1.5),
-            Text(
-              'Welcome, $userName 👋',
-              style: const TextStyle(
-                fontSize: 11.5,
-                color: Color(0xFF64748B),
-                fontWeight: FontWeight.normal,
-                letterSpacing: 0.1,
-              ),
-            ),
-          ],
+        title: Text(
+          'Es Bangla',
+          style: TextStyle(
+            fontFamily: 'VintageColorize',
+            fontSize: 27,
+            fontWeight: FontWeight.bold,
+            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+            letterSpacing: 0.5,
+          ),
         ),
         actions: [
           IconButton(
@@ -132,11 +117,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
-                        color: AppColors.surfaceMuted,
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF1E293B) : AppColors.surfaceMuted,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.notifications_none_rounded, color: AppColors.textPrimary, size: 22),
+                      child: Icon(
+                        Icons.notifications_none_rounded,
+                        color: isDark ? const Color(0xFFF8FAFC) : AppColors.textPrimary,
+                        size: 22,
+                      ),
                     ),
                     if (unreadCount > 0)
                       Positioned(
@@ -211,9 +200,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 10),
 
-                  // 5. Book Notes / Handnotes 3D Card
+                  // 5. Premium Store 3D Card
                   _buildActionTile(
-                    title: 'BOOK NOTES & HANDNOTES',
+                    title: 'PREMIUM STORE',
                     iconAsset: 'assets/icons/ic_book_notes.png',
                     onTap: () {
                       Navigator.push(
@@ -316,87 +305,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () => _showNewsDetailsModal(item),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              // 100% Bright, Crisp & Clear Image (No Dark Overlay)
-                              CachedNetworkImage(
-                                imageUrl: imageUrl,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 0),
-                                errorWidget: (context, url, error) => Container(
-                                  color: const Color(0xFF1E293B),
-                                  child: const Center(
-                                    child: Icon(Icons.broken_image_rounded, color: Colors.white54, size: 36),
-                                  ),
-                                ),
+                          child: CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 0),
+                            errorWidget: (context, url, error) => Container(
+                              color: const Color(0xFF1E293B),
+                              child: const Center(
+                                child: Icon(Icons.broken_image_rounded, color: Colors.white54, size: 36),
                               ),
-
-                              // Top-Left: Category Tag & Live Indicator
-                              Positioned(
-                                top: 12,
-                                left: 12,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFDC2626),
-                                        borderRadius: BorderRadius.circular(4),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black.withOpacity(0.35),
-                                            blurRadius: 4,
-                                            offset: const Offset(0, 1),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Text(
-                                        tag,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w800,
-                                          letterSpacing: 0.5,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3.5),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(0.6),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            width: 6,
-                                            height: 6,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFF22C55E),
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 4),
-                                          const Text(
-                                            'LIVE',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 9.5,
-                                              fontWeight: FontWeight.bold,
-                                              letterSpacing: 0.5,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       );
@@ -408,48 +326,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: InkWell(
                         onTap: () => _showNewsDetailsModal(item),
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFDC2626),
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      tag,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Container(
-                                    width: 6,
-                                    height: 6,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFF22C55E),
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  const Text(
-                                    'LIVE',
-                                    style: TextStyle(
-                                      color: Color(0xFF22C55E),
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -594,24 +475,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 16),
               ],
 
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFDC2626),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  tag,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.4,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-
               Text(
                 title,
                 style: const TextStyle(
@@ -744,20 +607,22 @@ class _HomeScreenState extends State<HomeScreen> {
     required int semester,
     required String iconAsset,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white, // Crisp White 3D Card
+        color: isDark ? const Color(0xFF1E293B) : Colors.white, // Crisp White / Dark Slate 3D Card
         borderRadius: BorderRadius.circular(28),
-        boxShadow: const [
+        border: isDark ? Border.all(color: const Color(0xFF334155)) : null,
+        boxShadow: [
           BoxShadow(
-            color: Color(0x14000000),
+            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.3 : 0.08),
             blurRadius: 18,
-            offset: Offset(0, 8),
+            offset: const Offset(0, 8),
           ),
           BoxShadow(
-            color: Color(0x06000000),
+            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.15 : 0.02),
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -784,8 +649,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       width: 60,
                       height: 60,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFEDF4FF), // Soft light blue
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF334155) : const Color(0xFFEDF4FF), // Soft light blue
                         shape: BoxShape.circle,
                       ),
                       child: Center(
@@ -802,15 +667,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       width: 34,
                       height: 34,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFEAF2FF),
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF334155) : const Color(0xFFEAF2FF),
                         shape: BoxShape.circle,
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Icon(
                           Icons.arrow_forward_ios_rounded,
                           size: 13,
-                          color: Color(0xFF0F172A),
+                          color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                         ),
                       ),
                     ),
@@ -819,11 +684,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 12),
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.3,
-                    color: Color(0xFF0F172A), // Crisp Black
+                    color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                   ),
                 ),
               ],
@@ -840,21 +705,23 @@ class _HomeScreenState extends State<HomeScreen> {
     required String iconAsset,
     required VoidCallback onTap,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white, // Crisp White 3D Card
+        color: isDark ? const Color(0xFF1E293B) : Colors.white, // Crisp White / Dark Slate 3D Card
         borderRadius: BorderRadius.circular(28),
-        boxShadow: const [
+        border: isDark ? Border.all(color: const Color(0xFF334155)) : null,
+        boxShadow: [
           BoxShadow(
-            color: Color(0x22000000), // Prominent bottom drop shadow
+            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.35 : 0.13),
             blurRadius: 22,
             spreadRadius: 1,
-            offset: Offset(0, 11),
+            offset: const Offset(0, 11),
           ),
           BoxShadow(
-            color: Color(0x0C000000),
+            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.2 : 0.05),
             blurRadius: 6,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -871,8 +738,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   width: 64,
                   height: 64,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFEDF4FF), // Soft light blue
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF334155) : const Color(0xFFEDF4FF),
                     shape: BoxShape.circle,
                   ),
                   child: Center(
@@ -889,11 +756,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15.5,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 0.3,
-                      color: Color(0xFF0F172A), // Crisp Black
+                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                     ),
                   ),
                 ),
@@ -902,15 +769,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   width: 40,
                   height: 40,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFEAF2FF),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF334155) : const Color(0xFFEAF2FF),
                     shape: BoxShape.circle,
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Icon(
                       Icons.arrow_forward_ios_rounded,
                       size: 15,
-                      color: Color(0xFF0F172A),
+                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                     ),
                   ),
                 ),

@@ -50,6 +50,8 @@ class _MainShellScreenState extends State<MainShellScreen> with WidgetsBindingOb
       ProfileScreen(onSemesterChanged: _onSemesterChanged),
     ];
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
@@ -57,15 +59,20 @@ class _MainShellScreenState extends State<MainShellScreen> with WidgetsBindingOb
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          border: const Border(top: BorderSide(color: AppColors.border, width: 1)),
+          color: isDark ? const Color(0xFF1E293B) : AppColors.surface,
+          border: Border(
+            top: BorderSide(
+              color: isDark ? const Color(0xFF334155) : AppColors.border,
+              width: 1,
+            ),
+          ),
           boxShadow: AppColors.softCardShadow,
         ),
         child: NavigationBar(
           selectedIndex: _currentIndex,
-          backgroundColor: AppColors.surface,
+          backgroundColor: isDark ? const Color(0xFF1E293B) : AppColors.surface,
           elevation: 0,
-          indicatorColor: AppColors.primaryLight,
+          indicatorColor: isDark ? const Color(0xFF334155) : AppColors.primaryLight,
           onDestinationSelected: (idx) => setState(() => _currentIndex = idx),
           destinations: [
             NavigationDestination(

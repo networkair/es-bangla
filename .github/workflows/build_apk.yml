@@ -56,23 +56,26 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.2.6
-          name: "Es Bangla v1.2.6 (True Fullscreen, Deep 3D Shadows, Large Icons & Header Refinements)"
+          tag_name: v1.2.7
+          name: "Es Bangla v1.2.7 (White Notch Cutout, Vintage Colorize Font, Device-Local Notifications & Dark Theme)"
           body: |
-            ### Es Bangla v1.2.6 Release Highlights:
-            - **True Fullscreen App (Immersive Sticky Mode)**:
-              - Removed Android top system status bar (clock, battery, timer, notifications).
-              - Native Fullscreen configured across Android manifest, styles.xml, MainActivity.kt, and Flutter main.dart.
-              - App fills 100% of the physical screen display.
-            - **Enhanced 3D Bottom Shadows**:
-              - Prominent grounded bottom drop shadows on all full-width long cards (Study Reminder, PYQ, Book Notes, Social Hub).
-            - **Large Edge-to-Edge Semester 3 & 4 Icons**:
-              - Cropped 58% transparent margin from Semester 3 and 4 3D icons, scaling them to fill the light blue circular containers.
-            - **Header Refinement**:
-              - Pure black bold brand title `Es Bangla`.
-              - Small, clean English subtitle `Welcome, $userName 👋` with all Bengali text removed.
-            - **Reliable Offline Detection**:
-              - Eliminated false offline screens on app resume by removing background HTTP timer and adding lifecycle sync with hardware connectivity.
+            ### Es Bangla v1.2.7 Release Highlights:
+            - **Seamless White Notch & Cutout Integration**:
+              - Configured `shortEdges` display cutout mode and pure white background across Android native window and decorView.
+              - Completely removed black letterbox bars around camera notches.
+            - **Typography & Clean Header**:
+              - Registered and applied custom TrueType font `Vintage Colorize` for `Es Bangla` brand title.
+              - Removed welcome subtitle and cleared cluttered tags.
+            - **Clean News Experience**:
+              - Removed `LATEST NEWS` and `LIVE` tag overlays from 16:9 news banners and modals in the user panel.
+            - **Enhanced Device-Local Push Notifications**:
+              - Background FCM handler wakes up status bar notification and saves directly to local storage even when app is killed/closed.
+              - Android native `NotificationAlarmReceiver` with `AlarmManager` syncs notifications in background.
+              - Notification Inbox operates 100% on device local storage without remote database dependency, with offline support and clear-all action.
+            - **Dynamic Dark Theme**:
+              - Added Dark Theme toggle in Profile Preferences with persistent storage and system theme reactivity.
+            - **Renamed Premium Store**:
+              - Action tile updated to `PREMIUM STORE`.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

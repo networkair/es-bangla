@@ -97,6 +97,18 @@ class AppNotificationService {
         final imageUrl = notification?.android?.imageUrl ?? data['imageUrl'] ?? '';
 
         final msgKey = message.messageId ?? '${title}_${body}';
+
+        // 1. Save directly into device local storage
+        _storage.saveLocalNotification({
+          'id': msgKey,
+          'title': title,
+          'body': body,
+          'actionUrl': actionUrl,
+          'imageUrl': imageUrl,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+        });
+        _updateUnreadCount();
+
         if (_seenDocIds.contains(msgKey)) return;
         _seenDocIds.add(msgKey);
         _storage.addSeenNotificationId(msgKey);
@@ -120,6 +132,7 @@ class AppNotificationService {
       debugPrint('FCM init note: $e');
     }
 
+    _updateUnreadCount();
     _initialized = true;
   }
 
@@ -181,6 +194,21 @@ class AppNotificationService {
             unreadCount++;
           }
 
+          final title = (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
+          final body = (data['body'] ?? data['message'] ?? '').toString().trim();
+          final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
+          final imageUrl = (data['imageUrl'] ?? data['image'] ?? '').toString().trim();
+
+          // Save directly to device local storage
+          _storage.saveLocalNotification({
+            'id': doc.id,
+            'title': title,
+            'body': body,
+            'actionUrl': actionUrl,
+            'imageUrl': imageUrl,
+            'timestamp': createdAt.millisecondsSinceEpoch,
+          });
+
           final docId = doc.id;
           final bool alreadySeen = _seenDocIds.contains(docId);
 
@@ -193,11 +221,6 @@ class AppNotificationService {
                 createdAt.isAfter(_serviceStartTime.subtract(const Duration(minutes: 2)));
 
             if (isRealtime) {
-              final title = (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
-              final body = (data['body'] ?? data['message'] ?? '').toString().trim();
-              final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
-              final imageUrl = (data['imageUrl'] ?? data['image'] ?? '').toString().trim();
-
               showSystemNotification(
                 id: (docId.hashCode & 0x7FFFFFFF),
                 title: title,
@@ -209,7 +232,7 @@ class AppNotificationService {
           }
         }
 
-        unreadCountNotifier.value = unreadCount;
+        _updateUnreadCount();
         _isFirstSyncDone = true;
       },
       onError: (err) {
@@ -239,8 +262,6 @@ class AppNotificationService {
         final semKey1 = 'c12_sem$semester';
         final semKey2 = 'sem$semester';
         final semKey3 = semester.toString();
-        final lastReadMs = _storage.lastReadNotificationTimestamp;
-        int unreadCount = 0;
 
         dataMap.forEach((key, val) {
           if (val is Map) {
@@ -263,9 +284,20 @@ class AppNotificationService {
               createdAt = DateTime.fromMillisecondsSinceEpoch(createdAtRaw.toInt());
             }
 
-            if (createdAt.millisecondsSinceEpoch > lastReadMs) {
-              unreadCount++;
-            }
+            final title = (map['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
+            final body = (map['body'] ?? map['message'] ?? '').toString().trim();
+            final actionUrl = (map['actionUrl'] ?? map['link'] ?? map['redirectUrl'] ?? '').toString().trim();
+            final imageUrl = (map['imageUrl'] ?? map['image'] ?? '').toString().trim();
+
+            // Save directly to device local storage
+            _storage.saveLocalNotification({
+              'id': key,
+              'title': title,
+              'body': body,
+              'actionUrl': actionUrl,
+              'imageUrl': imageUrl,
+              'timestamp': createdAt.millisecondsSinceEpoch,
+            });
 
             final bool alreadySeen = _seenDocIds.contains(key);
 
@@ -278,11 +310,6 @@ class AppNotificationService {
                   createdAt.isAfter(_serviceStartTime.subtract(const Duration(minutes: 2)));
 
               if (isRealtime) {
-                final title = (map['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
-                final body = (map['body'] ?? map['message'] ?? '').toString().trim();
-                final actionUrl = (map['actionUrl'] ?? map['link'] ?? map['redirectUrl'] ?? '').toString().trim();
-                final imageUrl = (map['imageUrl'] ?? map['image'] ?? '').toString().trim();
-
                 showSystemNotification(
                   id: (key.hashCode & 0x7FFFFFFF),
                   title: title,
@@ -295,13 +322,26 @@ class AppNotificationService {
           }
         });
 
-        unreadCountNotifier.value = unreadCount;
+        _updateUnreadCount();
         _isFirstSyncDone = true;
       }
     } catch (_) {
     } finally {
       _isPolling = false;
     }
+  }
+
+  void _updateUnreadCount() {
+    final lastReadMs = _storage.lastReadNotificationTimestamp;
+    final list = _storage.getLocalNotifications();
+    int unread = 0;
+    for (final item in list) {
+      final ts = (item['timestamp'] as num?)?.toInt() ?? 0;
+      if (ts > lastReadMs) {
+        unread++;
+      }
+    }
+    unreadCountNotifier.value = unread;
   }
 
   /// Displays an immediate high-priority Heads-up Notification on the user's phone with BigPicture image preview

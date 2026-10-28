@@ -20,12 +20,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final LocalStorageService _storage = LocalStorageService();
   late bool _notificationsEnabled;
   late int _currentSemester;
+  late bool _isDarkMode;
 
   @override
   void initState() {
     super.initState();
     _notificationsEnabled = _storage.notificationsEnabled;
     _currentSemester = _storage.semester;
+    _isDarkMode = _storage.isDarkMode;
   }
 
   void _changeSemester() {
@@ -136,14 +138,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     final avgAccuracy = attempts.isNotEmpty ? (totalAcc / attempts.length).toStringAsFixed(0) : '0';
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'My Profile',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 19,
+            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+          ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
       ),
@@ -155,17 +163,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? const Color(0xFF1E293B) : Colors.white,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+                border: Border.all(
+                  color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                  width: 1.2,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF0F172A).withOpacity(0.05),
+                    color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.05),
                     blurRadius: 18,
                     offset: const Offset(0, 8),
                   ),
                   BoxShadow(
-                    color: const Color(0xFF0F172A).withOpacity(0.02),
+                    color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.02),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -206,17 +217,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: [
                             Text(
                               displayName,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
-                                color: Color(0xFF0F172A),
+                                color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                                 letterSpacing: -0.2,
                               ),
                             ),
                             const SizedBox(height: 3),
                             Text(
                               email,
-                              style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             const SizedBox(height: 8),
                             InkWell(
@@ -225,25 +240,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFEFF6FF),
+                                  color: isDark ? const Color(0xFF1E3A8A).withOpacity(0.4) : const Color(0xFFEFF6FF),
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: const Color(0xFFBFDBFE), width: 1),
+                                  border: Border.all(
+                                    color: isDark ? const Color(0xFF3B82F6).withOpacity(0.5) : const Color(0xFFBFDBFE),
+                                    width: 1,
+                                  ),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Icon(Icons.school_rounded, size: 13, color: Color(0xFF2563EB)),
+                                    const Icon(Icons.school_rounded, size: 13, color: Color(0xFF38BDF8)),
                                     const SizedBox(width: 5),
                                     Text(
                                       'Class 12 • Sem $_currentSemester',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 11.5,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xFF1E40AF),
+                                        color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF1E40AF),
                                       ),
                                     ),
                                     const SizedBox(width: 4),
-                                    const Icon(Icons.edit_rounded, size: 12, color: Color(0xFF2563EB)),
+                                    const Icon(Icons.edit_rounded, size: 12, color: Color(0xFF38BDF8)),
                                   ],
                                 ),
                               ),
@@ -259,9 +277,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF8FAFC),
+                      color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: const Color(0xFFF1F5F9)),
+                      border: Border.all(
+                        color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -272,14 +292,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: const Color(0xFF2563EB),
                           icon: Icons.assignment_turned_in_rounded,
                         ),
-                        Container(width: 1, height: 32, color: const Color(0xFFE2E8F0)),
+                        Container(width: 1, height: 32, color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
                         _buildMetricPill(
                           label: 'Bookmarks',
                           value: '${savedQuestions.length}',
                           color: const Color(0xFFD97706),
                           icon: Icons.bookmark_rounded,
                         ),
-                        Container(width: 1, height: 32, color: const Color(0xFFE2E8F0)),
+                        Container(width: 1, height: 32, color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
                         _buildMetricPill(
                           label: 'Avg. Accuracy',
                           value: '$avgAccuracy%',
@@ -361,7 +381,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 16),
 
-            // 4. Preferences & Support 3D Section
+            // 4. Preferences & System 3D Section
             _build3DSection(
               title: 'Preferences & System',
               items: [
@@ -370,24 +390,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   secondary: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEFF6FF),
+                      color: isDark ? const Color(0xFF334155) : const Color(0xFFEFF6FF),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(Icons.notifications_active_outlined, color: Color(0xFF2563EB), size: 20),
                   ),
-                  title: const Text(
+                  title: Text(
                     'Study Alerts & Reminders',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: Color(0xFF0F172A)),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                    ),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Get periodic mock test prompts & updates',
-                    style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                    ),
                   ),
                   value: _notificationsEnabled,
                   activeColor: const Color(0xFF2563EB),
                   onChanged: (val) {
                     setState(() => _notificationsEnabled = val);
                     _storage.notificationsEnabled = val;
+                  },
+                ),
+                _buildDivider(),
+                SwitchListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+                  secondary: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.dark_mode_outlined,
+                      color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF334155),
+                      size: 20,
+                    ),
+                  ),
+                  title: Text(
+                    'Dark Theme (ডার্ক মোড)',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Enable dark appearance across the app',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                    ),
+                  ),
+                  value: _isDarkMode,
+                  activeColor: const Color(0xFF2563EB),
+                  onChanged: (val) {
+                    setState(() => _isDarkMode = val);
+                    _storage.isDarkMode = val;
                   },
                 ),
                 _buildDivider(),
@@ -429,6 +493,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required Color color,
     required IconData icon,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         Row(
@@ -445,26 +510,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
         const SizedBox(height: 2),
         Text(
           label,
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF64748B)),
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+          ),
         ),
       ],
     );
   }
 
   Widget _build3DSection({required String title, required List<Widget> items}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F172A).withOpacity(0.04),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.04),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
           BoxShadow(
-            color: const Color(0xFF0F172A).withOpacity(0.02),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.02),
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -477,22 +550,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.fromLTRB(18, 14, 18, 8),
             child: Text(
               title.toUpperCase(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 11.5,
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF64748B),
+                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
                 letterSpacing: 0.6,
               ),
             ),
           ),
-          const Divider(height: 1, color: Color(0xFFF1F5F9)),
+          Divider(height: 1, color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9)),
           ...items,
         ],
       ),
     );
   }
 
-  Widget _buildDivider() => const Divider(height: 1, indent: 64, endIndent: 16, color: Color(0xFFF1F5F9));
+  Widget _buildDivider() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Divider(
+      height: 1,
+      indent: 64,
+      endIndent: 16,
+      color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+    );
+  }
 
   Widget _buildActionTile({
     required IconData icon,
@@ -505,12 +586,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Widget? trailing,
     VoidCallback? onTap,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       leading: Container(
         padding: const EdgeInsets.all(9),
         decoration: BoxDecoration(
-          color: iconBg,
+          color: isDark ? const Color(0xFF334155) : iconBg,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Icon(icon, color: iconColor, size: 21),
@@ -520,11 +602,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         style: TextStyle(
           fontSize: 14.5,
           fontWeight: FontWeight.w700,
-          color: titleColor ?? const Color(0xFF0F172A),
+          color: titleColor ?? (isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A)),
         ),
       ),
       subtitle: subtitle != null
-          ? Text(subtitle, style: const TextStyle(fontSize: 12, color: Color(0xFF64748B), height: 1.3))
+          ? Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 12,
+                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                height: 1.3,
+              ),
+            )
           : null,
       trailing: trailing ??
           Row(
@@ -534,18 +623,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFEFF6FF),
+                    color: isDark ? const Color(0xFF1E3A8A) : const Color(0xFFEFF6FF),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: const Color(0xFFBFDBFE)),
+                    border: Border.all(
+                      color: isDark ? const Color(0xFF3B82F6) : const Color(0xFFBFDBFE),
+                    ),
                   ),
                   child: Text(
                     badge,
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF2563EB)),
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF2563EB),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 6),
               ],
-              const Icon(Icons.arrow_forward_ios_rounded, size: 13, color: Color(0xFF94A3B8)),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 13,
+                color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
+              ),
             ],
           ),
       onTap: onTap,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
@@ -7,15 +8,25 @@ class LocalStorageService {
   LocalStorageService._internal();
 
   late SharedPreferences _prefs;
+  final ValueNotifier<ThemeMode> themeModeNotifier = ValueNotifier<ThemeMode>(ThemeMode.light);
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
+    themeModeNotifier.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    localNotificationsNotifier.value = getLocalNotifications();
   }
 
   // User Profile & Academic Info
+  static const String _keyDarkMode = 'is_dark_mode';
   static const String _keySemester = 'user_semester';
   static const String _keyClass = 'user_class';
   static const String _keyUserName = 'user_name';
+
+  bool get isDarkMode => _prefs.getBool(_keyDarkMode) ?? false;
+  set isDarkMode(bool value) {
+    _prefs.setBool(_keyDarkMode, value);
+    themeModeNotifier.value = value ? ThemeMode.dark : ThemeMode.light;
+  }
   static const String _keyUserEmail = 'user_email';
   static const String _keyNotificationsEnabled = 'notifications_enabled';
   static const String _keySavedQuestions = 'saved_questions';
@@ -143,5 +154,49 @@ class LocalStorageService {
     final set = getSeenNotificationIds();
     set.addAll(ids);
     await _prefs.setStringList(_keySeenNotifIds, set.toList());
+  }
+
+  // Device-Only Local Notification Storage (PRD Section Update)
+  static const String _keyLocalNotifications = 'user_local_notifications';
+  final ValueNotifier<List<Map<String, dynamic>>> localNotificationsNotifier =
+      ValueNotifier<List<Map<String, dynamic>>>([]);
+
+  List<Map<String, dynamic>> getLocalNotifications() {
+    final raw = _prefs.getString(_keyLocalNotifications);
+    if (raw == null || raw.isEmpty) return [];
+    try {
+      final List decoded = jsonDecode(raw);
+      return decoded.map((e) => Map<String, dynamic>.from(e)).toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> saveLocalNotification(Map<String, dynamic> notification) async {
+    final current = getLocalNotifications();
+    final id = notification['id']?.toString() ?? '';
+    final title = notification['title']?.toString() ?? '';
+    final body = notification['body']?.toString() ?? '';
+
+    // Deduplicate by ID or identical title+body
+    current.removeWhere((item) =>
+        (id.isNotEmpty && item['id']?.toString() == id) ||
+        (item['title'] == title && item['body'] == body));
+
+    current.insert(0, notification);
+    await _prefs.setString(_keyLocalNotifications, jsonEncode(current));
+    localNotificationsNotifier.value = List<Map<String, dynamic>>.from(current);
+  }
+
+  Future<void> deleteLocalNotification(String id) async {
+    final current = getLocalNotifications();
+    current.removeWhere((item) => item['id']?.toString() == id);
+    await _prefs.setString(_keyLocalNotifications, jsonEncode(current));
+    localNotificationsNotifier.value = List<Map<String, dynamic>>.from(current);
+  }
+
+  Future<void> clearAllLocalNotifications() async {
+    await _prefs.remove(_keyLocalNotifications);
+    localNotificationsNotifier.value = [];
   }
 }
