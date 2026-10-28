@@ -6,6 +6,7 @@ import '../data/mock_test_repository.dart';
 import '../domain/mock_test_models.dart';
 import 'report_bottom_sheet.dart';
 import 'result_screen.dart';
+import '../../../core/widgets/app_shimmer.dart';
 
 class QuizScreen extends StatefulWidget {
   final String subjectId;
@@ -166,8 +167,23 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(AppColors.primary)),
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            AppShimmer.box(width: double.infinity, height: 48, borderRadius: 12),
+            const SizedBox(height: 16),
+            AppShimmer.box(width: double.infinity, height: 120, borderRadius: 16),
+            const SizedBox(height: 20),
+            ...List.generate(
+              4,
+              (index) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: AppShimmer.box(width: double.infinity, height: 56, borderRadius: 12),
+              ),
+            ),
+          ],
+        ),
       );
     }
 

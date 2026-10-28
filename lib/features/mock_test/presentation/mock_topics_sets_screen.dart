@@ -5,6 +5,7 @@ import '../data/mock_test_repository.dart';
 import '../domain/mock_test_models.dart';
 import 'quiz_screen.dart';
 import 'premium_lock_screen.dart';
+import '../../../core/widgets/app_shimmer.dart';
 
 class MockTopicsSetsScreen extends StatefulWidget {
   final SubjectModel subject;
@@ -124,8 +125,62 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(AppColors.primary)),
+      return ListView.builder(
+        padding: const EdgeInsets.all(16),
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 4,
+        itemBuilder: (context, index) {
+          return AppShimmer(
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 14),
+              height: 82,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.border),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 140,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF1F5F9),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 80,
+                          height: 11,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF1F5F9),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       );
     }
 

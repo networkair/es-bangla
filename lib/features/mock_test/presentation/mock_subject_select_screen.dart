@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
+import '../../../core/widgets/app_shimmer.dart';
 import '../data/mock_test_repository.dart';
 import '../domain/mock_test_models.dart';
 import 'mock_topics_sets_screen.dart';
@@ -109,11 +110,7 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(AppColors.primary),
-        ),
-      );
+      return _buildLoadingGrid();
     }
 
     if (_error != null && _subjects.isEmpty) {
@@ -174,6 +171,83 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
             itemBuilder: (context, index) {
               final subject = _subjects[index];
               return _buildSubjectCard(subject);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingGrid() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.fromLTRB(18, 4, 18, 14),
+          child: Text(
+            'মক টেস্ট দিতে আপনার বিষয়টি বেছে নিন',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ),
+        Expanded(
+          child: GridView.builder(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.68,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 18,
+            ),
+            itemCount: 6,
+            itemBuilder: (context, index) {
+              return AppShimmer(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(color: AppColors.border, width: 1.5),
+                  ),
+                  padding: const EdgeInsets.fromLTRB(14, 20, 14, 16),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 90,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF1F5F9),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        width: 95,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF1F5F9),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      const Spacer(),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF1F5F9),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             },
           ),
         ),

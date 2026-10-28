@@ -120,4 +120,10 @@ class LocalStorageService {
   Future<void> setEntitlements(List<String> list) async {
     await _prefs.setStringList(_keyEntitlements, list);
   }
+
+  // Notifications read tracking
+  static const String _keyLastReadNotif = 'last_read_notif_time';
+  int get lastReadNotificationTimestamp => _prefs.getInt(_keyLastReadNotif) ?? 0;
+  Future<void> setLastReadNotificationTimestamp(int timestampMs) =>
+      _prefs.setInt(_keyLastReadNotif, timestampMs);
 }

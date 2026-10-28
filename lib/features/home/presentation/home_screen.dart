@@ -12,6 +12,8 @@ import '../../pdf_notes/presentation/pyq_screen.dart';
 import '../../reminder/presentation/reminder_screen.dart';
 import '../../notifications/presentation/notification_inbox_screen.dart';
 import '../../book_notes/presentation/book_notes_screen.dart';
+import '../../../core/widgets/app_shimmer.dart';
+import '../../../core/notifications/app_notification_service.dart';
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback onSemesterChanged;
@@ -112,29 +114,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute(builder: (_) => const NotificationInboxScreen()),
               );
             },
-            icon: Stack(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceMuted,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.notifications_none_rounded, color: AppColors.textPrimary, size: 22),
-                ),
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: AppColors.wrongRed,
-                      shape: BoxShape.circle,
+            icon: ValueListenableBuilder<int>(
+              valueListenable: AppNotificationService().unreadCountNotifier,
+              builder: (context, unreadCount, _) {
+                return Stack(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: AppColors.surfaceMuted,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.notifications_none_rounded, color: AppColors.textPrimary, size: 22),
                     ),
-                  ),
-                ),
-              ],
+                    if (unreadCount > 0)
+                      Positioned(
+                        right: 6,
+                        top: 6,
+                        child: Container(
+                          width: 9,
+                          height: 9,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFDC2626),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
             ),
           ),
           const SizedBox(width: 12),
@@ -216,6 +224,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('news').snapshots(),
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
+          return AppShimmer.banner16x9(borderRadius: 4);
+        }
+
         List<Map<String, dynamic>> newsList = [];
 
         if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
@@ -329,19 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               CachedNetworkImage(
                                 imageUrl: imageUrl,
                                 fit: BoxFit.cover,
-                                placeholder: (context, url) => Container(
-                                  color: AppColors.surfaceMuted,
-                                  child: const Center(
-                                    child: SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation(Color(0xFFDC2626)),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 4),
                                 errorWidget: (context, url, error) => Container(
                                   color: AppColors.surfaceMuted,
                                   child: const Center(
@@ -613,15 +613,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        color: AppColors.surfaceMuted,
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation(Color(0xFFDC2626)),
-                          ),
-                        ),
-                      ),
+                      placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 6),
                       errorWidget: (_, __, ___) => const SizedBox.shrink(),
                     ),
                   ),

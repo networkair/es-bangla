@@ -8,6 +8,7 @@ import 'core/storage/local_storage_service.dart';
 import 'core/network/network_connectivity_service.dart';
 import 'core/network/offline_screen.dart';
 import 'features/reminder/data/reminder_notification_service.dart';
+import 'core/notifications/app_notification_service.dart';
 import 'features/auth/presentation/login_screen.dart';
 import 'features/home/presentation/main_shell_screen.dart';
 
@@ -31,6 +32,12 @@ void main() async {
   } catch (_) {
     // Allows preview even before Firebase credentials setup on emulator
   }
+
+  // Initialize App Announcements & Notification System
+  try {
+    await AppNotificationService().initialize();
+    AppNotificationService().startRealtimeListener(LocalStorageService().semester);
+  } catch (_) {}
 
   runApp(const ProviderScope(child: EsBanglaApp()));
 }
