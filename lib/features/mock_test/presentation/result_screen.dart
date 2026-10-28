@@ -108,7 +108,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          'Test Result',
+          'Performance Scorecard',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         backgroundColor: Colors.white,
@@ -142,10 +142,10 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
               children: [
                 Text(
                   _correctCount >= (questions.length * 0.8)
-                      ? '🏆 Outstanding Champion!'
+                      ? '🎯 Outstanding Performance!'
                       : (_correctCount >= (questions.length * 0.5)
-                          ? '✨ Great Effort, Keep Going!'
-                          : '📚 Try More Champion!'),
+                          ? '⚡ Impressive Effort, Keep Going!'
+                          : '📚 Practice Makes Perfect!'),
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -157,7 +157,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
             ),
             const SizedBox(height: 4),
             const Text(
-              'Here is your Result',
+              'Performance Summary & Overview',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -166,7 +166,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
             ),
             const SizedBox(height: 16),
 
-            // 3. Score Pill Box (Reference Design)
+            // 3. Score Pill Box
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 46, vertical: 12),
               decoration: BoxDecoration(
@@ -189,7 +189,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                         ),
                       ),
                       const Text(
-                        'Marks',
+                        'Total Score',
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -227,7 +227,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                         ),
                         const SizedBox(height: 4),
                         const Text(
-                          'Total Questions',
+                          'All Questions',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 11,
@@ -262,7 +262,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                         ),
                         const SizedBox(height: 4),
                         const Text(
-                          'Correct Answers',
+                          'Right Answers',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 11,
@@ -297,7 +297,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                         ),
                         const SizedBox(height: 4),
                         const Text(
-                          'Wrong Answers',
+                          'Incorrect Answers',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 11,
@@ -313,7 +313,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
             ),
             const SizedBox(height: 20),
 
-            // 5. Action Buttons (Reference Design)
+            // 5. Action Buttons
             SizedBox(
               width: double.infinity,
               height: 52,
@@ -340,7 +340,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                   elevation: 2,
                 ),
                 child: const Text(
-                  'Start New Test',
+                  'Retake Mock Test',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -352,7 +352,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
               child: OutlinedButton.icon(
                 onPressed: () => Navigator.pop(context),
                 icon: const Icon(Icons.arrow_back_rounded, size: 18),
-                label: const Text('Back to Topics', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                label: const Text('Return to Topics', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: const Color(0xFF475569),
                   side: const BorderSide(color: Color(0xFFCBD5E1), width: 1.2),
@@ -362,12 +362,12 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
             ),
             const SizedBox(height: 28),
 
-            // 6. See Your Performance Section Header (Reference Design)
+            // 6. Question Analysis Section Header
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'See Your Performance',
+                  'Question Breakdown',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -376,7 +376,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  'Review every question and learn from mistakes.',
+                  'Review submitted answers and verify step-by-step solutions.',
                   style: TextStyle(
                     fontSize: 13,
                     color: Color(0xFF64748B),
@@ -515,7 +515,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
                       const Divider(height: 22, thickness: 1, color: Color(0xFFF1F5F9)),
 
-                      // Answers Display (Exact Reference Design in Image 1)
+                      // Answers Display
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2),
                         child: RichText(
@@ -523,7 +523,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                             style: const TextStyle(fontSize: 14, fontFamily: 'Hind Siliguri'),
                             children: [
                               const TextSpan(
-                                text: 'Your Answer : ',
+                                text: 'Your Response : ',
                                 style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
                               ),
                               TextSpan(
@@ -547,7 +547,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                             style: const TextStyle(fontSize: 14, fontFamily: 'Hind Siliguri'),
                             children: [
                               const TextSpan(
-                                text: 'Correct Answer : ',
+                                text: 'Right Answer : ',
                                 style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
                               ),
                               TextSpan(
@@ -564,7 +564,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
                       const SizedBox(height: 12),
 
-                      // Capsule Status Badge: [✔ Correct] or [✖ Wrong]
+                      // Capsule Status Badge
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                         decoration: BoxDecoration(
@@ -585,7 +585,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              isCorrect ? 'Correct' : (userAns == null ? 'Skipped' : 'Wrong'),
+                              isCorrect ? 'Right' : (userAns == null ? 'Skipped' : 'Incorrect'),
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -614,7 +614,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  'Explanation: ${q.explanation}',
+                                  'Solution Insight: ${q.explanation}',
                                   style: const TextStyle(
                                     fontSize: 12.5,
                                     color: Color(0xFF475569),

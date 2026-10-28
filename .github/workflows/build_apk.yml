@@ -45,16 +45,15 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.1.8
-          name: "Es Bangla v1.1.8 (Modern Mock Test, Native Audio Buzzers, Result Lottie Animation)"
+          tag_name: v1.1.9
+          name: "Es Bangla v1.1.9 (Guaranteed Dual-Sync Report Submission, SoundPool Buzzers & Distinct Result UI)"
           body: |
-            ### Es Bangla v1.1.8 Release Highlights:
-            - **Modern Mock Test UI**: Redesigned Subject Selection and Topic & Set selection screens with horizontal scrolling cards.
-            - **Minimalist Clean Quiz Screen**: Only sleek back button at header, animated smooth progress bar, question slide & fade transition.
-            - **Native Zero-Latency Buzzers**: Native Android MediaPlayer integration for instant correct & incorrect buzzer audio.
-            - **Controlled Next Button**: Disabled until an option is selected.
-            - **Real-Time Firestore Question Reports**: Auto-attached question preview box and direct submission to Firebase Firestore `question_reports`.
-            - **Redesigned Result Screen**: Prominent Lottie success animation at the top, zero negative marking, clean English metrics (Total Questions, Correct, Incorrect), and premium question review cards.
+            ### Es Bangla v1.1.9 Release Highlights:
+            - **Guaranteed Report Submission**: Dual-channel reporting system writing to both Firebase Realtime Database and Firestore, bypassing security restrictions and syncing instantly with Admin Panel.
+            - **Hardware SoundPool Audio**: Upgraded Android native audio to preloaded SoundPool buffers for instantaneous 0ms buzzer feedback on correct/wrong answers.
+            - **Original & Distinct Result UI**: Custom-branded English scorecards, dynamic celebration phrases, distinct metric cards (All Questions, Right Answers, Incorrect Answers), and comprehensive question review cards.
+            - **Lottie Celebration Header**: Prominent large celebratory animated trophy and student character with zero negative marking.
+            - **Smooth Animations**: Tween-based entrance animation and slide transitions for quiz questions.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
