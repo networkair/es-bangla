@@ -1,6 +1,9 @@
 package com.rkson.esbangla
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -97,8 +100,32 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
         videoWebView.isHapticFeedbackEnabled = false
         videoWebView.setOnLongClickListener { true }
 
-        // Native touch guard overlay to absorb touches on channel link at top-left
-        findViewById<View>(R.id.overlayChannelGuard)?.setOnClickListener { /* Consume touch */ }
+        // Native touch guard overlays to absorb touches on all sensitive areas
+        val touchGuards = listOf(
+            findViewById<View>(R.id.overlayChannelGuard),
+            findViewById<View>(R.id.overlayLinkGuard),
+            findViewById<View>(R.id.overlayRelatedShelfGuard),
+            findViewById<View>(R.id.overlayYtLogoGuard)
+        )
+        touchGuards.forEach { guard ->
+            guard?.setOnClickListener { /* Absorb click */ }
+            guard?.setOnTouchListener { _, _ -> true /* Absorb touch */ }
+        }
+
+        // Android OS Clipboard Guard: Clear any YouTube or embed links if copied
+        try {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+            clipboard?.addPrimaryClipChangedListener {
+                val clip = clipboard.primaryClip
+                if (clip != null && clip.itemCount > 0) {
+                    val text = clip.getItemAt(0).text?.toString() ?: ""
+                    if (text.contains("youtu") || text.contains("embed") || text.contains("http")) {
+                        clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
+                        Log.d(TAG, "Cleared video link from clipboard")
+                    }
+                }
+            }
+        } catch (e: Exception) {}
 
         val settings = videoWebView.settings
         settings.javaScriptEnabled = true
@@ -313,151 +340,159 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
 
     companion object {
         private const val CUSTOM_CLEANER_CSS = """
-            /* 1. Hide Copy Link button at bottom-left completely */
-            .ytp-overlay-bottom-left,
+            /* 1. Disable click and touch interactions on sensitive player elements */
             .ytp-copylink-button,
-            .ytp-copylink-button-visible,
-            .ytp-copylink-icon,
-            .ytp-copylink-title,
-            .ytp-show-copylink-title,
             .ytp-share-button,
-            .ytp-show-share-title,
-
-            /* 2. Hide "More videos" / related videos shelf & thumbnails at bottom-center */
             .ytp-pause-overlay,
-            .ytp-pause-overlay-container,
-            .ytp-pause-overlay-backdrop,
-            .ytp-pause-overlay-controls-hidden,
-            .ytp-expand-pause-overlay,
             .ytp-more-videos-view,
-            .ytp-more-videos-view-container,
-            .ytp-more-videos-button,
-            .ytp-more-videos-button-thumbnail,
-            .ytp-more-videos-button-title,
-            .ytp-suggestions,
-            .ytp-suggestion-link,
-            .ytp-suggestion-image,
-            .ytp-suggestion-title,
-            .ytp-suggestion-author,
-            .ytp-suggestion-overlay,
-            .ytp-autonav-endscreen-more-videos,
-            .ytp-watch-again-on-youtube-endscreen-more-videos-container,
-
-            /* 3. Hide YouTube logo and watermark at bottom-right */
             .ytp-impression-link,
-            .ytp-impression-link-content,
-            .ytp-impression-link-logo,
-            .ytp-impression-link-text,
-            .ytp-music-impression-link,
             .ytp-watermark,
-            .ytp-watermark-small,
             .ytp-youtube-button,
+            .ytp-title-link {
+                pointer-events: none !important;
+                cursor: default !important;
+            }
 
-            /* 4. Hide "More options" popup panel & share panels completely */
+            /* 2. In settings popup drawer, disable pointer events on More options (... আরও বিকল্প) */
+            .ytp-panel-menu > .ytp-menuitem:last-child,
+            .ytp-panel-menu > .ytp-menuitem:last-child * {
+                pointer-events: none !important;
+                cursor: default !important;
+            }
+
+            /* 3. Block overflow panel, share panel, and context menu completely */
             .ytp-overflow-panel,
-            .ytp-overflow-panel-action-buttons,
-            .ytp-overflow-panel-close,
-            .ytp-overflow-panel-content,
             .ytp-share-panel,
-            .ytp-share-panel-close,
-            .ytp-share-panel-inner-content,
-            .ytp-share-panel-service-button,
-            .ytp-share-panel-service-buttons,
-            .ytp-contextmenu,
-            .ytp-cards-button,
-            .ytp-overflow-button,
-
-            /* 5. In main settings drawer, hide the last item ("... More options") */
-            .ytp-settings-menu .ytp-panel-menu > .ytp-menuitem:last-child {
+            .ytp-contextmenu {
                 display: none !important;
                 visibility: hidden !important;
-                opacity: 0 !important;
                 pointer-events: none !important;
+                opacity: 0 !important;
                 width: 0 !important;
                 height: 0 !important;
-                min-height: 0 !important;
-                max-height: 0 !important;
-                margin: 0 !important;
-                padding: 0 !important;
                 overflow: hidden !important;
             }
 
-            /* 6. Ensure channel name & avatar at top-left stay visible */
-            .ytp-chrome-top,
-            .ytp-title,
-            .ytp-title-link,
-            .ytp-title-channel,
-            .ytp-title-expanded-title,
-            .ytp-overlay-top-left {
-                display: flex !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
-
-            /* 7. Ensure fullscreen button at bottom-right stays visible */
-            .ytp-fullscreen-button {
-                display: inline-block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
+            /* 4. Ensure play/pause, time bar, settings gear, and fullscreen remain interactive */
+            .ytp-chrome-bottom,
+            .ytp-chrome-controls,
+            .ytp-play-button,
+            .ytp-settings-button,
+            .ytp-fullscreen-button,
+            .ytp-progress-bar-container {
                 pointer-events: auto !important;
             }
         """
 
         private const val CUSTOM_CLEANER_SCRIPT = """
             (function() {
-                function cleanMenu() {
-                    try {
-                        var items = document.querySelectorAll('.ytp-menuitem');
-                        for (var i = 0; i < items.length; i++) {
-                            var it = items[i];
-                            var txt = (it.innerText || it.textContent || '').trim().toLowerCase();
-                            if (txt.indexOf('more') !== -1 || txt.indexOf('বিকল্প') !== -1 || txt.indexOf('share') !== -1 || txt.indexOf('copy') !== -1) {
-                                it.style.setProperty('display', 'none', 'important');
-                                it.style.setProperty('visibility', 'hidden', 'important');
-                                it.style.setProperty('pointer-events', 'none', 'important');
-                                it.style.setProperty('height', '0px', 'important');
+                function isBlockedTarget(target) {
+                    if (!target) return false;
+
+                    // Check menu items inside settings panel
+                    var menuItem = target.closest ? target.closest('.ytp-menuitem, [role="menuitem"]') : null;
+                    if (menuItem) {
+                        var text = (menuItem.innerText || menuItem.textContent || '').trim().toLowerCase();
+                        var aria = (menuItem.getAttribute('aria-label') || '').toLowerCase();
+                        if (text.indexOf('more') !== -1 ||
+                            text.indexOf('বিকল্প') !== -1 ||
+                            text.indexOf('option') !== -1 ||
+                            text.indexOf('share') !== -1 ||
+                            text.indexOf('copy') !== -1 ||
+                            text.indexOf('link') !== -1 ||
+                            text.indexOf('embed') !== -1 ||
+                            text.indexOf('stats') !== -1 ||
+                            text.indexOf('feedback') !== -1 ||
+                            aria.indexOf('more') !== -1 ||
+                            aria.indexOf('বিকল্প') !== -1) {
+                            return true;
+                        }
+
+                        var parent = menuItem.parentElement;
+                        if (parent && (parent.classList?.contains('ytp-panel-menu') || parent.getAttribute('role') === 'menu')) {
+                            var items = parent.querySelectorAll('.ytp-menuitem, [role="menuitem"]');
+                            if (items.length >= 2 && menuItem === items[items.length - 1]) {
+                                return true;
                             }
                         }
-                        var channelLinks = document.querySelectorAll('.ytp-title-link, .ytp-title-channel, .ytp-chrome-top a');
-                        for (var j = 0; j < channelLinks.length; j++) {
-                            channelLinks[j].removeAttribute('href');
-                            channelLinks[j].removeAttribute('target');
-                            channelLinks[j].style.cursor = 'default';
-                        }
-                    } catch(e) {}
+                    }
+
+                    // Check sensitive player overlays / buttons
+                    var sensitive = target.closest ? target.closest(
+                        '.ytp-overflow-panel, .ytp-share-panel, .ytp-contextmenu, ' +
+                        '.ytp-copylink-button, .ytp-share-button, .ytp-pause-overlay, ' +
+                        '.ytp-more-videos-view, .ytp-impression-link, .ytp-watermark, ' +
+                        '.ytp-youtube-button, .ytp-title-link'
+                    ) : null;
+                    if (sensitive) {
+                        return true;
+                    }
+
+                    return false;
                 }
 
-                document.addEventListener('click', function(e) {
-                    var t = e.target;
-                    if (!t) return;
-                    var m = t.closest ? t.closest('.ytp-menuitem') : null;
-                    if (m) {
-                        var txt = (m.innerText || m.textContent || '').trim().toLowerCase();
-                        if (txt.indexOf('more') !== -1 || txt.indexOf('বিকল্প') !== -1 || txt.indexOf('share') !== -1 || txt.indexOf('copy') !== -1) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            e.stopImmediatePropagation();
-                            return false;
-                        }
-                    }
-                    var blk = t.closest ? t.closest('.ytp-copylink-button, .ytp-share-button, .ytp-impression-link, .ytp-watermark, .ytp-pause-overlay, .ytp-overflow-panel') : null;
-                    if (blk) {
+                function interceptEvent(e) {
+                    if (isBlockedTarget(e.target)) {
                         e.preventDefault();
                         e.stopPropagation();
                         e.stopImmediatePropagation();
                         return false;
                     }
-                    setTimeout(cleanMenu, 25);
-                    setTimeout(cleanMenu, 100);
-                    setTimeout(cleanMenu, 300);
-                }, true);
+                }
 
-                cleanMenu();
-                if (!window._esyObsAttached) {
-                    window._esyObsAttached = true;
-                    var obs = new MutationObserver(cleanMenu);
+                // Intercept all touch, pointer, mouse and click events in capture phase
+                var eventTypes = ['touchstart', 'touchend', 'touchcancel', 'pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click'];
+                for (var i = 0; i < eventTypes.length; i++) {
+                    window.addEventListener(eventTypes[i], interceptEvent, true);
+                    document.addEventListener(eventTypes[i], interceptEvent, true);
+                }
+
+                // Neutralize channel title hrefs and clipboard APIs
+                function sweepDOM() {
+                    try {
+                        var channelLinks = document.querySelectorAll('.ytp-title-link, .ytp-title-channel, .ytp-chrome-top a');
+                        for (var j = 0; j < channelLinks.length; j++) {
+                            channelLinks[j].removeAttribute('href');
+                            channelLinks[j].removeAttribute('target');
+                            channelLinks[j].style.cursor = 'default';
+                            channelLinks[j].style.pointerEvents = 'none';
+                        }
+
+                        var menuItems = document.querySelectorAll('.ytp-menuitem, [role="menuitem"]');
+                        for (var k = 0; k < menuItems.length; k++) {
+                            var mi = menuItems[k];
+                            if (isBlockedTarget(mi)) {
+                                mi.style.setProperty('pointer-events', 'none', 'important');
+                                mi.style.setProperty('cursor', 'default', 'important');
+                                var allDesc = mi.querySelectorAll('*');
+                                for (var d = 0; d < allDesc.length; d++) {
+                                    allDesc[d].style.setProperty('pointer-events', 'none', 'important');
+                                }
+                            }
+                        }
+                    } catch(e) {}
+                }
+
+                // Prevent clipboard writes in JS
+                try {
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText = function() { return Promise.resolve(); };
+                        navigator.clipboard.write = function() { return Promise.resolve(); };
+                    }
+                    window.open = function() { return null; };
+                    document.addEventListener('copy', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                    }, true);
+                } catch(e) {}
+
+                if (!window._esyInterceptorActive) {
+                    window._esyInterceptorActive = true;
+                    var obs = new MutationObserver(sweepDOM);
                     obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
-                    setInterval(cleanMenu, 400);
+                    setInterval(sweepDOM, 400);
+                    sweepDOM();
                 }
             })();
         """

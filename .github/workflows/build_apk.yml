@@ -45,9 +45,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.1.6
-          name: "Es Bangla v1.1.6 (Network Interceptor: Completely Removed Copy Link, More Videos, YouTube Logo & Blocked Settings More Options)"
-          body: "Release APK v1.1.6 using network-level CSS/HTML interception to completely remove copy link button, more videos shelf, and YouTube logo, while keeping the channel title and blocking More options in player settings."
+          tag_name: v1.1.7
+          name: "Es Bangla v1.1.7 (Full Touch Guard & Settings More Options Click Blocking)"
+          body: "Release APK v1.1.7 with 4 native transparent touch guards covering sensitive video areas (channel title, copy link, related videos shelf, YouTube logo) plus multi-layer capture-phase click blocking on Settings More Options and clipboard protection."
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
