@@ -149,113 +149,90 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Academic Selector Pill (Class 12 Semester Indicator)
-            _buildAcademicHeaderPill(currentSem),
-            const SizedBox(height: 14),
-
-            // 2. News Slider (16:9 Banner)
+            // 1. Hero News Slider (Edge-to-Edge Flush 16:9, Sharp Corners, Crystal Clear)
             _buildNewsSlider(currentSem),
-            const SizedBox(height: 14),
 
-            // 3. Study Reminder Banner (Warm Soft-Amber 3D Card)
-            _buildStudyReminderTile(),
-            const SizedBox(height: 14),
+            // Content Area with Clean, Balanced Spacing
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 2. Study Reminder 3D Card (Warm Soft-Amber Theme Accent)
+                  _buildStudyReminderTile(),
+                  const SizedBox(height: 14),
 
-            // 4. Primary Academic Action Cards (Cohesive Full-Width 3D Cards)
-            _buildModernFeatureCard(
-              tag: 'SEMESTER 3',
-              title: 'Semester 3',
-              subtitle: 'অধ্যায়ভিত্তিক সাজেশন, হ্যান্ডনোটস ও প্র্যাকটিস',
-              iconAsset: 'assets/icons/ic_sem3.png',
-              emblemBgColor: const Color(0xFFEFF6FF),
-              emblemBorderColor: const Color(0xFFBFDBFE),
-              tagColor: const Color(0xFF0369A1),
-              trailingBadge: _buildPillBadge('WBCHSE', const Color(0xFF0284C7), const Color(0xFFE0F2FE)),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const NotesSubjectsScreen(semester: 3)),
-                );
-              },
+                  // 3. Semester 3 & Semester 4 Cards (Side by Side in a Row)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildSemesterTile(
+                          title: 'Semester 3',
+                          semester: 3,
+                          iconAsset: 'assets/icons/ic_sem3.png',
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _buildSemesterTile(
+                          title: 'Semester 4',
+                          semester: 4,
+                          iconAsset: 'assets/icons/ic_sem4.png',
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+
+                  // 4. Previous Year Questions (PYQ) 3D Card
+                  _buildActionTile(
+                    title: 'Previous Year Questions',
+                    subtitle: 'উচ্চ মাধ্যমিক বিগত বছরের প্রশ্নপত্র ও সমাধান',
+                    iconAsset: 'assets/icons/ic_pyq.png',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const PyqScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 14),
+
+                  // 5. Book Notes / Handnotes 3D Card
+                  _buildActionTile(
+                    title: 'Book Notes (বইয়ের নোটস)',
+                    subtitle: 'গুরুত্বপূর্ণ অধ্যায়ভিত্তিক হ্যান্ডনোটস ও সাজেশন',
+                    iconAsset: 'assets/icons/ic_book_notes.png',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const BookNotesScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 6. Authentic Es Bangla Social Media Hub
+                  _buildSocialMediaSection(),
+                ],
+              ),
             ),
-
-            _buildModernFeatureCard(
-              tag: 'SEMESTER 4',
-              title: 'Semester 4',
-              subtitle: 'অধ্যায়ভিত্তিক সাজেশন, হ্যান্ডনোটস ও প্র্যাকটিস',
-              iconAsset: 'assets/icons/ic_sem4.png',
-              emblemBgColor: const Color(0xFFFAF5FF),
-              emblemBorderColor: const Color(0xFFDDD6FE),
-              tagColor: const Color(0xFF6D28D9),
-              trailingBadge: _buildPillBadge('WBCHSE', const Color(0xFF7C3AED), const Color(0xFFEDE9FE)),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const NotesSubjectsScreen(semester: 4)),
-                );
-              },
-            ),
-
-            _buildModernFeatureCard(
-              tag: 'PREVIOUS YEARS QUESTIONS',
-              title: 'PYQ',
-              subtitle: 'উচ্চ মাধ্যমিক বিগত বছরের প্রশ্নপত্র ও সমাধান',
-              iconAsset: 'assets/icons/ic_pyq.png',
-              emblemBgColor: const Color(0xFFFFF7ED),
-              emblemBorderColor: const Color(0xFFFED7AA),
-              tagColor: const Color(0xFFC2410C),
-              trailingBadge: _buildPillBadge('SOLVED', const Color(0xFFEA580C), const Color(0xFFFFEDD5)),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const PyqScreen()),
-                );
-              },
-            ),
-
-            _buildModernFeatureCard(
-              tag: 'BOOK NOTES (বইয়ের নোটস)',
-              title: 'Book Notes',
-              subtitle: 'গুরুত্বপূর্ণ অধ্যায়ভিত্তিক হ্যান্ডনোটস ও সাজেশন',
-              iconAsset: 'assets/icons/ic_book_notes.png',
-              emblemBgColor: const Color(0xFFECFDF5),
-              emblemBorderColor: const Color(0xFFA7F3D0),
-              tagColor: const Color(0xFF047857),
-              trailingBadge: _buildPillBadge('PDF', const Color(0xFF059669), const Color(0xFFD1FAE5)),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const BookNotesScreen()),
-                );
-              },
-            ),
-            const SizedBox(height: 6),
-
-            // 5. WhatsApp Community Hero Banner
-            _buildWhatsAppCommunityBanner(),
-
-            // 6. Social Media Channels
-            _buildSocialChannelsSection(),
-
-            // 7. Trust Badge Footer
-            _buildTrustBadge(),
-            const SizedBox(height: 16),
           ],
         ),
       ),
     );
   }
 
+  // ==================== 1. NEWS SLIDER ====================
   Widget _buildNewsSlider(int currentSem) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('news').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
-          return AppShimmer.banner16x9(borderRadius: 16);
+          return AppShimmer.banner16x9(borderRadius: 0);
         }
 
         List<Map<String, dynamic>> newsList = [];
@@ -289,16 +266,13 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           }
 
-          // Sort by order ascending
           newsList.sort((a, b) => (a['order'] as int).compareTo(b['order'] as int));
         }
 
-        // Fallback default slides if collection is empty or offline
         if (newsList.isEmpty) {
           newsList = _fallbackSlides;
         }
 
-        // Sync slider timer smoothly with current item count
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) _syncSliderTimer(newsList.length);
         });
@@ -308,44 +282,14 @@ class _HomeScreenState extends State<HomeScreen> {
         return AspectRatio(
           aspectRatio: 16 / 9,
           child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.border, width: 1.2),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.zero,
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Stack(
+            child: Stack(
+              fit: StackFit.expand,
               children: [
-                // Background subtle graphic icon (for cards without image)
-                Positioned(
-                  top: -15,
-                  right: -15,
-                  child: Container(
-                    width: 110,
-                    height: 110,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primaryLight.withOpacity(0.4),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.campaign_rounded,
-                        size: 48,
-                        color: AppColors.primary.withOpacity(0.2),
-                      ),
-                    ),
-                  ),
-                ),
-
-                // PageView with real-time news cards
                 PageView.builder(
                   controller: _sliderController,
                   onPageChanged: (idx) => setState(() => _currentSlide = idx),
@@ -363,34 +307,33 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () => _showNewsDetailsModal(item),
-                          borderRadius: BorderRadius.circular(16),
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
-                              // Background 16:9 Banner Image (100% Bright, Crisp & Clear - No Dark Overlay)
+                              // 100% Bright, Crisp & Clear Image (No Dark Overlay)
                               CachedNetworkImage(
                                 imageUrl: imageUrl,
                                 fit: BoxFit.cover,
-                                placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 16),
+                                placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 0),
                                 errorWidget: (context, url, error) => Container(
-                                  color: AppColors.surfaceMuted,
+                                  color: const Color(0xFF1E293B),
                                   child: const Center(
-                                    child: Icon(Icons.broken_image_rounded, color: AppColors.textMuted, size: 32),
+                                    child: Icon(Icons.broken_image_rounded, color: Colors.white54, size: 36),
                                   ),
                                 ),
                               ),
 
-                              // Top-Left: Red Tag Badge & Live Indicator
+                              // Top-Left: Category Tag & Live Indicator
                               Positioned(
-                                top: 10,
-                                left: 10,
+                                top: 12,
+                                left: 12,
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFFDC2626), // RED TAG
+                                        color: const Color(0xFFDC2626),
                                         borderRadius: BorderRadius.circular(4),
                                         boxShadow: [
                                           BoxShadow(
@@ -404,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         tag,
                                         style: const TextStyle(
                                           color: Colors.white,
-                                          fontSize: 10.5,
+                                          fontSize: 10,
                                           fontWeight: FontWeight.w800,
                                           letterSpacing: 0.5,
                                         ),
@@ -412,9 +355,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     const SizedBox(width: 6),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3.5),
                                       decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(0.55),
+                                        color: Colors.black.withOpacity(0.6),
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       child: Row(
@@ -450,34 +393,31 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }
 
-                    // Fallback when news has no image
+                    // Fallback for News without Image
                     return Material(
-                      color: Colors.transparent,
+                      color: const Color(0xFF0F172A),
                       child: InkWell(
                         onTap: () => _showNewsDetailsModal(item),
-                        borderRadius: BorderRadius.circular(16),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // Top Tag & Live Indicator
                               Row(
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFFDC2626), // RED TAG
+                                      color: const Color(0xFFDC2626),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Text(
                                       tag,
                                       style: const TextStyle(
                                         color: Colors.white,
-                                        fontSize: 10.5,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.w800,
-                                        letterSpacing: 0.5,
                                       ),
                                     ),
                                   ),
@@ -486,7 +426,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     width: 6,
                                     height: 6,
                                     decoration: const BoxDecoration(
-                                      color: AppColors.correctGreen,
+                                      color: Color(0xFF22C55E),
                                       shape: BoxShape.circle,
                                     ),
                                   ),
@@ -494,25 +434,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const Text(
                                     'LIVE',
                                     style: TextStyle(
-                                      color: AppColors.correctGreen,
+                                      color: Color(0xFF22C55E),
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold,
-                                      letterSpacing: 0.5,
                                     ),
                                   ),
                                 ],
                               ),
-
-                              // Title & Subtitle
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     title,
                                     style: const TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 15.5,
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimary,
+                                      color: Colors.white,
                                       height: 1.25,
                                     ),
                                     maxLines: 2,
@@ -524,7 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       subtitle,
                                       style: const TextStyle(
                                         fontSize: 12,
-                                        color: AppColors.textSecondary,
+                                        color: Colors.white70,
                                         height: 1.25,
                                       ),
                                       maxLines: 2,
@@ -533,8 +470,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ],
                               ),
-
-                              // Bottom action hint
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: const [
@@ -542,12 +477,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'বিস্তারিত দেখতে ট্যাপ করুন',
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color: Color(0xFFDC2626),
+                                      color: Color(0xFFF87171),
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  SizedBox(width: 3),
-                                  Icon(Icons.arrow_forward_rounded, size: 12, color: Color(0xFFDC2626)),
+                                  SizedBox(width: 4),
+                                  Icon(Icons.arrow_forward_rounded, size: 12, color: Color(0xFFF87171)),
                                 ],
                               ),
                             ],
@@ -566,7 +501,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.52),
+                        color: Colors.black.withOpacity(0.55),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
@@ -590,8 +525,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-        ),
-      );
+        );
       },
     );
   }
@@ -610,7 +544,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (ctx) {
         return Container(
           decoration: const BoxDecoration(
-            color: AppColors.surface,
+            color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
           padding: EdgeInsets.only(
@@ -628,7 +562,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: AppColors.border,
+                    color: const Color(0xFFCBD5E1),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -637,13 +571,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
               if (imageUrl.isNotEmpty) ...[
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(8),
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
                     child: CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 6),
+                      placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 8),
                       errorWidget: (_, __, ___) => const SizedBox.shrink(),
                     ),
                   ),
@@ -651,11 +585,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 16),
               ],
 
-              // Category Tag
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFDC2626), // RED TAG
+                  color: const Color(0xFFDC2626),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -670,24 +603,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 12),
 
-              // Title
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 17.5,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: Color(0xFF0F172A),
                   height: 1.3,
                 ),
               ),
 
               if (subtitle.isNotEmpty) ...[
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Text(
                   subtitle,
                   style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
+                    fontSize: 13.5,
+                    color: Color(0xFF475569),
                     height: 1.5,
                   ),
                 ),
@@ -729,7 +661,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ],
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
             ],
           ),
         );
@@ -737,230 +669,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildAcademicHeaderPill(int currentSem) {
-    return Center(
-      child: InkWell(
-        onTap: () => _showSemesterSelectionSheet(currentSem),
-        borderRadius: BorderRadius.circular(24),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppColors.border, width: 1.2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.03),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryLight,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.school_rounded, size: 14, color: AppColors.primary),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'CLASS 12 (Semester $currentSem)',
-                style: const TextStyle(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                  letterSpacing: 0.3,
-                ),
-              ),
-              const SizedBox(width: 4),
-              const Icon(Icons.keyboard_arrow_down_rounded, size: 18, color: AppColors.textSecondary),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showSemesterSelectionSheet(int currentSem) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 38,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'সেমিস্টার নির্বাচন করুন',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'আপনার প্রয়োজনীয় সেমিস্টার বেছে নিন',
-                style: TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
-              ),
-              const SizedBox(height: 16),
-              _buildSemesterChoiceTile(
-                semester: 3,
-                title: 'Semester 3 (সেমিস্টার ৩)',
-                subtitle: 'উচ্চ মাধ্যমিক প্রথম পর্ব',
-                isSelected: currentSem == 3,
-                onTap: () {
-                  _storage.semester = 3;
-                  setState(() {});
-                  widget.onSemesterChanged();
-                  Navigator.pop(ctx);
-                },
-              ),
-              const SizedBox(height: 10),
-              _buildSemesterChoiceTile(
-                semester: 4,
-                title: 'Semester 4 (সেমিস্টার ৪)',
-                subtitle: 'উচ্চ মাধ্যমিক দ্বিতীয় পর্ব',
-                isSelected: currentSem == 4,
-                onTap: () {
-                  _storage.semester = 4;
-                  setState(() {});
-                  widget.onSemesterChanged();
-                  Navigator.pop(ctx);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSemesterChoiceTile({
-    required int semester,
-    required String title,
-    required String subtitle,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isSelected ? AppColors.primaryLight.withOpacity(0.4) : AppColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: isSelected ? AppColors.primary : AppColors.border,
-          width: isSelected ? 1.6 : 1,
-        ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(14),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            child: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primary : Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      '$semester',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: isSelected ? Colors.white : AppColors.textPrimary,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w700,
-                          color: isSelected ? AppColors.primaryDark : AppColors.textPrimary,
-                        ),
-                      ),
-                      Text(
-                        subtitle,
-                        style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
-                      ),
-                    ],
-                  ),
-                ),
-                if (isSelected)
-                  const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 22),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPillBadge(String label, Color textColor, Color bgColor) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 9.5,
-          fontWeight: FontWeight.w800,
-          color: textColor,
-          letterSpacing: 0.4,
-        ),
-      ),
-    );
-  }
-
+  // ==================== 2. STUDY REMINDER CARD ====================
   Widget _buildStudyReminderTile() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFBEB),
-        borderRadius: BorderRadius.circular(18),
+        color: const Color(0xFFFFFBEB), // Soft warm amber cream matching white theme
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFFDE68A), width: 1.2),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFD97706).withOpacity(0.06),
-            blurRadius: 10,
+            color: const Color(0xFFD97706).withOpacity(0.08),
+            blurRadius: 8,
             offset: const Offset(0, 3),
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -973,23 +698,23 @@ class _HomeScreenState extends State<HomeScreen> {
               MaterialPageRoute(builder: (_) => const ReminderScreen()),
             );
           },
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(16),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
               children: [
-                // 3D Reminder Bell Icon Emblem
+                // Uniform Light Blue Icon Container (Blue Fairy)
                 Container(
                   width: 52,
                   height: 52,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFEF3C7),
+                    color: const Color(0xFFEFF6FF), // Soft light blue
                     shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFFFDE68A), width: 1.2),
+                    border: Border.all(color: const Color(0xFFBFDBFE), width: 1.2),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFD97706).withOpacity(0.08),
-                        blurRadius: 6,
+                        color: Colors.black.withOpacity(0.03),
+                        blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
                     ],
@@ -997,231 +722,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Center(
                     child: Image.asset(
                       'assets/icons/ic_reminder.png',
-                      width: 34,
-                      height: 34,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 14),
-                // Text Column
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'SET STUDY REMINDER',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 13.5,
-                          color: Color(0xFF78350F),
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        'দৈনিক পড়ার রুটিন ও অ্যালার্ম সেট করুন',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF92400E),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // Forward chevron circle
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFEF3C7),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFFFDE68A)),
-                  ),
-                  child: const Center(
-                    child: Icon(Icons.arrow_forward_ios_rounded, size: 11.5, color: Color(0xFF92400E)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildModernFeatureCard({
-    required String tag,
-    required String title,
-    required String subtitle,
-    required String iconAsset,
-    required Color emblemBgColor,
-    required Color emblemBorderColor,
-    required Color tagColor,
-    required VoidCallback onTap,
-    Widget? trailingBadge,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF0F172A).withOpacity(0.035),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(18),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              children: [
-                // 3D Circular Emblem
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: emblemBgColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: emblemBorderColor, width: 1.2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.03),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      iconAsset,
-                      width: 44,
-                      height: 44,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 14),
-
-                // Title, Tag & Subtitle
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            tag,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                              color: tagColor,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                          if (trailingBadge != null) ...[
-                            const SizedBox(width: 8),
-                            trailingBadge,
-                          ],
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        subtitle,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.textSecondary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 8),
-
-                // Chevron Action Circle
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF8FAFC),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFFE2E8F0)),
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 11.5,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildWhatsAppCommunityBanner() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0FDF4),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFBBF7D0), width: 1.2),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF16A34A).withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            SecurityManager.openExternalUrl(ApiConstants.whatsappUrl);
-          },
-          borderRadius: BorderRadius.circular(18),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              children: [
-                // WhatsApp 3D Emblem
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFDCFCE7),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFF86EFAC), width: 1.2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF16A34A).withOpacity(0.08),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/icons/ic_whatsapp.png',
                       width: 36,
                       height: 36,
                       fit: BoxFit.contain,
@@ -1230,57 +730,40 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(width: 14),
 
-                // Text Info
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       Text(
-                        'GET ALL LATEST UPDATES',
+                        'Study Reminder',
                         style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 13,
-                          color: Color(0xFF14532D),
-                          letterSpacing: 0.5,
+                          fontSize: 15.5,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0F172A), // Crisp black/dark slate
                         ),
                       ),
                       SizedBox(height: 2),
                       Text(
-                        'যুক্ত হন আমাদের অফিসিয়াল হোয়াটসঅ্যাপে',
+                        'দৈনিক পড়ার রুটিন ও অ্যালার্ম সেট করুন',
                         style: TextStyle(
-                          fontSize: 11.5,
-                          color: Color(0xFF166534),
-                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          color: Color(0xFF475569),
                         ),
                       ),
                     ],
                   ),
                 ),
 
-                const SizedBox(width: 10),
-
-                // Join Now Button
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  width: 28,
+                  height: 28,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF22C55E),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF22C55E).withOpacity(0.35),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    color: const Color(0xFFFEF3C7),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFFFDE68A)),
                   ),
-                  child: const Text(
-                    'JOIN NOW',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 11,
-                      letterSpacing: 0.5,
-                    ),
+                  child: const Center(
+                    child: Icon(Icons.arrow_forward_ios_rounded, size: 11.5, color: Color(0xFFD97706)),
                   ),
                 ),
               ],
@@ -1291,194 +774,211 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSocialChannelsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Icon(Icons.public_rounded, size: 16, color: AppColors.textSecondary),
-            SizedBox(width: 6),
-            Text(
-              'আমাদের সাথে যুক্ত থাকুন',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textSecondary,
-                letterSpacing: 0.3,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            // YouTube Card
-            Expanded(
-              child: _buildSocialPillCard(
-                title: 'YouTube',
-                subtitle: 'ফ্রি ক্লাস ও টিপস',
-                iconAsset: 'assets/icons/ic_youtube.png',
-                bgColor: const Color(0xFFFEF2F2),
-                borderColor: const Color(0xFFFECACA),
-                titleColor: const Color(0xFFB91C1C),
-                url: ApiConstants.youtubeChannelUrl,
-              ),
-            ),
-            const SizedBox(width: 10),
-            // Telegram Card
-            Expanded(
-              child: _buildSocialPillCard(
-                title: 'Telegram',
-                subtitle: 'নোটস ও পিডিএফ',
-                iconAsset: 'assets/icons/ic_telegram.png',
-                bgColor: const Color(0xFFF0F9FF),
-                borderColor: const Color(0xFFBAE6FD),
-                titleColor: const Color(0xFF0369A1),
-                url: ApiConstants.telegramChannelUrl,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        // Facebook Card
-        _buildFacebookBannerCard(),
-      ],
-    );
-  }
-
-  Widget _buildSocialPillCard({
+  // ==================== 3. SEMESTER 3 & 4 CARDS (SIDE BY SIDE) ====================
+  Widget _buildSemesterTile({
     required String title,
-    required String subtitle,
+    required int semester,
     required String iconAsset,
-    required Color bgColor,
-    required Color borderColor,
-    required Color titleColor,
-    required String url,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: bgColor,
+        color: Colors.white, // Crisp White 3D Card
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: borderColor, width: 1.2),
+        border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
+            color: const Color(0xFF64748B).withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+          BoxShadow(
+            color: const Color(0xFF94A3B8).withOpacity(0.04),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => SecurityManager.openExternalUrl(url),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => NotesSubjectsScreen(semester: semester)),
+            );
+          },
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            child: Row(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 38,
-                  height: 38,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Image.asset(iconAsset, width: 24, height: 24, fit: BoxFit.contain),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Uniform Light Blue Icon Container (Blue Fairy)
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEFF6FF), // Soft light blue
+                        shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xFFBFDBFE), width: 1.2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.03),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          iconAsset,
+                          width: 44,
+                          height: 44,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF8FAFC),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: const Center(
+                        child: Icon(Icons.arrow_forward_ios_rounded, size: 11, color: Color(0xFF64748B)),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0F172A), // Crisp Black
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(height: 2),
+                const Text(
+                  'উচ্চ মাধ্যমিক',
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    color: Color(0xFF64748B),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==================== 4 & 5. ACTION CARDS (PYQ & BOOK NOTES) ====================
+  Widget _buildActionTile({
+    required String title,
+    required String subtitle,
+    required String iconAsset,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white, // Crisp White 3D Card
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF64748B).withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+          BoxShadow(
+            color: const Color(0xFF94A3B8).withOpacity(0.04),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                // Uniform Light Blue Icon Container (Blue Fairy)
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEFF6FF), // Soft light blue
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFFBFDBFE), width: 1.2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.03),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      iconAsset,
+                      width: 36,
+                      height: 36,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         title,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w800,
-                          color: titleColor,
+                        style: const TextStyle(
+                          fontSize: 15.5,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0F172A), // Crisp Black
                         ),
                       ),
+                      const SizedBox(height: 2),
                       Text(
                         subtitle,
-                        style: const TextStyle(fontSize: 10.5, color: AppColors.textSecondary),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFacebookBannerCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFF6FF),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFDBEAFE), width: 1.2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => SecurityManager.openExternalUrl(ApiConstants.facebookPageUrl),
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            child: Row(
-              children: [
-                Container(
-                  width: 38,
-                  height: 38,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/icons/ic_facebook.png',
-                      width: 24,
-                      height: 24,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Facebook Page',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF1D4ED8),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF475569),
                         ),
                       ),
-                      Text(
-                        'আমাদের অফিশিয়াল পেজে যুক্ত হয়ে আপডেট থাকুন',
-                        style: TextStyle(fontSize: 10.5, color: AppColors.textSecondary),
-                      ),
                     ],
                   ),
                 ),
-                const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: Color(0xFF1D4ED8)),
+
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF8FAFC),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                  ),
+                  child: const Center(
+                    child: Icon(Icons.arrow_forward_ios_rounded, size: 11.5, color: Color(0xFF64748B)),
+                  ),
+                ),
               ],
             ),
           ),
@@ -1487,33 +987,119 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildTrustBadge() {
+  // ==================== 6. AUTHENTIC ES BANGLA SOCIAL HUB ====================
+  Widget _buildSocialMediaSection() {
     return Container(
-      margin: const EdgeInsets.only(top: 14, bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F9FF),
+        color: Colors.white, // Crisp White 3D Card
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFBAE6FD), width: 1.2),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(Icons.verified_rounded, size: 20, color: Color(0xFF0284C7)),
-          SizedBox(width: 8),
-          Flexible(
-            child: Text(
-              'Trusted by over 10,000+ Class 12 Students',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF0369A1),
-                letterSpacing: 0.3,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
+        border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF64748B).withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+          BoxShadow(
+            color: const Color(0xFF94A3B8).withOpacity(0.04),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
           ),
         ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFEFF6FF),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.share_rounded, size: 17, color: AppColors.primary),
+              ),
+              const SizedBox(width: 10),
+              const Expanded(
+                child: Text(
+                  'আমাদের সাথে যুক্ত থাকুন',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0F172A), // Crisp Black
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 3),
+          const Text(
+            'সকল নতুন আপডেট, সাজেশন ও ক্লাস সবার আগে পেতে যুক্ত হোন',
+            style: TextStyle(
+              fontSize: 12,
+              color: Color(0xFF64748B),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // 4 Social Channels in a Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildSocialButton('assets/icons/ic_youtube.png', 'YouTube', ApiConstants.youtubeChannelUrl),
+              _buildSocialButton('assets/icons/ic_facebook.png', 'Facebook', ApiConstants.facebookPageUrl),
+              _buildSocialButton('assets/icons/ic_telegram.png', 'Telegram', ApiConstants.telegramChannelUrl),
+              _buildSocialButton('assets/icons/ic_whatsapp.png', 'WhatsApp', ApiConstants.whatsappUrl),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSocialButton(String iconAsset, String label, String url) {
+    return InkWell(
+      onTap: () {
+        SecurityManager.openExternalUrl(url);
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+        child: Column(
+          children: [
+            // Uniform Light Blue Container (Blue Fairy)
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: const Color(0xFFEFF6FF), // Soft light blue
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFFBFDBFE), width: 1.2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Image.asset(iconAsset, width: 32, height: 32, fit: BoxFit.contain),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 11.5,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF0F172A), // Crisp Black
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
