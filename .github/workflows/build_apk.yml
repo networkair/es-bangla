@@ -45,9 +45,16 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.1.7
-          name: "Es Bangla v1.1.7 (Full Touch Guard & Settings More Options Click Blocking)"
-          body: "Release APK v1.1.7 with 4 native transparent touch guards covering sensitive video areas (channel title, copy link, related videos shelf, YouTube logo) plus multi-layer capture-phase click blocking on Settings More Options and clipboard protection."
+          tag_name: v1.1.8
+          name: "Es Bangla v1.1.8 (Modern Mock Test, Native Audio Buzzers, Result Lottie Animation)"
+          body: |
+            ### Es Bangla v1.1.8 Release Highlights:
+            - **Modern Mock Test UI**: Redesigned Subject Selection and Topic & Set selection screens with horizontal scrolling cards.
+            - **Minimalist Clean Quiz Screen**: Only sleek back button at header, animated smooth progress bar, question slide & fade transition.
+            - **Native Zero-Latency Buzzers**: Native Android MediaPlayer integration for instant correct & incorrect buzzer audio.
+            - **Controlled Next Button**: Disabled until an option is selected.
+            - **Real-Time Firestore Question Reports**: Auto-attached question preview box and direct submission to Firebase Firestore `question_reports`.
+            - **Redesigned Result Screen**: Prominent Lottie success animation at the top, zero negative marking, clean English metrics (Total Questions, Correct, Incorrect), and premium question review cards.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
