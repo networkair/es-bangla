@@ -29,6 +29,17 @@ jobs:
           flutter-version: '3.24.5'
           cache: true
 
+      - name: Setup Permanent Release Keystore
+        run: |
+          if [ ! -f android/app/release.keystore ]; then
+            keytool -genkey -v -keystore android/app/release.keystore -alias esbangla -keyalg RSA -keysize 2048 -validity 10000 -storepass esbangla123 -keypass esbangla123 -dname "CN=EsBangla, OU=Education, O=EsBangla, L=Kolkata, ST=WB, C=IN"
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add android/app/release.keystore
+            git commit -m "chore(signing): commit permanent release keystore [skip ci]" || true
+            git push origin main || true
+          fi
+
       - name: Install Dependencies
         run: flutter pub get
 
@@ -45,10 +56,13 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.2.3
-          name: "Es Bangla v1.2.3 (Refined Authentic 3D Home & BigPicture Status Bar Notifications)"
+          tag_name: v1.2.4
+          name: "Es Bangla v1.2.4 (Consistent Permanent Signing & Refined 3D Home)"
           body: |
-            ### Es Bangla v1.2.3 Release Highlights:
+            ### Es Bangla v1.2.4 Release Highlights:
+            - **Consistent Permanent Release Signing**:
+              - Permanent release keystore configured to prevent Android package installer signature mismatch errors ("App not installed as package appears to be invalid").
+              - Seamless future updates without needing to uninstall.
             - **Refined Authentic 3D Home Screen**:
               - Restored authentic Es Bangla design layout (removed reference-app clones).
               - Removed top Class/Semester pill selector from HomeScreen (kept exclusively in Profile section).

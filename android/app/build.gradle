@@ -44,9 +44,22 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            if (file("release.keystore").exists()) {
+                storeFile file("release.keystore")
+                storePassword "esbangla123"
+                keyAlias "esbangla"
+                keyPassword "esbangla123"
+            } else {
+                signingConfig signingConfigs.debug
+            }
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources false
         }
