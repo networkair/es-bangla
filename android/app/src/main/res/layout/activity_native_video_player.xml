@@ -106,43 +106,9 @@
             <!-- Guard 1: Top-left corner covers channel avatar & title to prevent clicking channel/leaving app -->
             <View
                 android:id="@+id/overlayChannelGuard"
-                android:layout_width="260dp"
-                android:layout_height="65dp"
-                android:layout_gravity="top|start"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <!-- Guard 2: Bottom-left corner covers copy link round button -->
-            <View
-                android:id="@+id/overlayLinkGuard"
-                android:layout_width="70dp"
+                android:layout_width="220dp"
                 android:layout_height="55dp"
-                android:layout_gravity="bottom|start"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <!-- Guard 3: Bottom-center covers "More Videos" related cards shelf -->
-            <View
-                android:id="@+id/overlayRelatedShelfGuard"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginStart="70dp"
-                android:layout_marginEnd="140dp"
-                android:layout_marginBottom="25dp"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <!-- Guard 4: Bottom-right covers YouTube logo (leaves fullscreen button at far right accessible) -->
-            <View
-                android:id="@+id/overlayYtLogoGuard"
-                android:layout_width="95dp"
-                android:layout_height="45dp"
-                android:layout_gravity="bottom|end"
-                android:layout_marginEnd="45dp"
+                android:layout_gravity="top|start"
                 android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true" />

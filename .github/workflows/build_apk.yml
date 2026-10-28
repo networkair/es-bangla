@@ -45,9 +45,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.1.4
-          name: "Es Bangla v1.1.4 (Secured Player: Blocked Channel, Share, Copy Link & More Videos)"
-          body: "Release APK v1.1.4 with complete security lockdowns: blocked channel avatar/title clicks, removed copy link button, disabled more videos / related shelf popups, blocked context menus, and preserved full player controls & fullscreen."
+          tag_name: v1.1.5
+          name: "Es Bangla v1.1.5 (Clean UI & Secured Player: Hidden Copy Link, More Videos & Settings More Options Blocked)"
+          body: "Release APK v1.1.5 with full visual cleanup and security: completely hid copy link button, more videos / related shelf, and YouTube logo from screen while keeping the channel title cleanly visible. Blocked 'More options' in player settings menu to prevent link/embed copying."
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
