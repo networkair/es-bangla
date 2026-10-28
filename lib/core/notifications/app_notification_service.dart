@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +20,8 @@ class AppNotificationService {
   StreamSubscription<QuerySnapshot>? _firestoreSubscription;
   Timer? _rtdbPollTimer;
   final Set<String> _seenDocIds = {};
+  bool _isFirstSyncDone = false;
+  bool _isPolling = false;
   DateTime _serviceStartTime = DateTime.now();
 
   /// Real-time count of unread announcements for the top-bar bell badge
@@ -28,6 +31,12 @@ class AppNotificationService {
     if (_initialized) return;
 
     _serviceStartTime = DateTime.now();
+
+    // Hydrate in-memory seen set from persistent storage immediately
+    try {
+      final persisted = _storage.getSeenNotificationIds();
+      _seenDocIds.addAll(persisted);
+    } catch (_) {}
 
     const AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -87,8 +96,13 @@ class AppNotificationService {
         final actionUrl = data['actionUrl'] ?? data['link'] ?? '';
         final imageUrl = notification?.android?.imageUrl ?? data['imageUrl'] ?? '';
 
+        final msgKey = message.messageId ?? '${title}_${body}';
+        if (_seenDocIds.contains(msgKey)) return;
+        _seenDocIds.add(msgKey);
+        _storage.addSeenNotificationId(msgKey);
+
         showSystemNotification(
-          id: message.messageId?.hashCode ?? DateTime.now().millisecondsSinceEpoch,
+          id: (message.messageId?.hashCode ?? DateTime.now().millisecondsSinceEpoch) & 0x7FFFFFFF,
           title: title,
           body: body,
           actionUrl: actionUrl,
@@ -125,6 +139,12 @@ class AppNotificationService {
   void startRealtimeListener(int semester) {
     _firestoreSubscription?.cancel();
     _rtdbPollTimer?.cancel();
+    _isFirstSyncDone = false;
+
+    // Refresh memory cache from storage
+    try {
+      _seenDocIds.addAll(_storage.getSeenNotificationIds());
+    } catch (_) {}
 
     final semKey1 = 'c12_sem$semester';
     final semKey2 = 'sem$semester';
@@ -161,38 +181,36 @@ class AppNotificationService {
             unreadCount++;
           }
 
-          // Trigger heads-up system notification on user phone if not previously seen
           final docId = doc.id;
-          final seenSet = _storage.getSeenNotificationIds();
-          final bool alreadySeen = seenSet.contains(docId) || _seenDocIds.contains(docId);
+          final bool alreadySeen = _seenDocIds.contains(docId);
 
-            final diff = DateTime.now().difference(createdAt);
-            final bool isFresh = diff.inHours < 2 && diff.inMinutes > -30;
+          if (!alreadySeen) {
+            _seenDocIds.add(docId); // Synchronous memory lock to prevent duplicate alerts
+            _storage.addSeenNotificationId(docId);
 
-            if (!alreadySeen) {
-              _seenDocIds.add(docId);
-              _storage.addSeenNotificationId(docId);
+            // Only ring phone if real-time (not historical notification on app launch)
+            final bool isRealtime = _isFirstSyncDone ||
+                createdAt.isAfter(_serviceStartTime.subtract(const Duration(minutes: 2)));
 
-              if (isFresh) {
-                final title = (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
-                final body = (data['body'] ?? data['message'] ?? '').toString().trim();
-                final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
-                final imageUrl = (data['imageUrl'] ?? data['image'] ?? '').toString().trim();
+            if (isRealtime) {
+              final title = (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
+              final body = (data['body'] ?? data['message'] ?? '').toString().trim();
+              final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
+              final imageUrl = (data['imageUrl'] ?? data['image'] ?? '').toString().trim();
 
-                showSystemNotification(
-                  id: docId.hashCode,
-                  title: title,
-                  body: body,
-                  actionUrl: actionUrl,
-                  imageUrl: imageUrl,
-                );
-              }
-            } else {
-              _seenDocIds.add(docId);
+              showSystemNotification(
+                id: (docId.hashCode & 0x7FFFFFFF),
+                title: title,
+                body: body,
+                actionUrl: actionUrl,
+                imageUrl: imageUrl,
+              );
             }
+          }
         }
 
         unreadCountNotifier.value = unreadCount;
+        _isFirstSyncDone = true;
       },
       onError: (err) {
         debugPrint('AppNotificationService real-time listener error: $err');
@@ -207,6 +225,9 @@ class AppNotificationService {
   }
 
   Future<void> _pollRtdbNotifications(int semester) async {
+    if (_isPolling) return;
+    _isPolling = true;
+
     try {
       final dio = Dio(BaseOptions(
         connectTimeout: const Duration(seconds: 5),
@@ -246,42 +267,44 @@ class AppNotificationService {
               unreadCount++;
             }
 
-            final seenSet = _storage.getSeenNotificationIds();
-            final bool alreadySeen = seenSet.contains(key) || _seenDocIds.contains(key);
-
-            final diff = DateTime.now().difference(createdAt);
-            final bool isFresh = diff.inHours < 2 && diff.inMinutes > -30;
+            final bool alreadySeen = _seenDocIds.contains(key);
 
             if (!alreadySeen) {
-              _seenDocIds.add(key);
+              _seenDocIds.add(key); // Synchronous memory lock to prevent duplicate alerts
               _storage.addSeenNotificationId(key);
 
-              if (isFresh) {
+              // Only ring phone if real-time (not historical notification on app launch)
+              final bool isRealtime = _isFirstSyncDone ||
+                  createdAt.isAfter(_serviceStartTime.subtract(const Duration(minutes: 2)));
+
+              if (isRealtime) {
                 final title = (map['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
                 final body = (map['body'] ?? map['message'] ?? '').toString().trim();
                 final actionUrl = (map['actionUrl'] ?? map['link'] ?? map['redirectUrl'] ?? '').toString().trim();
                 final imageUrl = (map['imageUrl'] ?? map['image'] ?? '').toString().trim();
 
                 showSystemNotification(
-                  id: key.hashCode,
+                  id: (key.hashCode & 0x7FFFFFFF),
                   title: title,
                   body: body,
                   actionUrl: actionUrl,
                   imageUrl: imageUrl,
                 );
               }
-            } else {
-              _seenDocIds.add(key);
             }
           }
         });
 
         unreadCountNotifier.value = unreadCount;
+        _isFirstSyncDone = true;
       }
-    } catch (_) {}
+    } catch (_) {
+    } finally {
+      _isPolling = false;
+    }
   }
 
-  /// Displays an immediate high-priority Heads-up Notification on the user's phone
+  /// Displays an immediate high-priority Heads-up Notification on the user's phone with BigPicture image preview
   Future<void> showSystemNotification({
     required int id,
     required String title,
@@ -291,6 +314,42 @@ class AppNotificationService {
   }) async {
     await initialize();
 
+    ByteArrayAndroidBitmap? bigPictureBitmap;
+    final cleanImageUrl = imageUrl?.trim() ?? '';
+
+    // If notification has an image, download bytes to display in Android notification drawer
+    if (cleanImageUrl.isNotEmpty && (cleanImageUrl.startsWith('http://') || cleanImageUrl.startsWith('https://'))) {
+      try {
+        final dio = Dio(BaseOptions(
+          connectTimeout: const Duration(seconds: 4),
+          receiveTimeout: const Duration(seconds: 5),
+        ));
+        final response = await dio.get<List<int>>(
+          cleanImageUrl,
+          options: Options(responseType: ResponseType.bytes),
+        );
+        if (response.data != null && response.data!.isNotEmpty) {
+          bigPictureBitmap = ByteArrayAndroidBitmap(Uint8List.fromList(response.data!));
+        }
+      } catch (e) {
+        debugPrint('Notification image preview download note: $e');
+      }
+    }
+
+    final StyleInformation styleInformation = bigPictureBitmap != null
+        ? BigPictureStyleInformation(
+            bigPictureBitmap,
+            contentTitle: title,
+            summaryText: body,
+            largeIcon: bigPictureBitmap,
+            hideExpandedLargeIcon: false,
+          )
+        : BigTextStyleInformation(
+            body,
+            contentTitle: title,
+            summaryText: 'Es Bangla Update',
+          );
+
     final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'es_bangla_announcements',
       'বিজ্ঞপ্তি ও গুরুত্বপূর্ণ আপডেট (Announcements)',
@@ -299,19 +358,17 @@ class AppNotificationService {
       priority: Priority.high,
       playSound: true,
       enableVibration: true,
-      styleInformation: BigTextStyleInformation(
-        body,
-        contentTitle: title,
-        summaryText: 'Es Bangla Update',
-      ),
+      largeIcon: bigPictureBitmap,
+      styleInformation: styleInformation,
     );
 
     final NotificationDetails platformDetails = NotificationDetails(
       android: androidDetails,
     );
 
+    final safeId = id & 0x7FFFFFFF;
     await _notificationsPlugin.show(
-      id,
+      safeId,
       title,
       body,
       platformDetails,

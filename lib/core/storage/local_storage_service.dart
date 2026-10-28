@@ -138,4 +138,10 @@ class LocalStorageService {
     set.add(id);
     await _prefs.setStringList(_keySeenNotifIds, set.toList());
   }
+
+  Future<void> addAllSeenNotificationIds(Iterable<String> ids) async {
+    final set = getSeenNotificationIds();
+    set.addAll(ids);
+    await _prefs.setStringList(_keySeenNotifIds, set.toList());
+  }
 }
