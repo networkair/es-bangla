@@ -59,8 +59,8 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 14,
-                            mainAxisSpacing: 14,
-                            childAspectRatio: 0.78,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 0.68,
                           ),
                           itemCount: _subjects.length,
                           itemBuilder: (context, index) {
@@ -154,18 +154,54 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
     );
   }
 
+  String _getSubjectAsset(String id, String name, String nameEn) {
+    final lowerId = id.toLowerCase();
+    final lowerName = name.toLowerCase();
+    final lowerEn = nameEn.toLowerCase();
+
+    if (lowerId.contains('bengali') || lowerId.contains('bangla') || lowerName.contains('বাংলা') || lowerEn.contains('bengali')) {
+      return 'assets/icons/subjects/ic_sub_bangla.png';
+    } else if (lowerId.contains('english') || lowerName.contains('english') || lowerName.contains('ইংরেজি') || lowerName.contains('ইংরাজি') || lowerEn.contains('english')) {
+      return 'assets/icons/subjects/ic_sub_english.png';
+    } else if (lowerId.contains('hist') || lowerName.contains('ইতিহাস') || lowerEn.contains('history')) {
+      return 'assets/icons/subjects/ic_sub_history.png';
+    } else if (lowerId.contains('geo') || lowerName.contains('ভূগোল') || lowerEn.contains('geography')) {
+      return 'assets/icons/subjects/ic_sub_geography.png';
+    } else if (lowerId.contains('pol') || lowerName.contains('রাষ্ট্র') || lowerEn.contains('pol')) {
+      return 'assets/icons/subjects/ic_sub_polscience.png';
+    } else if (lowerId.contains('edu') || lowerName.contains('শিক্ষা') || lowerEn.contains('education')) {
+      return 'assets/icons/subjects/ic_sub_education.png';
+    } else if (lowerId.contains('phil') || lowerName.contains('দর্শন') || lowerEn.contains('philosophy')) {
+      return 'assets/icons/subjects/ic_sub_philosophy.png';
+    } else if (lowerId.contains('san') || lowerName.contains('সংস্কৃত') || lowerEn.contains('sanskrit')) {
+      return 'assets/icons/subjects/ic_sub_sanskrit.png';
+    } else if (lowerId.contains('comp') || lowerName.contains('কম্পিউটার') || lowerEn.contains('computer')) {
+      return 'assets/icons/subjects/ic_sub_computer.png';
+    }
+    return 'assets/icons/subjects/ic_sub_bangla.png';
+  }
+
   Widget _buildSubjectCard(NoteSubject subject) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppColors.border, width: 1.2),
-        boxShadow: AppColors.softCardShadow,
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(26),
+        border: Border.all(
+          color: const Color(0xFFE2E8F0).withOpacity(0.8),
+          width: 1.0,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0F172A).withOpacity(0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(26),
           onTap: () {
             Navigator.push(
               context,
@@ -178,57 +214,42 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(14, 18, 14, 14),
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. Large, prominent 3D Icon (Centered, open and spacious)
+                // 1. Large 3D Subject Icon sitting directly on the card with NO background
                 Expanded(
                   child: Center(
                     child: _buildSubjectEmblem(subject),
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
 
                 // 2. Subject Title
                 Text(
                   subject.subjectName,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                    height: 1.25,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF0F172A),
+                    letterSpacing: -0.3,
+                    height: 1.2,
                   ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
 
-                const SizedBox(height: 12),
+                const SizedBox(height: 6),
 
-                // 3. Bottom Row: Sleek right-aligned circular arrow button
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.35),
-                          blurRadius: 6,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.arrow_forward_rounded,
-                      color: Colors.white,
-                      size: 16,
-                    ),
+                // 3. Double Arrow (») matching reference image
+                const Align(
+                  alignment: Alignment.bottomRight,
+                  child: Icon(
+                    Icons.keyboard_double_arrow_right_rounded,
+                    size: 30,
+                    color: Color(0xFF0F172A),
                   ),
                 ),
               ],
@@ -240,14 +261,20 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
   }
 
   Widget _buildSubjectEmblem(NoteSubject subject) {
-    if (subject.iconAsset != null && subject.iconAsset!.isNotEmpty) {
-      return Image.asset(
-        subject.iconAsset!,
-        width: 86,
-        height: 86,
-        fit: BoxFit.contain,
-      );
-    }
+    String assetPath = (subject.iconAsset != null && subject.iconAsset!.isNotEmpty)
+        ? subject.iconAsset!
+        : _getSubjectAsset(subject.subjectId, subject.subjectName, subject.subjectNameEn);
+
+    return Image.asset(
+      assetPath,
+      width: 95,
+      height: 95,
+      fit: BoxFit.contain,
+      errorBuilder: (_, __, ___) => _buildFallbackEmblem(subject),
+    );
+  }
+
+  Widget _buildFallbackEmblem(NoteSubject subject) {
 
     // Default clean semantic emblems for subjects
     final nameLower = subject.subjectName.toLowerCase();

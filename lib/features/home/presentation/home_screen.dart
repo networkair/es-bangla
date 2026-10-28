@@ -765,16 +765,27 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             children: [
               Container(
-                width: 48,
-                height: 48,
-                padding: const EdgeInsets.all(2),
+                width: 56,
+                height: 56,
                 decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(14),
+                  color: const Color(0xFFF1F5F9),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.04),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-                child: Image.asset(
-                  'assets/icons/ic_reminder.png',
-                  fit: BoxFit.contain,
+                child: Center(
+                  child: Image.asset(
+                    'assets/icons/ic_reminder.png',
+                    width: 38,
+                    height: 38,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               const SizedBox(width: 14),
@@ -834,19 +845,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 70,
-                    height: 70,
-                    padding: const EdgeInsets.all(3),
+                    width: 78,
+                    height: 78,
                     decoration: BoxDecoration(
-                      color: AppColors.primaryLight.withOpacity(0.45),
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.12)),
+                      color: const Color(0xFFF8FAFC),
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.03),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: Center(
                       child: Image.asset(
                         iconAsset,
-                        width: 62,
-                        height: 62,
+                        width: 56,
+                        height: 56,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -903,14 +920,28 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             children: [
               Container(
-                width: 48,
-                height: 48,
-                padding: const EdgeInsets.all(2),
+                width: 56,
+                height: 56,
                 decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(14),
+                  color: const Color(0xFFF1F5F9),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.04),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-                child: Image.asset(iconAsset, fit: BoxFit.contain),
+                child: Center(
+                  child: Image.asset(
+                    iconAsset,
+                    width: 38,
+                    height: 38,
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -921,7 +952,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title,
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       subtitle,
                       style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),

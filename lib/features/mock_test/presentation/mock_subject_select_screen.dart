@@ -166,7 +166,7 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.72,
+              childAspectRatio: 0.68,
               crossAxisSpacing: 16,
               mainAxisSpacing: 18,
             ),
@@ -181,29 +181,55 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
     );
   }
 
+  String _getSubjectAsset(SubjectModel subject) {
+    final id = subject.subjectId.toLowerCase();
+    final name = subject.name.toLowerCase();
+    final nameEn = subject.nameEn.toLowerCase();
+
+    if (id.contains('bengali') || id.contains('bangla') || name.contains('বাংলা') || nameEn.contains('bengali')) {
+      return 'assets/icons/subjects/ic_sub_bangla.png';
+    } else if (id.contains('english') || name.contains('english') || name.contains('ইংরেজি') || name.contains('ইংরাজি') || nameEn.contains('english')) {
+      return 'assets/icons/subjects/ic_sub_english.png';
+    } else if (id.contains('hist') || name.contains('ইতিহাস') || nameEn.contains('history')) {
+      return 'assets/icons/subjects/ic_sub_history.png';
+    } else if (id.contains('geo') || name.contains('ভূগোল') || nameEn.contains('geography')) {
+      return 'assets/icons/subjects/ic_sub_geography.png';
+    } else if (id.contains('pol') || name.contains('রাষ্ট্র') || nameEn.contains('pol')) {
+      return 'assets/icons/subjects/ic_sub_polscience.png';
+    } else if (id.contains('edu') || name.contains('শিক্ষা') || nameEn.contains('education')) {
+      return 'assets/icons/subjects/ic_sub_education.png';
+    } else if (id.contains('phil') || name.contains('দর্শন') || nameEn.contains('philosophy')) {
+      return 'assets/icons/subjects/ic_sub_philosophy.png';
+    } else if (id.contains('san') || name.contains('সংস্কৃত') || nameEn.contains('sanskrit')) {
+      return 'assets/icons/subjects/ic_sub_sanskrit.png';
+    } else if (id.contains('comp') || name.contains('কম্পিউটার') || nameEn.contains('computer')) {
+      return 'assets/icons/subjects/ic_sub_computer.png';
+    }
+
+    if (subject.iconUrl.isNotEmpty && subject.iconUrl.startsWith('assets/')) {
+      return subject.iconUrl;
+    }
+    return 'assets/icons/subjects/ic_sub_bangla.png';
+  }
+
   Widget _buildSubjectCard(SubjectModel subject) {
     final theme = _getSubjectTheme(subject);
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(26),
         border: Border.all(
           color: widget.isPremiumMode
               ? AppColors.premiumGold.withOpacity(0.35)
-              : AppColors.border.withOpacity(0.8),
+              : const Color(0xFFE2E8F0).withOpacity(0.8),
           width: widget.isPremiumMode ? 1.4 : 1.0,
         ),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF0F172A).withOpacity(0.04),
             blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-          BoxShadow(
-            color: theme.color.withOpacity(0.06),
-            blurRadius: 18,
-            offset: const Offset(0, 4),
+            offset: const Offset(0, 6),
           ),
         ],
       ),
@@ -221,48 +247,26 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
               ),
             );
           },
-          borderRadius: BorderRadius.circular(24),
-          splashColor: theme.color.withOpacity(0.12),
-          highlightColor: theme.color.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(26),
+          splashColor: theme.color.withOpacity(0.08),
+          highlightColor: theme.color.withOpacity(0.04),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. Top Section: Centered Floating Subject Logo / Icon Placeholder
+                // 1. Top Section: Large 3D Subject Icon directly on card (NO background)
                 Expanded(
                   child: Center(
-                    child: Container(
-                      width: 92,
-                      height: 92,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            theme.color.withOpacity(0.14),
-                            theme.color.withOpacity(0.04),
-                          ],
-                        ),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: theme.color.withOpacity(0.20),
-                          width: 1.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.color.withOpacity(0.08),
-                            blurRadius: 14,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Icon(
-                          theme.icon,
-                          size: 46,
-                          color: theme.color,
-                        ),
+                    child: Image.asset(
+                      _getSubjectAsset(subject),
+                      width: 95,
+                      height: 95,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) => Icon(
+                        theme.icon,
+                        size: 54,
+                        color: theme.color,
                       ),
                     ),
                   ),
@@ -270,43 +274,30 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
 
                 const SizedBox(height: 12),
 
-                // 2. Bottom Row: Subject Name (no chapter count) & Action Arrow (»)
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        subject.name,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
-                          letterSpacing: -0.3,
-                          height: 1.25,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
+                // 2. Subject Name
+                Text(
+                  subject.name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF0F172A),
+                    letterSpacing: -0.3,
+                    height: 1.2,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
 
-                    // Modern Action Arrow indicator
-                    Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: theme.color.withOpacity(0.10),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.keyboard_double_arrow_right_rounded,
-                          color: theme.color,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ],
+                const SizedBox(height: 6),
+
+                // 3. Double Arrow (») matching reference image
+                const Align(
+                  alignment: Alignment.bottomRight,
+                  child: Icon(
+                    Icons.keyboard_double_arrow_right_rounded,
+                    size: 30,
+                    color: Color(0xFF0F172A),
+                  ),
                 ),
               ],
             ),

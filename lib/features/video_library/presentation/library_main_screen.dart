@@ -193,19 +193,25 @@ class LibraryMainScreen extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 62,
-                  height: 62,
-                  padding: const EdgeInsets.all(3),
+                  width: 66,
+                  height: 66,
                   decoration: BoxDecoration(
-                    color: AppColors.primaryLight.withOpacity(0.45),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.12)),
+                    color: const Color(0xFFF8FAFC),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.03),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Center(
                     child: Image.asset(
                       iconAsset,
-                      width: 52,
-                      height: 52,
+                      width: 48,
+                      height: 48,
                       fit: BoxFit.contain,
                     ),
                   ),
