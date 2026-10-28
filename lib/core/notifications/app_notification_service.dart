@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../storage/local_storage_service.dart';
 import '../utils/security_manager.dart';
 
@@ -60,6 +61,47 @@ class AppNotificationService {
 
       await androidImplementation.createNotificationChannel(channel);
       await requestPermissions();
+    }
+
+    // Initialize Firebase Cloud Messaging (FCM) & Topics
+    try {
+      final fcm = FirebaseMessaging.instance;
+      await fcm.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+        provisional: false,
+      );
+
+      final sem = _storage.semester;
+      await fcm.subscribeToTopic('all');
+      await fcm.subscribeToTopic('c12_sem$sem');
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        final notification = message.notification;
+        final data = message.data;
+        final title = notification?.title ?? (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢');
+        final body = notification?.body ?? (data['body'] ?? data['message'] ?? '');
+        final actionUrl = data['actionUrl'] ?? data['link'] ?? '';
+        final imageUrl = notification?.android?.imageUrl ?? data['imageUrl'] ?? '';
+
+        showSystemNotification(
+          id: message.messageId?.hashCode ?? DateTime.now().millisecondsSinceEpoch,
+          title: title,
+          body: body,
+          actionUrl: actionUrl,
+          imageUrl: imageUrl,
+        );
+      });
+
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        final actionUrl = message.data['actionUrl'] ?? message.data['link'] ?? '';
+        if (actionUrl.isNotEmpty && (actionUrl.startsWith('http://') || actionUrl.startsWith('https://'))) {
+          SecurityManager.openExternalUrl(actionUrl);
+        }
+      });
+    } catch (e) {
+      debugPrint('FCM init note: $e');
     }
 
     _initialized = true;
