@@ -56,26 +56,23 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.2.5
-          name: "Es Bangla v1.2.5 (3D Card Shapes, Seamless White Canvas & Compact Design)"
+          tag_name: v1.2.6
+          name: "Es Bangla v1.2.6 (True Fullscreen, Deep 3D Shadows, Large Icons & Header Refinements)"
           body: |
-            ### Es Bangla v1.2.5 Release Highlights:
-            - **Seamless Matching Canvas**:
-              - Unified screen background (`#FFFFFF`) and card backgrounds (`#FFFFFF`) to eliminate background/card color mismatch.
-            - **Signature 3D Shape & Drop Shadows**:
-              - Deep rounded squircle cards (`BorderRadius.circular(28)`) with multi-layered soft drop shadows creating authentic 3D physical elevation.
-              - Completely removed card outlines and harsh gray borders.
-            - **Compact & Balanced Spacing**:
-              - Reduced spacing between cards and sections for a snug, modern, cohesive layout.
-            - **Modern 3D Study Reminder**:
-              - Smooth pill-shaped card in warm peach-cream (`#FFEEDD`) with bold black title and 3D reminder bell icon.
-            - **Large Vibrant Icons & Borderless Circles**:
-              - Enlarged 3D icons to fill ~80% of circular containers.
-              - Removed all border outlines from light blue icon containers (`#EDF4FF`).
-              - Added circular chevron action buttons (`#EAF2FF`) with bold slate arrows.
-            - **Clean English Headlines**:
-              - Streamlined typography with bold uppercase English titles (`SEMESTER 3`, `SEMESTER 4`, `PREVIOUS YEARS QUESTIONS`, `BOOK NOTES & HANDNOTES`).
-              - Removed cluttered Bengali subtitles and redundant badges.
+            ### Es Bangla v1.2.6 Release Highlights:
+            - **True Fullscreen App (Immersive Sticky Mode)**:
+              - Removed Android top system status bar (clock, battery, timer, notifications).
+              - Native Fullscreen configured across Android manifest, styles.xml, MainActivity.kt, and Flutter main.dart.
+              - App fills 100% of the physical screen display.
+            - **Enhanced 3D Bottom Shadows**:
+              - Prominent grounded bottom drop shadows on all full-width long cards (Study Reminder, PYQ, Book Notes, Social Hub).
+            - **Large Edge-to-Edge Semester 3 & 4 Icons**:
+              - Cropped 58% transparent margin from Semester 3 and 4 3D icons, scaling them to fill the light blue circular containers.
+            - **Header Refinement**:
+              - Pure black bold brand title `Es Bangla`.
+              - Small, clean English subtitle `Welcome, $userName 👋` with all Bengali text removed.
+            - **Reliable Offline Detection**:
+              - Eliminated false offline screens on app resume by removing background HTTP timer and adding lifecycle sync with hardware connectivity.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -94,18 +94,26 @@ class _HomeScreenState extends State<HomeScreen> {
         titleSpacing: 20,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              children: [
-                Text(
-                  'হ্যালো, $userName 👋',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-                ),
-              ],
-            ),
             const Text(
-              'আজ নতুন কিছু শিক্ষার দিন!',
-              style: TextStyle(fontSize: 12, color: AppColors.textSecondary, fontWeight: FontWeight.normal),
+              'Es Bangla',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -0.3,
+                color: Color(0xFF0F172A), // Pure crisp black
+              ),
+            ),
+            const SizedBox(height: 1.5),
+            Text(
+              'Welcome, $userName 👋',
+              style: const TextStyle(
+                fontSize: 11.5,
+                color: Color(0xFF64748B),
+                fontWeight: FontWeight.normal,
+                letterSpacing: 0.1,
+              ),
             ),
           ],
         ),
@@ -679,14 +687,15 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(29),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000), // Smooth 3D elevation
-            blurRadius: 16,
-            offset: Offset(0, 6),
+            color: Color(0x20000000), // Rich prominent bottom shadow
+            blurRadius: 18,
+            spreadRadius: 0.5,
+            offset: Offset(0, 9),
           ),
           BoxShadow(
-            color: Color(0x06000000),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+            color: Color(0x0A000000),
+            blurRadius: 6,
+            offset: Offset(0, 3),
           ),
         ],
       ),
@@ -773,8 +782,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     // Uniform Borderless Light Blue Icon Container
                     Container(
-                      width: 58,
-                      height: 58,
+                      width: 60,
+                      height: 60,
                       decoration: const BoxDecoration(
                         color: Color(0xFFEDF4FF), // Soft light blue
                         shape: BoxShape.circle,
@@ -782,8 +791,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Center(
                         child: Image.asset(
                           iconAsset,
-                          width: 48,
-                          height: 48,
+                          width: 54,
+                          height: 54,
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -837,14 +846,15 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(28),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 18,
-            offset: Offset(0, 8),
+            color: Color(0x22000000), // Prominent bottom drop shadow
+            blurRadius: 22,
+            spreadRadius: 1,
+            offset: Offset(0, 11),
           ),
           BoxShadow(
-            color: Color(0x06000000),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+            color: Color(0x0C000000),
+            blurRadius: 6,
+            offset: Offset(0, 3),
           ),
         ],
       ),
@@ -921,14 +931,15 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(28),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 18,
-            offset: Offset(0, 8),
+            color: Color(0x22000000), // Prominent bottom drop shadow
+            blurRadius: 22,
+            spreadRadius: 1,
+            offset: Offset(0, 11),
           ),
           BoxShadow(
-            color: Color(0x06000000),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+            color: Color(0x0C000000),
+            blurRadius: 6,
+            offset: Offset(0, 3),
           ),
         ],
       ),
