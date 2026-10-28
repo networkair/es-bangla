@@ -45,15 +45,18 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.1.9
-          name: "Es Bangla v1.1.9 (Guaranteed Dual-Sync Report Submission, SoundPool Buzzers & Distinct Result UI)"
+          tag_name: v1.2.0
+          name: "Es Bangla v1.2.0 (Subject-Grouped Vault, Advanced 3D Analytics & Profile Upgrade)"
           body: |
-            ### Es Bangla v1.1.9 Release Highlights:
-            - **Guaranteed Report Submission**: Dual-channel reporting system writing to both Firebase Realtime Database and Firestore, bypassing security restrictions and syncing instantly with Admin Panel.
-            - **Hardware SoundPool Audio**: Upgraded Android native audio to preloaded SoundPool buffers for instantaneous 0ms buzzer feedback on correct/wrong answers.
-            - **Original & Distinct Result UI**: Custom-branded English scorecards, dynamic celebration phrases, distinct metric cards (All Questions, Right Answers, Incorrect Answers), and comprehensive question review cards.
-            - **Lottie Celebration Header**: Prominent large celebratory animated trophy and student character with zero negative marking.
-            - **Smooth Animations**: Tween-based entrance animation and slide transitions for quiz questions.
+            ### Es Bangla v1.2.0 Release Highlights:
+            - **Subject-Grouped Saved Questions**: Questions saved during mock tests are categorized strictly by subject with colorful 3D subject cards, question counts, correct answer solutions, and contextual explanations.
+            - **Advanced Mock Analytics Dashboard**:
+              - *Subject Mastery*: Multi-timeframe performance breakdown (All Time, 30 Days, 7 Days), 3D metric cards, Subject Comparison Bar Chart, Priority Focus Areas (<60% accuracy), Mastery Strengths (>=70%), and targeted 4-step improvement roadmaps.
+              - *Subject Deep-Dive Screen*: Detailed metrics (Proficiency, Accuracy, Total Attempts, Correct Solved) with high-performing and focus-needed chapter cards.
+              - *Activity & Streak*: Dedicated monthly calendar tracking mock test completion days in 3D emerald pills with streak count.
+            - **100% English Experience in Profile & Analytics**: Complete translation and terminology upgrade across Profile, Analytics, and Saved Questions.
+            - **Word Count Limit in Reporting**: Observation/feedback messages in the reporting bottom sheet are now capped at 100 words with live counter feedback ($words / 100 words).
+            - **Guaranteed Dual-Sync Reporting**: Real-time dual submission to both Firebase Realtime Database and Firestore, synced directly with the web Admin Panel.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

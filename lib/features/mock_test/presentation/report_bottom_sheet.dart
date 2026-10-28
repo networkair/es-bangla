@@ -44,8 +44,19 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
     super.dispose();
   }
 
+  int _getWordCount(String text) {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return 0;
+    return trimmed.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
+  }
+
   Future<void> _submitReport() async {
     final message = _messageController.text.trim();
+    final wordCount = _getWordCount(message);
+    if (wordCount > 100) {
+      setState(() => _statusMessage = 'Your observation exceeds the 100-word limit ($wordCount/100 words). Please shorten your message.');
+      return;
+    }
     if (message.isEmpty && _selectedType != 'wrong_question') {
       setState(() => _statusMessage = 'Please enter a brief message or observation.');
       return;
@@ -234,12 +245,40 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
           TextField(
             controller: _messageController,
             maxLines: 3,
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               labelText: 'Your Feedback / Comment (Optional)',
               hintText: 'Tell us what is wrong or needs correction...',
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               contentPadding: const EdgeInsets.all(14),
             ),
+          ),
+          const SizedBox(height: 6),
+          Builder(
+            builder: (context) {
+              final words = _getWordCount(_messageController.text);
+              final isOver = words > 100;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Maximum 100 words allowed',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppColors.textSecondary.withOpacity(0.8),
+                    ),
+                  ),
+                  Text(
+                    '$words / 100 words',
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.bold,
+                      color: isOver ? AppColors.wrongRed : (words >= 80 ? Colors.orange : AppColors.textSecondary),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
 
           if (_statusMessage != null) ...[
