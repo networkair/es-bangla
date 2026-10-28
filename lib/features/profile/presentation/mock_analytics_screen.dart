@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
-import '../../mock_test/presentation/mock_test_screen.dart';
+import '../../mock_test/presentation/mock_subject_select_screen.dart';
 
 class MockAnalyticsScreen extends StatefulWidget {
   const MockAnalyticsScreen({super.key});
@@ -122,7 +122,7 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
                 ElevatedButton.icon(
                   onPressed: () => Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (_) => const MockTestScreen()),
+                    MaterialPageRoute(builder: (_) => const MockSubjectSelectScreen(isPremiumMode: false)),
                   ),
                   icon: const Icon(Icons.play_arrow_rounded, size: 20),
                   label: const Text('Start First Mock Test', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
@@ -419,7 +419,8 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
               title: 'No Critical Weak Topics!',
               subtitle: 'Great work! All your tested chapters currently maintain a solid score.',
             )
-          : SizedBox(
+          else
+            SizedBox(
               height: 125,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
@@ -493,7 +494,8 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
               title: 'No Strength Topics Recorded Yet',
               subtitle: 'Solve more mock test papers to identify and highlight your strongest chapters.',
             )
-          : SizedBox(
+          else
+            SizedBox(
               height: 125,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
@@ -723,7 +725,7 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const MockTestScreen()),
+                  MaterialPageRoute(builder: (_) => const MockSubjectSelectScreen(isPremiumMode: false)),
                 );
               },
               icon: const Icon(Icons.rocket_launch_rounded, size: 20),
@@ -1320,7 +1322,7 @@ class SubjectAnalyticsDetailScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const MockTestScreen()),
+                    MaterialPageRoute(builder: (_) => const MockSubjectSelectScreen(isPremiumMode: false)),
                   );
                 },
                 icon: const Icon(Icons.rocket_launch_rounded, size: 20),
