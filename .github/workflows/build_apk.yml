@@ -45,22 +45,23 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.2.1
-          name: "Es Bangla v1.2.1 (3D Home Redesign, Real-Time Push Notifications & Shimmer Loading)"
+          tag_name: v1.2.2
+          name: "Es Bangla v1.2.2 (Real-Time Push Notifications & Live RTDB Sync)"
           body: |
-            ### Es Bangla v1.2.1 Release Highlights:
+            ### Es Bangla v1.2.2 Release Highlights:
+            - **100% Reliable Real-Time Notifications**:
+              - Dual-Sync architecture listening directly to Firebase Realtime Database & Firestore with 4-second instant poller.
+              - High-priority Android heads-up system notifications (sound, vibration & banner) delivered directly to user phone.
+              - Persistent seen notification tracking to eliminate duplicate chimes.
+              - Live Notification Inbox with pull-to-refresh and Shimmer skeleton loading.
+              - Fixed Android notification channel ID mapping (`es_bangla_announcements`).
             - **Modern 3D Home Screen Redesign**:
               - Full-width, cohesive 3D feature cards for Semester 3, Semester 4, Previous Year Questions, and Book Notes.
-              - Eliminates awkward spacing and scattered layout; provides high-contrast typography, WBCHSE/SOLVED/PDF badges, and circular action chevrons.
               - 16:9 bright banner news slider with live status indicator and smooth 16px corner rounding.
               - Interactive Academic Semester Selector Pill (`CLASS 12 (Semester 3/4)`) for seamless semester switching.
               - Dedicated Study Reminder 3D Banner in warm amber tone.
               - WhatsApp Hero Community Card with instant "JOIN NOW" pill button.
               - Balanced dual-card social channels hub (YouTube, Telegram, Facebook) and student trust verification badge.
-            - **Real-Time Push Notification System**:
-              - Firebase Cloud Messaging topic subscriptions (`all`, `c12_sem3`, `c12_sem4`).
-              - Android 13+ permission flow, foreground Heads-Up notifications, BigPicture rich image previews.
-              - Real-time in-app notification inbox with live Firestore updates and unread count badge.
             - **High-Performance Shimmer Loading Animations**:
               - Lightweight, GPU-accelerated shimmer skeleton loaders across News Slider, Mock Test Subject Select, Topics/Sets, and Quiz screens.
           files: build/app/outputs/flutter-apk/app-release.apk

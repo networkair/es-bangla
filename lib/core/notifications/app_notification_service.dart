@@ -161,28 +161,35 @@ class AppNotificationService {
             unreadCount++;
           }
 
-          // Trigger heads-up system notification on user phone if new notification created after app opened
+          // Trigger heads-up system notification on user phone if not previously seen
           final docId = doc.id;
-          final isRecentlyCreated = createdAt.isAfter(_serviceStartTime.subtract(const Duration(seconds: 15)));
+          final seenSet = _storage.getSeenNotificationIds();
+          final bool alreadySeen = seenSet.contains(docId) || _seenDocIds.contains(docId);
 
-          if (isRecentlyCreated && !_seenDocIds.contains(docId)) {
-            _seenDocIds.add(docId);
+            final diff = DateTime.now().difference(createdAt);
+            final bool isFresh = diff.inHours < 2 && diff.inMinutes > -30;
 
-            final title = (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
-            final body = (data['body'] ?? data['message'] ?? '').toString().trim();
-            final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
-            final imageUrl = (data['imageUrl'] ?? data['image'] ?? '').toString().trim();
+            if (!alreadySeen) {
+              _seenDocIds.add(docId);
+              _storage.addSeenNotificationId(docId);
 
-            showSystemNotification(
-              id: docId.hashCode,
-              title: title,
-              body: body,
-              actionUrl: actionUrl,
-              imageUrl: imageUrl,
-            );
-          } else {
-            _seenDocIds.add(docId);
-          }
+              if (isFresh) {
+                final title = (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
+                final body = (data['body'] ?? data['message'] ?? '').toString().trim();
+                final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
+                final imageUrl = (data['imageUrl'] ?? data['image'] ?? '').toString().trim();
+
+                showSystemNotification(
+                  id: docId.hashCode,
+                  title: title,
+                  body: body,
+                  actionUrl: actionUrl,
+                  imageUrl: imageUrl,
+                );
+              }
+            } else {
+              _seenDocIds.add(docId);
+            }
         }
 
         unreadCountNotifier.value = unreadCount;
@@ -192,9 +199,9 @@ class AppNotificationService {
       },
     );
 
-    // 2. Dual-Sync Realtime Database Polling (every 10 seconds for instant delivery)
+    // 2. Dual-Sync Realtime Database Polling (every 4 seconds for instant delivery)
     _pollRtdbNotifications(semester);
-    _rtdbPollTimer = Timer.periodic(const Duration(seconds: 10), (_) {
+    _rtdbPollTimer = Timer.periodic(const Duration(seconds: 4), (_) {
       _pollRtdbNotifications(semester);
     });
   }
@@ -212,7 +219,7 @@ class AppNotificationService {
         final semKey2 = 'sem$semester';
         final semKey3 = semester.toString();
         final lastReadMs = _storage.lastReadNotificationTimestamp;
-        int unreadCount = unreadCountNotifier.value;
+        int unreadCount = 0;
 
         dataMap.forEach((key, val) {
           if (val is Map) {
@@ -239,31 +246,37 @@ class AppNotificationService {
               unreadCount++;
             }
 
-            final isRecentlyCreated = createdAt.isAfter(_serviceStartTime.subtract(const Duration(seconds: 45)));
-            if (isRecentlyCreated && !_seenDocIds.contains(key)) {
+            final seenSet = _storage.getSeenNotificationIds();
+            final bool alreadySeen = seenSet.contains(key) || _seenDocIds.contains(key);
+
+            final diff = DateTime.now().difference(createdAt);
+            final bool isFresh = diff.inHours < 2 && diff.inMinutes > -30;
+
+            if (!alreadySeen) {
               _seenDocIds.add(key);
+              _storage.addSeenNotificationId(key);
 
-              final title = (map['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
-              final body = (map['body'] ?? map['message'] ?? '').toString().trim();
-              final actionUrl = (map['actionUrl'] ?? map['link'] ?? map['redirectUrl'] ?? '').toString().trim();
-              final imageUrl = (map['imageUrl'] ?? map['image'] ?? '').toString().trim();
+              if (isFresh) {
+                final title = (map['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
+                final body = (map['body'] ?? map['message'] ?? '').toString().trim();
+                final actionUrl = (map['actionUrl'] ?? map['link'] ?? map['redirectUrl'] ?? '').toString().trim();
+                final imageUrl = (map['imageUrl'] ?? map['image'] ?? '').toString().trim();
 
-              showSystemNotification(
-                id: key.hashCode,
-                title: title,
-                body: body,
-                actionUrl: actionUrl,
-                imageUrl: imageUrl,
-              );
+                showSystemNotification(
+                  id: key.hashCode,
+                  title: title,
+                  body: body,
+                  actionUrl: actionUrl,
+                  imageUrl: imageUrl,
+                );
+              }
             } else {
               _seenDocIds.add(key);
             }
           }
         });
 
-        if (unreadCount > unreadCountNotifier.value) {
-          unreadCountNotifier.value = unreadCount;
-        }
+        unreadCountNotifier.value = unreadCount;
       }
     } catch (_) {}
   }

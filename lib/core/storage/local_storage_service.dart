@@ -126,4 +126,16 @@ class LocalStorageService {
   int get lastReadNotificationTimestamp => _prefs.getInt(_keyLastReadNotif) ?? 0;
   Future<void> setLastReadNotificationTimestamp(int timestampMs) =>
       _prefs.setInt(_keyLastReadNotif, timestampMs);
+
+  static const String _keySeenNotifIds = 'seen_notif_ids_set';
+  Set<String> getSeenNotificationIds() {
+    final list = _prefs.getStringList(_keySeenNotifIds);
+    return list?.toSet() ?? {};
+  }
+
+  Future<void> addSeenNotificationId(String id) async {
+    final set = getSeenNotificationIds();
+    set.add(id);
+    await _prefs.setStringList(_keySeenNotifIds, set.toList());
+  }
 }

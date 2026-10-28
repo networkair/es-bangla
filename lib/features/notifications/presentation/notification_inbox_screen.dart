@@ -18,6 +18,7 @@ class NotificationInboxScreen extends StatefulWidget {
 
 class _NotificationInboxScreenState extends State<NotificationInboxScreen> {
   final List<Map<String, dynamic>> _rtdbNotifications = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -76,7 +77,14 @@ class _NotificationInboxScreenState extends State<NotificationInboxScreen> {
           _rtdbNotifications.addAll(list);
         });
       }
-    } catch (_) {}
+    } catch (_) {
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -95,7 +103,7 @@ class _NotificationInboxScreenState extends State<NotificationInboxScreen> {
         stream: FirebaseFirestore.instance.collection('notifications').snapshots(),
         builder: (context, snapshot) {
           // Shimmer loading placeholder while fetching real-time data
-          if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData && _rtdbNotifications.isEmpty) {
+          if (_isLoading && _rtdbNotifications.isEmpty && (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData)) {
             return _buildShimmerLoading();
           }
 
@@ -141,42 +149,58 @@ class _NotificationInboxScreenState extends State<NotificationInboxScreen> {
           notifications.sort((a, b) => (b['createdAt'] as DateTime).compareTo(a['createdAt'] as DateTime));
 
           if (notifications.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 76,
-                      height: 76,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primaryLight,
-                        shape: BoxShape.circle,
+            return RefreshIndicator(
+              onRefresh: _fetchRtdbNotifications,
+              color: AppColors.primary,
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 76,
+                              height: 76,
+                              decoration: const BoxDecoration(
+                                color: AppColors.primaryLight,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.notifications_none_rounded, size: 40, color: AppColors.primary),
+                            ),
+                            const SizedBox(height: 18),
+                            const Text(
+                              'কোনো নতুন বিজ্ঞপ্তি নেই',
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'গুরুত্বপূর্ণ নোটিশ, রুটিন ও ক্লাসের আপডেট এখানে রিয়েল-টাইমে দেখতে পাবেন।',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 13.5, color: AppColors.textSecondary, height: 1.4),
+                            ),
+                          ],
+                        ),
                       ),
-                      child: const Icon(Icons.notifications_none_rounded, size: 40, color: AppColors.primary),
                     ),
-                    const SizedBox(height: 18),
-                    const Text(
-                      'কোনো নতুন বিজ্ঞপ্তি নেই',
-                      style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'গুরুত্বপূর্ণ নোটিশ, রুটিন ও ক্লাসের আপডেট এখানে রিয়েল-টাইমে দেখতে পাবেন।',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 13.5, color: AppColors.textSecondary, height: 1.4),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           }
 
-          return ListView.builder(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
-            itemCount: notifications.length,
-            itemBuilder: (context, index) {
+          return RefreshIndicator(
+            onRefresh: _fetchRtdbNotifications,
+            color: AppColors.primary,
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
+              itemCount: notifications.length,
+              itemBuilder: (context, index) {
               final item = notifications[index];
               final title = item['title'] as String;
               final body = item['body'] as String;
@@ -321,10 +345,11 @@ class _NotificationInboxScreenState extends State<NotificationInboxScreen> {
                 ),
               );
             },
-          );
-        },
-      ),
-    );
+          ),
+        );
+      },
+    ),
+  );
   }
 
   Widget _buildShimmerLoading() {
