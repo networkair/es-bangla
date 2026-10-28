@@ -14,6 +14,7 @@ import android.view.WindowInsetsController
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -23,6 +24,9 @@ import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import java.io.ByteArrayInputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 class NativeVideoPlayerActivity : AppCompatActivity() {
 
@@ -170,6 +174,92 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                 return true
             }
 
+            override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+                val url = request?.url?.toString() ?: return null
+
+                // 1. Intercept player stylesheet (www-player.css or player_embed*.css)
+                if (url.contains("www-player.css") || (url.contains("player") && url.endsWith(".css"))) {
+                    try {
+                        val connection = URL(url).openConnection() as HttpURLConnection
+                        connection.requestMethod = "GET"
+                        request.requestHeaders?.forEach { (k, v) ->
+                            connection.setRequestProperty(k, v)
+                        }
+                        if (connection.getRequestProperty("User-Agent") == null) {
+                            connection.setRequestProperty("User-Agent", view?.settings?.userAgentString ?: "Mozilla/5.0")
+                        }
+                        connection.connectTimeout = 8000
+                        connection.readTimeout = 8000
+
+                        val originalCss = connection.inputStream.bufferedReader().use { it.readText() }
+                        val modifiedCss = originalCss + "\n\n/* Antigravity Cleaner */\n" + CUSTOM_CLEANER_CSS
+
+                        return WebResourceResponse(
+                            "text/css",
+                            "UTF-8",
+                            ByteArrayInputStream(modifiedCss.toByteArray(Charsets.UTF_8))
+                        )
+                    } catch (e: Exception) {
+                        Log.e(TAG, "CSS Interception failed: ${e.message}")
+                    }
+                }
+
+                // 2. Intercept embed HTML to inject cleaner style tag & script directly into the document
+                if (url.startsWith("https://www.youtube-nocookie.com/embed/") || url.startsWith("https://www.youtube.com/embed/")) {
+                    try {
+                        val connection = URL(url).openConnection() as HttpURLConnection
+                        connection.requestMethod = "GET"
+                        request.requestHeaders?.forEach { (k, v) ->
+                            connection.setRequestProperty(k, v)
+                        }
+                        if (connection.getRequestProperty("User-Agent") == null) {
+                            connection.setRequestProperty("User-Agent", view?.settings?.userAgentString ?: "Mozilla/5.0")
+                        }
+                        if (connection.getRequestProperty("Referer") == null) {
+                            connection.setRequestProperty("Referer", "https://www.youtube-nocookie.com")
+                        }
+                        connection.connectTimeout = 8000
+                        connection.readTimeout = 8000
+
+                        var originalHtml = connection.inputStream.bufferedReader().use { it.readText() }
+
+                        val injectHead = """
+                            <style id="esy-native-interceptor-style">
+                                $CUSTOM_CLEANER_CSS
+                            </style>
+                        """.trimIndent()
+
+                        val injectBody = """
+                            <script id="esy-native-interceptor-script">
+                                $CUSTOM_CLEANER_SCRIPT
+                            </script>
+                        """.trimIndent()
+
+                        if (originalHtml.contains("</head>")) {
+                            originalHtml = originalHtml.replace("</head>", "$injectHead\n</head>")
+                        } else {
+                            originalHtml = "$injectHead\n$originalHtml"
+                        }
+
+                        if (originalHtml.contains("</body>")) {
+                            originalHtml = originalHtml.replace("</body>", "$injectBody\n</body>")
+                        } else {
+                            originalHtml = "$originalHtml\n$injectBody"
+                        }
+
+                        return WebResourceResponse(
+                            "text/html",
+                            "UTF-8",
+                            ByteArrayInputStream(originalHtml.toByteArray(Charsets.UTF_8))
+                        )
+                    } catch (e: Exception) {
+                        Log.e(TAG, "HTML Interception failed: ${e.message}")
+                    }
+                }
+
+                return super.shouldInterceptRequest(view, request)
+            }
+
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 playerLoading.visibility = View.VISIBLE
@@ -205,191 +295,172 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
         val js = """
             (function() {
                 try {
-                    // 1. Inject CSS rules to hide unwanted options and keep channel title & fullscreen button
                     var cssId = 'esy-player-clean-style';
                     if (!document.getElementById(cssId)) {
-                        var css = `
-                            .ytp-overlay-bottom-left,
-                            .ytp-copylink-button,
-                            .ytp-share-button,
-                            .ytp-pause-overlay,
-                            .ytp-pause-overlay-container,
-                            .ytp-pause-overlay-backdrop,
-                            .ytp-expand-pause-overlay,
-                            .ytp-more-videos-view,
-                            .ytp-suggestions,
-                            .ytp-suggestion-link,
-                            .ytp-suggestion-image,
-                            .ytp-suggestion-title,
-                            .ytp-suggestion-author,
-                            .ytp-suggestion-overlay,
-                            .ytp-impression-link,
-                            .ytp-impression-link-content,
-                            .ytp-impression-link-logo,
-                            .ytp-impression-link-text,
-                            .ytp-watermark,
-                            .ytp-watermark-small,
-                            .ytp-youtube-button,
-                            .ytp-contextmenu,
-                            .ytp-cards-button,
-                            .ytp-overflow-button {
-                                display: none !important;
-                                visibility: hidden !important;
-                                opacity: 0 !important;
-                                pointer-events: none !important;
-                                width: 0 !important;
-                                height: 0 !important;
-                                max-width: 0 !important;
-                                max-height: 0 !important;
-                            }
-                            /* Preserve channel avatar & name visible at top-left */
-                            .ytp-chrome-top,
-                            .ytp-title,
-                            .ytp-title-link,
-                            .ytp-title-channel,
-                            .ytp-title-expanded-title,
-                            .ytp-overlay-top-left {
-                                display: flex !important;
-                                visibility: visible !important;
-                                opacity: 1 !important;
-                            }
-                            /* Keep fullscreen button visible & accessible */
-                            .ytp-fullscreen-button {
-                                display: inline-block !important;
-                                visibility: visible !important;
-                                opacity: 1 !important;
-                                pointer-events: auto !important;
-                            }
-                        `;
                         var head = document.head || document.getElementsByTagName('head')[0] || document.documentElement;
                         var style = document.createElement('style');
                         style.id = cssId;
                         style.type = 'text/css';
-                        style.appendChild(document.createTextNode(css));
+                        style.appendChild(document.createTextNode(`$CUSTOM_CLEANER_CSS`));
                         head.appendChild(style);
                     }
-
-                    // 2. Disable clipboard write
-                    if (navigator.clipboard) {
-                        navigator.clipboard.writeText = function() { return Promise.reject(new Error("Disabled")); };
-                        navigator.clipboard.write = function() { return Promise.reject(new Error("Disabled")); };
-                    }
-
-                    // 3. Purge sensitive / unwanted items from settings menu (e.g. More options, Copy link, Share)
-                    function cleanSettingsMenu() {
-                        var items = document.querySelectorAll('.ytp-menuitem');
-                        for (var i = 0; i < items.length; i++) {
-                            var item = items[i];
-                            var text = (item.innerText || item.textContent || '').trim().toLowerCase();
-                            
-                            var isQuality = text.indexOf('quality') !== -1 || text.indexOf('গুণমান') !== -1 || text.indexOf('কোয়ালিটি') !== -1;
-                            var isSpeed = text.indexOf('speed') !== -1 || text.indexOf('গতি') !== -1 || text.indexOf('playback') !== -1;
-                            var isSubtitles = text.indexOf('subtitle') !== -1 || text.indexOf('caption') !== -1 || text.indexOf('সাবটাইটেল') !== -1 || text.indexOf('cc') !== -1;
-                            var isResolutionOrRate = /\d{3,4}p/.test(text) || text.indexOf('auto') !== -1 || text.indexOf('normal') !== -1 || text.indexOf('স্বাভাবিক') !== -1 || /\d(\.\d+)?x/.test(text);
-
-                            var isForbidden = text.indexOf('more') !== -1 || 
-                                              text.indexOf('বিকল্প') !== -1 || 
-                                              text.indexOf('share') !== -1 || 
-                                              text.indexOf('শেয়ার') !== -1 || 
-                                              text.indexOf('copy') !== -1 || 
-                                              text.indexOf('কপি') !== -1 || 
-                                              text.indexOf('link') !== -1 || 
-                                              text.indexOf('লিঙ্ক') !== -1 || 
-                                              text.indexOf('embed') !== -1 || 
-                                              text.indexOf('stats') !== -1 || 
-                                              text.indexOf('report') !== -1;
-
-                            if (isForbidden || (!isQuality && !isSpeed && !isSubtitles && !isResolutionOrRate && text.length > 0)) {
-                                item.style.setProperty('display', 'none', 'important');
-                                item.style.setProperty('visibility', 'hidden', 'important');
-                                item.style.setProperty('pointer-events', 'none', 'important');
-                                item.style.setProperty('height', '0px', 'important');
-                                item.style.setProperty('min-height', '0px', 'important');
-                                item.style.setProperty('margin', '0px', 'important');
-                                item.style.setProperty('padding', '0px', 'important');
-                            }
-                        }
-                    }
-
-                    // 4. Secure channel title links so clicking them doesn't navigate
-                    function secureChannelLinks() {
-                        var titleLinks = document.querySelectorAll('.ytp-title-link, .ytp-title-channel, .ytp-chrome-top a');
-                        for (var i = 0; i < titleLinks.length; i++) {
-                            var a = titleLinks[i];
-                            a.removeAttribute('href');
-                            a.removeAttribute('target');
-                            a.style.cursor = 'default';
-                        }
-                    }
-
-                    // 5. Global capture click listener to block any forbidden actions immediately
-                    if (!window._esyClickGuardsAttached) {
-                        window._esyClickGuardsAttached = true;
-                        document.addEventListener('click', function(e) {
-                            var target = e.target;
-                            if (!target) return;
-                            
-                            // Check if clicking inside a forbidden menuitem in Settings
-                            var menuItem = target.closest('.ytp-menuitem');
-                            if (menuItem) {
-                                var text = (menuItem.innerText || menuItem.textContent || '').trim().toLowerCase();
-                                if (text.indexOf('more') !== -1 || text.indexOf('বিকল্প') !== -1 || 
-                                    text.indexOf('share') !== -1 || text.indexOf('শেয়ার') !== -1 || 
-                                    text.indexOf('copy') !== -1 || text.indexOf('কপি') !== -1 || 
-                                    text.indexOf('link') !== -1 || text.indexOf('লিঙ্ক') !== -1 || 
-                                    text.indexOf('embed') !== -1 || text.indexOf('stats') !== -1) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    e.stopImmediatePropagation();
-                                    return false;
-                                }
-                            }
-
-                            // Check if clicking copy button, watermark, or pause overlay
-                            var blocked = target.closest('.ytp-copylink-button, .ytp-share-button, .ytp-impression-link, .ytp-watermark, .ytp-pause-overlay');
-                            if (blocked) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                e.stopImmediatePropagation();
-                                return false;
-                            }
-
-                            setTimeout(cleanSettingsMenu, 25);
-                            setTimeout(cleanSettingsMenu, 100);
-                            setTimeout(cleanSettingsMenu, 250);
-                        }, true);
-
-                        // Block copy commands
-                        document.addEventListener('copy', function(e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            e.stopImmediatePropagation();
-                        }, true);
-                    }
-
-                    // Run immediately and observe DOM changes
-                    cleanSettingsMenu();
-                    secureChannelLinks();
-
-                    if (!window._esyObserverAttached) {
-                        window._esyObserverAttached = true;
-                        var observer = new MutationObserver(function() {
-                            cleanSettingsMenu();
-                            secureChannelLinks();
-                        });
-                        observer.observe(document.body || document.documentElement, {
-                            childList: true,
-                            subtree: true
-                        });
-                        setInterval(function() {
-                            cleanSettingsMenu();
-                            secureChannelLinks();
-                        }, 500);
-                    }
+                    $CUSTOM_CLEANER_SCRIPT
                 } catch(e) {}
             })();
         """.trimIndent()
         view?.evaluateJavascript(js, null)
+    }
+
+    companion object {
+        private const val CUSTOM_CLEANER_CSS = """
+            /* 1. Hide Copy Link button at bottom-left completely */
+            .ytp-overlay-bottom-left,
+            .ytp-copylink-button,
+            .ytp-copylink-button-visible,
+            .ytp-copylink-icon,
+            .ytp-copylink-title,
+            .ytp-show-copylink-title,
+            .ytp-share-button,
+            .ytp-show-share-title,
+
+            /* 2. Hide "More videos" / related videos shelf & thumbnails at bottom-center */
+            .ytp-pause-overlay,
+            .ytp-pause-overlay-container,
+            .ytp-pause-overlay-backdrop,
+            .ytp-pause-overlay-controls-hidden,
+            .ytp-expand-pause-overlay,
+            .ytp-more-videos-view,
+            .ytp-more-videos-view-container,
+            .ytp-more-videos-button,
+            .ytp-more-videos-button-thumbnail,
+            .ytp-more-videos-button-title,
+            .ytp-suggestions,
+            .ytp-suggestion-link,
+            .ytp-suggestion-image,
+            .ytp-suggestion-title,
+            .ytp-suggestion-author,
+            .ytp-suggestion-overlay,
+            .ytp-autonav-endscreen-more-videos,
+            .ytp-watch-again-on-youtube-endscreen-more-videos-container,
+
+            /* 3. Hide YouTube logo and watermark at bottom-right */
+            .ytp-impression-link,
+            .ytp-impression-link-content,
+            .ytp-impression-link-logo,
+            .ytp-impression-link-text,
+            .ytp-music-impression-link,
+            .ytp-watermark,
+            .ytp-watermark-small,
+            .ytp-youtube-button,
+
+            /* 4. Hide "More options" popup panel & share panels completely */
+            .ytp-overflow-panel,
+            .ytp-overflow-panel-action-buttons,
+            .ytp-overflow-panel-close,
+            .ytp-overflow-panel-content,
+            .ytp-share-panel,
+            .ytp-share-panel-close,
+            .ytp-share-panel-inner-content,
+            .ytp-share-panel-service-button,
+            .ytp-share-panel-service-buttons,
+            .ytp-contextmenu,
+            .ytp-cards-button,
+            .ytp-overflow-button,
+
+            /* 5. In main settings drawer, hide the last item ("... More options") */
+            .ytp-settings-menu .ytp-panel-menu > .ytp-menuitem:last-child {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+                width: 0 !important;
+                height: 0 !important;
+                min-height: 0 !important;
+                max-height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+            }
+
+            /* 6. Ensure channel name & avatar at top-left stay visible */
+            .ytp-chrome-top,
+            .ytp-title,
+            .ytp-title-link,
+            .ytp-title-channel,
+            .ytp-title-expanded-title,
+            .ytp-overlay-top-left {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            /* 7. Ensure fullscreen button at bottom-right stays visible */
+            .ytp-fullscreen-button {
+                display: inline-block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+        """
+
+        private const val CUSTOM_CLEANER_SCRIPT = """
+            (function() {
+                function cleanMenu() {
+                    try {
+                        var items = document.querySelectorAll('.ytp-menuitem');
+                        for (var i = 0; i < items.length; i++) {
+                            var it = items[i];
+                            var txt = (it.innerText || it.textContent || '').trim().toLowerCase();
+                            if (txt.indexOf('more') !== -1 || txt.indexOf('বিকল্প') !== -1 || txt.indexOf('share') !== -1 || txt.indexOf('copy') !== -1) {
+                                it.style.setProperty('display', 'none', 'important');
+                                it.style.setProperty('visibility', 'hidden', 'important');
+                                it.style.setProperty('pointer-events', 'none', 'important');
+                                it.style.setProperty('height', '0px', 'important');
+                            }
+                        }
+                        var channelLinks = document.querySelectorAll('.ytp-title-link, .ytp-title-channel, .ytp-chrome-top a');
+                        for (var j = 0; j < channelLinks.length; j++) {
+                            channelLinks[j].removeAttribute('href');
+                            channelLinks[j].removeAttribute('target');
+                            channelLinks[j].style.cursor = 'default';
+                        }
+                    } catch(e) {}
+                }
+
+                document.addEventListener('click', function(e) {
+                    var t = e.target;
+                    if (!t) return;
+                    var m = t.closest ? t.closest('.ytp-menuitem') : null;
+                    if (m) {
+                        var txt = (m.innerText || m.textContent || '').trim().toLowerCase();
+                        if (txt.indexOf('more') !== -1 || txt.indexOf('বিকল্প') !== -1 || txt.indexOf('share') !== -1 || txt.indexOf('copy') !== -1) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            return false;
+                        }
+                    }
+                    var blk = t.closest ? t.closest('.ytp-copylink-button, .ytp-share-button, .ytp-impression-link, .ytp-watermark, .ytp-pause-overlay, .ytp-overflow-panel') : null;
+                    if (blk) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                        return false;
+                    }
+                    setTimeout(cleanMenu, 25);
+                    setTimeout(cleanMenu, 100);
+                    setTimeout(cleanMenu, 300);
+                }, true);
+
+                cleanMenu();
+                if (!window._esyObsAttached) {
+                    window._esyObsAttached = true;
+                    var obs = new MutationObserver(cleanMenu);
+                    obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
+                    setInterval(cleanMenu, 400);
+                }
+            })();
+        """
     }
 
     override fun onPause() {
