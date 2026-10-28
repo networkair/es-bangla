@@ -71,6 +71,9 @@ flutter:
     - assets/fonts/
 
   fonts:
+    - family: AppTitleFont
+      fonts:
+        - asset: assets/fonts/app_title_font.ttf
     - family: VintageColorize
       fonts:
         - asset: assets/fonts/vintage_colorize.ttf

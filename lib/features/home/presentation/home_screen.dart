@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           'Es Bangla',
           style: TextStyle(
-            fontFamily: 'VintageColorize',
+            fontFamily: 'AppTitleFont',
             fontSize: 27,
             fontWeight: FontWeight.bold,
             color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),

@@ -161,7 +161,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text(
                   'Es Bangla',
                   style: TextStyle(
-                    fontSize: 26,
+                    fontFamily: 'AppTitleFont',
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                     letterSpacing: -0.5,
