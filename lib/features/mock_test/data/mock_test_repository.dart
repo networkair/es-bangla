@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/storage/local_storage_service.dart';
@@ -70,6 +72,25 @@ class MockTestRepository {
         return list;
       }
     } catch (e) {
+      if (diskSubjects != null && diskSubjects.isNotEmpty) return diskSubjects;
+      try {
+        final manifestStr = await rootBundle.loadString('assets/manifest/content_manifest.json');
+        final data = jsonDecode(manifestStr);
+        final semNotes = data['semesters']?['$semester']?['notes'] as List? ?? [];
+        if (semNotes.isNotEmpty) {
+          final fallbackList = semNotes.map((s) => SubjectModel(
+            subjectId: s['subject_id'] ?? '',
+            name: s['subject_name'] ?? '',
+            nameEn: s['subject_name_en'] ?? '',
+            order: 1,
+            iconUrl: s['icon_asset'] ?? '',
+            topicCount: (s['topics'] as List? ?? []).length,
+            hasPremium: true,
+          )).toList();
+          _memoryCache[cacheKey] = fallbackList.map((s) => s.toJson()).toList();
+          return fallbackList;
+        }
+      } catch (_) {}
       if (diskSubjects != null) return diskSubjects;
       rethrow;
     }
@@ -113,6 +134,79 @@ class MockTestRepository {
         return list;
       }
     } catch (e) {
+      if (diskTopics != null && diskTopics.isNotEmpty) return diskTopics;
+      try {
+        final manifestStr = await rootBundle.loadString('assets/manifest/content_manifest.json');
+        final data = jsonDecode(manifestStr);
+        final semNotes = data['semesters']?['$semester']?['notes'] as List? ?? [];
+        final matchedSub = semNotes.firstWhere(
+          (s) => s['subject_id'] == subjectId,
+          orElse: () => null,
+        );
+        if (matchedSub != null) {
+          final tList = matchedSub['topics'] as List? ?? [];
+          final fallbackTopics = tList.map((t) => TopicModel(
+            topicId: t['topic_id'] ?? '',
+            name: t['title'] ?? '',
+            order: 1,
+            sets: [
+              TestSetModel(
+                setFile: 'set1',
+                title: 'Set 1',
+                setNumber: 1,
+                questionCount: 10,
+                totalMarks: 10,
+                isPremium: false,
+                hasTimer: false,
+                durationMinutes: 10,
+                version: '1',
+              ),
+              TestSetModel(
+                setFile: 'set2',
+                title: 'Set 2',
+                setNumber: 2,
+                questionCount: 10,
+                totalMarks: 10,
+                isPremium: false,
+                hasTimer: false,
+                durationMinutes: 10,
+                version: '1',
+              ),
+              TestSetModel(
+                setFile: 'set3',
+                title: 'Set 3',
+                setNumber: 3,
+                questionCount: 10,
+                totalMarks: 10,
+                isPremium: false,
+                hasTimer: false,
+                durationMinutes: 10,
+                version: '1',
+              ),
+              TestSetModel(
+                setFile: 'set4',
+                title: 'Set 4',
+                setNumber: 4,
+                questionCount: 10,
+                totalMarks: 10,
+                isPremium: false,
+                hasTimer: false,
+                durationMinutes: 10,
+                version: '1',
+              ),
+            ],
+          )).toList();
+          if (fallbackTopics.isNotEmpty) {
+            _memoryCache[cacheKey] = fallbackTopics.map((t) => {
+              'topic_id': t.topicId,
+              'name': t.name,
+              'order': t.order,
+              'sets': t.sets.map((s) => s.toJson()).toList(),
+            }).toList();
+            return fallbackTopics;
+          }
+        }
+      } catch (_) {}
       if (diskTopics != null) return diskTopics;
       rethrow;
     }
@@ -155,7 +249,7 @@ class MockTestRepository {
     throw Exception('Failed to load test paper');
   }
 
-  /// Submit Question Report or Feedback to Telegram API v1/v2
+  /// Submit Question Report or Feedback (Firestore Real-time + API Fallback)
   Future<bool> sendReport({
     required String type,
     required String name,
@@ -164,17 +258,30 @@ class MockTestRepository {
     required String contextSummary,
     Map<String, dynamic>? meta,
   }) async {
-    try {
-      final payload = {
-        'client_request_id': const Uuid().v4(),
-        'type': type,
-        'name': name.isEmpty ? 'Student' : name,
-        'email': email.isEmpty ? 'student@esbangla.app' : email,
-        'message': message,
-        'context': contextSummary,
-        if (meta != null) 'meta': meta,
-      };
+    final clientRequestId = const Uuid().v4();
+    final payload = {
+      'client_request_id': clientRequestId,
+      'type': type,
+      'name': name.isEmpty ? 'Student' : name,
+      'email': email.isEmpty ? 'student@esbangla.app' : email,
+      'message': message,
+      'context': contextSummary,
+      if (meta != null) 'meta': meta,
+      'created_at': FieldValue.serverTimestamp(),
+      'timestamp': DateTime.now().toIso8601String(),
+      'status': 'pending',
+    };
 
+    bool firestoreSuccess = false;
+
+    // 1. Direct Firestore Submission (Real-time and guaranteed delivery)
+    try {
+      await FirebaseFirestore.instance.collection('question_reports').add(payload);
+      firestoreSuccess = true;
+    } catch (_) {}
+
+    // 2. HTTP Endpoint Fallback / Sync
+    try {
       final response = await _dio.post(
         ApiConstants.reportEndpoint,
         data: payload,
@@ -183,11 +290,10 @@ class MockTestRepository {
           validateStatus: (status) => status != null && status < 500,
         ),
       );
+      if (response.statusCode == 200) return true;
+    } catch (_) {}
 
-      return response.statusCode == 200;
-    } catch (_) {
-      return false;
-    }
+    return firestoreSuccess;
   }
 }
 

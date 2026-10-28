@@ -32,10 +32,10 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
   bool _isSuccess = false;
 
   final Map<String, String> _typeLabels = {
-    'wrong_question': '🚩 ভুল প্রশ্ন রিপোর্ট',
-    'feedback': '💡 মতামত',
-    'bug': '🐛 বাগ রিপোর্ট',
-    'other': '📝 অন্যান্য',
+    'wrong_question': '🚩 Incorrect Question / Options',
+    'feedback': '💡 Feedback / Suggestion',
+    'bug': '🐛 App / Quiz Bug',
+    'other': '📝 Other Issue',
   };
 
   @override
@@ -46,8 +46,8 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
 
   Future<void> _submitReport() async {
     final message = _messageController.text.trim();
-    if (message.length < 5) {
-      setState(() => _statusMessage = 'অনুগ্রহ করে ন্যূনতম ৫ অক্ষরের বিবরণ লিখুন।');
+    if (message.isEmpty && _selectedType != 'wrong_question') {
+      setState(() => _statusMessage = 'Please enter a brief message or observation.');
       return;
     }
 
@@ -64,6 +64,15 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
         'Class ${widget.metadata.className} | Semester ${widget.metadata.semester} | ${widget.metadata.subjectName} | ${widget.metadata.topicName} | Set ${widget.metadata.setNumber} | Q${widget.questionIndex + 1} (${widget.question.qId})';
 
     final meta = {
+      'test_title': '${widget.metadata.subjectName} - ${widget.metadata.topicName} (Set ${widget.metadata.setNumber})',
+      'question_id': widget.question.qId,
+      'question_text': widget.question.questionText,
+      'correct_answer_id': widget.question.correctOption,
+      'selected_option': widget.selectedOption ?? 'unanswered',
+      'options': widget.question.options.entries
+          .map((e) => {'id': e.key, 'text': e.value})
+          .toList(),
+      'explanation': widget.question.explanation,
       'class': widget.metadata.className,
       'semester': widget.metadata.semester,
       'subject_id': widget.metadata.subjectId,
@@ -80,15 +89,18 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
         'correct_option': widget.question.correctOption,
         'selected_option': widget.selectedOption ?? 'unanswered',
       },
-      'app_version': '1.0.0',
-      'android_sdk': 34,
+      'app_version': '1.1.7',
     };
+
+    final finalMessage = message.isNotEmpty
+        ? message
+        : 'Auto-reported: Question ${widget.questionIndex + 1} flagged as incorrect.';
 
     final success = await _repository.sendReport(
       type: _selectedType,
       name: name,
       email: email,
-      message: message,
+      message: finalMessage,
       contextSummary: contextStr,
       meta: meta,
     );
@@ -98,12 +110,12 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
         _isSending = false;
         _isSuccess = success;
         _statusMessage = success
-            ? 'ধন্যবাদ! আপনার রিপোর্টটি সফলভাবে অ্যাডমিনের কাছে পাঠানো হয়েছে।'
-            : 'রিপোর্ট পাঠাতে ব্যর্থ হয়েছে। ইন্টারনেট সংযোগ দেখে পুনরায় চেষ্টা করুন।';
+            ? 'Thank you! Your report has been submitted to the admin.'
+            : 'Could not send report right now. Please try again.';
       });
 
       if (success) {
-        Future.delayed(const Duration(seconds: 2), () {
+        Future.delayed(const Duration(milliseconds: 1600), () {
           if (mounted) Navigator.pop(context, true);
         });
       }
@@ -112,7 +124,7 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: EdgeInsets.only(
         left: 20,
         right: 20,
@@ -127,8 +139,12 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'প্রশ্ন সংক্রান্ত রিপোর্ট',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                'Report an Issue',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
               ),
               IconButton(
                 onPressed: () => Navigator.pop(context),
@@ -137,9 +153,15 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
             ],
           ),
           const SizedBox(height: 12),
+
+          // Dropdown for report type (in English)
           DropdownButtonFormField<String>(
             value: _selectedType,
-            decoration: const InputDecoration(labelText: 'রিপোর্টের ধরন'),
+            decoration: InputDecoration(
+              labelText: 'Issue Type',
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            ),
             items: _typeLabels.entries.map((entry) {
               return DropdownMenuItem(value: entry.key, child: Text(entry.value));
             }).toList(),
@@ -148,13 +170,78 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
             },
           ),
           const SizedBox(height: 14),
+
+          // Auto-attached Question Box (Appears automatically for 'wrong_question')
+          if (_selectedType == 'wrong_question') ...[
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceMuted,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.auto_awesome_rounded, size: 14, color: AppColors.primary),
+                      const SizedBox(width: 6),
+                      const Text(
+                        'Auto-attached Question Details:',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryDark,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Q: ${widget.question.questionText}',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                      height: 1.3,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  ...widget.question.options.entries.map((e) => Padding(
+                    padding: const EdgeInsets.only(bottom: 2),
+                    child: Text(
+                      '${e.key}) ${e.value}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: e.key == widget.selectedOption
+                            ? AppColors.primaryDark
+                            : AppColors.textSecondary,
+                        fontWeight: e.key == widget.selectedOption
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  )),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+          ],
+
+          // Feedback text box
           TextField(
             controller: _messageController,
             maxLines: 3,
-            decoration: const InputDecoration(
-              hintText: 'কী সমস্যা রয়েছে বিস্তারিত লিখুন (ন্যূনতম ৫ অক্ষর)...',
+            decoration: InputDecoration(
+              labelText: 'Your Feedback / Comment (Optional)',
+              hintText: 'Tell us what is wrong or needs correction...',
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              contentPadding: const EdgeInsets.all(14),
             ),
           ),
+
           if (_statusMessage != null) ...[
             const SizedBox(height: 10),
             Text(
@@ -166,19 +253,27 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
               ),
             ),
           ],
+
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
               onPressed: _isSending || _isSuccess ? null : _submitReport,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
               child: _isSending
                   ? const SizedBox(
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                     )
-                  : const Text('রিপোর্ট পাঠান (Send)'),
+                  : const Text(
+                      'Submit Report',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
             ),
           ),
         ],

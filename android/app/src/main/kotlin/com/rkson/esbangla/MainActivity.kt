@@ -74,6 +74,38 @@ class MainActivity: FlutterActivity() {
                 }
             }
         }
+
+        val AUDIO_CHANNEL = "com.rkson.esbangla/audio"
+        var correctPlayer: android.media.MediaPlayer? = null
+        var wrongPlayer: android.media.MediaPlayer? = null
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, AUDIO_CHANNEL).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "playCorrect" -> {
+                    try {
+                        correctPlayer?.release()
+                        correctPlayer = android.media.MediaPlayer.create(this, R.raw.quiz_correct)
+                        correctPlayer?.start()
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.error("AUDIO_ERROR", e.message, null)
+                    }
+                }
+                "playWrong" -> {
+                    try {
+                        wrongPlayer?.release()
+                        wrongPlayer = android.media.MediaPlayer.create(this, R.raw.quiz_wrong)
+                        wrongPlayer?.start()
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.error("AUDIO_ERROR", e.message, null)
+                    }
+                }
+                else -> {
+                    result.notImplemented()
+                }
+            }
+        }
     }
 
     @Suppress("DEPRECATION")

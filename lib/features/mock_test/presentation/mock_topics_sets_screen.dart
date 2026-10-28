@@ -45,7 +45,7 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          _error = 'অধ্যায় ও টেস্ট সেট লোড করা সম্ভব হয়নি।';
+          _error = 'অধ্যায় ও টেস্ট সেট লোড করা সম্ভব হয়নি। ইন্টারনেট সংযোগ চেক করুন।';
           _isLoading = false;
         });
       }
@@ -66,7 +66,57 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(widget.subject.name),
+        backgroundColor: AppColors.background,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        title: Text(
+          widget.subject.name,
+          style: const TextStyle(
+            fontSize: 21,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+            letterSpacing: -0.4,
+          ),
+        ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: widget.isPremiumMode ? AppColors.premiumLight : AppColors.primaryLight,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: widget.isPremiumMode
+                    ? AppColors.premiumGold.withOpacity(0.4)
+                    : AppColors.primary.withOpacity(0.3),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  widget.isPremiumMode
+                      ? Icons.workspace_premium_rounded
+                      : Icons.verified_outlined,
+                  size: 14,
+                  color: widget.isPremiumMode ? AppColors.premiumGold : AppColors.primaryDark,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  widget.isPremiumMode ? 'PREMIUM' : 'FREE',
+                  style: TextStyle(
+                    color: widget.isPremiumMode ? AppColors.premiumGold : AppColors.primaryDark,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: _buildBody(),
     );
@@ -86,9 +136,9 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline_rounded, size: 48, color: AppColors.wrongRed),
+              const Icon(Icons.wifi_off_rounded, size: 48, color: AppColors.wrongRed),
               const SizedBox(height: 16),
-              Text(_error!, style: const TextStyle(fontSize: 15, color: AppColors.textSecondary)),
+              Text(_error!, style: const TextStyle(fontSize: 15, color: AppColors.textSecondary), textAlign: TextAlign.center),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
@@ -103,163 +153,269 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
       );
     }
 
+    // Filter topics if in premium mode
+    final validTopics = _topics.where((t) {
+      if (!widget.isPremiumMode) return t.sets.isNotEmpty;
+      return t.sets.any((s) => s.isPremium);
+    }).toList();
+
+    if (validTopics.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                widget.isPremiumMode ? Icons.workspace_premium_outlined : Icons.quiz_outlined,
+                size: 54,
+                color: AppColors.textMuted,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'এই বিষয়ে কোনো টেস্ট সেট পাওয়া যায়নি',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'খুব শীঘ্রই নতুন টেস্ট সেট যোগ করা হবে।',
+                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: _topics.length,
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 30),
+      itemCount: validTopics.length,
       itemBuilder: (context, index) {
-        final topic = _topics[index];
+        final topic = validTopics[index];
         final setsToShow = widget.isPremiumMode
             ? topic.sets.where((s) => s.isPremium).toList()
             : topic.sets;
 
-        if (widget.isPremiumMode && setsToShow.isEmpty) {
-          return const SizedBox.shrink();
-        }
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 20),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border),
-            boxShadow: AppColors.softCardShadow,
-          ),
-          padding: const EdgeInsets.all(16),
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryLight,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      '${index + 1 < 10 ? '0' : ''}${index + 1}',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primaryDark),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      topic.name,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-                    ),
-                  ),
-                  Text(
-                    'মোট ${setsToShow.length}টি সেট',
-                    style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              const Divider(color: AppColors.border, height: 1),
-              const SizedBox(height: 14),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.5,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: setsToShow.length,
-                itemBuilder: (context, sIndex) {
-                  final set = setsToShow[sIndex];
-                  final isUnlocked = _isSetAccessible(set);
-
-                  return InkWell(
-                    onTap: () {
-                      if (!isUnlocked) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => PremiumLockScreen(
-                              title: set.title,
-                              grantType: 'premium_mock_sem${LocalStorageService().semester}',
-                            ),
-                          ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => QuizScreen(
-                              subjectId: widget.subject.subjectId,
-                              subjectName: widget.subject.name,
-                              topicId: topic.topicId,
-                              topicName: topic.name,
-                              setFile: set.setFile,
-                              version: set.version,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
+              // 1. Topic Title Header
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 18,
                       decoration: BoxDecoration(
-                        color: isUnlocked ? AppColors.surface : AppColors.surfaceMuted,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isUnlocked ? AppColors.border : AppColors.premiumGold.withOpacity(0.4),
+                        color: widget.isPremiumMode ? AppColors.premiumGold : AppColors.primary,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        topic.name,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                          letterSpacing: -0.2,
                         ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Set ${set.setNumber}',
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textPrimary),
-                              ),
-                              if (set.isPremium)
-                                Icon(
-                                  isUnlocked ? Icons.lock_open_rounded : Icons.lock_outline_rounded,
-                                  size: 16,
-                                  color: isUnlocked ? AppColors.correctGreen : AppColors.premiumGold,
-                                ),
-                            ],
-                          ),
-                          Text(
-                            '${set.questionCount} প্রশ্ন • ${set.totalMarks.toInt()} নম্বর',
-                            style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            decoration: BoxDecoration(
-                              color: isUnlocked ? AppColors.primaryLight : AppColors.premiumLight,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Center(
-                              child: Text(
-                                isUnlocked ? 'মক টেস্ট দিন' : 'লক করা',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                  color: isUnlocked ? AppColors.primaryDark : AppColors.premiumGold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
-                  );
-                },
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              // 2. Horizontal Scrollable Row of Set Cards (Left-to-Right)
+              SizedBox(
+                height: 165,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  itemCount: setsToShow.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 14),
+                  itemBuilder: (context, sIndex) {
+                    final set = setsToShow[sIndex];
+                    return _buildHorizontalSetCard(topic, set);
+                  },
+                ),
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildHorizontalSetCard(TopicModel topic, TestSetModel set) {
+    final isUnlocked = _isSetAccessible(set);
+
+    return Container(
+      width: 148,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isUnlocked
+              ? AppColors.border.withOpacity(0.8)
+              : AppColors.premiumGold.withOpacity(0.35),
+          width: 1.2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0F172A).withOpacity(0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+          BoxShadow(
+            color: (isUnlocked ? AppColors.primary : AppColors.premiumGold).withOpacity(0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            if (!isUnlocked) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => PremiumLockScreen(
+                    title: set.title,
+                    grantType: 'premium_mock_sem${LocalStorageService().semester}',
+                  ),
+                ),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => QuizScreen(
+                    subjectId: widget.subject.subjectId,
+                    subjectName: widget.subject.name,
+                    topicId: topic.topicId,
+                    topicName: topic.name,
+                    setFile: set.setFile,
+                    version: set.version,
+                  ),
+                ),
+              );
+            }
+          },
+          borderRadius: BorderRadius.circular(20),
+          splashColor: (isUnlocked ? AppColors.primary : AppColors.premiumGold).withOpacity(0.12),
+          highlightColor: (isUnlocked ? AppColors.primary : AppColors.premiumGold).withOpacity(0.06),
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Top: Set Name in English (e.g. Set 1, Set 2)
+                Text(
+                  'Set ${set.setNumber}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: AppColors.textPrimary,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+
+                // Middle: "Full Free" Badge in English (No Coins / No Question counts)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4.5),
+                  decoration: BoxDecoration(
+                    color: isUnlocked
+                        ? const Color(0xFFECFDF5)
+                        : AppColors.premiumLight,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: isUnlocked
+                          ? const Color(0xFFA7F3D0)
+                          : AppColors.premiumGold.withOpacity(0.4),
+                      width: 1,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isUnlocked
+                            ? Icons.check_circle_rounded
+                            : Icons.lock_rounded,
+                        size: 13,
+                        color: isUnlocked
+                            ? const Color(0xFF10B981)
+                            : AppColors.premiumGold,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        isUnlocked ? 'Full Free' : 'Premium',
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w700,
+                          color: isUnlocked
+                              ? const Color(0xFF047857)
+                              : AppColors.premiumGold,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Bottom: Clean English Action Row ("Start Test" with arrow)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      isUnlocked ? 'Start Test' : 'Unlock',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: isUnlocked
+                            ? AppColors.primaryDark
+                            : AppColors.premiumGold,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: isUnlocked
+                            ? AppColors.primaryLight
+                            : AppColors.premiumLight,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          isUnlocked
+                              ? Icons.arrow_forward_rounded
+                              : Icons.lock_outline_rounded,
+                          size: 15,
+                          color: isUnlocked
+                              ? AppColors.primaryDark
+                              : AppColors.premiumGold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
