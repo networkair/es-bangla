@@ -45,18 +45,24 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.2.0
-          name: "Es Bangla v1.2.0 (Subject-Grouped Vault, Advanced 3D Analytics & Profile Upgrade)"
+          tag_name: v1.2.1
+          name: "Es Bangla v1.2.1 (3D Home Redesign, Real-Time Push Notifications & Shimmer Loading)"
           body: |
-            ### Es Bangla v1.2.0 Release Highlights:
-            - **Subject-Grouped Saved Questions**: Questions saved during mock tests are categorized strictly by subject with colorful 3D subject cards, question counts, correct answer solutions, and contextual explanations.
-            - **Advanced Mock Analytics Dashboard**:
-              - *Subject Mastery*: Multi-timeframe performance breakdown (All Time, 30 Days, 7 Days), 3D metric cards, Subject Comparison Bar Chart, Priority Focus Areas (<60% accuracy), Mastery Strengths (>=70%), and targeted 4-step improvement roadmaps.
-              - *Subject Deep-Dive Screen*: Detailed metrics (Proficiency, Accuracy, Total Attempts, Correct Solved) with high-performing and focus-needed chapter cards.
-              - *Activity & Streak*: Dedicated monthly calendar tracking mock test completion days in 3D emerald pills with streak count.
-            - **100% English Experience in Profile & Analytics**: Complete translation and terminology upgrade across Profile, Analytics, and Saved Questions.
-            - **Word Count Limit in Reporting**: Observation/feedback messages in the reporting bottom sheet are now capped at 100 words with live counter feedback ($words / 100 words).
-            - **Guaranteed Dual-Sync Reporting**: Real-time dual submission to both Firebase Realtime Database and Firestore, synced directly with the web Admin Panel.
+            ### Es Bangla v1.2.1 Release Highlights:
+            - **Modern 3D Home Screen Redesign**:
+              - Full-width, cohesive 3D feature cards for Semester 3, Semester 4, Previous Year Questions, and Book Notes.
+              - Eliminates awkward spacing and scattered layout; provides high-contrast typography, WBCHSE/SOLVED/PDF badges, and circular action chevrons.
+              - 16:9 bright banner news slider with live status indicator and smooth 16px corner rounding.
+              - Interactive Academic Semester Selector Pill (`CLASS 12 (Semester 3/4)`) for seamless semester switching.
+              - Dedicated Study Reminder 3D Banner in warm amber tone.
+              - WhatsApp Hero Community Card with instant "JOIN NOW" pill button.
+              - Balanced dual-card social channels hub (YouTube, Telegram, Facebook) and student trust verification badge.
+            - **Real-Time Push Notification System**:
+              - Firebase Cloud Messaging topic subscriptions (`all`, `c12_sem3`, `c12_sem4`).
+              - Android 13+ permission flow, foreground Heads-Up notifications, BigPicture rich image previews.
+              - Real-time in-app notification inbox with live Firestore updates and unread count badge.
+            - **High-Performance Shimmer Loading Animations**:
+              - Lightweight, GPU-accelerated shimmer skeleton loaders across News Slider, Mock Test Subject Select, Topics/Sets, and Quiz screens.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
