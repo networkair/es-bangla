@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import '../../../core/widgets/app_shimmer.dart';
@@ -16,13 +17,66 @@ class NotificationInboxScreen extends StatefulWidget {
 }
 
 class _NotificationInboxScreenState extends State<NotificationInboxScreen> {
+  final List<Map<String, dynamic>> _rtdbNotifications = [];
+
   @override
   void initState() {
     super.initState();
     // Mark announcements as read to clear the top-bar notification badge
     WidgetsBinding.instance.addPostFrameCallback((_) {
       AppNotificationService().markAllAsRead();
+      _fetchRtdbNotifications();
     });
+  }
+
+  Future<void> _fetchRtdbNotifications() async {
+    try {
+      final sem = LocalStorageService().semester;
+      final semKey1 = 'c12_sem$sem';
+      final semKey2 = 'sem$sem';
+      final semKey3 = sem.toString();
+
+      final dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 5), receiveTimeout: const Duration(seconds: 5)));
+      final res = await dio.get('https://es-bangla-225f2-default-rtdb.firebaseio.com/notifications.json');
+      if (res.data is Map && mounted) {
+        final Map<String, dynamic> dataMap = Map<String, dynamic>.from(res.data);
+        final List<Map<String, dynamic>> list = [];
+        dataMap.forEach((key, val) {
+          if (val is Map) {
+            final map = Map<String, dynamic>.from(val);
+            final bool isActive = map['isActive'] ?? true;
+            if (!isActive) return;
+
+            final audience = (map['audience'] ?? 'all').toString().trim().toLowerCase();
+            final bool isTarget = audience == 'all' ||
+                audience == semKey1 ||
+                audience == semKey2 ||
+                audience == semKey3 ||
+                audience == '0';
+            if (!isTarget) return;
+
+            final createdAtRaw = map['createdAt'];
+            DateTime createdAt = DateTime.now();
+            if (createdAtRaw is num) {
+              createdAt = DateTime.fromMillisecondsSinceEpoch(createdAtRaw.toInt());
+            }
+
+            list.add({
+              'id': key,
+              'title': (map['title'] ?? 'বিজ্ঞপ্তি').toString().trim(),
+              'body': (map['body'] ?? map['message'] ?? '').toString().trim(),
+              'imageUrl': (map['imageUrl'] ?? map['image'] ?? '').toString().trim(),
+              'actionUrl': (map['actionUrl'] ?? map['link'] ?? map['redirectUrl'] ?? '').toString().trim(),
+              'createdAt': createdAt,
+            });
+          }
+        });
+        setState(() {
+          _rtdbNotifications.clear();
+          _rtdbNotifications.addAll(list);
+        });
+      }
+    } catch (_) {}
   }
 
   @override
@@ -41,12 +95,16 @@ class _NotificationInboxScreenState extends State<NotificationInboxScreen> {
         stream: FirebaseFirestore.instance.collection('notifications').snapshots(),
         builder: (context, snapshot) {
           // Shimmer loading placeholder while fetching real-time data
-          if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData && _rtdbNotifications.isEmpty) {
             return _buildShimmerLoading();
           }
 
           final allDocs = snapshot.data?.docs ?? [];
-          final List<Map<String, dynamic>> notifications = [];
+          final Map<String, Map<String, dynamic>> combined = {};
+
+          for (final item in _rtdbNotifications) {
+            combined[item['id']] = item;
+          }
 
           for (final doc in allDocs) {
             final data = doc.data() as Map<String, dynamic>? ?? {};
@@ -68,16 +126,17 @@ class _NotificationInboxScreenState extends State<NotificationInboxScreen> {
             final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
             final createdAt = (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now();
 
-            notifications.add({
+            combined[doc.id] = {
               'id': doc.id,
               'title': title,
               'body': body,
               'imageUrl': imageUrl,
               'actionUrl': actionUrl,
               'createdAt': createdAt,
-            });
+            };
           }
 
+          final notifications = combined.values.toList();
           // Sort by newest first
           notifications.sort((a, b) => (b['createdAt'] as DateTime).compareTo(a['createdAt'] as DateTime));
 

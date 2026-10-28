@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:dio/dio.dart';
 import '../storage/local_storage_service.dart';
 import '../utils/security_manager.dart';
 
@@ -16,6 +17,7 @@ class AppNotificationService {
 
   bool _initialized = false;
   StreamSubscription<QuerySnapshot>? _firestoreSubscription;
+  Timer? _rtdbPollTimer;
   final Set<String> _seenDocIds = {};
   DateTime _serviceStartTime = DateTime.now();
 
@@ -119,14 +121,16 @@ class AppNotificationService {
     return true;
   }
 
-  /// Starts listening to real-time Firestore notifications targeted for the user's semester
+  /// Starts listening to real-time Firestore & RTDB notifications targeted for the user's semester
   void startRealtimeListener(int semester) {
     _firestoreSubscription?.cancel();
+    _rtdbPollTimer?.cancel();
 
     final semKey1 = 'c12_sem$semester';
     final semKey2 = 'sem$semester';
     final semKey3 = semester.toString();
 
+    // 1. Primary Firestore Snapshot Stream
     _firestoreSubscription = FirebaseFirestore.instance
         .collection('notifications')
         .snapshots()
@@ -187,6 +191,81 @@ class AppNotificationService {
         debugPrint('AppNotificationService real-time listener error: $err');
       },
     );
+
+    // 2. Dual-Sync Realtime Database Polling (every 10 seconds for instant delivery)
+    _pollRtdbNotifications(semester);
+    _rtdbPollTimer = Timer.periodic(const Duration(seconds: 10), (_) {
+      _pollRtdbNotifications(semester);
+    });
+  }
+
+  Future<void> _pollRtdbNotifications(int semester) async {
+    try {
+      final dio = Dio(BaseOptions(
+        connectTimeout: const Duration(seconds: 5),
+        receiveTimeout: const Duration(seconds: 5),
+      ));
+      final res = await dio.get('https://es-bangla-225f2-default-rtdb.firebaseio.com/notifications.json');
+      if (res.data is Map) {
+        final Map<String, dynamic> dataMap = Map<String, dynamic>.from(res.data);
+        final semKey1 = 'c12_sem$semester';
+        final semKey2 = 'sem$semester';
+        final semKey3 = semester.toString();
+        final lastReadMs = _storage.lastReadNotificationTimestamp;
+        int unreadCount = unreadCountNotifier.value;
+
+        dataMap.forEach((key, val) {
+          if (val is Map) {
+            final map = Map<String, dynamic>.from(val);
+            final bool isActive = map['isActive'] ?? true;
+            if (!isActive) return;
+
+            final audience = (map['audience'] ?? 'all').toString().trim().toLowerCase();
+            final bool isTarget = audience == 'all' ||
+                audience == semKey1 ||
+                audience == semKey2 ||
+                audience == semKey3 ||
+                audience == '0';
+
+            if (!isTarget) return;
+
+            final createdAtRaw = map['createdAt'];
+            DateTime createdAt = DateTime.now();
+            if (createdAtRaw is num) {
+              createdAt = DateTime.fromMillisecondsSinceEpoch(createdAtRaw.toInt());
+            }
+
+            if (createdAt.millisecondsSinceEpoch > lastReadMs) {
+              unreadCount++;
+            }
+
+            final isRecentlyCreated = createdAt.isAfter(_serviceStartTime.subtract(const Duration(seconds: 45)));
+            if (isRecentlyCreated && !_seenDocIds.contains(key)) {
+              _seenDocIds.add(key);
+
+              final title = (map['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
+              final body = (map['body'] ?? map['message'] ?? '').toString().trim();
+              final actionUrl = (map['actionUrl'] ?? map['link'] ?? map['redirectUrl'] ?? '').toString().trim();
+              final imageUrl = (map['imageUrl'] ?? map['image'] ?? '').toString().trim();
+
+              showSystemNotification(
+                id: key.hashCode,
+                title: title,
+                body: body,
+                actionUrl: actionUrl,
+                imageUrl: imageUrl,
+              );
+            } else {
+              _seenDocIds.add(key);
+            }
+          }
+        });
+
+        if (unreadCount > unreadCountNotifier.value) {
+          unreadCountNotifier.value = unreadCount;
+        }
+      }
+    } catch (_) {}
   }
 
   /// Displays an immediate high-priority Heads-up Notification on the user's phone
@@ -235,5 +314,6 @@ class AppNotificationService {
 
   void dispose() {
     _firestoreSubscription?.cancel();
+    _rtdbPollTimer?.cancel();
   }
 }
