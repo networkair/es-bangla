@@ -56,26 +56,26 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.2.4
-          name: "Es Bangla v1.2.4 (Consistent Permanent Signing & Refined 3D Home)"
+          tag_name: v1.2.5
+          name: "Es Bangla v1.2.5 (3D Card Shapes, Seamless White Canvas & Compact Design)"
           body: |
-            ### Es Bangla v1.2.4 Release Highlights:
-            - **Consistent Permanent Release Signing**:
-              - Permanent release keystore configured to prevent Android package installer signature mismatch errors ("App not installed as package appears to be invalid").
-              - Seamless future updates without needing to uninstall.
-            - **Refined Authentic 3D Home Screen**:
-              - Restored authentic Es Bangla design layout (removed reference-app clones).
-              - Removed top Class/Semester pill selector from HomeScreen (kept exclusively in Profile section).
-              - 16:9 Hero News Slider with flush edge-to-edge fit, sharp 90-degree corners, and crystal-clear image presentation.
-              - Side-by-side Semester 3 and Semester 4 3D feature cards.
-              - Pure white 3D cards with subtle soft drop shadows across all sections.
-              - Warm soft-amber Study Reminder card matching the white theme.
-              - Uniform light blue (Blue Fairy) rounded icon containers with crisp, prominent icons.
-              - Clean black typography for titles and headings; removed cluttered tags/badges.
-              - Authentic 4-channel Social Media Hub (YouTube, Facebook, Telegram, WhatsApp).
-            - **BigPicture Notification Previews**:
-              - Android status bar notifications now display rich image thumbnail and full expandable BigPicture previews.
-              - Fixed duplicate notification rings and automated chimes.
+            ### Es Bangla v1.2.5 Release Highlights:
+            - **Seamless Matching Canvas**:
+              - Unified screen background (`#FFFFFF`) and card backgrounds (`#FFFFFF`) to eliminate background/card color mismatch.
+            - **Signature 3D Shape & Drop Shadows**:
+              - Deep rounded squircle cards (`BorderRadius.circular(28)`) with multi-layered soft drop shadows creating authentic 3D physical elevation.
+              - Completely removed card outlines and harsh gray borders.
+            - **Compact & Balanced Spacing**:
+              - Reduced spacing between cards and sections for a snug, modern, cohesive layout.
+            - **Modern 3D Study Reminder**:
+              - Smooth pill-shaped card in warm peach-cream (`#FFEEDD`) with bold black title and 3D reminder bell icon.
+            - **Large Vibrant Icons & Borderless Circles**:
+              - Enlarged 3D icons to fill ~80% of circular containers.
+              - Removed all border outlines from light blue icon containers (`#EDF4FF`).
+              - Added circular chevron action buttons (`#EAF2FF`) with bold slate arrows.
+            - **Clean English Headlines**:
+              - Streamlined typography with bold uppercase English titles (`SEMESTER 3`, `SEMESTER 4`, `PREVIOUS YEARS QUESTIONS`, `BOOK NOTES & HANDNOTES`).
+              - Removed cluttered Bengali subtitles and redundant badges.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
