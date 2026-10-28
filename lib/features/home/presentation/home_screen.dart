@@ -263,17 +263,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
         final safeSlideIndex = _currentSlide >= newsList.length ? 0 : _currentSlide;
 
-        return Container(
-          height: 168,
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: AppColors.primary.withOpacity(0.18), width: 1.2),
-            boxShadow: AppColors.softCardShadow,
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(22),
-            child: Stack(
+        return AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: AppColors.border, width: 1),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.06),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Stack(
               children: [
                 // Background subtle graphic icon (for cards without image)
                 Positioned(
@@ -314,11 +321,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () => _showNewsDetailsModal(item),
-                          borderRadius: BorderRadius.circular(22),
+                          borderRadius: BorderRadius.circular(4),
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
-                              // Background Image (Auto-adjusted)
+                              // Background 16:9 Banner Image (100% Bright, Crisp & Clear - No Dark Overlay)
                               CachedNetworkImage(
                                 imageUrl: imageUrl,
                                 fit: BoxFit.cover,
@@ -328,133 +335,81 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: SizedBox(
                                       width: 24,
                                       height: 24,
-                                      child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation(AppColors.primary)),
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor: AlwaysStoppedAnimation(Color(0xFFDC2626)),
+                                      ),
                                     ),
                                   ),
                                 ),
                                 errorWidget: (context, url, error) => Container(
-                                  color: AppColors.primaryDark,
-                                  child: const Center(child: Icon(Icons.broken_image_rounded, color: Colors.white38, size: 30)),
-                                ),
-                              ),
-
-                              // Dark Gradient Overlay for Maximum Readability
-                              Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Colors.black.withOpacity(0.28),
-                                      Colors.black.withOpacity(0.85),
-                                    ],
+                                  color: AppColors.surfaceMuted,
+                                  child: const Center(
+                                    child: Icon(Icons.broken_image_rounded, color: AppColors.textMuted, size: 32),
                                   ),
                                 ),
                               ),
 
-                              // Text content over image
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(18, 14, 18, 14),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              // Top-Left: Red Tag Badge & Live Indicator
+                              Positioned(
+                                top: 10,
+                                left: 10,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    // Top Tag & Live Indicator
-                                    Row(
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.primary,
-                                            borderRadius: BorderRadius.circular(10),
-                                            boxShadow: [
-                                              BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 4),
-                                            ],
-                                          ),
-                                          child: Text(
-                                            tag,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10.5,
-                                              fontWeight: FontWeight.bold,
-                                              letterSpacing: 0.4,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Container(
-                                          width: 6,
-                                          height: 6,
-                                          decoration: const BoxDecoration(
-                                            color: AppColors.correctGreen,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        const Text(
-                                          'LIVE',
-                                          style: TextStyle(
-                                            color: AppColors.correctGreen,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 0.5,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    // Title & Subtitle
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          title,
-                                          style: const TextStyle(
-                                            fontSize: 15.5,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            height: 1.25,
-                                            shadows: [
-                                              Shadow(color: Colors.black87, blurRadius: 4, offset: Offset(0, 1)),
-                                            ],
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        if (subtitle.isNotEmpty) ...[
-                                          const SizedBox(height: 3),
-                                          Text(
-                                            subtitle,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white.withOpacity(0.9),
-                                              height: 1.25,
-                                              shadows: const [
-                                                Shadow(color: Colors.black87, blurRadius: 3),
-                                              ],
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFDC2626), // RED TAG
+                                        borderRadius: BorderRadius.circular(4),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.35),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 1),
                                           ),
                                         ],
-                                      ],
-                                    ),
-
-                                    // Bottom action hint
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: const [
-                                        Text(
-                                          'বিস্তারিত দেখতে ট্যাপ করুন',
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            color: Colors.amberAccent,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                      ),
+                                      child: Text(
+                                        tag,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10.5,
+                                          fontWeight: FontWeight.w800,
+                                          letterSpacing: 0.5,
                                         ),
-                                        SizedBox(width: 4),
-                                        Icon(Icons.arrow_forward_rounded, size: 12, color: Colors.amberAccent),
-                                      ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.55),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            width: 6,
+                                            height: 6,
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFF22C55E),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          const Text(
+                                            'LIVE',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 9.5,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 0.5,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -470,9 +425,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () => _showNewsDetailsModal(item),
-                        borderRadius: BorderRadius.circular(22),
+                        borderRadius: BorderRadius.circular(4),
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
+                          padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -481,18 +436,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               Row(
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
+                                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color(0xFFDC2626), // RED TAG
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Text(
                                       tag,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 10.5,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 0.4,
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: 0.5,
                                       ),
                                     ),
                                   ),
@@ -534,7 +489,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   if (subtitle.isNotEmpty) ...[
-                                    const SizedBox(height: 3),
+                                    const SizedBox(height: 4),
                                     Text(
                                       subtitle,
                                       style: const TextStyle(
@@ -542,7 +497,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: AppColors.textSecondary,
                                         height: 1.25,
                                       ),
-                                      maxLines: 1,
+                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
@@ -557,12 +512,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'বিস্তারিত দেখতে ট্যাপ করুন',
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color: AppColors.primary,
+                                      color: Color(0xFFDC2626),
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                   SizedBox(width: 3),
-                                  Icon(Icons.arrow_forward_rounded, size: 12, color: AppColors.primary),
+                                  Icon(Icons.arrow_forward_rounded, size: 12, color: Color(0xFFDC2626)),
                                 ],
                               ),
                             ],
@@ -576,28 +531,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Slide Indicator Dots (Bottom Right)
                 if (newsList.length > 1)
                   Positioned(
-                    bottom: 14,
-                    right: 18,
-                    child: Row(
-                      children: List.generate(newsList.length, (idx) {
-                        final isSelected = safeSlideIndex == idx;
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 250),
-                          width: isSelected ? 16 : 6,
-                          height: 6,
-                          margin: const EdgeInsets.only(left: 4),
-                          decoration: BoxDecoration(
-                            color: isSelected ? AppColors.primary : AppColors.textMuted.withOpacity(0.35),
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                        );
-                      }),
+                    bottom: 10,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.52),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(newsList.length, (idx) {
+                          final isSelected = safeSlideIndex == idx;
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 250),
+                            width: isSelected ? 14 : 5,
+                            height: 5,
+                            margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                            decoration: BoxDecoration(
+                              color: isSelected ? const Color(0xFFDC2626) : Colors.white.withOpacity(0.65),
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                          );
+                        }),
+                      ),
                     ),
                   ),
               ],
             ),
           ),
-        );
+        ),
+      );
       },
     );
   }
@@ -643,7 +607,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               if (imageUrl.isNotEmpty) ...[
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(6),
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
                     child: CachedNetworkImage(
@@ -651,7 +615,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
                         color: AppColors.surfaceMuted,
-                        child: const Center(child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation(AppColors.primary))),
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation(Color(0xFFDC2626)),
+                          ),
+                        ),
                       ),
                       errorWidget: (_, __, ___) => const SizedBox.shrink(),
                     ),
@@ -664,8 +633,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(0xFFDC2626), // RED TAG
+                  borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
                   tag,
