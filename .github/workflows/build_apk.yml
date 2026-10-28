@@ -56,26 +56,19 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.2.7
-          name: "Es Bangla v1.2.7 (White Notch Cutout, Vintage Colorize Font, Device-Local Notifications & Dark Theme)"
+          tag_name: v1.2.8
+          name: "Es Bangla v1.2.8 (Custom App Font, New Quiz Correct Sound, 3D Library Cards)"
           body: |
-            ### Es Bangla v1.2.7 Release Highlights:
-            - **Seamless White Notch & Cutout Integration**:
-              - Configured `shortEdges` display cutout mode and pure white background across Android native window and decorView.
-              - Completely removed black letterbox bars around camera notches.
-            - **Typography & Clean Header**:
-              - Registered and applied custom TrueType font `Vintage Colorize` for `Es Bangla` brand title.
-              - Removed welcome subtitle and cleared cluttered tags.
-            - **Clean News Experience**:
-              - Removed `LATEST NEWS` and `LIVE` tag overlays from 16:9 news banners and modals in the user panel.
-            - **Enhanced Device-Local Push Notifications**:
-              - Background FCM handler wakes up status bar notification and saves directly to local storage even when app is killed/closed.
-              - Android native `NotificationAlarmReceiver` with `AlarmManager` syncs notifications in background.
-              - Notification Inbox operates 100% on device local storage without remote database dependency, with offline support and clear-all action.
-            - **Dynamic Dark Theme**:
-              - Added Dark Theme toggle in Profile Preferences with persistent storage and system theme reactivity.
-            - **Renamed Premium Store**:
-              - Action tile updated to `PREMIUM STORE`.
+            ### Es Bangla v1.2.8 Release Highlights:
+            - **Custom Brand Typography**:
+              - Applied the new Georgia typography font (`AppTitleFont`) to the app bar title and auth screen.
+            - **Updated Quiz Audio Effects**:
+              - Updated the mock test correct answer sound with new high-quality audio in native Android SoundPool and Flutter assets.
+            - **Redesigned Video Library Experience**:
+              - Completely removed the old top header container, cluttered tags, and text hero box.
+              - Added dedicated top banner container ready for custom banner graphics.
+              - Redesigned Semester 3 and Semester 4 cards in a premium 3D style with rich bottom drop shadows, pure white surfaces, `Class 12` pill badges, English subtitles, and pill action buttons with circular arrow icons.
+              - Reserved clean graphic space on each card for upcoming 3D illustrations.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
