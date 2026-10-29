@@ -26,33 +26,53 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final LocalStorageService _storage = LocalStorageService();
-  final PageController _sliderController = PageController();
+  late final PageController _sliderController;
   int _currentSlide = 0;
   Timer? _sliderTimer;
   int _sliderItemCount = 0;
 
   final List<Map<String, dynamic>> _fallbackSlides = [
     {
-      'title': 'উচ্চ মাধ্যমিকের নতুন নির্দেশিকা প্রকাশ!',
-      'subtitle': 'পরীক্ষা, রুটিন, সিলেবাস ও অন্যান্য সকল আপডেট জানুন',
-      'tag': 'LATEST NEWS',
+      'title': 'Active স্কলারশিপ',
+      'subtitle': 'বিভিন্ন স্কলারশিপের আপডেট ও আবেদন লিঙ্ক',
+      'tag': 'SCHOLARSHIP',
       'redirectUrl': '',
-      'imageUrl': '',
+      'imageAsset': 'assets/images/banner_scholarship.png',
       'order': 1,
     },
     {
-      'title': 'সেমিস্টার ৩ ও ৪-এর মক টেস্ট শুরু!',
-      'subtitle': 'অধ্যায়ভিত্তিক প্রতিটি সেটে অংশ নিয়ে প্রস্তুতি যাচাই করুন',
-      'tag': 'MOCK TEST',
+      'title': 'Ongoing সরকারি চাকরি ফর্ম ফিলাপ',
+      'subtitle': 'সর্বশেষ সরকারি চাকরির বিজ্ঞপ্তি ও তথ্য',
+      'tag': 'JOB EXAM',
       'redirectUrl': '',
-      'imageUrl': '',
+      'imageAsset': 'assets/images/banner_job_exam.png',
       'order': 2,
+    },
+    {
+      'title': 'UpSkill with AI',
+      'subtitle': 'কম্পিউটার ও AI স্কিল শিখুন এবং ক্যারিয়ারে এগিয়ে থাকুন',
+      'tag': 'UPSKILL',
+      'redirectUrl': '',
+      'imageAsset': 'assets/images/banner_upskill_ai.png',
+      'order': 3,
+    },
+    {
+      'title': 'Special Offer 10% Discount - Edutips Store',
+      'subtitle': 'store.edutips.in - বই ও স্টাডি মেটেরিয়াল কিনুন ছাড়ে',
+      'tag': 'EDUTIPS STORE',
+      'redirectUrl': 'https://store.edutips.in',
+      'imageAsset': 'assets/images/banner_edutips_store.png',
+      'order': 4,
     },
   ];
 
   @override
   void initState() {
     super.initState();
+    _sliderController = PageController(
+      viewportFraction: 0.86,
+      initialPage: 1200,
+    );
   }
 
   void _syncSliderTimer(int count) {
@@ -62,11 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (count > 1) {
       _sliderTimer = Timer.periodic(const Duration(seconds: 4), (_) {
         if (_sliderController.hasClients && mounted) {
-          final nextPage = (_currentSlide + 1) % count;
-          _sliderController.animateToPage(
-            nextPage,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOut,
+          _sliderController.nextPage(
+            duration: const Duration(milliseconds: 550),
+            curve: Curves.easeInOutCubic,
           );
         }
       });
@@ -152,8 +170,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Hero News Slider (Edge-to-Edge Flush 16:9, Sharp Corners, Crystal Clear)
-            _buildNewsSlider(currentSem),
+            // 1. Hero News Slider (3D Peeking Carousel with Golden Dots)
+            _buildNewsSlider(currentSem, isDark),
 
             // Content Area with Clean, Balanced Spacing & Matching Canvas
             Padding(
@@ -225,12 +243,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ==================== 1. NEWS SLIDER ====================
-  Widget _buildNewsSlider(int currentSem) {
+  Widget _buildNewsSlider(int currentSem, bool isDark) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('news').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
-          return AppShimmer.banner16x9(borderRadius: 0);
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: AppShimmer.box(
+              width: double.infinity,
+              height: 160,
+              borderRadius: 18,
+            ),
+          );
         }
 
         List<Map<String, dynamic>> newsList = [];
@@ -260,6 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
               'tag': (data['tag'] ?? 'LATEST NEWS').toString().toUpperCase().trim(),
               'redirectUrl': (data['redirectUrl'] ?? data['link'] ?? data['url'] ?? '').toString().trim(),
               'imageUrl': (data['imageUrl'] ?? data['image'] ?? '').toString().trim(),
+              'imageAsset': (data['imageAsset'] ?? '').toString().trim(),
               'order': data['order'] is num ? (data['order'] as num).toInt() : 0,
             });
           }
@@ -277,146 +303,257 @@ class _HomeScreenState extends State<HomeScreen> {
 
         final safeSlideIndex = _currentSlide >= newsList.length ? 0 : _currentSlide;
 
-        return AspectRatio(
-          aspectRatio: 16 / 9,
-          child: Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.zero,
-            ),
-            child: Stack(
-              fit: StackFit.expand,
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            // Responsive slider height matching ~2.15:1 aspect ratio of the banner cards
+            final cardWidth = constraints.maxWidth * 0.86;
+            final sliderHeight = (cardWidth / 2.1).clamp(142.0, 185.0);
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                PageView.builder(
-                  controller: _sliderController,
-                  onPageChanged: (idx) => setState(() => _currentSlide = idx),
-                  itemCount: newsList.length,
-                  itemBuilder: (context, index) {
-                    final item = newsList[index];
-                    final tag = (item['tag'] ?? 'LATEST NEWS').toString();
-                    final title = item['title'] ?? '';
-                    final subtitle = item['subtitle'] ?? '';
-                    final imageUrl = (item['imageUrl'] ?? '').toString().trim();
-                    final hasImage = imageUrl.isNotEmpty;
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: sliderHeight,
+                  child: newsList.length == 1
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          child: _buildBannerCard(newsList[0], isDark),
+                        )
+                      : PageView.builder(
+                          controller: _sliderController,
+                          clipBehavior: Clip.none,
+                          onPageChanged: (idx) {
+                            final actualIndex = ((idx % newsList.length) + newsList.length) % newsList.length;
+                            if (_currentSlide != actualIndex) {
+                              setState(() => _currentSlide = actualIndex);
+                            }
+                          },
+                          itemBuilder: (context, virtualIndex) {
+                            final index = ((virtualIndex % newsList.length) + newsList.length) % newsList.length;
+                            final item = newsList[index];
 
-                    if (hasImage) {
-                      return Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () => _showNewsDetailsModal(item),
-                          child: CachedNetworkImage(
-                            imageUrl: imageUrl,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 0),
-                            errorWidget: (context, url, error) => Container(
-                              color: const Color(0xFF1E293B),
-                              child: const Center(
-                                child: Icon(Icons.broken_image_rounded, color: Colors.white54, size: 36),
-                              ),
-                            ),
-                          ),
+                            return AnimatedBuilder(
+                              animation: _sliderController,
+                              builder: (context, child) {
+                                double diff = 0.0;
+                                if (_sliderController.position.haveDimensions) {
+                                  final page = _sliderController.page ?? _sliderController.initialPage.toDouble();
+                                  diff = (page - virtualIndex).abs();
+                                } else {
+                                  diff = (virtualIndex == _sliderController.initialPage) ? 0.0 : 1.0;
+                                }
+                                final scale = (1.0 - (diff * 0.07)).clamp(0.93, 1.0);
+                                return Transform.scale(
+                                  scale: scale,
+                                  child: child,
+                                );
+                              },
+                              child: _buildBannerCard(item, isDark),
+                            );
+                          },
                         ),
-                      );
-                    }
-
-                    // Fallback for News without Image
-                    return Material(
-                      color: const Color(0xFF0F172A),
-                      child: InkWell(
-                        onTap: () => _showNewsDetailsModal(item),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    title,
-                                    style: const TextStyle(
-                                      fontSize: 15.5,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      height: 1.25,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  if (subtitle.isNotEmpty) ...[
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      subtitle,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white70,
-                                        height: 1.25,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: const [
-                                  Text(
-                                    'বিস্তারিত দেখতে ট্যাপ করুন',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Color(0xFFF87171),
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Icon(Icons.arrow_forward_rounded, size: 12, color: Color(0xFFF87171)),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
                 ),
 
-                // Slide Indicator Dots (Bottom Right)
-                if (newsList.length > 1)
-                  Positioned(
-                    bottom: 10,
-                    right: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.55),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(newsList.length, (idx) {
-                          final isSelected = safeSlideIndex == idx;
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 250),
-                            width: isSelected ? 14 : 5,
-                            height: 5,
-                            margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                            decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFFDC2626) : Colors.white.withOpacity(0.65),
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                          );
-                        }),
-                      ),
-                    ),
+                // Indicator Dots (Centered Golden Dots Below Slider)
+                if (newsList.length > 1) ...[
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(newsList.length, (idx) {
+                      final isSelected = safeSlideIndex == idx;
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeOut,
+                        width: isSelected ? 18 : 6,
+                        height: 6,
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? const Color(0xFFF59E0B) // Golden Amber
+                              : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                          borderRadius: BorderRadius.circular(3),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                    color: const Color(0xFFF59E0B).withOpacity(0.4),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ]
+                              : null,
+                        ),
+                      );
+                    }),
                   ),
+                ],
               ],
-            ),
-          ),
+            );
+          },
         );
       },
+    );
+  }
+
+  Widget _buildBannerCard(Map<String, dynamic> item, bool isDark) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? Colors.black.withOpacity(0.35) : const Color(0x140F172A),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(17),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => _showNewsDetailsModal(item),
+            child: _buildBannerImage(item, isDark),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBannerImage(Map<String, dynamic> item, bool isDark) {
+    final imageAsset = (item['imageAsset'] ?? '').toString().trim();
+    final imageUrl = (item['imageUrl'] ?? '').toString().trim();
+
+    if (imageAsset.isNotEmpty) {
+      return Image.asset(
+        imageAsset,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+        errorBuilder: (_, __, ___) => _buildBannerFallback(item, isDark),
+      );
+    }
+
+    if (imageUrl.isNotEmpty) {
+      if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+        return CachedNetworkImage(
+          imageUrl: imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          placeholder: (context, url) => AppShimmer.box(
+            width: double.infinity,
+            height: double.infinity,
+            borderRadius: 17,
+          ),
+          errorWidget: (context, url, error) => _buildBannerFallback(item, isDark),
+        );
+      } else {
+        return Image.asset(
+          imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          errorBuilder: (_, __, ___) => _buildBannerFallback(item, isDark),
+        );
+      }
+    }
+
+    return _buildBannerFallback(item, isDark);
+  }
+
+  Widget _buildBannerFallback(Map<String, dynamic> item, bool isDark) {
+    final title = item['title'] ?? '';
+    final subtitle = item['subtitle'] ?? '';
+    final tag = (item['tag'] ?? 'LATEST NEWS').toString().toUpperCase();
+
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF1E3A8A), Color(0xFF0F172A)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF59E0B),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  tag,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0F172A),
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  height: 1.25,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              if (subtitle.isNotEmpty) ...[
+                const SizedBox(height: 3),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 11.5,
+                    color: Colors.white70,
+                    height: 1.2,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Text(
+                'বিস্তারিত দেখতে ট্যাপ করুন',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Color(0xFFFCD34D),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(width: 4),
+              Icon(Icons.arrow_forward_rounded, size: 12, color: Color(0xFFFCD34D)),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -426,16 +563,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final tag = item['tag'] ?? 'LATEST NEWS';
     final redirectUrl = (item['redirectUrl'] ?? '').toString().trim();
     final imageUrl = (item['imageUrl'] ?? '').toString().trim();
+    final imageAsset = (item['imageAsset'] ?? '').toString().trim();
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) {
+        final isModalDark = Theme.of(ctx).brightness == Brightness.dark;
         return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: isModalDark ? const Color(0xFF1E293B) : Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           padding: EdgeInsets.only(
             left: 20,
@@ -452,22 +591,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFCBD5E1),
+                    color: isModalDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
               const SizedBox(height: 18),
 
-              if (imageUrl.isNotEmpty) ...[
+              if (imageAsset.isNotEmpty) ...[
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Image.asset(imageAsset, fit: BoxFit.cover),
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ] else if (imageUrl.isNotEmpty) ...[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
                     child: CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 8),
+                      placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 12),
                       errorWidget: (_, __, ___) => const SizedBox.shrink(),
                     ),
                   ),
@@ -477,10 +625,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 17.5,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0F172A),
+                  color: isModalDark ? Colors.white : const Color(0xFF0F172A),
                   height: 1.3,
                 ),
               ),
@@ -489,9 +637,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 8),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13.5,
-                    color: Color(0xFF475569),
+                    color: isModalDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569),
                     height: 1.5,
                   ),
                 ),
