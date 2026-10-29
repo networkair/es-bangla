@@ -56,19 +56,20 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.2.8
-          name: "Es Bangla v1.2.8 (Custom App Font, New Quiz Correct Sound, 3D Library Cards)"
+          tag_name: v1.2.9
+          name: "Es Bangla v1.2.9 (Library Top Banner, 3D Color-Matched Semester Cards & Icons)"
           body: |
-            ### Es Bangla v1.2.8 Release Highlights:
-            - **Custom Brand Typography**:
-              - Applied the new Georgia typography font (`AppTitleFont`) to the app bar title and auth screen.
-            - **Updated Quiz Audio Effects**:
-              - Updated the mock test correct answer sound with new high-quality audio in native Android SoundPool and Flutter assets.
-            - **Redesigned Video Library Experience**:
-              - Completely removed the old top header container, cluttered tags, and text hero box.
-              - Added dedicated top banner container ready for custom banner graphics.
-              - Redesigned Semester 3 and Semester 4 cards in a premium 3D style with rich bottom drop shadows, pure white surfaces, `Class 12` pill badges, English subtitles, and pill action buttons with circular arrow icons.
-              - Reserved clean graphic space on each card for upcoming 3D illustrations.
+            ### Es Bangla v1.2.9 Release Highlights:
+            - **Top Video Library Banner Integration**:
+              - Fitted the high-resolution 16:9 banner illustration with rounded corners, subtle border, and 3D shadow.
+            - **Semester 3 3D Card Color Matching**:
+              - Background gradient softly matched to the ice-blue 3D book icon (`#F8FCFE` to `#EAF5FC`).
+              - Fitted the transparent background 3D stacked book icon on the right side.
+            - **Semester 4 3D Card Color Matching**:
+              - Background gradient matched to the warm peach/amber 3D book & graduation cap icon (`#FFFDF9` to `#FFF3E6`).
+              - Orange/peach `Class 12` pill badge and fitted transparent 3D icon.
+            - **Seamless 3D Visual Depth**:
+              - Refined dual-layer drop shadows and responsive proportions.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

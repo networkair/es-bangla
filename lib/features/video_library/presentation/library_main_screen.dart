@@ -10,19 +10,19 @@ class LibraryMainScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(18, 16, 18, 24),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Banner Area (reserved placeholder ready for banner image)
+              // 1. Top Banner
               _buildTopBanner(context, isDark),
-              const SizedBox(height: 20),
+              const SizedBox(height: 18),
 
-              // Semester 3 3D Card
+              // 2. Semester 3 3D Card (Ice Blue Theme)
               _buildSemesterCard(
                 context: context,
                 semesterTitle: 'Semester 3',
@@ -30,9 +30,9 @@ class LibraryMainScreen extends StatelessWidget {
                 semester: 3,
                 isDark: isDark,
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 16),
 
-              // Semester 4 3D Card
+              // 3. Semester 4 3D Card (Warm Peach/Amber Theme)
               _buildSemesterCard(
                 context: context,
                 semesterTitle: 'Semester 4',
@@ -50,23 +50,21 @@ class LibraryMainScreen extends StatelessWidget {
   Widget _buildTopBanner(BuildContext context, bool isDark) {
     return Container(
       width: double.infinity,
-      height: 165,
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFBAE6FD).withOpacity(0.6),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.35 : 0.10),
-            blurRadius: 20,
+            color: (isDark ? Colors.black : const Color(0xFF0284C7)).withOpacity(isDark ? 0.35 : 0.12),
+            blurRadius: 18,
             spreadRadius: 1,
-            offset: const Offset(0, 10),
+            offset: const Offset(0, 8),
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.18 : 0.03),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -74,52 +72,32 @@ class LibraryMainScreen extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(21),
-        child: Image.asset(
-          'assets/images/library_banner.png',
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            // Clean placeholder ready for banner image
-            return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: isDark
-                      ? [const Color(0xFF1E293B), const Color(0xFF0F172A)]
-                      : [const Color(0xFFF0F9FF), const Color(0xFFE0F2FE)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+        child: AspectRatio(
+          aspectRatio: 1672 / 941,
+          child: Image.asset(
+            'assets/images/library_banner.png',
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: isDark
+                        ? [const Color(0xFF1E293B), const Color(0xFF0F172A)]
+                        : [const Color(0xFFF0F9FF), const Color(0xFFE0F2FE)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.12),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.image_outlined,
-                        size: 32,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Banner Area',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF0284C7),
-                        letterSpacing: 0.3,
-                      ),
-                    ),
-                  ],
+                child: Center(
+                  child: Icon(
+                    Icons.image_outlined,
+                    size: 36,
+                    color: AppColors.primary.withOpacity(0.6),
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -132,23 +110,78 @@ class LibraryMainScreen extends StatelessWidget {
     required int semester,
     required bool isDark,
   }) {
+    final isSem3 = semester == 3;
+
+    // Background gradient matched to each semester's 3D icon
+    final cardGradient = isDark
+        ? (isSem3
+            ? const LinearGradient(
+                colors: [Color(0xFF1E293B), Color(0xFF0F2644)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : const LinearGradient(
+                colors: [Color(0xFF1E293B), Color(0xFF332014)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ))
+        : (isSem3
+            ? const LinearGradient(
+                colors: [Color(0xFFF8FCFE), Color(0xFFEAF5FC)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : const LinearGradient(
+                colors: [Color(0xFFFFFDF9), Color(0xFFFFF3E6)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ));
+
+    // Border color matching the icon color scheme
+    final borderColor = isDark
+        ? (isSem3
+            ? const Color(0xFF0284C7).withOpacity(0.4)
+            : const Color(0xFFF97316).withOpacity(0.4))
+        : (isSem3
+            ? const Color(0xFFBAE6FD).withOpacity(0.85)
+            : const Color(0xFFFED7AA).withOpacity(0.85));
+
+    // 3D Shadow with soft color tint
+    final shadowColor = isDark
+        ? Colors.black
+        : (isSem3 ? const Color(0xFF0284C7) : const Color(0xFFEA580C));
+
+    // Badge styling
+    final badgeBg = isDark
+        ? (isSem3 ? const Color(0xFF0C4A6E).withOpacity(0.5) : const Color(0xFF7C2D12).withOpacity(0.5))
+        : (isSem3 ? const Color(0xFFE0F2FE) : const Color(0xFFFFEDD5));
+
+    final badgeBorder = isDark
+        ? (isSem3 ? const Color(0xFF0284C7) : const Color(0xFFF97316))
+        : (isSem3 ? const Color(0xFFBAE6FD) : const Color(0xFFFED7AA));
+
+    final badgeTextColor = isDark
+        ? (isSem3 ? const Color(0xFF38BDF8) : const Color(0xFFFB923C))
+        : (isSem3 ? const Color(0xFF0284C7) : const Color(0xFFC2410C));
+
+    final assetPath = isSem3
+        ? 'assets/images/library_sem3_3d.png'
+        : 'assets/images/library_sem4_3d.png';
+
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        gradient: cardGradient,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-          width: 1.5,
-        ),
+        border: Border.all(color: borderColor, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.35 : 0.12),
-            blurRadius: 22,
+            color: shadowColor.withOpacity(isDark ? 0.38 : 0.12),
+            blurRadius: 20,
             spreadRadius: 1,
             offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.18 : 0.04),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -167,31 +200,30 @@ class LibraryMainScreen extends StatelessWidget {
           },
           borderRadius: BorderRadius.circular(24),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(18, 16, 12, 16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // Left Column: Details & Action Button
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Badge: Class 12
+                      // Pill Badge: Class 12
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF0C4A6E).withOpacity(0.4) : const Color(0xFFE0F2FE),
+                          color: badgeBg,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: isDark ? const Color(0xFF0284C7) : const Color(0xFFBAE6FD),
-                            width: 1,
-                          ),
+                          border: Border.all(color: badgeBorder, width: 1),
                         ),
                         child: Text(
                           'Class 12',
                           style: TextStyle(
-                            color: isDark ? const Color(0xFF38BDF8) : const Color(0xFF0284C7),
+                            color: badgeTextColor,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
+                            letterSpacing: 0.2,
                           ),
                         ),
                       ),
@@ -201,31 +233,31 @@ class LibraryMainScreen extends StatelessWidget {
                       Text(
                         semesterTitle,
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 23,
                           fontWeight: FontWeight.w800,
                           color: isDark ? Colors.white : const Color(0xFF0F172A),
                           letterSpacing: -0.5,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 5),
 
                       // Subtitle in English
                       Text(
                         subtitle,
                         style: TextStyle(
-                          fontSize: 13,
-                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                          fontSize: 12.5,
+                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF475569),
                           height: 1.35,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 16),
 
-                      // Pill Button with Blue Circle Arrow
+                      // Action Button with Blue Circle Arrow
                       Container(
                         padding: const EdgeInsets.only(left: 14, right: 6, top: 5, bottom: 5),
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                          color: isDark ? const Color(0xFF0F172A) : Colors.white,
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
                             color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
@@ -273,31 +305,22 @@ class LibraryMainScreen extends StatelessWidget {
 
                 const SizedBox(width: 8),
 
-                // Right side illustration (reserved clean space until user provides 3D graphics)
-                _buildCardIllustration(semester),
+                // Right: 3D Illustration
+                SizedBox(
+                  width: 125,
+                  height: 125,
+                  child: Image.asset(
+                    assetPath,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const SizedBox(width: 125, height: 125);
+                    },
+                  ),
+                ),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildCardIllustration(int semester) {
-    final assetName = semester == 3
-        ? 'assets/images/library_sem3_3d.png'
-        : 'assets/images/library_sem4_3d.png';
-
-    return SizedBox(
-      width: 105,
-      height: 115,
-      child: Image.asset(
-        assetName,
-        fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) {
-          // Space kept clean and empty as requested until user provides the 3D graphics
-          return const SizedBox(width: 105, height: 115);
-        },
       ),
     );
   }
