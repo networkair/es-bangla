@@ -440,18 +440,22 @@ class MockTestLandingScreen extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(25),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(width: 28),
-                Text(
-                  text,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                    letterSpacing: 0.2,
+                const SizedBox(width: 32),
+                Expanded(
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      letterSpacing: 0.2,
+                    ),
                   ),
                 ),
                 Container(
@@ -461,10 +465,12 @@ class MockTestLandingScreen extends StatelessWidget {
                     color: Colors.white.withOpacity(0.24),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.arrow_forward_rounded,
-                    color: Colors.white,
-                    size: 18,
+                  child: const Center(
+                    child: Icon(
+                      Icons.arrow_forward_rounded,
+                      color: Colors.white,
+                      size: 18,
+                    ),
                   ),
                 ),
               ],

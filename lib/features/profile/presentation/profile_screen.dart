@@ -21,6 +21,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late bool _notificationsEnabled;
   late int _currentSemester;
   late bool _isDarkMode;
+  late String _userAvatar;
+
+  static const List<String> _availableAvatars = [
+    'assets/avatars/avatar_1.jpg',
+    'assets/avatars/avatar_2.jpg',
+    'assets/avatars/avatar_3.jpg',
+    'assets/avatars/avatar_4.jpg',
+    'assets/avatars/avatar_5.jpg',
+    'assets/avatars/avatar_6.jpg',
+    'assets/avatars/avatar_7.jpg',
+    'assets/avatars/avatar_8.jpg',
+    'assets/avatars/avatar_9.jpg',
+    'assets/avatars/avatar_10.jpg',
+  ];
 
   @override
   void initState() {
@@ -28,6 +42,197 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _notificationsEnabled = _storage.notificationsEnabled;
     _currentSemester = _storage.semester;
     _isDarkMode = _storage.isDarkMode;
+    _userAvatar = _storage.userAvatar;
+  }
+
+  void _showAvatarPicker() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (modalContext, setModalState) {
+            return Container(
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 20,
+                    offset: const Offset(0, -4),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Handle Bar
+                  Container(
+                    width: 42,
+                    height: 4.5,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  // Title Row
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2563EB).withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.face_rounded, color: Color(0xFF2563EB), size: 22),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Choose Your Avatar',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Select an avatar for your profile',
+                              style: TextStyle(
+                                fontSize: 12.5,
+                                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (_userAvatar.isNotEmpty)
+                        TextButton(
+                          onPressed: () {
+                            setState(() => _userAvatar = '');
+                            _storage.userAvatar = '';
+                            Navigator.pop(ctx);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Default initial avatar restored'),
+                                duration: Duration(seconds: 2),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Reset',
+                            style: TextStyle(color: Color(0xFFE11D48), fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  // Grid of 10 avatars
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _availableAvatars.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 14,
+                      childAspectRatio: 1.0,
+                    ),
+                    itemBuilder: (context, index) {
+                      final avatarPath = _availableAvatars[index];
+                      final isSelected = _userAvatar == avatarPath;
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() => _userAvatar = avatarPath);
+                          _storage.userAvatar = avatarPath;
+                          Navigator.pop(ctx);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Avatar updated successfully!'),
+                              duration: Duration(seconds: 2),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isSelected
+                                  ? const Color(0xFF2563EB)
+                                  : (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
+                              width: isSelected ? 3 : 1.5,
+                            ),
+                            boxShadow: isSelected
+                                ? [
+                                    BoxShadow(
+                                      color: const Color(0xFF2563EB).withOpacity(0.4),
+                                      blurRadius: 10,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              ClipOval(
+                                child: Container(
+                                  color: isDark ? const Color(0xFF0F172A) : Colors.white,
+                                  child: Transform.scale(
+                                    scale: 1.12,
+                                    child: Image.asset(
+                                      avatarPath,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (isSelected)
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    width: 18,
+                                    height: 18,
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFF2563EB),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.check_rounded,
+                                      size: 13,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   void _changeSemester() {
@@ -186,28 +391,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        width: 62,
-                        height: 62,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF2563EB).withOpacity(0.28),
-                              blurRadius: 14,
-                              offset: const Offset(0, 6),
+                      GestureDetector(
+                        onTap: _showAvatarPicker,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              width: 66,
+                              height: 66,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: _userAvatar.isEmpty
+                                    ? const LinearGradient(
+                                        colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )
+                                    : null,
+                                color: _userAvatar.isNotEmpty
+                                    ? (isDark ? const Color(0xFF1E293B) : Colors.white)
+                                    : null,
+                                border: Border.all(
+                                  color: isDark ? const Color(0xFF3B82F6) : const Color(0xFF93C5FD),
+                                  width: 2.2,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF2563EB).withOpacity(0.28),
+                                    blurRadius: 14,
+                                    offset: const Offset(0, 6),
+                                  ),
+                                ],
+                              ),
+                              child: ClipOval(
+                                child: _userAvatar.isNotEmpty
+                                    ? Transform.scale(
+                                        scale: 1.12,
+                                        child: Image.asset(
+                                          _userAvatar,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) => Center(
+                                            child: Text(
+                                              displayName.isNotEmpty ? displayName[0].toUpperCase() : 'S',
+                                              style: const TextStyle(
+                                                fontSize: 26,
+                                                fontWeight: FontWeight.w900,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Center(
+                                        child: Text(
+                                          displayName.isNotEmpty ? displayName[0].toUpperCase() : 'S',
+                                          style: const TextStyle(
+                                            fontSize: 26,
+                                            fontWeight: FontWeight.w900,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: -2,
+                              right: -2,
+                              child: Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF2563EB),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                                    width: 2.2,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.22),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.add_rounded,
+                                    size: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          displayName.isNotEmpty ? displayName[0].toUpperCase() : 'S',
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: Colors.white),
                         ),
                       ),
                       const SizedBox(width: 16),

@@ -56,18 +56,18 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.5
-          name: "Es Bangla v1.3.5 (Full Mockup Visual Redesign, 3D Icons, Soft Organic Blobs & Cream Canvas)"
+          tag_name: v1.3.6
+          name: "Es Bangla v1.3.6 (Avatar Selection System, Mock Test Arrow Fix, Clean Analytics & Saved Vault UI)"
           body: |
-            ### Es Bangla v1.3.5 Release Highlights:
-            - **Exact Fidelity Implementation of User Reference Mockup**:
-              - **New 3D Icons**: Integrated 3D glowing lightbulb on stacked books for Semester 3 & 4, 3D clipboard with magnifying glass for PYQ, and 3D Store building with shopping cart for Premium Store.
-              - **Organic Card Backdrop Blobs**: Added soft organic sky, peach, teal, and rose blobs behind the large 3D icons and bottom-right corners.
-              - **Accent Underline Bars**: Distinct rounded accent bars beneath card titles (Sky Blue for Sem 3, Amber for Sem 4, Teal for PYQ, Coral Pink for Store).
-              - **Refined Study Reminder Pill**: Royal/electric blue gradient with organic cyan bubble, white badge with golden bell, and right chevron pill.
-              - **Royal Blue News Slider Dots**: Replaced amber dots with circular Royal Blue indicator dots (`#0070F3`).
-              - **Dual-Color "Es Bangla" AppBar Title**: Navy "Es", Royal Blue "Bangla", and golden brushstroke accent underline.
-              - **Warm Cream Canvas Background**: `#FAF8F5` background for rich, warm aesthetic contrast with crisp white cards.
+            ### Es Bangla v1.3.6 Release Highlights:
+            - **Profile Avatar Customization System**:
+              - Added interactive '+' badge to user profile picture.
+              - Bottom-sheet avatar picker featuring 10 custom illustrated character avatars with smooth selection, reset option, and persistent local storage.
+            - **Mock Test Arrow Fix**:
+              - Fixed overflowing action button arrow on premium mock test cards on narrow screens.
+            - **Decluttered Analytics & Saved Question UI**:
+              - Streamlined Performance Analytics by removing verbose subtitles and extra descriptions from section headers, subject cards, focus areas, strength topics, and improvement steps.
+              - Polished Saved Question Vault by removing the redundant overview banner and title for an ultra-clean, subject-focused view.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

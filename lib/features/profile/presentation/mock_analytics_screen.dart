@@ -298,11 +298,10 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
             icon: Icons.assignment_outlined,
             iconColor: const Color(0xFF2563EB),
             title: 'Total Solved Questions',
-            subtitle: 'Tap any subject to inspect chapter breakdowns',
           ),
           const SizedBox(height: 12),
           SizedBox(
-            height: 130,
+            height: 110,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: subjectMap.keys.length,
@@ -390,11 +389,6 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5, color: Color(0xFF0F172A)),
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          '$totalQuestions Questions',
-                          style: const TextStyle(fontSize: 11.5, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
-                        ),
                       ],
                     ),
                   ),
@@ -409,7 +403,6 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
             icon: Icons.trending_down_rounded,
             iconColor: const Color(0xFFE11D48),
             title: 'Priority Focus Areas',
-            subtitle: 'Chapters below 60% accuracy requiring revision',
           ),
           const SizedBox(height: 12),
           if (weakTopics.isEmpty)
@@ -417,11 +410,10 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
               icon: Icons.verified_rounded,
               iconColor: const Color(0xFF16A34A),
               title: 'No Critical Weak Topics!',
-              subtitle: 'Great work! All your tested chapters currently maintain a solid score.',
             )
           else
             SizedBox(
-              height: 125,
+              height: 105,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: weakTopics.length,
@@ -453,13 +445,6 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF9F1239)),
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          t['subject_name'],
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 11, color: Color(0xFFBE123C), fontWeight: FontWeight.w500),
-                        ),
                         const Spacer(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -484,7 +469,6 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
             icon: Icons.fitness_center_rounded,
             iconColor: const Color(0xFF16A34A),
             title: 'Mastery Strength Topics',
-            subtitle: 'Chapters scoring 70%+ accuracy with consistent results',
           ),
           const SizedBox(height: 12),
           if (strongTopics.isEmpty)
@@ -492,11 +476,10 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
               icon: Icons.task_alt_rounded,
               iconColor: const Color(0xFF64748B),
               title: 'No Strength Topics Recorded Yet',
-              subtitle: 'Solve more mock test papers to identify and highlight your strongest chapters.',
             )
           else
             SizedBox(
-              height: 125,
+              height: 105,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: strongTopics.length,
@@ -528,13 +511,6 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF14532D)),
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          t['subject_name'],
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 11, color: Color(0xFF15803D), fontWeight: FontWeight.w500),
-                        ),
                         const Spacer(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -559,7 +535,6 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
             icon: Icons.bar_chart_rounded,
             iconColor: const Color(0xFF7C3AED),
             title: 'Overall Subject Comparison',
-            subtitle: 'Average percentage accuracy across tested subjects',
           ),
           const SizedBox(height: 12),
           Container(
@@ -677,39 +652,34 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
             icon: Icons.lightbulb_rounded,
             iconColor: const Color(0xFFD97706),
             title: 'Targeted Improvement Steps',
-            subtitle: 'Evidence-backed strategy to boost exam scores',
           ),
           const SizedBox(height: 12),
           SizedBox(
-            height: 135,
+            height: 90,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
                 _buildStepCard(
                   stepNum: '1',
                   title: 'Core Concept Revision',
-                  desc: 'Read study summaries and foundational textbook notes.',
                   color: const Color(0xFF2563EB),
                 ),
                 const SizedBox(width: 12),
                 _buildStepCard(
                   stepNum: '2',
                   title: 'Focused Topic Drills',
-                  desc: 'Practice specific MCQs on the weak chapters identified above.',
                   color: const Color(0xFF7C3AED),
                 ),
                 const SizedBox(width: 12),
                 _buildStepCard(
                   stepNum: '3',
                   title: 'Timed Mock Practice',
-                  desc: 'Retake full papers without peeking at answers to test recall.',
                   color: const Color(0xFF059669),
                 ),
                 const SizedBox(width: 12),
                 _buildStepCard(
                   stepNum: '4',
                   title: 'Review Saved Vault',
-                  desc: 'Re-examine question explanations and verify mistakes.',
                   color: const Color(0xFFEA580C),
                 ),
               ],
@@ -1028,10 +998,8 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
     required IconData icon,
     required Color iconColor,
     required String title,
-    required String subtitle,
   }) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.all(7),
@@ -1043,18 +1011,9 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
         ),
         const SizedBox(width: 10),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
-              ),
-              Text(
-                subtitle,
-                style: const TextStyle(fontSize: 11.5, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
-              ),
-            ],
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
           ),
         ),
       ],
@@ -1065,11 +1024,10 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
     required IconData icon,
     required Color iconColor,
     required String title,
-    required String subtitle,
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -1077,16 +1035,12 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
       ),
       child: Row(
         children: [
-          Icon(icon, color: iconColor, size: 28),
+          Icon(icon, color: iconColor, size: 24),
           const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A))),
-                const SizedBox(height: 2),
-                Text(subtitle, style: const TextStyle(fontSize: 11.5, color: Color(0xFF64748B), height: 1.35)),
-              ],
+            child: Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Color(0xFF0F172A)),
             ),
           ),
         ],
@@ -1097,12 +1051,11 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
   Widget _buildStepCard({
     required String stepNum,
     required String title,
-    required String desc,
     required Color color,
   }) {
     return Container(
-      width: 195,
-      padding: const EdgeInsets.all(14),
+      width: 170,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -1117,6 +1070,7 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -1132,18 +1086,9 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> with SingleTi
           const SizedBox(height: 8),
           Text(
             title,
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
-          ),
-          const SizedBox(height: 4),
-          Expanded(
-            child: Text(
-              desc,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 11, color: Color(0xFF64748B), height: 1.3),
-            ),
           ),
         ],
       ),

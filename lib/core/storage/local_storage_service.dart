@@ -9,11 +9,13 @@ class LocalStorageService {
 
   late SharedPreferences _prefs;
   final ValueNotifier<ThemeMode> themeModeNotifier = ValueNotifier<ThemeMode>(ThemeMode.light);
+  final ValueNotifier<String> userAvatarNotifier = ValueNotifier<String>('');
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
     themeModeNotifier.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
     localNotificationsNotifier.value = getLocalNotifications();
+    userAvatarNotifier.value = userAvatar;
   }
 
   // User Profile & Academic Info
@@ -21,6 +23,7 @@ class LocalStorageService {
   static const String _keySemester = 'user_semester';
   static const String _keyClass = 'user_class';
   static const String _keyUserName = 'user_name';
+  static const String _keyUserAvatar = 'user_avatar_path';
 
   bool get isDarkMode => _prefs.getBool(_keyDarkMode) ?? false;
   set isDarkMode(bool value) {
@@ -43,6 +46,12 @@ class LocalStorageService {
 
   String get userName => _prefs.getString(_keyUserName) ?? 'Student';
   set userName(String value) => _prefs.setString(_keyUserName, value);
+
+  String get userAvatar => _prefs.getString(_keyUserAvatar) ?? '';
+  set userAvatar(String value) {
+    _prefs.setString(_keyUserAvatar, value);
+    userAvatarNotifier.value = value;
+  }
 
   String get userEmail => _prefs.getString(_keyUserEmail) ?? '';
   set userEmail(String value) => _prefs.setString(_keyUserEmail, value);
