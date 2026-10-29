@@ -300,24 +300,58 @@ class _QuizScreenState extends State<QuizScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             child: Row(
               children: List.generate(questions.length, (idx) {
-                final isFilled = idx <= _currentIndex;
+                final userAns = _userAnswers[idx];
+                final isAnswered = userAns != null;
                 final isCurrent = idx == _currentIndex;
+
+                Color capsuleColor;
+                List<BoxShadow>? capsuleShadow;
+
+                if (isAnswered) {
+                  final isCorrect = userAns == questions[idx].correctOption;
+                  if (isCorrect) {
+                    capsuleColor = const Color(0xFF10B981); // Emerald green for correct
+                    capsuleShadow = [
+                      BoxShadow(
+                        color: const Color(0xFF10B981).withOpacity(0.4),
+                        blurRadius: 3,
+                        offset: const Offset(0, 1),
+                      ),
+                    ];
+                  } else {
+                    capsuleColor = const Color(0xFFEF4444); // Red for incorrect
+                    capsuleShadow = [
+                      BoxShadow(
+                        color: const Color(0xFFEF4444).withOpacity(0.4),
+                        blurRadius: 3,
+                        offset: const Offset(0, 1),
+                      ),
+                    ];
+                  }
+                } else if (isCurrent) {
+                  capsuleColor = AppColors.primary;
+                  capsuleShadow = [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.4),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
+                    ),
+                  ];
+                } else {
+                  capsuleColor = const Color(0xFFE2E8F0);
+                  capsuleShadow = null;
+                }
+
                 return Expanded(
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 280),
                     curve: Curves.easeOutCubic,
-                    height: 5,
+                    height: 5.5,
                     margin: EdgeInsets.only(right: idx == questions.length - 1 ? 0 : 3.5),
                     decoration: BoxDecoration(
-                      color: isFilled ? AppColors.primary : const Color(0xFFE2E8F0),
+                      color: capsuleColor,
                       borderRadius: BorderRadius.circular(4),
-                      boxShadow: isCurrent ? [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.35),
-                          blurRadius: 3,
-                          offset: const Offset(0, 1),
-                        ),
-                      ] : null,
+                      boxShadow: capsuleShadow,
                     ),
                   ),
                 );

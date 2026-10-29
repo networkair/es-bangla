@@ -77,3 +77,6 @@ flutter:
     - family: VintageColorize
       fonts:
         - asset: assets/fonts/vintage_colorize.ttf
+    - family: NotoSerifBengali
+      fonts:
+        - asset: assets/fonts/NotoSerifBengali.ttf

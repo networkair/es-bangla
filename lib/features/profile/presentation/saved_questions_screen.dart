@@ -568,7 +568,7 @@ class _SubjectSavedQuestionsScreenState extends State<SubjectSavedQuestionsScree
                             Expanded(
                               child: RichText(
                                 text: TextSpan(
-                                  style: const TextStyle(fontSize: 13, fontFamily: 'Hind Siliguri'),
+                                  style: const TextStyle(fontSize: 13, fontFamily: 'NotoSerifBengali'),
                                   children: [
                                     const TextSpan(
                                       text: 'Correct Solution: ',
