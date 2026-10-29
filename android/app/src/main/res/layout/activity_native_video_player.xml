@@ -4,91 +4,21 @@
     android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0F172A">
+    android:background="#FFFFFF">
 
     <!-- Normal (Non-fullscreen) Layout Container -->
     <LinearLayout
         android:id="@+id/normalLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         android:orientation="vertical">
 
-        <!-- Top Header Bar -->
-        <LinearLayout
-            android:id="@+id/headerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="#1E293B"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp">
-
-            <!-- Back Button -->
-            <FrameLayout
-                android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/bg_back_button"
-                android:clickable="true"
-                android:focusable="true">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_arrow_back"
-                    android:contentDescription="Back" />
-            </FrameLayout>
-
-            <!-- Video Title in Header -->
-            <TextView
-                android:id="@+id/tvHeaderTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="10dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <!-- Secure Badge -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_secure_badge"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="8dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="4dp">
-
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_shield"
-                    android:contentDescription="Secure" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="Secure"
-                    android:textColor="#93C5FD"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- 16:9 Aspect Ratio Video Player Container -->
+        <!-- Prominent Video Player Container (Matching Safollo App) -->
         <FrameLayout
             android:id="@+id/playerContainer"
             android:layout_width="match_parent"
-            android:layout_height="225dp"
+            android:layout_height="270dp"
             android:background="#000000">
 
             <WebView
@@ -103,163 +33,81 @@
                 android:layout_gravity="center"
                 android:indeterminateTint="#3B82F6" />
 
-            <!-- Guard 1: Top-left corner covers channel avatar & title to prevent clicking channel/leaving app -->
+            <!-- Guard 1: Top-left covers channel avatar & title so tapping channel name does nothing.
+                 Width is 135dp so it leaves the Volume/Speaker button, CC, and Settings Gear completely free! -->
             <View
                 android:id="@+id/overlayChannelGuard"
-                android:layout_width="220dp"
-                android:layout_height="55dp"
+                android:layout_width="135dp"
+                android:layout_height="48dp"
                 android:layout_gravity="top|start"
                 android:background="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true" />
 
-            <!-- Guard 2: Bottom-left corner covers copy link round button -->
-            <View
-                android:id="@+id/overlayLinkGuard"
-                android:layout_width="70dp"
-                android:layout_height="55dp"
-                android:layout_gravity="bottom|start"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <!-- Guard 3: Bottom-center covers 'More Videos' related cards shelf -->
-            <View
-                android:id="@+id/overlayRelatedShelfGuard"
+            <!-- Bottom Controls Layout (Overlay at bottom of player) -->
+            <FrameLayout
+                android:id="@+id/bottomControlsLayout"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginStart="70dp"
-                android:layout_marginEnd="140dp"
-                android:layout_marginBottom="25dp"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true" />
+                android:layout_height="44dp"
+                android:layout_gravity="bottom">
 
-            <!-- Guard 4: Bottom-right covers YouTube logo (leaves fullscreen button at far right accessible) -->
-            <View
-                android:id="@+id/overlayYtLogoGuard"
-                android:layout_width="95dp"
-                android:layout_height="45dp"
-                android:layout_gravity="bottom|end"
-                android:layout_marginEnd="45dp"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true" />
+                <!-- Full bottom guard: absorbs any touches between buttons (blocks YouTube logo, More videos, Copy link) -->
+                <View
+                    android:id="@+id/overlayBottomBarGuard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <!-- Bottom-Left Custom Back Button: cleanly exits back to topic page -->
+                <FrameLayout
+                    android:id="@+id/btnPlayerBack"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="bottom|start"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="3dp"
+                    android:background="@drawable/bg_player_back_btn"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="Back"
+                        android:src="@drawable/ic_chevron_left" />
+                </FrameLayout>
+
+                <!-- Bottom-Right Custom Fullscreen Button: toggles fullscreen -->
+                <FrameLayout
+                    android:id="@+id/btnPlayerFullscreen"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="3dp"
+                    android:background="@drawable/bg_player_fullscreen_btn"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="Fullscreen"
+                        android:src="@drawable/ic_fullscreen_expand" />
+                </FrameLayout>
+            </FrameLayout>
         </FrameLayout>
 
-        <!-- Status Banner Below Player -->
-        <LinearLayout
-            android:id="@+id/statusContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#1E293B"
-            android:orientation="horizontal"
-            android:paddingStart="14dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="14dp"
-            android:paddingBottom="8dp"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/tvPlayerStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="⏳ ভিডিও প্রস্তুত হচ্ছে..."
-                android:textColor="#93C5FD"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- Content Details Area Below Video -->
-        <ScrollView
-            android:id="@+id/contentScrollView"
+        <!-- Clean, uncluttered white space below player -->
+        <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="18dp">
-
-                <!-- Title Large -->
-                <TextView
-                    android:id="@+id/tvVideoTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingMultiplier="1.25"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <!-- Badges Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_lecture_badge"
-                        android:paddingStart="8dp"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="8dp"
-                        android:paddingBottom="4dp"
-                        android:text="Es Bangla Video Lecture"
-                        android:textColor="#93C5FD"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginStart="10dp"
-                        android:src="@drawable/ic_lock"
-                        android:contentDescription="Protected" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="সুরক্ষিত শিক্ষা প্লেয়ার"
-                        android:textColor="#94A3B8"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <!-- Usage Guidelines Card -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/bg_info_card"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💡 ব্যবহারবিধি ও সুবিধা"
-                        android:textColor="#E2E8F0"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:lineSpacingMultiplier="1.4"
-                        android:text="• ভিডিও দেখতে সরাসরি প্লেয়ারের মাঝের প্লে বাটনে ট্যাপ করুন।\n• বড় স্ক্রিনে দেখতে প্লেয়ারের নিচের ডানদিকের ফুলস্ক্রিন আইকনে চাপ দিন।\n• ফুলস্ক্রিন থেকে ফিরে আসতে অথবা ভিডিও বন্ধ করতে ফোনের ব্যাক বাটন চাপুন।"
-                        android:textColor="#94A3B8"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
+            android:background="#FFFFFF" />
     </LinearLayout>
 
     <!-- Fullscreen Overlay Container (when in fullscreen mode) -->

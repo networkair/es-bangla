@@ -27,16 +27,6 @@ class LibraryTopicsScreen extends StatefulWidget {
 }
 
 class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  bool _isSearching = false;
-  String _searchQuery = '';
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,12 +34,12 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header Bar (Matching Reference Image 2)
+            // Header Bar (Clean Minimalist Back Button Only)
             Container(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+              decoration: const BoxDecoration(
                 color: AppColors.surface,
-                border: const Border(bottom: BorderSide(color: AppColors.border, width: 1)),
+                border: Border(bottom: BorderSide(color: AppColors.border, width: 1)),
               ),
               child: Row(
                 children: [
@@ -72,95 +62,6 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                         ],
                       ),
                       child: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary, size: 20),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-
-                  // Header Title or Search Field
-                  Expanded(
-                    child: _isSearching
-                        ? TextField(
-                            controller: _searchController,
-                            autofocus: true,
-                            decoration: const InputDecoration(
-                              hintText: 'ভিডিও টপিক খুঁজুন...',
-                              border: InputBorder.none,
-                              isDense: true,
-                            ),
-                            onChanged: (val) {
-                              setState(() {
-                                _searchQuery = val.trim().toLowerCase();
-                              });
-                            },
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    widget.subjectName.isNotEmpty ? widget.subjectName : 'Video Library',
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.primary,
-                                      letterSpacing: -0.3,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  const Icon(Icons.play_circle_fill_rounded, color: AppColors.primary, size: 18),
-                                ],
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                '${widget.subjectName} বিষয়ের শিক্ষামূলক ভিডিও',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.textSecondary,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                  ),
-
-                  // Circular Search Button
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (_isSearching) {
-                          _isSearching = false;
-                          _searchQuery = '';
-                          _searchController.clear();
-                        } else {
-                          _isSearching = true;
-                        }
-                      });
-                    },
-                    child: Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.border),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
-                            blurRadius: 10,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        _isSearching ? Icons.close_rounded : Icons.search_rounded,
-                        color: AppColors.primary,
-                        size: 20,
-                      ),
                     ),
                   ),
                 ],
@@ -214,9 +115,6 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                     if (!matches) continue;
 
                     final title = (data['title'] ?? data['topicName'] ?? '').toString().trim();
-                    if (_searchQuery.isNotEmpty && !title.toLowerCase().contains(_searchQuery)) {
-                      continue;
-                    }
 
                     videos.add({
                       'id': doc.id,
@@ -231,112 +129,40 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                   // Sort by order ascending
                   videos.sort((a, b) => (a['order'] as int).compareTo(b['order'] as int));
 
+                  if (videos.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: _buildEmptyState(),
+                    );
+                  }
+
                   return SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 28),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Top Hero Banner (as seen in Reference Image 2)
-                        _buildHeroBanner(),
-                        const SizedBox(height: 18),
-
-                        // Video Grid
-                        if (videos.isEmpty)
-                          _buildEmptyState()
-                        else
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 14,
-                              childAspectRatio: 1.35, // Wide card ratio matching Image 2
-                            ),
-                            itemCount: videos.length,
-                            itemBuilder: (context, index) {
-                              final video = videos[index];
-                              return _buildVideoCard(video);
-                            },
-                          ),
-
-                        const SizedBox(height: 22),
-
-                        // Bottom Student Community Banner (from Reference Image 2)
-                        _buildCommunityBanner(),
-                      ],
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 14,
+                        mainAxisSpacing: 14,
+                        childAspectRatio: 1.32,
+                      ),
+                      itemCount: videos.length,
+                      itemBuilder: (context, index) {
+                        final video = videos[index];
+                        return _buildVideoCard(video);
+                      },
                     ),
                   );
                 },
               ),
             ),
+
+            // Fixed Bottom Trust Banner (3D Card Design, Docked at Bottom)
+            _buildFixedBottomBanner(),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeroBanner() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-      decoration: BoxDecoration(
-        color: AppColors.primaryLight.withOpacity(0.4),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppColors.primary.withOpacity(0.18), width: 1.2),
-        boxShadow: AppColors.softCardShadow,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${widget.subjectName} ভিডিও লেকচার',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryDark,
-                    letterSpacing: -0.3,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                const Text(
-                  'গদ্য, কবিতা ও অধ্যায়ভিত্তিক সম্পূর্ণ শিক্ষামূলক ভিডিও ক্লাস।',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.textSecondary,
-                    height: 1.35,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Container(
-            width: 58,
-            height: 58,
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.border),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.school_rounded,
-              size: 30,
-              color: AppColors.primary,
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -358,15 +184,21 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: hasAccess ? AppColors.border : AppColors.primary.withOpacity(0.25),
+          color: hasAccess ? AppColors.border : AppColors.primary.withOpacity(0.3),
+          width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 5),
+          ),
+          BoxShadow(
+            color: hasAccess ? AppColors.primary.withOpacity(0.04) : AppColors.wrongRed.withOpacity(0.04),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -407,9 +239,9 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
               videoId: videoId,
             );
           },
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(18),
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -436,15 +268,15 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                 // Subtle dark overlay if locked
                 if (!hasAccess)
                   Container(
-                    color: Colors.black.withOpacity(0.32),
+                    color: Colors.black.withOpacity(0.35),
                   ),
 
-                // Top-Right Badge (FREE / UNLOCKED / LOCKED)
+                // Top-Right 3D Badge (FREE / UNLOCKED / LOCKED)
                 Positioned(
                   top: 8,
                   right: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -456,9 +288,9 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.12),
-                          blurRadius: 4,
-                          offset: const Offset(0, 1),
+                          color: Colors.black.withOpacity(0.14),
+                          blurRadius: 5,
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -485,21 +317,26 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                   ),
                 ),
 
-                // Bottom-Right Circular Button (Play or Lock)
+                // Bottom-Right 3D Circular Button (Play or Lock)
                 Positioned(
                   bottom: 8,
                   right: 8,
                   child: Container(
-                    width: 30,
-                    height: 30,
+                    width: 32,
+                    height: 32,
                     decoration: BoxDecoration(
                       color: hasAccess ? Colors.white : AppColors.primary,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withOpacity(0.24),
                           blurRadius: 6,
-                          offset: const Offset(0, 2),
+                          offset: const Offset(0, 2.5),
+                        ),
+                        BoxShadow(
+                          color: (hasAccess ? AppColors.primary : Colors.black).withOpacity(0.1),
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
                         ),
                       ],
                     ),
@@ -507,7 +344,7 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                       child: Icon(
                         hasAccess ? Icons.play_arrow_rounded : Icons.lock_rounded,
                         color: hasAccess ? AppColors.primary : Colors.white,
-                        size: hasAccess ? 20 : 16,
+                        size: hasAccess ? 22 : 16,
                       ),
                     ),
                   ),
@@ -553,36 +390,65 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
     );
   }
 
-  Widget _buildCommunityBanner() {
+  Widget _buildFixedBottomBanner() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.primaryLight,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.group_rounded, color: AppColors.primary, size: 20),
-          ),
-          const SizedBox(width: 12),
-          const Expanded(
-            child: Text(
-              'হাজারো শিক্ষার্থী ইতিমধ্যে Es Bangla-র সাথে নিয়মিত প্রস্তুতি নিচ্ছেন।',
-              style: TextStyle(
-                fontSize: 12,
-                color: AppColors.textSecondary,
-                height: 1.3,
-              ),
-            ),
+        border: const Border(top: BorderSide(color: AppColors.border, width: 1)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 10,
+            offset: const Offset(0, -3),
           ),
         ],
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.primary.withOpacity(0.18), width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primary.withOpacity(0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 3,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.primaryLight,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+              ),
+              child: const Icon(Icons.group_rounded, color: AppColors.primary, size: 20),
+            ),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Text(
+                'হাজারো শিক্ষার্থী ইতিমধ্যে Es Bangla-র সাথে নিয়মিত প্রস্তুতি নিচ্ছেন।',
+                style: TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textSecondary,
+                  height: 1.35,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

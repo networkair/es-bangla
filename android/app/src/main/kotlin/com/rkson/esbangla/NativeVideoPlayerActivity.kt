@@ -24,8 +24,6 @@ import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.ScrollView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import java.io.ByteArrayInputStream
 import java.net.HttpURLConnection
@@ -38,9 +36,8 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
     private lateinit var playerLoading: ProgressBar
     private lateinit var normalLayout: LinearLayout
     private lateinit var fullscreenContainer: FrameLayout
-    private lateinit var headerLayout: LinearLayout
-    private lateinit var contentScrollView: ScrollView
-    private lateinit var tvPlayerStatus: TextView
+    private lateinit var btnPlayerBack: View
+    private lateinit var btnPlayerFullscreen: View
 
     private var customView: View? = null
     private var customViewCallback: WebChromeClient.CustomViewCallback? = null
@@ -50,43 +47,79 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_native_video_player)
 
+        // Clean status bar matching white theme
+        setupStatusBar()
+
         val title = intent.getStringExtra("title") ?: "Es Bangla Video Lecture"
         val rawVideoId = intent.getStringExtra("videoId") ?: ""
         val cleanVideoId = extractCleanId(rawVideoId)
 
-        Log.d(TAG, "Starting Direct Native Video Player for videoId: $cleanVideoId (title: $title)")
+        Log.d(TAG, "Starting Safollo-Style Clean Video Player for videoId: $cleanVideoId (title: $title)")
 
         // Bind layout views
         normalLayout = findViewById(R.id.normalLayout)
         fullscreenContainer = findViewById(R.id.fullscreenContainer)
-        headerLayout = findViewById(R.id.headerLayout)
-        contentScrollView = findViewById(R.id.contentScrollView)
         videoWebView = findViewById(R.id.videoWebView)
         playerLoading = findViewById(R.id.playerLoading)
+        btnPlayerBack = findViewById(R.id.btnPlayerBack)
+        btnPlayerFullscreen = findViewById(R.id.btnPlayerFullscreen)
 
-        val tvHeaderTitle: TextView = findViewById(R.id.tvHeaderTitle)
-        val tvVideoTitle: TextView = findViewById(R.id.tvVideoTitle)
-        tvPlayerStatus = findViewById(R.id.tvPlayerStatus)
-        val btnBack: View = findViewById(R.id.btnBack)
-
-        tvHeaderTitle.text = title
-        tvVideoTitle.text = title
-
-        btnBack.setOnClickListener {
+        // Custom bottom-left back button: exits to topic page
+        btnPlayerBack.setOnClickListener {
             finish()
+        }
+
+        // Custom bottom-right fullscreen button: toggles fullscreen
+        btnPlayerFullscreen.setOnClickListener {
+            toggleFullscreen()
         }
 
         if (cleanVideoId.isEmpty()) {
             playerLoading.visibility = View.GONE
-            tvPlayerStatus.text = "⚠️ কোনো ভিডিও লিঙ্ক যুক্ত করা হয়নি"
-            tvPlayerStatus.setTextColor(Color.parseColor("#F87171"))
             return
         }
 
-        tvPlayerStatus.text = "⏳ ভিডিও লোড হচ্ছে..."
-        tvPlayerStatus.setTextColor(Color.parseColor("#93C5FD"))
-
         setupWebView(cleanVideoId)
+    }
+
+    private fun setupStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.statusBarColor = Color.WHITE
+            window.insetsController?.setSystemBarsAppearance(
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            window.statusBarColor = Color.WHITE
+        }
+    }
+
+    private fun toggleFullscreen() {
+        if (customView != null) {
+            // Currently in fullscreen: exit fullscreen back to portrait
+            onBackPressed()
+        } else {
+            // Trigger HTML5 fullscreen in the embedded video player
+            val js = """
+                (function() {
+                    try {
+                        var fsBtn = document.querySelector('.ytp-fullscreen-button');
+                        if (fsBtn) {
+                            fsBtn.click();
+                        } else {
+                            var v = document.querySelector('video');
+                            if (v) {
+                                if (v.requestFullscreen) v.requestFullscreen();
+                                else if (v.webkitRequestFullscreen) v.webkitRequestFullscreen();
+                            }
+                        }
+                    } catch(e) {}
+                })();
+            """.trimIndent()
+            videoWebView.evaluateJavascript(js, null)
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -100,12 +133,12 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
         videoWebView.isHapticFeedbackEnabled = false
         videoWebView.setOnLongClickListener { true }
 
-        // Native touch guard overlays to absorb touches on all sensitive areas
+        // Native touch guard overlays:
+        // overlayChannelGuard blocks clicks on the channel avatar & title (0-135dp from start)
+        // overlayBottomBarGuard blocks clicks anywhere between the back & fullscreen buttons
         val touchGuards = listOf(
             findViewById<View>(R.id.overlayChannelGuard),
-            findViewById<View>(R.id.overlayLinkGuard),
-            findViewById<View>(R.id.overlayRelatedShelfGuard),
-            findViewById<View>(R.id.overlayYtLogoGuard)
+            findViewById<View>(R.id.overlayBottomBarGuard)
         )
         touchGuards.forEach { guard ->
             guard?.setOnClickListener { /* Absorb click */ }
@@ -176,6 +209,7 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
 
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 showSystemUI()
+                setupStatusBar()
             }
 
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
@@ -190,7 +224,7 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val url = request?.url?.toString() ?: ""
                 Log.d(TAG, "Navigation requested: $url")
-                // Allow the player embed itself to load
+                // Allow ONLY player embed itself to load
                 if (url.startsWith("https://www.youtube-nocookie.com/embed/") ||
                     url.startsWith("https://www.youtube.com/embed/") ||
                     url.startsWith("about:blank")) {
@@ -295,9 +329,6 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 playerLoading.visibility = View.GONE
-                tvPlayerStatus.text = "🟢 সুরক্ষিত শিক্ষা ভিডিও চলছে"
-                tvPlayerStatus.setTextColor(Color.parseColor("#4ADE80"))
-
                 injectPlayerModifications(view)
             }
 
@@ -305,14 +336,12 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                 super.onReceivedError(view, request, error)
                 if (request?.isForMainFrame == true) {
                     playerLoading.visibility = View.GONE
-                    tvPlayerStatus.text = "⚠️ ভিডিও লোড হতে ব্যর্থ হয়েছে। ইন্টারনেট সংযোগ পরীক্ষা করুন।"
-                    tvPlayerStatus.setTextColor(Color.parseColor("#F87171"))
                 }
             }
         }
 
-        // Direct loadUrl of YouTube embed with Referer header - eliminates iframe barrier
-        val embedUrl = "https://www.youtube-nocookie.com/embed/$videoId?autoplay=1&playsinline=1&enablejsapi=1&rel=0&modestbranding=1&fs=1"
+        // Direct loadUrl of YouTube embed with Referer header and iv_load_policy=3 (disable video annotations)
+        val embedUrl = "https://www.youtube-nocookie.com/embed/$videoId?autoplay=1&playsinline=1&enablejsapi=1&rel=0&modestbranding=1&fs=1&iv_load_policy=3"
         val extraHeaders = HashMap<String, String>()
         extraHeaders["Referer"] = "https://www.youtube-nocookie.com"
         videoWebView.loadUrl(embedUrl, extraHeaders)
@@ -340,46 +369,69 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
 
     companion object {
         private const val CUSTOM_CLEANER_CSS = """
-            /* 1. Disable click and touch interactions on sensitive player elements */
+            /* 1. COMPLETELY HIDE pause overlay, more videos, related shelf, suggestions, end-screen */
+            .ytp-pause-overlay,
+            .ytp-pause-overlay-backdrop,
+            .ytp-pause-overlay-container,
+            .ytp-expand-pause-overlay,
+            .ytp-more-videos-view,
+            .ytp-suggestions,
+            .ytp-suggestion-set,
+            .ytp-suggestion-overlay,
+            .ytp-cued-thumbnail-overlay,
+            .ytp-related-on-error-overlay,
             .ytp-copylink-button,
             .ytp-share-button,
-            .ytp-pause-overlay,
-            .ytp-more-videos-view,
-            .ytp-impression-link,
-            .ytp-watermark,
-            .ytp-youtube-button,
-            .ytp-title-link {
-                pointer-events: none !important;
-                cursor: default !important;
-            }
-
-            /* 2. In settings popup drawer, disable pointer events on More options (... আরও বিকল্প) */
-            .ytp-panel-menu > .ytp-menuitem:last-child,
-            .ytp-panel-menu > .ytp-menuitem:last-child * {
-                pointer-events: none !important;
-                cursor: default !important;
-            }
-
-            /* 3. Block overflow panel, share panel, and context menu completely */
-            .ytp-overflow-panel,
             .ytp-share-panel,
-            .ytp-contextmenu {
+            .ytp-overflow-panel,
+            .ytp-contextmenu,
+            .ytp-watermark,
+            .ytp-watermark-small,
+            .ytp-youtube-button,
+            .ytp-impression-link,
+            .ytp-muted-autoplay-overlay {
                 display: none !important;
                 visibility: hidden !important;
                 pointer-events: none !important;
                 opacity: 0 !important;
                 width: 0 !important;
                 height: 0 !important;
-                overflow: hidden !important;
+                position: absolute !important;
+                top: -9999px !important;
+                left: -9999px !important;
+                z-index: -999 !important;
             }
 
-            /* 4. Ensure play/pause, time bar, settings gear, and fullscreen remain interactive */
+            /* 2. Block click and touch interactions on channel avatar, channel name, and top header */
+            .ytp-title-link,
+            .ytp-title-channel,
+            .ytp-title,
+            .ytp-title-text,
+            .ytp-chrome-top a {
+                pointer-events: none !important;
+                cursor: default !important;
+                user-select: none !important;
+            }
+
+            /* 3. Hide the last menuitem ("More / ... আরও বিকল্প") in Settings popup */
+            .ytp-panel-menu > .ytp-menuitem:last-child {
+                display: none !important;
+                visibility: hidden !important;
+                pointer-events: none !important;
+            }
+
+            /* 4. Ensure Volume/Mute, Play/Pause, Scrubber, Settings gear, and Fullscreen are fully interactive */
             .ytp-chrome-bottom,
             .ytp-chrome-controls,
             .ytp-play-button,
             .ytp-settings-button,
             .ytp-fullscreen-button,
-            .ytp-progress-bar-container {
+            .ytp-progress-bar-container,
+            .ytp-progress-bar,
+            .ytp-scrubber-container,
+            .ytp-mute-button,
+            .ytp-volume-area,
+            .ytp-volume-panel {
                 pointer-events: auto !important;
             }
         """
@@ -389,7 +441,20 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                 function isBlockedTarget(target) {
                     if (!target) return false;
 
-                    // Check menu items inside settings panel
+                    // NEVER block sound/mute button or player controls
+                    if (target.closest && (
+                        target.closest('.ytp-mute-button') ||
+                        target.closest('.ytp-volume-area') ||
+                        target.closest('.ytp-volume-panel') ||
+                        target.closest('.ytp-play-button') ||
+                        target.closest('.ytp-progress-bar-container') ||
+                        target.closest('.ytp-settings-button') ||
+                        target.closest('.ytp-fullscreen-button')
+                    )) {
+                        return false;
+                    }
+
+                    // Check menu items inside settings panel (block More / শেয়ার / লিঙ্ক etc.)
                     var menuItem = target.closest ? target.closest('.ytp-menuitem, [role="menuitem"]') : null;
                     if (menuItem) {
                         var text = (menuItem.innerText || menuItem.textContent || '').trim().toLowerCase();
@@ -417,12 +482,14 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                         }
                     }
 
-                    // Check sensitive player overlays / buttons
+                    // Check sensitive player overlays / recommendations / buttons
                     var sensitive = target.closest ? target.closest(
                         '.ytp-overflow-panel, .ytp-share-panel, .ytp-contextmenu, ' +
                         '.ytp-copylink-button, .ytp-share-button, .ytp-pause-overlay, ' +
-                        '.ytp-more-videos-view, .ytp-impression-link, .ytp-watermark, ' +
-                        '.ytp-youtube-button, .ytp-title-link'
+                        '.ytp-pause-overlay-container, .ytp-expand-pause-overlay, ' +
+                        '.ytp-more-videos-view, .ytp-suggestions, .ytp-suggestion-set, ' +
+                        '.ytp-impression-link, .ytp-watermark, .ytp-youtube-button, ' +
+                        '.ytp-title-link, .ytp-title-channel, .ytp-title'
                     ) : null;
                     if (sensitive) {
                         return true;
@@ -447,10 +514,35 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                     document.addEventListener(eventTypes[i], interceptEvent, true);
                 }
 
-                // Neutralize channel title hrefs and clipboard APIs
+                // Aggressively remove and sweep DOM
                 function sweepDOM() {
                     try {
-                        var channelLinks = document.querySelectorAll('.ytp-title-link, .ytp-title-channel, .ytp-chrome-top a');
+                        // 1. Remove More Videos & Suggestions from DOM entirely
+                        var removeSelectors = [
+                            '.ytp-pause-overlay',
+                            '.ytp-pause-overlay-backdrop',
+                            '.ytp-pause-overlay-container',
+                            '.ytp-expand-pause-overlay',
+                            '.ytp-more-videos-view',
+                            '.ytp-suggestions',
+                            '.ytp-suggestion-set',
+                            '.ytp-copylink-button',
+                            '.ytp-share-button',
+                            '.ytp-watermark',
+                            '.ytp-youtube-button'
+                        ];
+                        for (var s = 0; s < removeSelectors.length; s++) {
+                            var elements = document.querySelectorAll(removeSelectors[s]);
+                            for (var e = 0; e < elements.length; e++) {
+                                var el = elements[e];
+                                if (el && el.parentNode) {
+                                    el.parentNode.removeChild(el);
+                                }
+                            }
+                        }
+
+                        // 2. Neutralize channel links
+                        var channelLinks = document.querySelectorAll('.ytp-title-link, .ytp-title-channel, .ytp-chrome-top a, .ytp-title');
                         for (var j = 0; j < channelLinks.length; j++) {
                             channelLinks[j].removeAttribute('href');
                             channelLinks[j].removeAttribute('target');
@@ -458,17 +550,21 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                             channelLinks[j].style.pointerEvents = 'none';
                         }
 
+                        // 3. Hide blocked settings menu items
                         var menuItems = document.querySelectorAll('.ytp-menuitem, [role="menuitem"]');
                         for (var k = 0; k < menuItems.length; k++) {
                             var mi = menuItems[k];
                             if (isBlockedTarget(mi)) {
+                                mi.style.setProperty('display', 'none', 'important');
                                 mi.style.setProperty('pointer-events', 'none', 'important');
-                                mi.style.setProperty('cursor', 'default', 'important');
-                                var allDesc = mi.querySelectorAll('*');
-                                for (var d = 0; d < allDesc.length; d++) {
-                                    allDesc[d].style.setProperty('pointer-events', 'none', 'important');
-                                }
                             }
+                        }
+
+                        // 4. Ensure Volume/Mute button is unblocked
+                        var muteBtns = document.querySelectorAll('.ytp-mute-button, .ytp-volume-area');
+                        for (var m = 0; m < muteBtns.length; m++) {
+                            muteBtns[m].style.setProperty('pointer-events', 'auto', 'important');
+                            muteBtns[m].style.setProperty('cursor', 'pointer', 'important');
                         }
                     } catch(e) {}
                 }
@@ -491,7 +587,7 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                     window._esyInterceptorActive = true;
                     var obs = new MutationObserver(sweepDOM);
                     obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
-                    setInterval(sweepDOM, 400);
+                    setInterval(sweepDOM, 250);
                     sweepDOM();
                 }
             })();
@@ -559,6 +655,7 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                 customView = null
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 showSystemUI()
+                setupStatusBar()
             }
             return
         }
