@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
 import 'pyq_years_screen.dart';
 
 class PyqScreen extends StatelessWidget {
@@ -49,26 +48,22 @@ class PyqScreen extends StatelessWidget {
                   letterSpacing: 0.3,
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
 
-              // Semester 3 Wide 3D Card
+              // Semester 3 Wide 3D Card (Text Only)
               _buildSemesterCard(
                 context: context,
                 semester: 3,
                 title: 'Semester 3',
-                subtitle: 'Class 12 Previous Year Questions',
-                iconAsset: 'assets/icons/ic_sem3.png',
                 isDark: isDark,
               ),
               const SizedBox(height: 16),
 
-              // Semester 4 Wide 3D Card
+              // Semester 4 Wide 3D Card (Text Only)
               _buildSemesterCard(
                 context: context,
                 semester: 4,
                 title: 'Semester 4',
-                subtitle: 'Class 12 Previous Year Questions',
-                iconAsset: 'assets/icons/ic_sem4.png',
                 isDark: isDark,
               ),
             ],
@@ -82,8 +77,6 @@ class PyqScreen extends StatelessWidget {
     required BuildContext context,
     required int semester,
     required String title,
-    required String subtitle,
-    required String iconAsset,
     required bool isDark,
   }) {
     return Container(
@@ -120,68 +113,19 @@ class PyqScreen extends StatelessWidget {
             );
           },
           borderRadius: BorderRadius.circular(20),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-            child: Row(
-              children: [
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-                      width: 1,
-                    ),
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      iconAsset,
-                      width: 38,
-                      height: 38,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+            child: Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: isDark ? Colors.white : const Color(0xFF0F172A),
+                  letterSpacing: 0.4,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white : const Color(0xFF0F172A),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 14,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),

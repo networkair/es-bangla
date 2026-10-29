@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
 import 'pyq_papers_screen.dart';
 
 class PyqYearsScreen extends StatelessWidget {
@@ -53,7 +52,7 @@ class PyqYearsScreen extends StatelessWidget {
                   letterSpacing: 0.3,
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
 
               ...years.map((year) {
                 return Padding(
@@ -114,67 +113,19 @@ class PyqYearsScreen extends StatelessWidget {
             );
           },
           borderRadius: BorderRadius.circular(20),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-            child: Row(
-              children: [
-                Container(
-                  width: 54,
-                  height: 54,
-                  decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF0C4A6E).withOpacity(0.5) : const Color(0xFFE0F2FE),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isDark ? const Color(0xFF0284C7) : const Color(0xFFBAE6FD),
-                      width: 1,
-                    ),
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.event_note_rounded,
-                      color: AppColors.primary,
-                      size: 28,
-                    ),
-                  ),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+            child: Center(
+              child: Text(
+                year,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  color: isDark ? Colors.white : const Color(0xFF0F172A),
+                  letterSpacing: 0.5,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        year,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white : const Color(0xFF0F172A),
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        'Semester $semester Question Papers',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 14,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
