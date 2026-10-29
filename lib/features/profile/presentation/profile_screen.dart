@@ -4,6 +4,7 @@ import 'package:in_app_review/in_app_review.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import 'mock_analytics_screen.dart';
+import 'activity_streak_screen.dart';
 import 'saved_questions_screen.dart';
 import '../../auth/presentation/login_screen.dart';
 
@@ -600,10 +601,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   iconColor: const Color(0xFF2563EB),
                   iconBg: const Color(0xFFEFF6FF),
                   title: 'Mock Test Analytics',
-                  subtitle: 'Strengths, weak topics, and mastery insights',
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const MockAnalyticsScreen()),
+                  ).then((_) => setState(() {})),
+                ),
+                _buildDivider(),
+                _buildActionTile(
+                  icon: Icons.local_fire_department_rounded,
+                  iconColor: const Color(0xFFEA580C),
+                  iconBg: const Color(0xFFFFF7ED),
+                  title: 'Activity & Streak',
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ActivityStreakScreen()),
                   ).then((_) => setState(() {})),
                 ),
                 _buildDivider(),
@@ -612,7 +623,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   iconColor: const Color(0xFFD97706),
                   iconBg: const Color(0xFFFFFBEB),
                   title: 'Saved Question Vault',
-                  subtitle: 'Review bookmarked exam questions by subject',
                   badge: savedQuestions.isNotEmpty ? '${savedQuestions.length}' : null,
                   onTap: () => Navigator.push(
                     context,
@@ -632,9 +642,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   iconColor: const Color(0xFF7C3AED),
                   iconBg: const Color(0xFFF5F3FF),
                   title: 'Subscription Status',
-                  subtitle: entitlements.isEmpty
-                      ? 'Free Standard Plan'
-                      : '${entitlements.length} Active Pro Access Permissions',
                   trailing: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
@@ -680,13 +687,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                     ),
                   ),
-                  subtitle: Text(
-                    'Get periodic mock test prompts & updates',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                    ),
-                  ),
                   value: _notificationsEnabled,
                   activeColor: const Color(0xFF2563EB),
                   onChanged: (val) {
@@ -717,13 +717,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                     ),
                   ),
-                  subtitle: Text(
-                    'Enable dark appearance across the app',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                    ),
-                  ),
                   value: _isDarkMode,
                   activeColor: const Color(0xFF2563EB),
                   onChanged: (val) {
@@ -737,7 +730,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   iconColor: const Color(0xFFEA580C),
                   iconBg: const Color(0xFFFFF7ED),
                   title: 'Rate App on Play Store',
-                  subtitle: 'Share your feedback with fellow students',
                   onTap: () async {
                     final inAppReview = InAppReview.instance;
                     if (await inAppReview.isAvailable()) {
@@ -752,7 +744,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   iconBg: const Color(0xFFFFF1F2),
                   title: 'Sign Out',
                   titleColor: const Color(0xFFE11D48),
-                  subtitle: 'Log out of this device',
                   onTap: _logout,
                 ),
               ],

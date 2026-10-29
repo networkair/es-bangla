@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "624443477019-5ktnu5e7of3ru35hhinqiv8in8r3ldul.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rkson.esbangla",
+            "certificate_hash": "4033f87df19553c9d4c8dc6b79c429249aca7172"
+          }
+        },
+        {
           "client_id": "624443477019-jg6lrosd2cm6hro4g2lcsh4a52umt046.apps.googleusercontent.com",
           "client_type": 3
         }

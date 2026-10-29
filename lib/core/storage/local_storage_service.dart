@@ -141,6 +141,18 @@ class LocalStorageService {
     await _prefs.setStringList(_keyEntitlements, list);
   }
 
+  // App install tracking (prevents loading historical notifications created before install)
+  static const String _keyInstallTimestamp = 'app_install_timestamp';
+  int get installTimestamp {
+    final ts = _prefs.getInt(_keyInstallTimestamp);
+    if (ts == null) {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      _prefs.setInt(_keyInstallTimestamp, now);
+      return now;
+    }
+    return ts;
+  }
+
   // Notifications read tracking
   static const String _keyLastReadNotif = 'last_read_notif_time';
   int get lastReadNotificationTimestamp => _prefs.getInt(_keyLastReadNotif) ?? 0;
@@ -175,7 +187,27 @@ class LocalStorageService {
     if (raw == null || raw.isEmpty) return [];
     try {
       final List decoded = jsonDecode(raw);
-      return decoded.map((e) => Map<String, dynamic>.from(e)).toList();
+      final list = decoded.map((e) => Map<String, dynamic>.from(e)).toList();
+      final now = DateTime.now().millisecondsSinceEpoch;
+      const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+      final filtered = list.where((item) {
+        final title = (item['title'] ?? '').toString().toLowerCase();
+        final body = (item['body'] ?? '').toString().toLowerCase();
+        // Purge dummy/test notifications
+        if (title.contains('টেস্টিং') || title.contains('test') || body == 'test') {
+          return false;
+        }
+        final ts = (item['timestamp'] as num?)?.toInt() ?? 0;
+        if (ts > 0 && (now - ts) > thirtyDaysMs) {
+          return false;
+        }
+        return true;
+      }).toList();
+
+      if (filtered.length != list.length) {
+        _prefs.setString(_keyLocalNotifications, jsonEncode(filtered));
+      }
+      return filtered;
     } catch (_) {
       return [];
     }

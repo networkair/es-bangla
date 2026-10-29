@@ -30,6 +30,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
     final msgId = message.messageId ?? 'notif_${DateTime.now().millisecondsSinceEpoch}';
 
+    // Discard any dummy/test notification
+    if ((title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
+        (body.toLowerCase() == 'test' || body.isEmpty)) {
+      return;
+    }
+
     // 1. Save directly into device local storage (SharedPreferences)
     final prefs = await SharedPreferences.getInstance();
     const storageKey = 'user_local_notifications';
@@ -83,26 +89,32 @@ void main() async {
   // Initialize Network Connectivity & Health Watcher
   NetworkConnectivityService().initialize();
 
+  // Initialize Firebase (local native config)
+  try {
+    await Firebase.initializeApp();
+  } catch (_) {
+    // Allows preview even before Firebase credentials setup on emulator
+  }
+
+  // Launch UI immediately so the user doesn't face splash screen delays
+  runApp(const ProviderScope(child: EsBanglaApp()));
+
+  // Run notification and background messaging services asynchronously
+  _initBackgroundServices();
+}
+
+void _initBackgroundServices() async {
   // Initialize Local Reminders
   try {
     await ReminderNotificationService().initialize();
   } catch (_) {}
 
-  // Initialize Firebase
+  // Firebase Background messaging & Notification System
   try {
-    await Firebase.initializeApp();
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  } catch (_) {
-    // Allows preview even before Firebase credentials setup on emulator
-  }
-
-  // Initialize App Announcements & Notification System
-  try {
     await AppNotificationService().initialize();
     AppNotificationService().startRealtimeListener(LocalStorageService().semester);
   } catch (_) {}
-
-  runApp(const ProviderScope(child: EsBanglaApp()));
 }
 
 class EsBanglaApp extends StatelessWidget {

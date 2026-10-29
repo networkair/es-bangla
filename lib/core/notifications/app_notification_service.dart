@@ -20,7 +20,8 @@ class AppNotificationService {
   StreamSubscription<QuerySnapshot>? _firestoreSubscription;
   Timer? _rtdbPollTimer;
   final Set<String> _seenDocIds = {};
-  bool _isFirstSyncDone = false;
+  bool _isFirestoreFirstSyncDone = false;
+  bool _isRtdbFirstSyncDone = false;
   bool _isPolling = false;
   DateTime _serviceStartTime = DateTime.now();
 
@@ -85,16 +86,22 @@ class AppNotificationService {
       );
 
       final sem = _storage.semester;
-      await fcm.subscribeToTopic('all');
-      await fcm.subscribeToTopic('c12_sem$sem');
+      fcm.subscribeToTopic('all').catchError((e) => debugPrint('FCM topic all error: $e'));
+      fcm.subscribeToTopic('c12_sem$sem').catchError((e) => debugPrint('FCM topic sem error: $e'));
 
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         final notification = message.notification;
         final data = message.data;
-        final title = notification?.title ?? (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢');
-        final body = notification?.body ?? (data['body'] ?? data['message'] ?? '');
-        final actionUrl = data['actionUrl'] ?? data['link'] ?? '';
-        final imageUrl = notification?.android?.imageUrl ?? data['imageUrl'] ?? '';
+        final title = (notification?.title ?? (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢')).toString().trim();
+        final body = (notification?.body ?? (data['body'] ?? data['message'] ?? '')).toString().trim();
+        final actionUrl = (data['actionUrl'] ?? data['link'] ?? '').toString().trim();
+        final imageUrl = (notification?.android?.imageUrl ?? data['imageUrl'] ?? '').toString().trim();
+
+        // Discard any dummy/test notification
+        if ((title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
+            (body.toLowerCase() == 'test' || body.isEmpty)) {
+          return;
+        }
 
         final msgKey = message.messageId ?? '${title}_${body}';
 
@@ -152,7 +159,8 @@ class AppNotificationService {
   void startRealtimeListener(int semester) {
     _firestoreSubscription?.cancel();
     _rtdbPollTimer?.cancel();
-    _isFirstSyncDone = false;
+    _isFirestoreFirstSyncDone = false;
+    _isRtdbFirstSyncDone = false;
 
     // Refresh memory cache from storage
     try {
@@ -162,6 +170,7 @@ class AppNotificationService {
     final semKey1 = 'c12_sem$semester';
     final semKey2 = 'sem$semester';
     final semKey3 = semester.toString();
+    final installTime = _storage.installTimestamp;
 
     // 1. Primary Firestore Snapshot Stream
     _firestoreSubscription = FirebaseFirestore.instance
@@ -169,10 +178,65 @@ class AppNotificationService {
         .snapshots()
         .listen(
       (snapshot) {
-        final lastReadMs = _storage.lastReadNotificationTimestamp;
-        int unreadCount = 0;
+        if (!_isFirestoreFirstSyncDone) {
+          // FIRST LOAD: Mark all existing documents as seen so historical notices NEVER trigger phone alerts
+          for (final doc in snapshot.docs) {
+            _seenDocIds.add(doc.id);
+            _storage.addSeenNotificationId(doc.id);
 
-        for (final doc in snapshot.docs) {
+            final data = doc.data() as Map<String, dynamic>? ?? {};
+            final bool isActive = data['isActive'] ?? true;
+            if (!isActive) continue;
+
+            final audience = (data['audience'] ?? 'all').toString().trim().toLowerCase();
+            final bool isTarget = audience == 'all' ||
+                audience == semKey1 ||
+                audience == semKey2 ||
+                audience == semKey3 ||
+                audience == '0';
+            if (!isTarget) continue;
+
+            final createdAtStamp = data['createdAt'] as Timestamp?;
+            final createdAt = createdAtStamp?.toDate();
+            final createdAtMs = createdAt?.millisecondsSinceEpoch ?? 0;
+
+            // Only show in inbox if created AFTER app installation and within 7 days
+            final bool isPostInstall = createdAtMs >= installTime;
+            final bool isWithinSevenDays = createdAt != null &&
+                DateTime.now().difference(createdAt).inDays <= 7;
+
+            final title = (data['title'] ?? '').toString().trim();
+            final body = (data['body'] ?? data['message'] ?? '').toString().trim();
+            final isTest = (title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
+                (body.toLowerCase() == 'test' || body.isEmpty);
+
+            if (isPostInstall && isWithinSevenDays && !isTest) {
+              _storage.saveLocalNotification({
+                'id': doc.id,
+                'title': title,
+                'body': body,
+                'actionUrl': (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim(),
+                'imageUrl': (data['imageUrl'] ?? data['image'] ?? '').toString().trim(),
+                'timestamp': createdAtMs,
+              });
+            }
+          }
+
+          _isFirestoreFirstSyncDone = true;
+          _updateUnreadCount();
+          return;
+        }
+
+        // SUBSEQUENT EVENTS: A new document was added in Firestore while the user is actively inside the app
+        for (final change in snapshot.docChanges) {
+          if (change.type != DocumentChangeType.added) continue;
+
+          final doc = change.doc;
+          final docId = doc.id;
+          if (_seenDocIds.contains(docId)) continue;
+          _seenDocIds.add(docId);
+          _storage.addSeenNotificationId(docId);
+
           final data = doc.data() as Map<String, dynamic>? ?? {};
           final bool isActive = data['isActive'] ?? true;
           if (!isActive) continue;
@@ -183,25 +247,23 @@ class AppNotificationService {
               audience == semKey2 ||
               audience == semKey3 ||
               audience == '0';
-
           if (!isTarget) continue;
 
           final createdAtStamp = data['createdAt'] as Timestamp?;
-          final createdAt = createdAtStamp?.toDate() ?? DateTime.now();
-
-          // Calculate unread badge count
-          if (createdAt.millisecondsSinceEpoch > lastReadMs) {
-            unreadCount++;
-          }
+          final createdAt = createdAtStamp?.toDate();
+          if (createdAt == null) continue;
 
           final title = (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
           final body = (data['body'] ?? data['message'] ?? '').toString().trim();
+          final isTest = (title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
+              (body.toLowerCase() == 'test' || body.isEmpty);
+          if (isTest) continue;
+
           final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
           final imageUrl = (data['imageUrl'] ?? data['image'] ?? '').toString().trim();
 
-          // Save directly to device local storage
           _storage.saveLocalNotification({
-            'id': doc.id,
+            'id': docId,
             'title': title,
             'body': body,
             'actionUrl': actionUrl,
@@ -209,40 +271,31 @@ class AppNotificationService {
             'timestamp': createdAt.millisecondsSinceEpoch,
           });
 
-          final docId = doc.id;
-          final bool alreadySeen = _seenDocIds.contains(docId);
+          // Strictly real-time: created AFTER current app session started and within 90 seconds
+          final bool isRealtime = createdAt.isAfter(_serviceStartTime) &&
+              DateTime.now().difference(createdAt).inSeconds.abs() <= 90;
 
-          if (!alreadySeen) {
-            _seenDocIds.add(docId); // Synchronous memory lock to prevent duplicate alerts
-            _storage.addSeenNotificationId(docId);
-
-            // Only ring phone if real-time (not historical notification on app launch)
-            final bool isRealtime = _isFirstSyncDone ||
-                createdAt.isAfter(_serviceStartTime.subtract(const Duration(minutes: 2)));
-
-            if (isRealtime) {
-              showSystemNotification(
-                id: (docId.hashCode & 0x7FFFFFFF),
-                title: title,
-                body: body,
-                actionUrl: actionUrl,
-                imageUrl: imageUrl,
-              );
-            }
+          if (isRealtime) {
+            showSystemNotification(
+              id: (docId.hashCode & 0x7FFFFFFF),
+              title: title,
+              body: body,
+              actionUrl: actionUrl,
+              imageUrl: imageUrl,
+            );
           }
         }
 
         _updateUnreadCount();
-        _isFirstSyncDone = true;
       },
       onError: (err) {
         debugPrint('AppNotificationService real-time listener error: $err');
       },
     );
 
-    // 2. Dual-Sync Realtime Database Polling (every 4 seconds for instant delivery)
+    // 2. Dual-Sync Realtime Database Polling (every 30 seconds)
     _pollRtdbNotifications(semester);
-    _rtdbPollTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+    _rtdbPollTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       _pollRtdbNotifications(semester);
     });
   }
@@ -262,8 +315,70 @@ class AppNotificationService {
         final semKey1 = 'c12_sem$semester';
         final semKey2 = 'sem$semester';
         final semKey3 = semester.toString();
+        final installTime = _storage.installTimestamp;
 
+        if (!_isRtdbFirstSyncDone) {
+          // FIRST RTDB LOAD: Mark all existing keys as seen so historical notices NEVER trigger phone alerts
+          dataMap.forEach((key, val) {
+            _seenDocIds.add(key);
+            _storage.addSeenNotificationId(key);
+
+            if (val is Map) {
+              final map = Map<String, dynamic>.from(val);
+              final bool isActive = map['isActive'] ?? true;
+              if (!isActive) return;
+
+              final audience = (map['audience'] ?? 'all').toString().trim().toLowerCase();
+              final bool isTarget = audience == 'all' ||
+                  audience == semKey1 ||
+                  audience == semKey2 ||
+                  audience == semKey3 ||
+                  audience == '0';
+              if (!isTarget) return;
+
+              final createdAtRaw = map['createdAt'];
+              DateTime? createdAt;
+              if (createdAtRaw is num) {
+                createdAt = DateTime.fromMillisecondsSinceEpoch(createdAtRaw.toInt());
+              } else if (createdAtRaw is String) {
+                createdAt = DateTime.tryParse(createdAtRaw);
+              }
+              final createdAtMs = createdAt?.millisecondsSinceEpoch ?? 0;
+
+              // Only show in inbox if created AFTER app installation and within 7 days
+              final bool isPostInstall = createdAtMs >= installTime;
+              final bool isWithinSevenDays = createdAt != null &&
+                  DateTime.now().difference(createdAt).inDays <= 7;
+
+              final title = (map['title'] ?? '').toString().trim();
+              final body = (map['body'] ?? map['message'] ?? '').toString().trim();
+              final isTest = (title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
+                  (body.toLowerCase() == 'test' || body.isEmpty);
+
+              if (isPostInstall && isWithinSevenDays && !isTest) {
+                _storage.saveLocalNotification({
+                  'id': key,
+                  'title': title,
+                  'body': body,
+                  'actionUrl': (map['actionUrl'] ?? map['link'] ?? map['redirectUrl'] ?? '').toString().trim(),
+                  'imageUrl': (map['imageUrl'] ?? map['image'] ?? '').toString().trim(),
+                  'timestamp': createdAtMs,
+                });
+              }
+            }
+          });
+
+          _isRtdbFirstSyncDone = true;
+          _updateUnreadCount();
+          return;
+        }
+
+        // SUBSEQUENT RTDB POLLS: Only trigger if newly added during current app session
         dataMap.forEach((key, val) {
+          if (_seenDocIds.contains(key)) return;
+          _seenDocIds.add(key);
+          _storage.addSeenNotificationId(key);
+
           if (val is Map) {
             final map = Map<String, dynamic>.from(val);
             final bool isActive = map['isActive'] ?? true;
@@ -275,21 +390,26 @@ class AppNotificationService {
                 audience == semKey2 ||
                 audience == semKey3 ||
                 audience == '0';
-
             if (!isTarget) return;
 
             final createdAtRaw = map['createdAt'];
-            DateTime createdAt = DateTime.now();
+            DateTime? createdAt;
             if (createdAtRaw is num) {
               createdAt = DateTime.fromMillisecondsSinceEpoch(createdAtRaw.toInt());
+            } else if (createdAtRaw is String) {
+              createdAt = DateTime.tryParse(createdAtRaw);
             }
+            if (createdAt == null) return;
 
             final title = (map['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
             final body = (map['body'] ?? map['message'] ?? '').toString().trim();
+            final isTest = (title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
+                (body.toLowerCase() == 'test' || body.isEmpty);
+            if (isTest) return;
+
             final actionUrl = (map['actionUrl'] ?? map['link'] ?? map['redirectUrl'] ?? '').toString().trim();
             final imageUrl = (map['imageUrl'] ?? map['image'] ?? '').toString().trim();
 
-            // Save directly to device local storage
             _storage.saveLocalNotification({
               'id': key,
               'title': title,
@@ -299,31 +419,22 @@ class AppNotificationService {
               'timestamp': createdAt.millisecondsSinceEpoch,
             });
 
-            final bool alreadySeen = _seenDocIds.contains(key);
+            final bool isRealtime = createdAt.isAfter(_serviceStartTime) &&
+                DateTime.now().difference(createdAt).inSeconds.abs() <= 90;
 
-            if (!alreadySeen) {
-              _seenDocIds.add(key); // Synchronous memory lock to prevent duplicate alerts
-              _storage.addSeenNotificationId(key);
-
-              // Only ring phone if real-time (not historical notification on app launch)
-              final bool isRealtime = _isFirstSyncDone ||
-                  createdAt.isAfter(_serviceStartTime.subtract(const Duration(minutes: 2)));
-
-              if (isRealtime) {
-                showSystemNotification(
-                  id: (key.hashCode & 0x7FFFFFFF),
-                  title: title,
-                  body: body,
-                  actionUrl: actionUrl,
-                  imageUrl: imageUrl,
-                );
-              }
+            if (isRealtime) {
+              showSystemNotification(
+                id: (key.hashCode & 0x7FFFFFFF),
+                title: title,
+                body: body,
+                actionUrl: actionUrl,
+                imageUrl: imageUrl,
+              );
             }
           }
         });
 
         _updateUnreadCount();
-        _isFirstSyncDone = true;
       }
     } catch (_) {
     } finally {
