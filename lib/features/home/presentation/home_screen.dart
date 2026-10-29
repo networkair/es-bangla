@@ -99,21 +99,53 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFFAF8F5),
       appBar: AppBar(
-        backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+        backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFFAF8F5),
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: 20,
-        title: Text(
-          'Es Bangla',
-          style: TextStyle(
-            fontFamily: 'AppTitleFont',
-            fontSize: 27,
-            fontWeight: FontWeight.bold,
-            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
-            letterSpacing: 0.5,
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Es ',
+                    style: TextStyle(
+                      fontFamily: 'AppTitleFont',
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const TextSpan(
+                    text: 'Bangla',
+                    style: TextStyle(
+                      fontFamily: 'AppTitleFont',
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0070F3), // Vibrant Royal Blue
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Golden brushstroke accent below 'Bangla' matching mockup
+            Container(
+              margin: const EdgeInsets.only(left: 38, top: 1),
+              width: 44,
+              height: 3,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF59E0B),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(
@@ -165,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Hero News Slider (3D Peeking Carousel with Golden Dots)
+            // 1. Hero News Slider (3D Peeking Carousel with Blue Dots)
             _buildNewsSlider(currentSem, isDark),
 
             // Content Area with Clean, Balanced Spacing & Matching Canvas
@@ -186,6 +218,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: 'SEMESTER 3',
                           semester: 3,
                           iconAsset: 'assets/icons/ic_sem3.png',
+                          blobColor: const Color(0xFFE0F2FE),
+                          accentLineColor: const Color(0xFF38BDF8),
+                          buttonBgColor: const Color(0xFFE0F2FE),
                         ),
                       ),
                       const SizedBox(width: 14),
@@ -194,6 +229,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: 'SEMESTER 4',
                           semester: 4,
                           iconAsset: 'assets/icons/ic_sem4.png',
+                          blobColor: const Color(0xFFFEF3C7),
+                          accentLineColor: const Color(0xFFF59E0B),
+                          buttonBgColor: const Color(0xFFFFEDD5),
                         ),
                       ),
                     ],
@@ -202,8 +240,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   // 4. Previous Year Questions (PYQ) 3D Card
                   _buildActionTile(
-                    title: 'PREVIOUS YEARS QUESTIONS',
+                    title: 'PREVIOUS YEARS\nQUESTIONS',
                     iconAsset: 'assets/icons/ic_pyq.png',
+                    blobColor: const Color(0xFFE0F7FA),
+                    accentLineColor: const Color(0xFF0D9488),
+                    buttonBgColor: const Color(0xFFE0F2FE),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -216,7 +257,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   // 5. Premium Store 3D Card
                   _buildActionTile(
                     title: 'PREMIUM STORE',
-                    iconAsset: 'assets/icons/ic_book_notes.png',
+                    iconAsset: 'assets/icons/ic_store.png',
+                    blobColor: const Color(0xFFFFF1F2),
+                    accentLineColor: const Color(0xFFF87171),
+                    buttonBgColor: const Color(0xFFFEE2E2),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -350,7 +394,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                 ),
 
-                // Indicator Dots (Centered Golden Dots Below Slider)
+                // Indicator Dots (Centered Royal Blue Dots Below Slider matching mockup)
                 if (newsList.length > 1) ...[
                   const SizedBox(height: 10),
                   Row(
@@ -360,18 +404,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 250),
                         curve: Curves.easeOut,
-                        width: isSelected ? 18 : 6,
-                        height: 6,
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        width: isSelected ? 8 : 6,
+                        height: isSelected ? 8 : 6,
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
                         decoration: BoxDecoration(
+                          shape: BoxShape.circle,
                           color: isSelected
-                              ? const Color(0xFFF59E0B) // Golden Amber
+                              ? const Color(0xFF0070F3) // Vibrant Royal Blue
                               : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
-                          borderRadius: BorderRadius.circular(3),
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                    color: const Color(0xFFF59E0B).withOpacity(0.4),
+                                    color: const Color(0xFF0070F3).withOpacity(0.35),
                                     blurRadius: 4,
                                     offset: const Offset(0, 1),
                                   ),
@@ -697,69 +741,110 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildStudyReminderTile() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      height: 58,
+      height: 62,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isDark
               ? const [Color(0xFF1E3A8A), Color(0xFF0F172A)]
-              : const [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+              : const [Color(0xFF0080FF), Color(0xFF0052D4)],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
-        borderRadius: BorderRadius.circular(29),
+        borderRadius: BorderRadius.circular(31),
         boxShadow: [
-          // 3D downward drop shadow matching cards
+          // 3D downward drop shadow matching mockup
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF1D4ED8)).withOpacity(isDark ? 0.40 : 0.28),
+            color: (isDark ? Colors.black : const Color(0xFF0052D4)).withOpacity(isDark ? 0.40 : 0.28),
             offset: const Offset(0, 8),
             blurRadius: 16,
             spreadRadius: -2,
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF1D4ED8)).withOpacity(isDark ? 0.20 : 0.12),
+            color: (isDark ? Colors.black : const Color(0xFF0052D4)).withOpacity(isDark ? 0.20 : 0.12),
             offset: const Offset(0, 3),
             blurRadius: 6,
             spreadRadius: 0,
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ReminderScreen()),
-            );
-          },
-          borderRadius: BorderRadius.circular(29),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(31),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ReminderScreen()),
+              );
+            },
+            child: Stack(
               children: [
-                // Study reminder icon with crisp white circular badge
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image.asset(
-                    'assets/icons/ic_reminder.png',
-                    width: 22,
-                    height: 22,
-                    fit: BoxFit.contain,
+                // Organic wave/bubble on the left matching mockup
+                Positioned(
+                  left: -15,
+                  top: -20,
+                  bottom: -20,
+                  child: Container(
+                    width: 85,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: const Color(0xFF38BDF8).withOpacity(0.35),
+                    ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                const Text(
-                  'SET STUDY REMINDER',
-                  style: TextStyle(
-                    fontSize: 15.5,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 0.8,
-                    color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: Row(
+                    children: [
+                      // White circular badge with golden ringing bell
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.notifications_active_rounded,
+                            color: Color(0xFFF59E0B), // Golden amber bell
+                            size: 24,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+
+                      // Title
+                      const Expanded(
+                        child: Text(
+                          'SET STUDY REMINDER',
+                          style: TextStyle(
+                            fontSize: 15.5,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.8,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+
+                      // Right circular chevron forward button
+                      Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.25),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -775,92 +860,132 @@ class _HomeScreenState extends State<HomeScreen> {
     required String title,
     required int semester,
     required String iconAsset,
+    required Color blobColor,
+    required Color accentLineColor,
+    required Color buttonBgColor,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? const Color(0xFF1E293B) : Colors.white;
+
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        color: cardBg,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
           width: 1.0,
         ),
         boxShadow: [
-          // 3D downward drop shadow matching user reference
+          // 3D downward drop shadow matching user reference mockup
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.35 : 0.08),
+            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.35 : 0.07),
             offset: const Offset(0, 8),
             blurRadius: 16,
             spreadRadius: -2,
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.18 : 0.04),
+            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.18 : 0.03),
             offset: const Offset(0, 3),
             blurRadius: 6,
             spreadRadius: 0,
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => NotesSubjectsScreen(semester: semester)),
-            );
-          },
-          borderRadius: BorderRadius.circular(28),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(28),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => NotesSubjectsScreen(semester: semester)),
+              );
+            },
+            child: Stack(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 58,
-                      height: 58,
-                      decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF334155) : const Color(0xFFEDF4FF),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          iconAsset,
-                          width: 48,
-                          height: 48,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                // Top-left organic backdrop blob
+                Positioned(
+                  left: -15,
+                  top: -15,
+                  child: Container(
+                    width: 130,
+                    height: 130,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isDark ? blobColor.withOpacity(0.12) : blobColor.withOpacity(0.65),
                     ),
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF334155) : const Color(0xFFEAF2FF),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          size: 13,
-                          color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                const SizedBox(height: 14),
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 15.5,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 0.3,
-                    color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                // Bottom-right corner subtle wave
+                Positioned(
+                  right: -20,
+                  bottom: -20,
+                  child: Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isDark ? blobColor.withOpacity(0.08) : blobColor.withOpacity(0.40),
+                    ),
+                  ),
+                ),
+
+                // Main card content
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Large 3D Icon matching mockup
+                          Image.asset(
+                            iconAsset,
+                            width: 78,
+                            height: 78,
+                            fit: BoxFit.contain,
+                          ),
+                          // Top-right action arrow pill
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: isDark ? const Color(0xFF334155) : buttonBgColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 13,
+                                color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.3,
+                          color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Container(
+                        width: 28,
+                        height: 3.5,
+                        decoration: BoxDecoration(
+                          color: accentLineColor,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -875,90 +1000,134 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildActionTile({
     required String title,
     required String iconAsset,
+    required Color blobColor,
+    required Color accentLineColor,
+    required Color buttonBgColor,
     required VoidCallback onTap,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? const Color(0xFF1E293B) : Colors.white;
+
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        color: cardBg,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
           width: 1.0,
         ),
         boxShadow: [
-          // 3D downward drop shadow matching user reference image
+          // 3D downward drop shadow matching user reference mockup
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.38 : 0.08),
+            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.35 : 0.07),
             offset: const Offset(0, 8),
             blurRadius: 16,
             spreadRadius: -2,
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.20 : 0.04),
+            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.18 : 0.03),
             offset: const Offset(0, 3),
             blurRadius: 6,
             spreadRadius: 0,
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(28),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-            child: Row(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(28),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            child: Stack(
               children: [
-                // 3D Left Avatar Circle
-                Container(
-                  width: 66,
-                  height: 66,
-                  decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF334155) : const Color(0xFFEDF4FF),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      iconAsset,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.contain,
+                // Left organic backdrop blob
+                Positioned(
+                  left: -20,
+                  top: -20,
+                  bottom: -20,
+                  child: Container(
+                    width: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isDark ? blobColor.withOpacity(0.12) : blobColor.withOpacity(0.65),
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
-
-                // Card Title
-                Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 15.5,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.4,
-                      height: 1.25,
-                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                // Bottom-right corner subtle wave
+                Positioned(
+                  right: -25,
+                  bottom: -25,
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isDark ? blobColor.withOpacity(0.08) : blobColor.withOpacity(0.40),
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
 
-                // Right 3D Action Chevron Button
-                Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF334155) : const Color(0xFFEAF2FF),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 15,
-                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
-                    ),
+                // Main card content
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  child: Row(
+                    children: [
+                      // Large 3D Icon matching mockup
+                      Image.asset(
+                        iconAsset,
+                        width: 84,
+                        height: 84,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(width: 16),
+
+                      // Title & Accent Underline
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontSize: 15.5,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.3,
+                                height: 1.25,
+                                color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Container(
+                              width: 32,
+                              height: 3.5,
+                              decoration: BoxDecoration(
+                                color: accentLineColor,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+
+                      // Right Action Arrow Circle
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: isDark ? const Color(0xFF334155) : buttonBgColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 15,
+                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
