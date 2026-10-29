@@ -36,7 +36,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
     _animController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1000),
     );
 
     _scoreAnim = Tween<double>(begin: 0, end: _finalScore).animate(
@@ -105,207 +105,357 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     final totalMarks = meta.totalMarks > 0 ? meta.totalMarks : questions.length.toDouble();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         title: const Text(
           'Performance Scorecard',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A)),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(color: const Color(0xFFE2E8F0), height: 1),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18, color: Color(0xFF0F172A)),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Prominent Large Lottie Animation
-            Container(
-              margin: const EdgeInsets.only(top: 0, bottom: 8),
-              height: 280,
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: Lottie.asset(
-                'assets/animations/quiz_success.json',
-                fit: BoxFit.contain,
-                repeat: true,
-              ),
-            ),
-
-            // 2. Dynamic Encouraging Title & Subtitle
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _correctCount >= (questions.length * 0.8)
-                      ? '🎯 Outstanding Performance!'
-                      : (_correctCount >= (questions.length * 0.5)
-                          ? '⚡ Impressive Effort, Keep Going!'
-                          : '📚 Practice Makes Perfect!'),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF2563EB),
-                    letterSpacing: -0.2,
-                  ),
+            // 1. Compact Lottie Celebration Illustration (Reduced from 280 down to 125)
+            Center(
+              child: SizedBox(
+                height: 125,
+                child: Lottie.asset(
+                  'assets/animations/quiz_success.json',
+                  fit: BoxFit.contain,
+                  repeat: true,
                 ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Performance Summary & Overview',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF64748B),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 6),
 
-            // 3. Score Pill Box
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 46, vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF0FDF4),
-                borderRadius: BorderRadius.circular(26),
-                border: Border.all(color: const Color(0xFFBBF7D0), width: 1.5),
+            // 2. Encouraging Title & Subtitle
+            Center(
+              child: Column(
+                children: [
+                  Text(
+                    _correctCount >= (questions.length * 0.8)
+                        ? '🎯 Outstanding Performance!'
+                        : (_correctCount >= (questions.length * 0.5)
+                            ? '⚡ Impressive Effort, Keep Going!'
+                            : '📚 Practice Makes Perfect!'),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF2563EB),
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  const Text(
+                    'Performance Summary & Overview',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF64748B),
+                    ),
+                  ),
+                ],
               ),
-              child: AnimatedBuilder(
-                animation: _scoreAnim,
-                builder: (context, child) {
-                  return Column(
+            ),
+            const SizedBox(height: 14),
+
+            // 3. Modern 3D Score & Metric Overview Card
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: const Color(0xFFE2E8F0), width: 1.4),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF94A3B8).withOpacity(0.22),
+                    offset: const Offset(0, 3.5),
+                    blurRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: const Color(0xFF0F172A).withOpacity(0.04),
+                    offset: const Offset(0, 1),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  // Score Pill
+                  AnimatedBuilder(
+                    animation: _scoreAnim,
+                    builder: (context, _) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF0FDF4),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: const Color(0xFF86EFAC), width: 1.2),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.stars_rounded, color: Color(0xFF16A34A), size: 20),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'Score: ${_scoreAnim.value.toInt()}/${totalMarks.toInt()}',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w900,
+                                    color: Color(0xFF15803D),
+                                    letterSpacing: -0.2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 3 Stat Chips in Row
+                  Row(
                     children: [
-                      Text(
-                        '${_scoreAnim.value.toInt()}/${totalMarks.toInt()}',
-                        style: const TextStyle(
-                          fontSize: 38,
-                          fontWeight: FontWeight.w900,
-                          color: Color(0xFF16A34A),
-                          letterSpacing: -0.5,
+                      // Total Questions
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFEFF6FF),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: const Color(0xFFBFDBFE), width: 1),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF93C5FD).withOpacity(0.35),
+                                offset: const Offset(0, 2),
+                                blurRadius: 0,
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                '${questions.length}',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                  color: Color(0xFF2563EB),
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              const Text(
+                                'All Questions',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1E40AF),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      const Text(
-                        'Total Score',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF15803D),
+                      const SizedBox(width: 8),
+
+                      // Correct
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF0FDF4),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: const Color(0xFFBBF7D0), width: 1),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF86EFAC).withOpacity(0.35),
+                                offset: const Offset(0, 2),
+                                blurRadius: 0,
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                '$_correctCount',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                  color: Color(0xFF16A34A),
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              const Text(
+                                'Right Answers',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF15803D),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+
+                      // Incorrect
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFF1F2),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: const Color(0xFFFECDD3), width: 1),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFFFDA4AF).withOpacity(0.35),
+                                offset: const Offset(0, 2),
+                                blurRadius: 0,
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                '$_wrongCount',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                  color: Color(0xFFE11D48),
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              const Text(
+                                'Incorrect',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFBE123C),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
-                  );
-                },
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 12),
 
-            // 4. 3 Separate Individual Stat Cards (Reference Design)
+            // 4. Compact 3D Action Buttons Side-by-Side
             Row(
               children: [
-                // Total Questions Card
+                // Retake Button
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEFF6FF),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: const Color(0xFFBFDBFE), width: 1),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          '${questions.length}',
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFF2563EB),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => QuizScreen(
+                            subjectId: meta.subjectId,
+                            subjectName: meta.subjectName,
+                            topicId: meta.topicId,
+                            topicName: meta.topicName,
+                            setFile: meta.setFile,
+                            version: meta.version,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'All Questions',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF1E40AF),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(14),
+                    child: Container(
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2563EB),
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0xFF1D4ED8),
+                            offset: Offset(0, 3),
+                            blurRadius: 0,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.refresh_rounded, size: 18, color: Colors.white),
+                          SizedBox(width: 6),
+                          Text(
+                            'Retake Test',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(width: 10),
 
-                // Correct Answers Card
+                // Return to Topics Button
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF0FDF4),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: const Color(0xFFBBF7D0), width: 1),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          '$_correctCount',
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFF16A34A),
+                  child: InkWell(
+                    onTap: () => Navigator.pop(context),
+                    borderRadius: BorderRadius.circular(14),
+                    child: Container(
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: const Color(0xFFCBD5E1), width: 1.2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF94A3B8).withOpacity(0.35),
+                            offset: const Offset(0, 2.5),
+                            blurRadius: 0,
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Right Answers',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF15803D),
+                        ],
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.arrow_back_rounded, size: 18, color: Color(0xFF475569)),
+                          SizedBox(width: 6),
+                          Text(
+                            'Return Topics',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF475569),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-
-                // Wrong Answers Card
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF1F2),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: const Color(0xFFFECDD3), width: 1),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          '$_wrongCount',
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFFE11D48),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Incorrect Answers',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFFBE123C),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -313,81 +463,46 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
             ),
             const SizedBox(height: 20),
 
-            // 5. Action Buttons
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => QuizScreen(
-                        subjectId: meta.subjectId,
-                        subjectName: meta.subjectName,
-                        topicId: meta.topicId,
-                        topicName: meta.topicName,
-                        setFile: meta.setFile,
-                        version: meta.version,
+            // 5. Answer Breakdown Section Header (Now immediately visible on viewport!)
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEFF6FF),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFFBFDBFE)),
+                  ),
+                  child: const Icon(Icons.fact_check_rounded, color: Color(0xFF2563EB), size: 18),
+                ),
+                const SizedBox(width: 10),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Answer Sheet & Solutions',
+                      style: TextStyle(
+                        fontSize: 16.5,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF0F172A),
+                        letterSpacing: -0.2,
                       ),
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF3B82F6),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  elevation: 2,
-                ),
-                child: const Text(
-                  'Retake Mock Test',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: OutlinedButton.icon(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back_rounded, size: 18),
-                label: const Text('Return to Topics', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF475569),
-                  side: const BorderSide(color: Color(0xFFCBD5E1), width: 1.2),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                ),
-              ),
-            ),
-            const SizedBox(height: 28),
-
-            // 6. Question Analysis Section Header
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Question Breakdown',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF3B82F6),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'Review submitted answers and verify step-by-step solutions.',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF64748B),
-                    fontWeight: FontWeight.w500,
-                  ),
+                    Text(
+                      'Review correct answers and step-by-step solutions below.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF64748B),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
 
-            // 7. Question Review Cards (Reference Image 1 Clean Layout)
+            // 6. Question Review Cards with 3D Design
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -399,39 +514,71 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                 final isSaved = LocalStorageService().isQuestionSaved(meta.testId, q.qId);
 
                 return Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(18),
+                  margin: const EdgeInsets.only(bottom: 14),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: const Color(0xFFE2E8F0), width: 1.2),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF0F172A).withOpacity(0.03),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
+                        color: const Color(0xFFCBD5E1).withOpacity(0.5),
+                        blurRadius: 0,
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Question Title & 3-Dots Popup Menu
+                      // Question Number, Status Capsule & 3-Dots Menu
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Expanded(
-                            child: Text(
-                              '${index + 1}. ${q.questionText}',
-                              style: const TextStyle(
-                                fontSize: 15.5,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF0F172A),
-                                height: 1.45,
+                          // Status Capsule Badge
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: isCorrect
+                                  ? const Color(0xFFDCFCE7)
+                                  : (userAns == null ? const Color(0xFFF1F5F9) : const Color(0xFFFFE4E6)),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: isCorrect
+                                    ? const Color(0xFF86EFAC)
+                                    : (userAns == null ? const Color(0xFFCBD5E1) : const Color(0xFFFDA4AF)),
+                                width: 1,
                               ),
                             ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  isCorrect
+                                      ? Icons.check_circle_rounded
+                                      : (userAns == null ? Icons.help_outline_rounded : Icons.cancel_rounded),
+                                  size: 13,
+                                  color: isCorrect
+                                      ? const Color(0xFF16A34A)
+                                      : (userAns == null ? const Color(0xFF64748B) : const Color(0xFFE11D48)),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  isCorrect ? 'Correct' : (userAns == null ? 'Skipped' : 'Incorrect'),
+                                  style: TextStyle(
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: isCorrect
+                                        ? const Color(0xFF16A34A)
+                                        : (userAns == null ? const Color(0xFF64748B) : const Color(0xFFE11D48)),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 4),
+                          const Spacer(),
+
+                          // 3-Dots Menu (Bookmark & Report)
                           PopupMenuButton<String>(
                             icon: const Icon(Icons.more_vert_rounded, color: Color(0xFF64748B), size: 20),
                             padding: EdgeInsets.zero,
@@ -500,6 +647,18 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                           ),
                         ],
                       ),
+                      const SizedBox(height: 8),
+
+                      // Question Text
+                      Text(
+                        '${index + 1}. ${q.questionText}',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0F172A),
+                          height: 1.4,
+                        ),
+                      ),
 
                       if (q.imageUrl.isNotEmpty) ...[
                         const SizedBox(height: 10),
@@ -513,84 +672,62 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                         ),
                       ],
 
-                      const Divider(height: 22, thickness: 1, color: Color(0xFFF1F5F9)),
+                      const Divider(height: 20, thickness: 1, color: Color(0xFFF1F5F9)),
 
                       // Answers Display
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: RichText(
-                          text: TextSpan(
-                            style: const TextStyle(fontSize: 14, fontFamily: 'Hind Siliguri'),
-                            children: [
-                              const TextSpan(
-                                text: 'Your Response : ',
-                                style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
-                              ),
-                              TextSpan(
-                                text: userAns != null ? '($userAns) ${q.options[userAns] ?? ''}' : 'Not Answered',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: userAns == null
-                                      ? const Color(0xFF94A3B8)
-                                      : (isCorrect ? const Color(0xFF16A34A) : const Color(0xFFE11D48)),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: RichText(
-                          text: TextSpan(
-                            style: const TextStyle(fontSize: 14, fontFamily: 'Hind Siliguri'),
-                            children: [
-                              const TextSpan(
-                                text: 'Right Answer : ',
-                                style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
-                              ),
-                              TextSpan(
-                                text: '(${q.correctOption}) ${q.options[q.correctOption] ?? ''}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF16A34A),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // Capsule Status Badge
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
-                          color: isCorrect ? const Color(0xFFDCFCE7) : const Color(0xFFFFE4E6),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: isCorrect ? const Color(0xFF86EFAC) : const Color(0xFFFDA4AF),
-                            width: 1,
-                          ),
+                          color: const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: const Color(0xFFE2E8F0)),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                              isCorrect ? Icons.check_circle_rounded : Icons.cancel_rounded,
-                              size: 14,
-                              color: isCorrect ? const Color(0xFF16A34A) : const Color(0xFFE11D48),
+                            // Your response
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Your Answer: ',
+                                  style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.bold, color: Color(0xFF475569)),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    userAns != null ? '($userAns) ${q.options[userAns] ?? ''}' : 'Not Answered',
+                                    style: TextStyle(
+                                      fontSize: 13.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: userAns == null
+                                          ? const Color(0xFF94A3B8)
+                                          : (isCorrect ? const Color(0xFF16A34A) : const Color(0xFFE11D48)),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 5),
-                            Text(
-                              isCorrect ? 'Right' : (userAns == null ? 'Skipped' : 'Incorrect'),
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: isCorrect ? const Color(0xFF16A34A) : const Color(0xFFE11D48),
-                              ),
+                            const SizedBox(height: 4),
+
+                            // Correct answer
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Correct Answer: ',
+                                  style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.bold, color: Color(0xFF475569)),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    '(${q.correctOption}) ${q.options[q.correctOption] ?? ''}',
+                                    style: const TextStyle(
+                                      fontSize: 13.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF16A34A),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -598,26 +735,26 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
                       // Explanation block
                       if (q.explanation.isNotEmpty) ...[
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 10),
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF8FAFC),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: const Color(0xFFE2E8F0)),
+                            color: const Color(0xFFEFF6FF),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: const Color(0xFFBFDBFE)),
                           ),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(Icons.lightbulb_outline_rounded, color: Color(0xFF3B82F6), size: 18),
+                              const Icon(Icons.lightbulb_outline_rounded, color: Color(0xFF2563EB), size: 18),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  'Solution Insight: ${q.explanation}',
+                                  'Explanation: ${q.explanation}',
                                   style: const TextStyle(
                                     fontSize: 12.5,
-                                    color: Color(0xFF475569),
+                                    color: Color(0xFF1E40AF),
                                     height: 1.45,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -632,6 +769,8 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                 );
               },
             ),
+
+            const SizedBox(height: 30),
           ],
         ),
       ),

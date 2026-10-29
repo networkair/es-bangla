@@ -424,6 +424,15 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
                           letterSpacing: 0.2,
                         ),
                       ),
+                      if (isUnlocked) ...[
+                        const SizedBox(width: 4),
+                        Image.asset(
+                          'assets/icons/ic_coin.png',
+                          width: 14,
+                          height: 14,
+                          fit: BoxFit.contain,
+                        ),
+                      ],
                     ],
                   ),
                 ),
