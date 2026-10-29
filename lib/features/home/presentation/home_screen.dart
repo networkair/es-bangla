@@ -33,36 +33,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Map<String, dynamic>> _fallbackSlides = [
     {
-      'title': 'Active স্কলারশিপ',
-      'subtitle': 'বিভিন্ন স্কলারশিপের আপডেট ও আবেদন লিঙ্ক',
-      'tag': 'SCHOLARSHIP',
+      'title': 'উচ্চ মাধ্যমিক বাংলা ও ইংরেজি সহায়িকা',
+      'subtitle': 'সেমিস্টার ৩ ও ৪-এর সম্পূর্ণ সিলেবাস, সাজেশন ও অধ্যায়ভিত্তিক নোটস',
+      'tag': 'ES BANGLA',
       'redirectUrl': '',
-      'imageAsset': 'assets/images/banner_scholarship.png',
+      'gradientColors': [Color(0xFF1E3A8A), Color(0xFF0F172A)],
+      'icon': Icons.menu_book_rounded,
       'order': 1,
     },
     {
-      'title': 'Ongoing সরকারি চাকরি ফর্ম ফিলাপ',
-      'subtitle': 'সর্বশেষ সরকারি চাকরির বিজ্ঞপ্তি ও তথ্য',
-      'tag': 'JOB EXAM',
+      'title': 'অনলাইন অধ্যায়ভিত্তিক মক টেস্ট',
+      'subtitle': 'প্রতিটি সেটে অংশগ্রহণ করে নিজের প্রস্তুতি তাৎক্ষণিক যাচাই করুন',
+      'tag': 'MOCK TEST',
       'redirectUrl': '',
-      'imageAsset': 'assets/images/banner_job_exam.png',
+      'gradientColors': [Color(0xFF065F46), Color(0xFF064E3B)],
+      'icon': Icons.timer_outlined,
       'order': 2,
     },
     {
-      'title': 'UpSkill with AI',
-      'subtitle': 'কম্পিউটার ও AI স্কিল শিখুন এবং ক্যারিয়ারে এগিয়ে থাকুন',
-      'tag': 'UPSKILL',
+      'title': 'বিগত বছরের প্রশ্নপত্র ও সমাধান (PYQ)',
+      'subtitle': 'পরীক্ষায় সর্বোচ্চ নম্বর পেতে প্রিভিয়াস ইয়ার কোশ্চেন অনুশীলন করুন',
+      'tag': 'PYQ ARCHIVE',
       'redirectUrl': '',
-      'imageAsset': 'assets/images/banner_upskill_ai.png',
+      'gradientColors': [Color(0xFF4C1D95), Color(0xFF2E1065)],
+      'icon': Icons.quiz_outlined,
       'order': 3,
-    },
-    {
-      'title': 'Special Offer 10% Discount - Edutips Store',
-      'subtitle': 'store.edutips.in - বই ও স্টাডি মেটেরিয়াল কিনুন ছাড়ে',
-      'tag': 'EDUTIPS STORE',
-      'redirectUrl': 'https://store.edutips.in',
-      'imageAsset': 'assets/images/banner_edutips_store.png',
-      'order': 4,
     },
   ];
 
@@ -175,13 +170,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // Content Area with Clean, Balanced Spacing & Matching Canvas
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 10, 14, 20),
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 2. Study Reminder 3D Pill Card
                   _buildStudyReminderTile(),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 14),
 
                   // 3. Semester 3 & Semester 4 Cards (Side by Side in a Row)
                   Row(
@@ -193,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconAsset: 'assets/icons/ic_sem3.png',
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: _buildSemesterTile(
                           title: 'SEMESTER 4',
@@ -203,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 14),
 
                   // 4. Previous Year Questions (PYQ) 3D Card
                   _buildActionTile(
@@ -216,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 14),
 
                   // 5. Premium Store 3D Card
                   _buildActionTile(
@@ -229,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 14),
 
                   // 6. Authentic Es Bangla Social Media Hub
                   _buildSocialMediaSection(),
@@ -407,9 +402,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.35) : const Color(0x140F172A),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -427,18 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBannerImage(Map<String, dynamic> item, bool isDark) {
-    final imageAsset = (item['imageAsset'] ?? '').toString().trim();
     final imageUrl = (item['imageUrl'] ?? '').toString().trim();
-
-    if (imageAsset.isNotEmpty) {
-      return Image.asset(
-        imageAsset,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-        errorBuilder: (_, __, ___) => _buildBannerFallback(item, isDark),
-      );
-    }
 
     if (imageUrl.isNotEmpty) {
       if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
@@ -471,86 +455,116 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBannerFallback(Map<String, dynamic> item, bool isDark) {
     final title = item['title'] ?? '';
     final subtitle = item['subtitle'] ?? '';
-    final tag = (item['tag'] ?? 'LATEST NEWS').toString().toUpperCase();
+    final tag = (item['tag'] ?? 'ES BANGLA').toString().toUpperCase();
+    final List<Color> gradientColors = item['gradientColors'] is List<Color>
+        ? (item['gradientColors'] as List<Color>)
+        : const [Color(0xFF1E3A8A), Color(0xFF0F172A)];
+    final IconData iconData = item['icon'] is IconData
+        ? (item['icon'] as IconData)
+        : Icons.school_rounded;
 
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF1E3A8A), Color(0xFF0F172A)],
+          colors: gradientColors,
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Stack(
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF59E0B),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  tag,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F172A),
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
-            ],
+          // Decorative Subtle Watermark Icon
+          Positioned(
+            right: -8,
+            bottom: -12,
+            child: Icon(
+              iconData,
+              size: 105,
+              color: Colors.white.withOpacity(0.08),
+            ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  height: 1.25,
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF59E0B),
+                        borderRadius: BorderRadius.circular(6),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFF59E0B).withOpacity(0.35),
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        tag,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0F172A),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              if (subtitle.isNotEmpty) ...[
-                const SizedBox(height: 3),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 11.5,
-                    color: Colors.white70,
-                    height: 1.2,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        height: 1.25,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (subtitle.isNotEmpty) ...[
+                      const SizedBox(height: 3),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          fontSize: 11.5,
+                          color: Colors.white70,
+                          height: 1.2,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      'বিস্তারিত জানতে ট্যাপ করুন',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Color(0xFFFCD34D),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Icon(Icons.arrow_forward_rounded, size: 12, color: Color(0xFFFCD34D)),
+                  ],
                 ),
               ],
-            ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              Text(
-                'বিস্তারিত দেখতে ট্যাপ করুন',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Color(0xFFFCD34D),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              SizedBox(width: 4),
-              Icon(Icons.arrow_forward_rounded, size: 12, color: Color(0xFFFCD34D)),
-            ],
+            ),
           ),
         ],
       ),
@@ -560,10 +574,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showNewsDetailsModal(Map<String, dynamic> item) {
     final title = item['title'] ?? '';
     final subtitle = item['subtitle'] ?? '';
-    final tag = item['tag'] ?? 'LATEST NEWS';
+    final tag = item['tag'] ?? 'ES BANGLA';
     final redirectUrl = (item['redirectUrl'] ?? '').toString().trim();
     final imageUrl = (item['imageUrl'] ?? '').toString().trim();
-    final imageAsset = (item['imageAsset'] ?? '').toString().trim();
 
     showModalBottomSheet(
       context: context,
@@ -598,16 +611,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 18),
 
-              if (imageAsset.isNotEmpty) ...[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Image.asset(imageAsset, fit: BoxFit.cover),
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ] else if (imageUrl.isNotEmpty) ...[
+              if (imageUrl.isNotEmpty) ...[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: AspectRatio(
@@ -696,16 +700,14 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: const Color(0xFFFFEEDD), // Warm modern peach cream matching white background
         borderRadius: BorderRadius.circular(29),
+        border: Border.all(
+          color: const Color(0xFFFFD8B2),
+          width: 1,
+        ),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x20000000), // Rich prominent bottom shadow
-            blurRadius: 18,
-            spreadRadius: 0.5,
-            offset: Offset(0, 9),
-          ),
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 6,
+            color: Color(0x10000000),
+            blurRadius: 8,
             offset: Offset(0, 3),
           ),
         ],
@@ -760,17 +762,15 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white, // Crisp White / Dark Slate 3D Card
         borderRadius: BorderRadius.circular(28),
-        border: isDark ? Border.all(color: const Color(0xFF334155)) : null,
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.3 : 0.08),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.15 : 0.02),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -858,17 +858,14 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white, // Crisp White / Dark Slate 3D Card
         borderRadius: BorderRadius.circular(28),
-        border: isDark ? Border.all(color: const Color(0xFF334155)) : null,
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.35 : 0.13),
-            blurRadius: 22,
-            spreadRadius: 1,
-            offset: const Offset(0, 11),
-          ),
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.2 : 0.05),
-            blurRadius: 6,
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.05),
+            blurRadius: 8,
             offset: const Offset(0, 3),
           ),
         ],
@@ -939,22 +936,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ==================== 6. AUTHENTIC ES BANGLA SOCIAL HUB ====================
   Widget _buildSocialMediaSection() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white, // Crisp White 3D Card
+        color: isDark ? const Color(0xFF1E293B) : Colors.white, // Crisp White 3D Card
         borderRadius: BorderRadius.circular(28),
-        boxShadow: const [
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+          width: 1,
+        ),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x22000000), // Prominent bottom drop shadow
-            blurRadius: 22,
-            spreadRadius: 1,
-            offset: Offset(0, 11),
-          ),
-          BoxShadow(
-            color: Color(0x0C000000),
-            blurRadius: 6,
-            offset: Offset(0, 3),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -965,21 +961,25 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 padding: const EdgeInsets.all(7),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFEDF4FF),
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF334155) : const Color(0xFFEDF4FF),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.share_rounded, size: 18, color: Color(0xFF0F172A)),
+                child: Icon(
+                  Icons.share_rounded,
+                  size: 18,
+                  color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                ),
               ),
               const SizedBox(width: 10),
-              const Expanded(
+              Expanded(
                 child: Text(
                   'JOIN OUR COMMUNITY',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.5,
-                    color: Color(0xFF0F172A), // Crisp Black
+                    color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                   ),
                 ),
               ),
@@ -991,10 +991,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildSocialButton('assets/icons/ic_youtube.png', 'YouTube', ApiConstants.youtubeChannelUrl),
-              _buildSocialButton('assets/icons/ic_facebook.png', 'Facebook', ApiConstants.facebookPageUrl),
-              _buildSocialButton('assets/icons/ic_telegram.png', 'Telegram', ApiConstants.telegramChannelUrl),
-              _buildSocialButton('assets/icons/ic_whatsapp.png', 'WhatsApp', ApiConstants.whatsappUrl),
+              _buildSocialButton('assets/icons/ic_youtube.png', 'YouTube', ApiConstants.youtubeChannelUrl, isDark),
+              _buildSocialButton('assets/icons/ic_facebook.png', 'Facebook', ApiConstants.facebookPageUrl, isDark),
+              _buildSocialButton('assets/icons/ic_telegram.png', 'Telegram', ApiConstants.telegramChannelUrl, isDark),
+              _buildSocialButton('assets/icons/ic_whatsapp.png', 'WhatsApp', ApiConstants.whatsappUrl, isDark),
             ],
           ),
         ],
@@ -1002,7 +1002,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSocialButton(String iconAsset, String label, String url) {
+  Widget _buildSocialButton(String iconAsset, String label, String url, bool isDark) {
     return InkWell(
       onTap: () {
         SecurityManager.openExternalUrl(url);
@@ -1016,8 +1016,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               width: 52,
               height: 52,
-              decoration: const BoxDecoration(
-                color: Color(0xFFEDF4FF), // Soft light blue
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF334155) : const Color(0xFFEDF4FF), // Soft light blue
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -1027,10 +1027,10 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 6),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 11.5,
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF0F172A), // Crisp Black
+                color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF0F172A),
               ),
             ),
           ],
