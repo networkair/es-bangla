@@ -46,6 +46,14 @@ jobs:
       - name: Build APK (Release)
         run: flutter build apk --release --android-skip-build-dependency-validation
 
+      - name: Audit APK Signing Fingerprint
+        run: |
+          echo "=========================================="
+          echo "  VERIFYING RELEASE APK SIGNING SHA-1"
+          echo "=========================================="
+          keytool -printcert -jarfile build/app/outputs/flutter-apk/app-release.apk
+          echo "=========================================="
+
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -56,17 +64,19 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.8
-          name: "Es Bangla v1.3.8 (Enhanced Google Sign-In, Cloud Database Sync & Diagnostics)"
+          tag_name: v1.3.9
+          name: "Es Bangla v1.3.9 (Hardened Release Keystore Signing, Clean Google Sign-In & Firestore Persistence)"
           body: |
-            ### Es Bangla v1.3.8 Release Highlights:
-            - **Enhanced Google Sign-In Engine**:
-              - Dual-path sign-in: Auto-discovery via native `google-services.json` + explicit server client ID fallback.
-              - Resolves real student name from Google profile or email handle (never default to 'Student').
-              - Direct persistence of student profile in Cloud Firestore database (`users/{uid}`).
-              - Transparent live diagnostic error messaging directly in the UI.
-            - **Email Login Database Persistence**:
-              - Synchronizes user profiles with Firestore cloud database on every login and sign-up.
+            ### Es Bangla v1.3.9 Release Highlights:
+            - **Hardened Keystore Signing**:
+              - Removed conditional fallback in `build.gradle`, enforcing permanent `release.keystore` signing.
+              - Added automated in-CI signature audit step (`keytool -printcert`) verifying SHA-1 `40:33:F8...`.
+            - **Clean Google Sign-In Engine**:
+              - Authoritative `serverClientId` configuration for Firebase ID Token issuance.
+              - Pre-emptive cache and session reset to prevent stale token handshake errors.
+              - Actionable guidance on screen for Google Cloud Consent Screen configuration.
+            - **Cloud Database Persistence**:
+              - Guaranteed Firestore persistence (`users/{uid}`) storing real name, email, class, semester, and timestamp.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

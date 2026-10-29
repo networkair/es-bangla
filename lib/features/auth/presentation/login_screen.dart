@@ -148,25 +148,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     });
 
     try {
-      GoogleSignInAccount? googleUser;
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        serverClientId: '624443477019-jg6lrosd2cm6hro4g2lcsh4a52umt046.apps.googleusercontent.com',
+        scopes: ['email', 'profile'],
+      );
 
-      // Method 1: Standard auto-configuration via google-services.json
-      try {
-        final GoogleSignIn nativeSignIn = GoogleSignIn(scopes: ['email']);
-        await nativeSignIn.signOut().catchError((_) => null);
-        googleUser = await nativeSignIn.signIn();
-      } catch (nativeErr) {
-        debugPrint('Standard GoogleSignIn note: $nativeErr');
-      }
+      // Clear previous cached session before starting fresh sign in
+      await googleSignIn.signOut().catchError((_) => null);
 
-      // Method 2: If Method 1 didn't return an account, try with explicit serverClientId
-      if (googleUser == null) {
-        final GoogleSignIn explicitSignIn = GoogleSignIn(
-          serverClientId: '624443477019-jg6lrosd2cm6hro4g2lcsh4a52umt046.apps.googleusercontent.com',
-          scopes: ['email'],
-        );
-        googleUser = await explicitSignIn.signIn();
-      }
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
       if (googleUser == null) {
         if (mounted) setState(() => _isGoogleLoading = false);
@@ -184,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
       final user = userCred.user;
       if (user != null) {
-        // Resolve real user name from Google or email prefix
+        // Resolve real user name from Google or email prefix (never default to 'Student')
         String resolvedName = '';
         if (user.displayName != null && user.displayName!.trim().isNotEmpty) {
           resolvedName = user.displayName!.trim();
@@ -257,7 +247,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       debugPrint('Google Sign-In error: $e');
       final errStr = e.toString();
       setState(() {
-        _errorMessage = 'Google Sign-In: ${errStr.replaceAll('Exception:', '').replaceAll('PlatformException', '').trim()}';
+        if (errStr.contains('10') || errStr.contains('ApiException: 10')) {
+          _errorMessage = 'Google Sign-In (ApiException 10): Ensure Google Cloud OAuth Consent Screen is in Production or your Gmail is in Test Users.';
+        } else {
+          _errorMessage = 'Google Sign-In: ${errStr.replaceAll('Exception:', '').replaceAll('PlatformException', '').trim()}';
+        }
       });
     } finally {
       if (mounted) setState(() => _isGoogleLoading = false);
