@@ -64,19 +64,23 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.9
-          name: "Es Bangla v1.3.9 (Hardened Release Keystore Signing, Clean Google Sign-In & Firestore Persistence)"
+          tag_name: v1.3.10
+          name: "Es Bangla v1.3.10 (Mock Analytics Redesign from Mockups & Clean Reminder Tile)"
           body: |
-            ### Es Bangla v1.3.9 Release Highlights:
-            - **Hardened Keystore Signing**:
-              - Removed conditional fallback in `build.gradle`, enforcing permanent `release.keystore` signing.
-              - Added automated in-CI signature audit step (`keytool -printcert`) verifying SHA-1 `40:33:F8...`.
-            - **Clean Google Sign-In Engine**:
-              - Authoritative `serverClientId` configuration for Firebase ID Token issuance.
-              - Pre-emptive cache and session reset to prevent stale token handshake errors.
-              - Actionable guidance on screen for Google Cloud Consent Screen configuration.
-            - **Cloud Database Persistence**:
-              - Guaranteed Firestore persistence (`users/{uid}`) storing real name, email, class, semester, and timestamp.
+            ### Es Bangla v1.3.10 Release Highlights:
+            - **Home Screen Reminder Tile Clean-Up**:
+              - Removed the right arrow/chevron circle icon on the Study Reminder card for an unobstructed, balanced layout.
+            - **Mock Test Analytics Complete Redesign (Matching Exact Mockup Reference)**:
+              - Added clean pill-segmented timeframe filter (`Daily` | `Weekly` | `Monthly`).
+              - `Total Solved Questions` section with horizontal cards by subject (green book icon, count, 'Questions').
+              - `Your Strength Topics` section (>=70% accuracy) with green wave sparklines, plus authentic clipboard-empty-state when no strength topics yet.
+              - `Your Weak Topics` section with rose-tinted cards, percentage, and red wave sparklines.
+              - `Overall Performance` responsive BarChart with subject X-axis and dynamic color coding.
+              - `How to Improve Your Performance` horizontal swipeable step cards (Step 1 to Step 6).
+              - **Subject Performance Detail Screen**:
+                - Tapping any subject opens dedicated performance breakdown with 2x2 metric cards (`Overall Performance`, `Average Percentage`, `Total Test Attempted`, `Correct Questions`).
+                - Displays `Best Chapters` and `Weak Chapters` with overall score pill.
+                - Quick-action `🚀 Start New Mock Test` button.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
