@@ -365,7 +365,6 @@ class _QuizScreenState extends State<QuizScreen> {
           Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
-              alignment: Alignment.topCenter,
               layoutBuilder: (currentChild, previousChildren) {
                 return Stack(
                   alignment: Alignment.topCenter,
