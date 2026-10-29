@@ -51,11 +51,13 @@
                 android:layout_height="44dp"
                 android:layout_gravity="bottom">
 
-                <!-- Full bottom guard: absorbs any touches between buttons (blocks YouTube logo, More videos, Copy link) -->
+                <!-- Bottom guard: absorbs touches in middle bar between back and fullscreen buttons (blocks YouTube logo, More videos, Copy link) -->
                 <View
                     android:id="@+id/overlayBottomBarGuard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginEnd="52dp"
                     android:background="@android:color/transparent"
                     android:clickable="true"
                     android:focusable="true" />

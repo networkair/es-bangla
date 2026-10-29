@@ -56,26 +56,19 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.0
-          name: "Es Bangla v1.3.0 (Clean Topics Screen, Fixed 3D Trust Banner & Safollo-Style Video Player)"
+          tag_name: v1.3.1
+          name: "Es Bangla v1.3.1 (Fixed Blue Fullscreen Button & Eliminated More Videos in Fullscreen)"
           body: |
-            ### Es Bangla v1.3.0 Release Highlights:
-            - **Clean Minimalist Topics Screen**:
-              - Clean header bar with circular back button only (removed title, subtitle, search).
-              - Removed hero banner ("BANGLA ভিডিও লেকচার").
-              - 3D topic cards with dual soft shadows, rounded borders, 3D FREE/LOCKED badges, and 3D play buttons.
-            - **Fixed 3D Trust Banner**:
-              - Docked community trust banner to the bottom of the screen with 3D styling and border.
-            - **Safollo-Style Clean Video Player**:
-              - Removed top title and Secure badge; removed all bottom clutter cards and text.
-              - Pure white background matching app theme.
-              - Prominent 270dp player layout.
-              - Custom bottom-left white back button (`<`) to return to topics.
-              - Custom bottom-right royal blue fullscreen button (`[ ↗ ]`) to toggle fullscreen.
-              - Bulletproof touch guard covering the bottom bar (blocking YouTube logo and recommendations).
-              - Neutralized channel header clicks.
-              - Fixed sound toggle (mute/unmute works smoothly).
-              - Blocked Settings "More" options and completely eliminated "More Videos" suggestions.
+            ### Es Bangla v1.3.1 Release Highlights:
+            - **Fixed Blue Fullscreen Button**:
+              - Dispatches native touch directly to player controls so tapping the custom royal blue button instantly expands to fullscreen.
+              - Styled player's native fullscreen toggle with royal blue squircle matching Safollo design.
+              - Clear touch boundaries around back and fullscreen buttons for 100% responsiveness.
+            - **Completely Eliminated 'More Videos' Shelves**:
+              - Blocked `.ytp-show-tiles`, `.ytp-more-videos-button`, `.ytp-sfn`, and suggestions in both portrait and fullscreen landscape mode.
+              - Added video pause listener to aggressively destroy any suggestion overlays immediately.
+            - **Smooth Fullscreen Navigation**:
+              - Clean toggle between portrait (270dp player) and fullscreen landscape with system status bar control.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
