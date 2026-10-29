@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (ctx) => AlertDialog(
         title: const Text('সাহায্য প্রয়োজন?'),
         content: const Text(
-          'পাসওয়ার্ড ভুলে গেলে বা অ্যাকাউন্টে সমস্যা হলে সরাসরি WhatsApp বা ফোনে আমাদের সাথে যোগাযোগ করুন। অ্যাডমিন আপনার পাসওয়ার্ড রিসেট করে দেবেন।\n\n'
+          'পাসওয়ার্ড ভুলে গেলে বা অ্যাকাউন্টে সমস্যা হলে সরাসরি WhatsApp বা ফোনে আমাদের সাথে যোগাযোগ করুন। আমাদের সাপোর্ট টিম আপনাকে সহায়তা করবে।\n\n'
           'WhatsApp: ${ApiConstants.defaultWhatsappNumber}\n'
           'Email: support@esbangla.app',
         ),

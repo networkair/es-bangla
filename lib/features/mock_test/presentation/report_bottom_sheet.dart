@@ -121,8 +121,8 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
         _isSending = false;
         _isSuccess = success;
         _statusMessage = success
-            ? 'Thank you! Your report has been submitted to the admin.'
-            : 'Could not send report right now. Please try again.';
+            ? 'ধন্যবাদ! আপনার রিপোর্টটি সফলভাবে গ্রহণ করা হয়েছে।'
+            : 'রিপোর্ট পাঠানো সম্ভব হয়নি, অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।';
       });
 
       if (success) {

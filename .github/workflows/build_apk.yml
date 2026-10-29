@@ -56,29 +56,23 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.2
-          name: "Es Bangla v1.3.2 (3D News Carousel, Dynamic Quiz Feedback, Font & Refined Shadows)"
+          tag_name: v1.3.3
+          name: "Es Bangla v1.3.3 (New Library Banner, Pure Bottom Shadows & Vibrant Study Reminder)"
           body: |
-            ### Es Bangla v1.3.2 Release Highlights:
-            - **Modern Peeking News Carousel**:
-              - 3D Peeking Carousel with centered active cards (`viewportFraction: 0.86`, `borderRadius: 18`) and smooth 3D scale animation (0.93 - 1.0).
-              - Centered Golden Amber indicator dots (`#F59E0B`) with subtle glow.
-              - Infinite smooth 4s auto-scrolling with ease-in-out cubic curve.
-              - Branded Es Bangla fallback slides with luxury gradients.
-            - **Refined Home Screen Card Shadows**:
-              - Tuned shadow elevation and blur (`offset: Offset(0, 3)`, `blurRadius: 8`, zero spread) across all cards to eliminate dark shadow bleeding onto neighboring cards.
-              - Increased card separation to 14dp with crisp 1px borders.
-            - **Video Player Enhancements**:
-              - Disabled copy link button (neutralized DOM, CSS, JS event capture, and native touch guard).
-              - Redesigned white circular back button for seamless portrait and fullscreen navigation.
-            - **Advanced Quiz Taking Experience**:
-              - Top-aligned segmented progress capsules with dynamic color feedback: Correct (Green `#10B981`), Incorrect (Red `#EF4444`), Active (Blue `#2563EB`).
-              - 3D question and option cards with 14dp vertical separation.
-              - Removed explanation during quiz (shown on completion / result screen).
-            - **Global Bengali Typography**:
-              - Integrated official Google Font 'Noto Serif Bengali' across light and dark themes.
-            - **Mock Test UI**:
-              - Added Golden Rupee Coin icon (`ic_coin.png`) beside 'Full Free' badge.
+            ### Es Bangla v1.3.3 Release Highlights:
+            - **New Library Section Top Banner**:
+              - Replaced top banner with high-resolution custom artwork (1672x941) "শিখুন, দেখুন নিজেকে এগিয়ে নিন - সমস্ত বিষয়ের শিক্ষামূলক ভিডিও এক জায়গায়".
+              - Refined elevation and rounded container for perfect edge-to-edge fit.
+            - **Pure Directional Bottom Shadows for All Home Cards**:
+              - Refined shadows on long cards (PYQ, Premium Store, Community Hub) and Semester cards using negative spread radius (`spreadRadius: -2`, `offset: Offset(0, 4)`).
+              - Completely eliminated top/side bleeding and shadow overlap onto neighboring cards.
+              - Increased card separation to 16dp for clean, comfortable spacing.
+            - **Vibrant & Comfortable Study Reminder Card**:
+              - Redesigned with a rich Sapphire Blue gradient, golden active notification bell, and crisp white typography.
+              - Completely eliminated pale washed-out look for maximum visual comfort and contrast.
+            - **Clean Professional Messaging**:
+              - Removed all internal technical mentions (e.g. Firebase Firestore, admin, API) from empty states and dialogs.
+              - Replaced with friendly, positive user messages ("শীঘ্রই নতুন ভিডিও ও ক্লাস যুক্ত করা হবে").
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

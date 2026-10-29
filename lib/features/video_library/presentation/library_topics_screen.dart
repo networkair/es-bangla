@@ -476,7 +476,7 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            '${widget.subjectName}-এ কোনো ভিডিও যুক্ত করা হয়নি',
+            'শীঘ্রই ${widget.subjectName}-এর ক্লাস যুক্ত করা হবে',
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -486,11 +486,11 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
           ),
           const SizedBox(height: 6),
           const Text(
-            'এডমিন প্যানেল (Firebase Firestore: library_videos) থেকে থাম্বনেল ও ইউটিউব ভিডিও লিঙ্ক যুক্ত করা হলে তা সরাসরি এখানে চলে আসবে।',
+            'আমাদের শিক্ষকবৃন্দ এই বিষয়ের প্রতিটি অধ্যায়ের ভিডিও ক্লাস প্রস্তুত করছেন, খুব শীঘ্রই এগুলো এখানে যুক্ত করা হবে।',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 12.5,
               color: AppColors.textSecondary,
-              height: 1.4,
+              height: 1.45,
             ),
             textAlign: TextAlign.center,
           ),

@@ -58,15 +58,10 @@ class LibraryMainScreen extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0284C7)).withOpacity(isDark ? 0.35 : 0.12),
-            blurRadius: 18,
-            spreadRadius: 1,
-            offset: const Offset(0, 8),
-          ),
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
+            color: (isDark ? Colors.black : const Color(0xFF0284C7)).withOpacity(isDark ? 0.25 : 0.08),
+            blurRadius: 10,
+            spreadRadius: -1,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -175,15 +170,10 @@ class LibraryMainScreen extends StatelessWidget {
         border: Border.all(color: borderColor, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: shadowColor.withOpacity(isDark ? 0.38 : 0.12),
-            blurRadius: 20,
-            spreadRadius: 1,
-            offset: const Offset(0, 10),
-          ),
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
+            color: shadowColor.withOpacity(isDark ? 0.25 : 0.08),
+            blurRadius: 10,
+            spreadRadius: -1,
+            offset: const Offset(0, 4),
           ),
         ],
       ),

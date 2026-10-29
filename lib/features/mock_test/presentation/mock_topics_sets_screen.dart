@@ -228,13 +228,14 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
               ),
               const SizedBox(height: 16),
               const Text(
-                'এই বিষয়ে কোনো টেস্ট সেট পাওয়া যায়নি',
+                'শীঘ্রই নতুন টেস্ট সেট যুক্ত হবে',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
               ),
               const SizedBox(height: 6),
               const Text(
-                'খুব শীঘ্রই নতুন টেস্ট সেট যোগ করা হবে।',
+                'আমাদের শিক্ষকবৃন্দ এই বিষয়ের টেস্ট সেট প্রস্তুত করছেন, খুব শীঘ্রই আপডেট চলে আসবে।',
                 style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
