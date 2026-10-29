@@ -9,9 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
@@ -39,7 +37,7 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
     private lateinit var normalLayout: LinearLayout
     private lateinit var fullscreenContainer: FrameLayout
     private lateinit var btnPlayerBack: View
-    private lateinit var btnPlayerFullscreen: View
+    private lateinit var btnFullscreenBack: View
     private lateinit var playerContainer: FrameLayout
 
     private var customView: View? = null
@@ -66,16 +64,16 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
         videoWebView = findViewById(R.id.videoWebView)
         playerLoading = findViewById(R.id.playerLoading)
         btnPlayerBack = findViewById(R.id.btnPlayerBack)
-        btnPlayerFullscreen = findViewById(R.id.btnPlayerFullscreen)
+        btnFullscreenBack = findViewById(R.id.btnFullscreenBack)
 
-        // Custom bottom-left back button: cleanly exits to topic page
+        // Custom bottom-left circular back button: cleanly exits to topic page
         btnPlayerBack.setOnClickListener {
             finish()
         }
 
-        // Custom bottom-right fullscreen button: triggers full screen
-        btnPlayerFullscreen.setOnClickListener {
-            toggleFullscreen()
+        // Custom persistent circular back button in fullscreen mode: exits fullscreen
+        btnFullscreenBack.setOnClickListener {
+            exitFullscreen()
         }
 
         if (cleanVideoId.isEmpty()) {
@@ -100,59 +98,41 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleFullscreen() {
-        if (customView != null) {
-            // Currently in fullscreen: exit fullscreen back to portrait
-            onBackPressed()
-            return
-        }
+    private fun exitFullscreen() {
+        if (customView == null) return
 
-        // 1. Dispatch trusted native OS MotionEvent directly to YouTube's fullscreen button in WebView
-        dispatchFullscreenTouch()
-
-        // 2. Also dispatch JS click event on the fullscreen button
-        val js = """
-            (function() {
-                try {
-                    var fsBtn = document.querySelector('.ytp-fullscreen-button');
-                    if (fsBtn) {
-                        fsBtn.click();
-                        fsBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-                    }
-                } catch(e) {}
-            })();
-        """.trimIndent()
-        videoWebView.evaluateJavascript(js, null)
-
-        // 3. Fallback: If customView isn't created within 300ms, toggle orientation to landscape
-        videoWebView.postDelayed({
-            if (customView == null && requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                playerContainer.layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-                hideSystemUI()
-            }
-        }, 300)
-    }
-
-    private fun dispatchFullscreenTouch() {
         try {
-            val density = resources.displayMetrics.density
-            val x = videoWebView.width - (22f * density)
-            val y = videoWebView.height - (22f * density)
-            val now = SystemClock.uptimeMillis()
+            val js = """
+                (function() {
+                    try {
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        }
+                    } catch(e) {}
+                })();
+            """.trimIndent()
+            videoWebView.evaluateJavascript(js, null)
+        } catch (e: Exception) {}
 
-            val down = MotionEvent.obtain(now, now, MotionEvent.ACTION_DOWN, x, y, 0)
-            val up = MotionEvent.obtain(now, now + 50, MotionEvent.ACTION_UP, x, y, 0)
-            videoWebView.dispatchTouchEvent(down)
-            videoWebView.dispatchTouchEvent(up)
-            down.recycle()
-            up.recycle()
-        } catch (e: Exception) {
-            Log.e(TAG, "dispatchFullscreenTouch error: ${e.message}")
-        }
+        btnFullscreenBack.visibility = View.GONE
+        fullscreenContainer.removeAllViews()
+        fullscreenContainer.visibility = View.GONE
+        normalLayout.visibility = View.VISIBLE
+
+        customView = null
+        customViewCallback?.onCustomViewHidden()
+        customViewCallback = null
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        val heightPx = (270 * resources.displayMetrics.density).toInt()
+        playerContainer.layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            heightPx
+        )
+        showSystemUI()
+        setupStatusBar()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -168,9 +148,11 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
 
         // Native touch guard overlays:
         // overlayChannelGuard blocks clicks on the channel avatar & title (0-135dp from start)
+        // overlayCopyLinkGuard blocks taps aimed at YouTube's copy link button at bottom-left
         // overlayBottomBarGuard blocks clicks in the middle bar between back & fullscreen buttons
         val touchGuards = listOf(
             findViewById<View>(R.id.overlayChannelGuard),
+            findViewById<View>(R.id.overlayCopyLinkGuard),
             findViewById<View>(R.id.overlayBottomBarGuard)
         )
         touchGuards.forEach { guard ->
@@ -225,29 +207,15 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                     )
                 )
 
+                btnFullscreenBack.visibility = View.VISIBLE
+                btnFullscreenBack.bringToFront()
+
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
                 hideSystemUI()
             }
 
             override fun onHideCustomView() {
-                if (customView == null) return
-
-                fullscreenContainer.removeAllViews()
-                fullscreenContainer.visibility = View.GONE
-                normalLayout.visibility = View.VISIBLE
-
-                customView = null
-                customViewCallback?.onCustomViewHidden()
-                customViewCallback = null
-
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                val heightPx = (270 * resources.displayMetrics.density).toInt()
-                playerContainer.layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    heightPx
-                )
-                showSystemUI()
-                setupStatusBar()
+                exitFullscreen()
             }
 
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
@@ -407,7 +375,7 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
 
     companion object {
         private const val CUSTOM_CLEANER_CSS = """
-            /* 1. COMPLETELY DESTROY & HIDE More Videos, suggestions, pause overlay, end screen, and sfn drawers in BOTH portrait and fullscreen */
+            /* 1. COMPLETELY DESTROY & HIDE More Videos, suggestions, pause overlay, end screen, sfn drawers, AND Copy Link / Share in BOTH portrait and fullscreen */
             .ytp-show-tiles,
             .ytp-more-videos-button,
             .ytp-more-videos-button-thumbnail,
@@ -442,6 +410,18 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
             .ytp-endscreen-paginate,
             .ytp-endscreen-takeover,
             .ytp-copylink-button,
+            .ytp-copylink-button-visible,
+            .ytp-copylink-icon,
+            .ytp-copylink-title,
+            .ytp-copytext,
+            .ytp-show-copylink-title,
+            [class*="copylink"],
+            [class*="copy-link"],
+            button[aria-label*="Copy link"],
+            button[aria-label*="কপি"],
+            button[aria-label*="লিঙ্ক"],
+            button[title*="Copy link"],
+            button[title*="কপি"],
             .ytp-share-button,
             .ytp-share-panel,
             .ytp-overflow-panel,
@@ -493,24 +473,12 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                 pointer-events: none !important;
             }
 
-            /* 4. Style YouTube native fullscreen button as royal blue rounded button */
+            /* 4. Ensure YouTube native fullscreen button is unobstructed and interactive */
             .ytp-fullscreen-button {
-                background-color: #2563EB !important;
-                border-radius: 9px !important;
-                width: 36px !important;
-                height: 36px !important;
-                margin-right: 8px !important;
-                margin-bottom: 4px !important;
-                opacity: 1 !important;
-                display: inline-flex !important;
-                align-items: center !important;
-                justify-content: center !important;
                 pointer-events: auto !important;
                 cursor: pointer !important;
-                z-index: 9999 !important;
-            }
-            .ytp-fullscreen-button svg {
-                fill: #FFFFFF !important;
+                opacity: 1 !important;
+                display: inline-flex !important;
             }
 
             /* 5. Ensure Volume/Mute, Play/Pause, Scrubber, Settings gear, and Fullscreen are fully interactive */
@@ -534,7 +502,7 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                 function isBlockedTarget(target) {
                     if (!target) return false;
 
-                    // NEVER block sound/mute, play/pause, settings, progress bar, or fullscreen
+                    // NEVER block sound/mute, play/pause, settings, progress bar, or fullscreen button
                     if (target.closest && (
                         target.closest('.ytp-mute-button') ||
                         target.closest('.ytp-volume-area') ||
@@ -575,11 +543,14 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                         }
                     }
 
-                    // Check sensitive player overlays / recommendations / more-videos buttons
+                    // Check sensitive player overlays / recommendations / copy link / more-videos buttons
                     var sensitive = target.closest ? target.closest(
                         '.ytp-show-tiles, .ytp-more-videos-button, .ytp-sfn, .ytp-sfn-close, .ytp-sfn-content, ' +
                         '.ytp-overflow-panel, .ytp-share-panel, .ytp-contextmenu, ' +
-                        '.ytp-copylink-button, .ytp-share-button, .ytp-pause-overlay, ' +
+                        '.ytp-copylink-button, .ytp-copylink-button-visible, [class*="copylink"], [class*="copy-link"], ' +
+                        'button[aria-label*="Copy"], button[aria-label*="কপি"], button[aria-label*="লিঙ্ক"], ' +
+                        'button[title*="Copy"], button[title*="কপি"], ' +
+                        '.ytp-share-button, .ytp-pause-overlay, ' +
                         '.ytp-pause-overlay-container, .ytp-expand-pause-overlay, ' +
                         '.ytp-more-videos-view, .ytp-more-videos-view-container, .ytp-suggestions, .ytp-suggestion-set, ' +
                         '.ytp-impression-link, .ytp-watermark, .ytp-youtube-button, ' +
@@ -608,10 +579,10 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                     document.addEventListener(eventTypes[i], interceptEvent, true);
                 }
 
-                // Aggressively remove recommendations, more videos, and sweep DOM
+                // Aggressively remove recommendations, copy link, more videos, and sweep DOM
                 function sweepDOM() {
                     try {
-                        // 1. Remove More Videos & Suggestions from DOM entirely in both portrait and fullscreen
+                        // 1. Remove More Videos, Suggestions & Copy Link from DOM entirely
                         var removeSelectors = [
                             '.ytp-show-tiles',
                             '.ytp-more-videos-button',
@@ -632,6 +603,11 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                             '.ytp-endscreen-content',
                             '.ytp-modern-endscreen-content',
                             '.ytp-copylink-button',
+                            '.ytp-copylink-button-visible',
+                            '[class*="copylink"]',
+                            '[class*="copy-link"]',
+                            'button[aria-label*="Copy link"]',
+                            'button[aria-label*="কপি"]',
                             '.ytp-share-button',
                             '.ytp-watermark',
                             '.ytp-youtube-button'
@@ -680,26 +656,35 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
                             muteBtns[m].style.setProperty('cursor', 'pointer', 'important');
                         }
 
-                        // 5. Ensure Fullscreen button is styled with royal blue
+                        // 5. Ensure Fullscreen button is unblocked and interactive
                         var fsButtons = document.querySelectorAll('.ytp-fullscreen-button');
                         for (var f = 0; f < fsButtons.length; f++) {
-                            fsButtons[f].style.setProperty('background-color', '#2563EB', 'important');
-                            fsButtons[f].style.setProperty('border-radius', '9px', 'important');
+                            fsButtons[f].style.setProperty('pointer-events', 'auto', 'important');
+                            fsButtons[f].style.setProperty('cursor', 'pointer', 'important');
                         }
                     } catch(e) {}
                 }
 
-                // Prevent clipboard writes in JS
+                // Prevent clipboard writes in JS completely
                 try {
                     if (navigator.clipboard) {
-                        navigator.clipboard.writeText = function() { return Promise.resolve(); };
-                        navigator.clipboard.write = function() { return Promise.resolve(); };
+                        navigator.clipboard.writeText = function() { return Promise.reject(new Error("blocked")); };
+                        navigator.clipboard.write = function() { return Promise.reject(new Error("blocked")); };
                     }
                     window.open = function() { return null; };
+                    document.execCommand = function(cmd) {
+                        if (cmd === 'copy' || cmd === 'cut') return false;
+                        try {
+                            return document.defaultView.Document.prototype.execCommand.apply(document, arguments);
+                        } catch(e) {
+                            return false;
+                        }
+                    };
                     document.addEventListener('copy', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
                         e.stopImmediatePropagation();
+                        if (e.clipboardData) e.clipboardData.clearData();
                     }, true);
                 } catch(e) {}
 
@@ -788,23 +773,7 @@ class NativeVideoPlayerActivity : AppCompatActivity() {
     @Suppress("DEPRECATION")
     override fun onBackPressed() {
         if (customView != null) {
-            // Exit fullscreen if currently in fullscreen view
-            if (customViewCallback != null) {
-                videoWebView.webChromeClient?.onHideCustomView()
-            } else {
-                fullscreenContainer.removeAllViews()
-                fullscreenContainer.visibility = View.GONE
-                normalLayout.visibility = View.VISIBLE
-                customView = null
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                val heightPx = (270 * resources.displayMetrics.density).toInt()
-                playerContainer.layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    heightPx
-                )
-                showSystemUI()
-                setupStatusBar()
-            }
+            exitFullscreen()
             return
         }
         if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {

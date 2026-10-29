@@ -14,7 +14,7 @@
         android:background="#FFFFFF"
         android:orientation="vertical">
 
-        <!-- Prominent Video Player Container (Matching Safollo App) -->
+        <!-- Prominent Video Player Container -->
         <FrameLayout
             android:id="@+id/playerContainer"
             android:layout_width="match_parent"
@@ -44,6 +44,16 @@
                 android:clickable="true"
                 android:focusable="true" />
 
+            <!-- Guard 2: Absorbs touches on YouTube's copy link button area at bottom-left -->
+            <View
+                android:id="@+id/overlayCopyLinkGuard"
+                android:layout_width="65dp"
+                android:layout_height="48dp"
+                android:layout_gravity="bottom|start"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true" />
+
             <!-- Bottom Controls Layout (Overlay at bottom of player) -->
             <FrameLayout
                 android:id="@+id/bottomControlsLayout"
@@ -51,55 +61,36 @@
                 android:layout_height="44dp"
                 android:layout_gravity="bottom">
 
-                <!-- Bottom guard: absorbs touches in middle bar between back and fullscreen buttons (blocks YouTube logo, More videos, Copy link) -->
+                <!-- Bottom guard: absorbs touches in middle bar between back and YouTube's fullscreen button (blocks YouTube logo, More videos) -->
                 <View
                     android:id="@+id/overlayBottomBarGuard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginEnd="52dp"
+                    android:layout_marginStart="56dp"
+                    android:layout_marginEnd="56dp"
                     android:background="@android:color/transparent"
                     android:clickable="true"
                     android:focusable="true" />
 
-                <!-- Bottom-Left Custom Back Button: cleanly exits back to topic page -->
+                <!-- Bottom-Left Custom Circular Back Button: cleanly exits back to topic page -->
                 <FrameLayout
                     android:id="@+id/btnPlayerBack"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="bottom|start"
                     android:layout_marginStart="10dp"
-                    android:layout_marginBottom="3dp"
-                    android:background="@drawable/bg_player_back_btn"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/bg_player_circle_back_btn"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:elevation="8dp">
 
                     <ImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_gravity="center"
                         android:contentDescription="Back"
-                        android:src="@drawable/ic_chevron_left" />
-                </FrameLayout>
-
-                <!-- Bottom-Right Custom Fullscreen Button: toggles fullscreen -->
-                <FrameLayout
-                    android:id="@+id/btnPlayerFullscreen"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_gravity="bottom|end"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="3dp"
-                    android:background="@drawable/bg_player_fullscreen_btn"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="Fullscreen"
-                        android:src="@drawable/ic_fullscreen_expand" />
+                        android:src="@drawable/ic_arrow_back_dark" />
                 </FrameLayout>
             </FrameLayout>
         </FrameLayout>
@@ -118,5 +109,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+
+    <!-- Persistent Circular Back Button in Fullscreen Mode: allows exiting fullscreen back to portrait -->
+    <FrameLayout
+        android:id="@+id/btnFullscreenBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_player_circle_back_btn"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="24dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center"
+            android:contentDescription="Exit Fullscreen"
+            android:src="@drawable/ic_arrow_back_dark" />
+    </FrameLayout>
 
 </FrameLayout>
