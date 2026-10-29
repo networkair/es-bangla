@@ -56,21 +56,17 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.7
-          name: "Es Bangla v1.3.7 (English 3D Login Screen, Google Sign-In, Subject Mastery & Activity Streak)"
+          tag_name: v1.3.8
+          name: "Es Bangla v1.3.8 (Enhanced Google Sign-In, Cloud Database Sync & Diagnostics)"
           body: |
-            ### Es Bangla v1.3.7 Release Highlights:
-            - **Redesigned English Login Screen & Google Sign-In**:
-              - Clean English UI with borderless 3D card and reminder royal blue gradient button.
-              - Full Google Sign-In integration with official SHA-1/SHA-256 fingerprint linking.
-              - Smooth animated transitions between Login and Sign Up.
-            - **Dedicated Mock Test Analytics & Activity Streak Separation**:
-              - Mock Test Analytics focused on pure Subject Mastery (Horizontal sliders for Solved Questions, Weak Topics, Strength Topics, BarChart comparison, and Targeted Steps).
-              - Standalone Activity & Streak screen with consistency metrics and interactive monthly study calendar.
-              - Streamlined profile action tiles without redundant subtitles.
-            - **Notification & Reliability Improvements**:
-              - Discarding test/dummy push notifications from cluttering device notifications.
-              - Instant app startup with asynchronous background service initialization.
+            ### Es Bangla v1.3.8 Release Highlights:
+            - **Enhanced Google Sign-In Engine**:
+              - Dual-path sign-in: Auto-discovery via native `google-services.json` + explicit server client ID fallback.
+              - Resolves real student name from Google profile or email handle (never default to 'Student').
+              - Direct persistence of student profile in Cloud Firestore database (`users/{uid}`).
+              - Transparent live diagnostic error messaging directly in the UI.
+            - **Email Login Database Persistence**:
+              - Synchronizes user profiles with Firestore cloud database on every login and sign-up.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

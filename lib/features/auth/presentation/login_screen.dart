@@ -82,17 +82,39 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           password: password,
         );
 
-        final doc = await FirebaseFirestore.instance.collection('users').doc(userCred.user!.uid).get();
         final storage = LocalStorageService();
-        if (doc.exists) {
-          final data = doc.data()!;
-          storage.userName = data['name'] ?? 'Student';
-          storage.userEmail = email;
-          storage.semester = data['semester'] ?? 3;
+        try {
+          final doc = await FirebaseFirestore.instance.collection('users').doc(userCred.user!.uid).get();
+          if (doc.exists) {
+            final data = doc.data()!;
+            storage.userName = (data['name'] as String?)?.isNotEmpty == true ? data['name'] : email.split('@').first;
+            storage.userEmail = email;
+            storage.semester = data['semester'] ?? 3;
 
-          await FirebaseFirestore.instance.collection('users').doc(userCred.user!.uid).update({
-            'lastLoginAt': FieldValue.serverTimestamp(),
-          });
+            await FirebaseFirestore.instance.collection('users').doc(userCred.user!.uid).update({
+              'lastLoginAt': FieldValue.serverTimestamp(),
+            });
+          } else {
+            final derivedName = email.split('@').first;
+            storage.userName = derivedName;
+            storage.userEmail = email;
+            storage.semester = 3;
+
+            await FirebaseFirestore.instance.collection('users').doc(userCred.user!.uid).set({
+              'name': derivedName,
+              'email': email,
+              'provider': 'password',
+              'class': '12',
+              'semester': 3,
+              'createdAt': FieldValue.serverTimestamp(),
+              'lastLoginAt': FieldValue.serverTimestamp(),
+            });
+          }
+        } catch (dbErr) {
+          debugPrint('Firestore login sync: $dbErr');
+          storage.userName = email.split('@').first;
+          storage.userEmail = email;
+          storage.semester = 3;
         }
       }
 
@@ -126,12 +148,28 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     });
 
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        serverClientId: '624443477019-jg6lrosd2cm6hro4g2lcsh4a52umt046.apps.googleusercontent.com',
-      );
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      GoogleSignInAccount? googleUser;
+
+      // Method 1: Standard auto-configuration via google-services.json
+      try {
+        final GoogleSignIn nativeSignIn = GoogleSignIn(scopes: ['email']);
+        await nativeSignIn.signOut().catchError((_) => null);
+        googleUser = await nativeSignIn.signIn();
+      } catch (nativeErr) {
+        debugPrint('Standard GoogleSignIn note: $nativeErr');
+      }
+
+      // Method 2: If Method 1 didn't return an account, try with explicit serverClientId
       if (googleUser == null) {
-        setState(() => _isGoogleLoading = false);
+        final GoogleSignIn explicitSignIn = GoogleSignIn(
+          serverClientId: '624443477019-jg6lrosd2cm6hro4g2lcsh4a52umt046.apps.googleusercontent.com',
+          scopes: ['email'],
+        );
+        googleUser = await explicitSignIn.signIn();
+      }
+
+      if (googleUser == null) {
+        if (mounted) setState(() => _isGoogleLoading = false);
         return;
       }
 
@@ -146,32 +184,55 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
       final user = userCred.user;
       if (user != null) {
-        final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-        final storage = LocalStorageService();
-
-        if (!doc.exists) {
-          await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-            'name': user.displayName ?? 'Student',
-            'email': user.email ?? '',
-            'provider': 'google',
-            'class': '12',
-            'semester': 3,
-            'avatar': user.photoURL ?? '',
-            'createdAt': FieldValue.serverTimestamp(),
-            'lastLoginAt': FieldValue.serverTimestamp(),
-          });
-          storage.userName = user.displayName ?? 'Student';
-          storage.userEmail = user.email ?? '';
-          storage.semester = 3;
+        // Resolve real user name from Google or email prefix
+        String resolvedName = '';
+        if (user.displayName != null && user.displayName!.trim().isNotEmpty) {
+          resolvedName = user.displayName!.trim();
+        } else if (user.email != null && user.email!.contains('@')) {
+          resolvedName = user.email!.split('@').first;
         } else {
-          final data = doc.data()!;
-          storage.userName = data['name'] ?? (user.displayName ?? 'Student');
-          storage.userEmail = user.email ?? '';
-          storage.semester = data['semester'] ?? 3;
+          resolvedName = 'Learner';
+        }
 
-          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
-            'lastLoginAt': FieldValue.serverTimestamp(),
-          });
+        final userEmail = user.email ?? '';
+
+        final storage = LocalStorageService();
+        storage.userName = resolvedName;
+        storage.userEmail = userEmail;
+        storage.semester = 3;
+
+        // Persist user record in Cloud Firestore database
+        try {
+          final userDocRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
+          final doc = await userDocRef.get();
+          if (!doc.exists) {
+            await userDocRef.set({
+              'uid': user.uid,
+              'name': resolvedName,
+              'email': userEmail,
+              'provider': 'google',
+              'class': '12',
+              'semester': 3,
+              'avatar': user.photoURL ?? '',
+              'createdAt': FieldValue.serverTimestamp(),
+              'lastLoginAt': FieldValue.serverTimestamp(),
+            });
+          } else {
+            final data = doc.data()!;
+            final cloudName = (data['name'] as String?)?.trim();
+            if (cloudName != null && cloudName.isNotEmpty) {
+              storage.userName = cloudName;
+            }
+            storage.semester = data['semester'] ?? 3;
+
+            await userDocRef.update({
+              'name': storage.userName,
+              'email': userEmail,
+              'lastLoginAt': FieldValue.serverTimestamp(),
+            });
+          }
+        } catch (firestoreError) {
+          debugPrint('Firestore database sync note: $firestoreError');
         }
       }
 
@@ -182,13 +243,21 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         );
       }
     } on FirebaseAuthException catch (e) {
+      debugPrint('Firebase Auth Error: ${e.code} - ${e.message}');
       setState(() {
-        _errorMessage = e.message ?? 'Google Sign-In failed.';
+        if (e.code == 'operation-not-allowed') {
+          _errorMessage = 'Google Sign-In is disabled in Firebase Console (Authentication -> Sign-in method).';
+        } else if (e.code == 'account-exists-with-different-credential') {
+          _errorMessage = 'An account already exists with this email using another login method.';
+        } else {
+          _errorMessage = 'Firebase Auth: ${e.message ?? e.code}';
+        }
       });
     } catch (e) {
-      debugPrint('Google Sign-In note: $e');
+      debugPrint('Google Sign-In error: $e');
+      final errStr = e.toString();
       setState(() {
-        _errorMessage = 'Google Sign-In requires SHA-1 fingerprint configured in Firebase.';
+        _errorMessage = 'Google Sign-In: ${errStr.replaceAll('Exception:', '').replaceAll('PlatformException', '').trim()}';
       });
     } finally {
       if (mounted) setState(() => _isGoogleLoading = false);
