@@ -56,23 +56,19 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.3
-          name: "Es Bangla v1.3.3 (New Library Banner, Pure Bottom Shadows & Vibrant Study Reminder)"
+          tag_name: v1.3.4
+          name: "Es Bangla v1.3.4 (Premium 3D Cards, Refined Soft Shadow & Clean Study Reminder)"
           body: |
-            ### Es Bangla v1.3.3 Release Highlights:
-            - **New Library Section Top Banner**:
-              - Replaced top banner with high-resolution custom artwork (1672x941) "শিখুন, দেখুন নিজেকে এগিয়ে নিন - সমস্ত বিষয়ের শিক্ষামূলক ভিডিও এক জায়গায়".
-              - Refined elevation and rounded container for perfect edge-to-edge fit.
-            - **Pure Directional Bottom Shadows for All Home Cards**:
-              - Refined shadows on long cards (PYQ, Premium Store, Community Hub) and Semester cards using negative spread radius (`spreadRadius: -2`, `offset: Offset(0, 4)`).
-              - Completely eliminated top/side bleeding and shadow overlap onto neighboring cards.
-              - Increased card separation to 16dp for clean, comfortable spacing.
-            - **Vibrant & Comfortable Study Reminder Card**:
-              - Redesigned with a rich Sapphire Blue gradient, golden active notification bell, and crisp white typography.
-              - Completely eliminated pale washed-out look for maximum visual comfort and contrast.
-            - **Clean Professional Messaging**:
-              - Removed all internal technical mentions (e.g. Firebase Firestore, admin, API) from empty states and dialogs.
-              - Replaced with friendly, positive user messages ("শীঘ্রই নতুন ভিডিও ও ক্লাস যুক্ত করা হবে").
+            ### Es Bangla v1.3.4 Release Highlights:
+            - **Premium 3D Card Architecture & Realistic Downward Elevation**:
+              - Re-engineered all primary home screen cards (PYQ, Premium Store, Community Hub) to match the reference design.
+              - Substantial 28dp rounded geometry with dual-layer soft downward drop shadow (`offset: Offset(0, 8)`, `blurRadius: 16`, `spreadRadius: -2` + `offset: Offset(0, 3)`, `blurRadius: 6`).
+              - Elevated 3D circle avatar badge (66x66dp with soft `#EDF4FF` sky-tinted backdrop) and centered forward chevron action pill (42x42dp with `#EAF2FF`).
+            - **Refined Study Reminder Pill**:
+              - Removed the flame icon on the left while preserving the crisp white circular badge around the reminder clock icon.
+              - Added matching 3D elevation downward drop shadow.
+            - **Canvas & Surface Color Harmony**:
+              - Matched scaffold and app bar with a subtle off-white canvas (`#F8FAFC`), giving crisp `#FFFFFF` cards authentic physical pop and 3D depth without visual clutter.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

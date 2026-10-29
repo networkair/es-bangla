@@ -99,9 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+        backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: 20,
@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1E293B) : AppColors.surfaceMuted,
+                        color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0).withOpacity(0.6),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -170,13 +170,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // Content Area with Clean, Balanced Spacing & Matching Canvas
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 32),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 2. Study Reminder 3D Pill Card
                   _buildStudyReminderTile(),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 18),
 
                   // 3. Semester 3 & Semester 4 Cards (Side by Side in a Row)
                   Row(
@@ -198,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 18),
 
                   // 4. Previous Year Questions (PYQ) 3D Card
                   _buildActionTile(
@@ -211,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 18),
 
                   // 5. Premium Store 3D Card
                   _buildActionTile(
@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 18),
 
                   // 6. Authentic Es Bangla Social Media Hub
                   _buildSocialMediaSection(),
@@ -697,7 +697,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildStudyReminderTile() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      height: 56,
+      height: 58,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isDark
@@ -706,14 +706,20 @@ class _HomeScreenState extends State<HomeScreen> {
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(29),
         boxShadow: [
-          // Strict bottom-only shadow
+          // 3D downward drop shadow matching cards
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF1D4ED8)).withOpacity(isDark ? 0.35 : 0.22),
-            offset: const Offset(0, 4),
-            blurRadius: 6,
+            color: (isDark ? Colors.black : const Color(0xFF1D4ED8)).withOpacity(isDark ? 0.40 : 0.28),
+            offset: const Offset(0, 8),
+            blurRadius: 16,
             spreadRadius: -2,
+          ),
+          BoxShadow(
+            color: (isDark ? Colors.black : const Color(0xFF1D4ED8)).withOpacity(isDark ? 0.20 : 0.12),
+            offset: const Offset(0, 3),
+            blurRadius: 6,
+            spreadRadius: 0,
           ),
         ],
       ),
@@ -726,30 +732,15 @@ class _HomeScreenState extends State<HomeScreen> {
               MaterialPageRoute(builder: (_) => const ReminderScreen()),
             );
           },
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(29),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.notifications_active_rounded,
-                  color: Color(0xFFFCD34D), // Golden amber bell
-                  size: 22,
-                ),
-                const SizedBox(width: 10),
-                const Text(
-                  'SET STUDY REMINDER',
-                  style: TextStyle(
-                    fontSize: 15.5,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 0.8,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 10),
+                // Study reminder icon with crisp white circular badge
                 Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(5),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
@@ -759,6 +750,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 22,
                     height: 22,
                     fit: BoxFit.contain,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Text(
+                  'SET STUDY REMINDER',
+                  style: TextStyle(
+                    fontSize: 15.5,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.8,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -779,23 +780,23 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
           width: 1.0,
         ),
         boxShadow: [
-          // Strict bottom-only shadow
+          // 3D downward drop shadow matching user reference
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.28 : 0.05),
-            offset: const Offset(0, 4),
-            blurRadius: 6,
+            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.35 : 0.08),
+            offset: const Offset(0, 8),
+            blurRadius: 16,
             spreadRadius: -2,
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.12 : 0.02),
-            offset: const Offset(0, 1),
-            blurRadius: 2,
+            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.18 : 0.04),
+            offset: const Offset(0, 3),
+            blurRadius: 6,
             spreadRadius: 0,
           ),
         ],
@@ -809,9 +810,9 @@ class _HomeScreenState extends State<HomeScreen> {
               MaterialPageRoute(builder: (_) => NotesSubjectsScreen(semester: semester)),
             );
           },
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(28),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -829,15 +830,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Center(
                         child: Image.asset(
                           iconAsset,
-                          width: 50,
-                          height: 50,
+                          width: 48,
+                          height: 48,
                           fit: BoxFit.contain,
                         ),
                       ),
                     ),
                     Container(
-                      width: 32,
-                      height: 32,
+                      width: 36,
+                      height: 36,
                       decoration: BoxDecoration(
                         color: isDark ? const Color(0xFF334155) : const Color(0xFFEAF2FF),
                         shape: BoxShape.circle,
@@ -845,14 +846,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Center(
                         child: Icon(
                           Icons.arrow_forward_ios_rounded,
-                          size: 12,
+                          size: 13,
                           color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 Text(
                   title,
                   style: TextStyle(
@@ -880,23 +881,23 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
           width: 1.0,
         ),
         boxShadow: [
-          // Strict bottom-only shadow (shrunk by 2px and pushed down by 4px)
+          // 3D downward drop shadow matching user reference image
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.28 : 0.05),
-            offset: const Offset(0, 4),
-            blurRadius: 6,
+            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.38 : 0.08),
+            offset: const Offset(0, 8),
+            blurRadius: 16,
             spreadRadius: -2,
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.12 : 0.02),
-            offset: const Offset(0, 1),
-            blurRadius: 2,
+            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.20 : 0.04),
+            offset: const Offset(0, 3),
+            blurRadius: 6,
             spreadRadius: 0,
           ),
         ],
@@ -905,14 +906,15 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(28),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
             child: Row(
               children: [
+                // 3D Left Avatar Circle
                 Container(
-                  width: 60,
-                  height: 60,
+                  width: 66,
+                  height: 66,
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF334155) : const Color(0xFFEDF4FF),
                     shape: BoxShape.circle,
@@ -920,29 +922,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Center(
                     child: Image.asset(
                       iconAsset,
-                      width: 48,
-                      height: 48,
+                      width: 50,
+                      height: 50,
                       fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 16),
 
+                // Card Title
                 Expanded(
                   child: Text(
                     title,
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 15.5,
                       fontWeight: FontWeight.w900,
-                      letterSpacing: 0.3,
+                      letterSpacing: 0.4,
+                      height: 1.25,
                       color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                     ),
                   ),
                 ),
+                const SizedBox(width: 12),
 
+                // Right 3D Action Chevron Button
                 Container(
-                  width: 38,
-                  height: 38,
+                  width: 42,
+                  height: 42,
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF334155) : const Color(0xFFEAF2FF),
                     shape: BoxShape.circle,
@@ -950,7 +956,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Center(
                     child: Icon(
                       Icons.arrow_forward_ios_rounded,
-                      size: 14,
+                      size: 15,
                       color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                     ),
                   ),
@@ -967,26 +973,26 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildSocialMediaSection() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
           width: 1.0,
         ),
         boxShadow: [
-          // Strict bottom-only shadow
+          // 3D downward drop shadow matching user reference image
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.28 : 0.05),
-            offset: const Offset(0, 4),
-            blurRadius: 6,
+            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.38 : 0.08),
+            offset: const Offset(0, 8),
+            blurRadius: 16,
             spreadRadius: -2,
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.12 : 0.02),
-            offset: const Offset(0, 1),
-            blurRadius: 2,
+            color: (isDark ? Colors.black : const Color(0xFF1E293B)).withOpacity(isDark ? 0.20 : 0.04),
+            offset: const Offset(0, 3),
+            blurRadius: 6,
             spreadRadius: 0,
           ),
         ],
@@ -997,23 +1003,26 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(7),
+                width: 42,
+                height: 42,
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF334155) : const Color(0xFFEDF4FF),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.share_rounded,
-                  size: 18,
-                  color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                child: Center(
+                  child: Icon(
+                    Icons.share_rounded,
+                    size: 18,
+                    color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                  ),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   'JOIN OUR COMMUNITY',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 15.5,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.5,
                     color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
@@ -1022,7 +1031,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
 
           // 4 Social Channels in a Row
           Row(
@@ -1051,8 +1060,8 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             // Uniform Borderless Light Blue Container
             Container(
-              width: 52,
-              height: 52,
+              width: 54,
+              height: 54,
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF334155) : const Color(0xFFEDF4FF), // Soft light blue
                 shape: BoxShape.circle,
