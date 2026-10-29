@@ -539,47 +539,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       );
                     }),
 
-                    // Explanation Box
-                    if (isAnswered && currentQ.explanation.isNotEmpty) ...[
-                      const SizedBox(height: 6),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        margin: const EdgeInsets.only(bottom: 14),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEFF6FF),
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: const Color(0xFFBFDBFE), width: 1.2),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF93C5FD).withOpacity(0.35),
-                              offset: const Offset(0, 2.5),
-                              blurRadius: 0,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Icon(Icons.info_outline_rounded, color: Color(0xFF2563EB), size: 20),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                'Explanation: ${currentQ.explanation}',
-                                style: const TextStyle(
-                                  fontSize: 13.5,
-                                  color: Color(0xFF1E40AF),
-                                  height: 1.45,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 6),
 
                     // 3D Next Question / Submit Test Button (placed directly after options)
                     InkWell(
