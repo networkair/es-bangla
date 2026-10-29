@@ -192,11 +192,24 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                     if (!isActive) continue;
 
                     // Match by subjectId or subjectName
-                    final docSubjId = (data['subjectId'] ?? '').toString().trim();
-                    final docSubjName = (data['subjectName'] ?? data['subject'] ?? '').toString().trim();
+                    final docSubjId = (data['subjectId'] ?? '').toString().trim().toLowerCase();
+                    final docSubjName = (data['subjectName'] ?? data['subject'] ?? '').toString().trim().toLowerCase();
+                    final targetId = widget.subjectId.toLowerCase();
+                    final targetName = widget.subjectName.toLowerCase();
 
-                    final bool matches = (docSubjId.isNotEmpty && docSubjId.toLowerCase() == widget.subjectId.toLowerCase()) ||
-                        (docSubjName.isNotEmpty && docSubjName.toLowerCase() == widget.subjectName.toLowerCase());
+                    final bool isBengali = targetId == 'bengali' || targetName.contains('বাংলা');
+                    final bool isEnglish = targetId == 'english' || targetName.contains('english');
+
+                    final bool matches = (docSubjId.isNotEmpty && (
+                        docSubjId == targetId ||
+                        (isBengali && (docSubjId == 'bangla' || docSubjId.contains('বাংলা'))) ||
+                        (isEnglish && (docSubjId == 'eng' || docSubjId.contains('ইংরেজি')))
+                      )) ||
+                      (docSubjName.isNotEmpty && (
+                        docSubjName == targetName ||
+                        (isBengali && (docSubjName.contains('বাংলা') || docSubjName.contains('bangla') || docSubjName.contains('bengali'))) ||
+                        (isEnglish && (docSubjName.contains('english') || docSubjName.contains('ইংরেজি') || docSubjName.contains('eng')))
+                      ));
 
                     if (!matches) continue;
 
