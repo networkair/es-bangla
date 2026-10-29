@@ -261,18 +261,20 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
         }
         return false;
       },
-      child: PdfViewer.data(
-        _pdfBytes!,
-        sourceName: widget.assetPath,
-        controller: _controller,
-        passwordProvider: () => SecurityManager.getDecryptedPdfPassword(),
-        params: PdfViewerParams(
-          backgroundColor: Colors.white,
-          margin: 10.0,
-          enableTextSelection: false,
-          onGeneralTap: (_) {
-            setState(() => _isHeaderVisible = !_isHeaderVisible);
-          },
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          setState(() => _isHeaderVisible = !_isHeaderVisible);
+        },
+        child: PdfViewer.data(
+          _pdfBytes!,
+          sourceName: widget.assetPath,
+          controller: _controller,
+          passwordProvider: () => SecurityManager.getDecryptedPdfPassword(),
+          params: PdfViewerParams(
+            backgroundColor: Colors.white,
+            margin: 10.0,
+            enableTextSelection: false,
           layoutPages: (pages, params) {
             final width = pages.fold(0.0, (w, p) => max(w, p.width)) + params.margin * 2;
             final pageLayout = <Rect>[];
@@ -308,6 +310,7 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
           },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
