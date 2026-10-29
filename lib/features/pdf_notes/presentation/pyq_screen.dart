@@ -1,161 +1,187 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/storage/local_storage_service.dart';
-import '../data/content_manifest_repository.dart';
-import 'secure_pdf_viewer_screen.dart';
+import 'pyq_years_screen.dart';
 
-class PyqScreen extends StatefulWidget {
+class PyqScreen extends StatelessWidget {
   const PyqScreen({super.key});
 
   @override
-  State<PyqScreen> createState() => _PyqScreenState();
-}
-
-class _PyqScreenState extends State<PyqScreen> {
-  final ContentManifestRepository _repo = ContentManifestRepository();
-  int _selectedSemester = LocalStorageService().semester;
-  List<PyqSubject> _pyqSubjects = [];
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPyqs();
-  }
-
-  Future<void> _loadPyqs() async {
-    setState(() => _isLoading = true);
-    final list = await _repo.getPyqForSemester(_selectedSemester);
-    if (mounted) {
-      setState(() {
-        _pyqSubjects = list;
-        _isLoading = false;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Previous Year Questions'),
+        backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+            size: 20,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Previous Year Questions',
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Container(
-            color: AppColors.surface,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _buildSemSelector(3, 'Semester 3 (সেমিস্টার ৩)'),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(18, 20, 18, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Select Semester',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                  letterSpacing: 0.3,
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildSemSelector(4, 'Semester 4 (সেমিস্টার ৪)'),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 14),
+
+              // Semester 3 Wide 3D Card
+              _buildSemesterCard(
+                context: context,
+                semester: 3,
+                title: 'Semester 3',
+                subtitle: 'Class 12 Previous Year Questions',
+                iconAsset: 'assets/icons/ic_sem3.png',
+                isDark: isDark,
+              ),
+              const SizedBox(height: 16),
+
+              // Semester 4 Wide 3D Card
+              _buildSemesterCard(
+                context: context,
+                semester: 4,
+                title: 'Semester 4',
+                subtitle: 'Class 12 Previous Year Questions',
+                iconAsset: 'assets/icons/ic_sem4.png',
+                isDark: isDark,
+              ),
+            ],
           ),
-          const Divider(height: 1, color: AppColors.border),
-          Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(AppColors.primary)))
-                : _pyqSubjects.isEmpty
-                    ? const Center(child: Text('কোনো প্রশ্নপত্র পাওয়া যায়নি'))
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: _pyqSubjects.length,
-                        itemBuilder: (context, index) {
-                          final subject = _pyqSubjects[index];
-                          return Card(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              side: const BorderSide(color: AppColors.border),
-                            ),
-                            child: ExpansionTile(
-                              initiallyExpanded: index == 0,
-                              leading: Container(
-                                width: 44,
-                                height: 44,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryLight,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: const Icon(Icons.history_edu_rounded, color: AppColors.primary),
-                              ),
-                              title: Text(
-                                subject.subjectName,
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                              children: subject.papers.map((paper) {
-                                return ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-                                  leading: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.surfaceMuted,
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: AppColors.border),
-                                    ),
-                                    child: Text(
-                                      paper.year,
-                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primaryDark),
-                                    ),
-                                  ),
-                                  title: Text(paper.title, style: const TextStyle(fontSize: 14)),
-                                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.textMuted),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => SecurePdfViewerScreen(
-                                          title: paper.title,
-                                          assetPath: paper.filePath,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }).toList(),
-                            ),
-                          );
-                        },
-                      ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildSemSelector(int sem, String label) {
-    final isSelected = _selectedSemester == sem;
-    return GestureDetector(
-      onTap: () {
-        if (_selectedSemester != sem) {
-          setState(() => _selectedSemester = sem);
-          _loadPyqs();
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryLight : AppColors.surfaceMuted,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.border,
-            width: isSelected ? 1.5 : 1,
-          ),
+  Widget _buildSemesterCard({
+    required BuildContext context,
+    required int semester,
+    required String title,
+    required String subtitle,
+    required String iconAsset,
+    required bool isDark,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          width: 1.5,
         ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-              color: isSelected ? AppColors.primaryDark : AppColors.textSecondary,
+        boxShadow: [
+          BoxShadow(
+            color: (isDark ? Colors.black : const Color(0xFF000000)).withOpacity(isDark ? 0.35 : 0.08),
+            blurRadius: 16,
+            spreadRadius: 1,
+            offset: const Offset(0, 6),
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PyqYearsScreen(semester: semester),
+              ),
+            );
+          },
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+            child: Row(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                      width: 1,
+                    ),
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      iconAsset,
+                      width: 38,
+                      height: 38,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: isDark ? Colors.white : const Color(0xFF0F172A),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                  ),
+                  child: const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 14,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
