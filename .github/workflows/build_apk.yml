@@ -56,19 +56,29 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.1
-          name: "Es Bangla v1.3.1 (Fixed Blue Fullscreen Button & Eliminated More Videos in Fullscreen)"
+          tag_name: v1.3.2
+          name: "Es Bangla v1.3.2 (3D News Carousel, Dynamic Quiz Feedback, Font & Refined Shadows)"
           body: |
-            ### Es Bangla v1.3.1 Release Highlights:
-            - **Fixed Blue Fullscreen Button**:
-              - Dispatches native touch directly to player controls so tapping the custom royal blue button instantly expands to fullscreen.
-              - Styled player's native fullscreen toggle with royal blue squircle matching Safollo design.
-              - Clear touch boundaries around back and fullscreen buttons for 100% responsiveness.
-            - **Completely Eliminated 'More Videos' Shelves**:
-              - Blocked `.ytp-show-tiles`, `.ytp-more-videos-button`, `.ytp-sfn`, and suggestions in both portrait and fullscreen landscape mode.
-              - Added video pause listener to aggressively destroy any suggestion overlays immediately.
-            - **Smooth Fullscreen Navigation**:
-              - Clean toggle between portrait (270dp player) and fullscreen landscape with system status bar control.
+            ### Es Bangla v1.3.2 Release Highlights:
+            - **Modern Peeking News Carousel**:
+              - 3D Peeking Carousel with centered active cards (`viewportFraction: 0.86`, `borderRadius: 18`) and smooth 3D scale animation (0.93 - 1.0).
+              - Centered Golden Amber indicator dots (`#F59E0B`) with subtle glow.
+              - Infinite smooth 4s auto-scrolling with ease-in-out cubic curve.
+              - Branded Es Bangla fallback slides with luxury gradients.
+            - **Refined Home Screen Card Shadows**:
+              - Tuned shadow elevation and blur (`offset: Offset(0, 3)`, `blurRadius: 8`, zero spread) across all cards to eliminate dark shadow bleeding onto neighboring cards.
+              - Increased card separation to 14dp with crisp 1px borders.
+            - **Video Player Enhancements**:
+              - Disabled copy link button (neutralized DOM, CSS, JS event capture, and native touch guard).
+              - Redesigned white circular back button for seamless portrait and fullscreen navigation.
+            - **Advanced Quiz Taking Experience**:
+              - Top-aligned segmented progress capsules with dynamic color feedback: Correct (Green `#10B981`), Incorrect (Red `#EF4444`), Active (Blue `#2563EB`).
+              - 3D question and option cards with 14dp vertical separation.
+              - Removed explanation during quiz (shown on completion / result screen).
+            - **Global Bengali Typography**:
+              - Integrated official Google Font 'Noto Serif Bengali' across light and dark themes.
+            - **Mock Test UI**:
+              - Added Golden Rupee Coin icon (`ic_coin.png`) beside 'Full Free' badge.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
