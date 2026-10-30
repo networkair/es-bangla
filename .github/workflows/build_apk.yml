@@ -64,24 +64,21 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.12
-          name: "Es Bangla v1.3.12 (99% Common Badges, Seamless Guest Mode, Cloud Entitlements & Official Icons)"
+          tag_name: v1.3.13
+          name: "Es Bangla v1.3.13 (Privacy Policy Integration, Seamless PDF Viewer & Study Reminder Polish)"
           body: |
-            ### Es Bangla v1.3.12 Release Highlights:
-            - **Semester 3 & 4 '99% Common' Badges**:
-              - Added clean, vibrant `⚡ 99% Common` pill badges to Semester 3 and 4 cards on both Home and Video Library screens.
-              - Polished 3D card layout without clutter, with borderless 3D shadows.
-            - **Seamless Guest Exploration & Smart Auth Gates**:
-              - Guests can explore the app and take free mock tests without forced registration.
-              - Prompts login when watching video library classes, redeeming course codes, or accessing premium mock tests.
-              - Direct post-login access re-evaluation so users immediately proceed without double-tapping.
-            - **Cloud Firestore Entitlement Sync & Persistence**:
-              - Auto-syncs subscription and mock test unlocks across `users/{uid}`, `users/{uid}/entitlements`, and `access_keys`.
-              - Subscriptions persist permanently even if the user clears app storage or logs out/in.
-              - Restoring user's own previously used invite key is fully supported without errors.
-            - **3D Profile Screen & Official Assets**:
-              - Integrated official assets: Google 'G' icon, Saved Question Vault (`ic_saved_vault.jpg`), Subscription Status (`ic_subscription_status.jpg`), Activity & Streak (`ic_calendar_streak.jpg`), and Mock Analytics (`ic_mock_chart.jpg`).
-              - Added Guest Banner with fast Google Sign-In and responsive login/logout state switching.
+            ### Es Bangla v1.3.13 Release Highlights:
+            - **Privacy Policy & Terms Integration**:
+              - Added official Privacy Policy option in Profile section linked to secure web documentation.
+              - Standardized legal disclosures conforming to Google Play guidelines.
+            - **Seamless Continuous PDF Viewer**:
+              - Removed page shadow lines and gaps for smooth continuous scrolling.
+              - Transparent back button and removed redundant page counter badge.
+              - Enhanced rendering scale to eliminate zoom blur on high-DPI devices.
+            - **Typography & UI Polish**:
+              - Straightened Study Reminder typography and optimized background bubble overlap.
+              - Free mock tests accessible directly without forcing login.
+              - Refined Bengali subscription status server messaging.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
