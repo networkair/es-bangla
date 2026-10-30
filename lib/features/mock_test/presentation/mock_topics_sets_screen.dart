@@ -358,7 +358,7 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
               if (mounted) setState(() {});
             }
 
-            final bool currentlyUnlocked = _isSetUnlocked(set);
+            final bool currentlyUnlocked = _isSetAccessible(set);
 
             if (!currentlyUnlocked) {
               if (!mounted) return;
