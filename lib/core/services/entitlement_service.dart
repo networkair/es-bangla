@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../storage/local_storage_service.dart';
 
 class RedeemResult {
   final bool success;
@@ -140,7 +141,10 @@ class EntitlementService {
     }
 
     final userUid = user.uid;
-    final userEmail = (user.email ?? '').trim().toLowerCase();
+    final userEmail = (user.email ?? LocalStorageService().userEmail).trim().toLowerCase();
+    if (userEmail.isEmpty) {
+      throw Exception('অ্যাক্টিভেশন কোড রিডিম করতে একটি বৈধ ইমেইল অ্যাকাউন্ট দিয়ে লগইন করা আবশ্যক।');
+    }
 
     final keyDocRef = FirebaseFirestore.instance.collection('access_keys').doc(code);
     final userRef = FirebaseFirestore.instance.collection('users').doc(userUid);
@@ -229,18 +233,21 @@ class EntitlementService {
       }
 
       // ==========================================
-      // 3. HANDLE ALREADY-USED KEYS (Self-Restore)
+      // 3. HANDLE ALREADY-USED KEYS (Self-Restore vs Other User Block)
       // ==========================================
       if (status == 'used') {
         final isOwnedByCurrentUser =
-            (redeemedByUid != null && redeemedByUid.isNotEmpty && redeemedByUid == userUid) ||
-            (redeemedByEmail != null && redeemedByEmail.isNotEmpty && redeemedByEmail == userEmail) ||
             (boundUid != null && boundUid.isNotEmpty && boundUid == userUid) ||
-            (boundEmail != null && boundEmail.isNotEmpty && boundEmail == userEmail);
+            (boundEmail != null && boundEmail.isNotEmpty && boundEmail == userEmail) ||
+            (redeemedByUid != null && redeemedByUid.isNotEmpty && redeemedByUid == userUid) ||
+            (redeemedByEmail != null && redeemedByEmail.isNotEmpty && redeemedByEmail == userEmail);
 
         if (isOwnedByCurrentUser) {
           // Self-restore to user document
           transaction.set(userRef, {
+            'email': userEmail,
+            if (user.displayName != null && user.displayName!.isNotEmpty)
+              'name': user.displayName,
             'entitlements': FieldValue.arrayUnion(grants),
             'lastEntitlementRestoreAt': FieldValue.serverTimestamp(),
           }, SetOptions(merge: true));
@@ -252,19 +259,23 @@ class EntitlementService {
           return RedeemResult(
             success: true,
             wasRestored: true,
-            message: 'আপনার এই কোডটি পূর্বেই সক্রিয় ছিল। সাবস্ক্রিপশন সফলভাবে পুনরুদ্ধার করা হয়েছে!',
+            message: 'আপনার এই কোডটি পূর্বেই আপনার অ্যাকাউন্টে সক্রিয় ছিল। সাবস্ক্রিপশন সফলভাবে পুনরুদ্ধার করা হয়েছে!',
             grants: grants,
           );
         } else {
-          throw Exception('এই অ্যাক্টিভেশন কোডটি ইতিমধ্যে অন্য অ্যাকাউন্টে ব্যবহার করা হয়ে গেছে।');
+          final target = boundEmail ?? redeemedByEmail ?? 'অন্য শিক্ষার্থী';
+          final masked = target.contains('@')
+              ? '${target.substring(0, 2)}***@${target.split('@').last}'
+              : target;
+          throw Exception('এই অ্যাক্টিভেশন কোডটি ইতিমধ্যে $masked অ্যাকাউন্টে একবার ব্যবহার হয়ে গেছে। একটি কোড কেবল একবারই প্রথম ব্যবহারকারীর ইমেইলে স্থায়ীভাবে লক হয়ে যায়।');
         }
       }
 
       // ==========================================
-      // 4. CHECK ACCOUNT BINDING
+      // 4. CHECK PRE-BOUND RESTRICTIONS (If pre-set by Admin)
       // ==========================================
       if (boundEmail != null && boundEmail.isNotEmpty && boundEmail != userEmail) {
-        throw Exception('এই কোডটি অন্য একটি ইমেইল অ্যাকাউন্টের ($boundEmail) জন্য বরাদ্দ করা।');
+        throw Exception('এই কোডটি পূর্বেই অন্য একটি নির্দিষ্ট অ্যাকাউন্টের ($boundEmail) জন্য বরাদ্দ করা হয়েছিল।');
       }
 
       if (boundUid != null && boundUid.isNotEmpty && boundUid != userUid) {
@@ -272,18 +283,25 @@ class EntitlementService {
       }
 
       // ==========================================
-      // 5. REDEEM NEW KEY INTO FIRESTORE
+      // 5. FIRST-USE PERMANENT EMAIL & UID BINDING
       // ==========================================
       transaction.update(keyDocRef, {
         'status': 'used',
+        'boundEmail': userEmail, // Permanently bound to the first user's email!
+        'boundUid': userUid,     // Permanently bound to the first user's UID!
         'redeemedByEmail': userEmail,
         'redeemedByUid': userUid,
+        'redeemedByName': user.displayName ?? '',
         'redeemedAt': FieldValue.serverTimestamp(),
+        'firstUsedAt': FieldValue.serverTimestamp(),
         'category': expectedCategory,
       });
 
-      // Save to user root document (Authoritative)
+      // Save to user root document (Authoritative Cloud DB)
       transaction.set(userRef, {
+        'email': userEmail,
+        if (user.displayName != null && user.displayName!.isNotEmpty)
+          'name': user.displayName,
         'entitlements': FieldValue.arrayUnion(grants),
         'lastEntitlementUpdateAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
@@ -297,6 +315,8 @@ class EntitlementService {
         'sourceCode': code,
         'semester': semester,
         'category': expectedCategory,
+        'boundEmail': userEmail,
+        'boundUid': userUid,
         'status': 'active',
       });
 
