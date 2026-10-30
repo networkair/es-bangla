@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/storage/local_storage_service.dart';
 import 'library_topics_screen.dart';
+import 'course_subscription_screen.dart';
 
 class LibrarySubjectItem {
   final String id;
@@ -125,19 +128,63 @@ class LibrarySubjectsScreen extends StatelessWidget {
                         ),
                       ),
                     )
-                  : ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
-                      itemCount: subjects.length,
-                      itemBuilder: (context, index) {
-                        final subject = subjects[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: _buildSubjectCard(
-                            context: context,
-                            subject: subject,
-                            isDark: isDark,
-                          ),
+                  : StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('library_settings')
+                          .doc('subject_locks')
+                          .snapshots(),
+                      builder: (context, lockSnapshot) {
+                        final lockData = lockSnapshot.data?.data() as Map<String, dynamic>? ?? {};
+                        final entitlements = LocalStorageService().getEntitlements();
+                        final hasSemesterVip = entitlements.contains('video_library_sem$semester') ||
+                            entitlements.contains('video_library_all');
+
+                        return ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
+                          itemCount: subjects.length,
+                          itemBuilder: (context, index) {
+                            final subject = subjects[index];
+                            final isLocked = lockData['sem${semester}_${subject.id}_locked'] == true;
+                            final hasSubjectVip = hasSemesterVip || entitlements.contains('subject_${subject.id}');
+                            final showLocked = isLocked && !hasSubjectVip;
+
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: _buildSubjectCard(
+                                context: context,
+                                subject: subject,
+                                isDark: isDark,
+                                isLocked: showLocked,
+                                onSubjectTap: () {
+                                  if (showLocked) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => CourseSubscriptionScreen(
+                                          semester: semester,
+                                          subjectName: subject.name,
+                                          subjectId: subject.id,
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => LibraryTopicsScreen(
+                                          semester: semester,
+                                          subjectId: subject.id,
+                                          subjectName: subject.name,
+                                          subjectThumbnailUrl: subject.thumbnailAsset,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            );
+                          },
                         );
                       },
                     ),
@@ -152,6 +199,8 @@ class LibrarySubjectsScreen extends StatelessWidget {
     required BuildContext context,
     required LibrarySubjectItem subject,
     required bool isDark,
+    required bool isLocked,
+    required VoidCallback onSubjectTap,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -178,44 +227,70 @@ class LibrarySubjectsScreen extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => LibraryTopicsScreen(
-                  semester: semester,
-                  subjectId: subject.id,
-                  subjectName: subject.name,
-                  subjectThumbnailUrl: subject.thumbnailAsset,
+          onTap: onSubjectTap,
+          borderRadius: BorderRadius.circular(18),
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Image.asset(
+                    subject.thumbnailAsset,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: AppColors.primaryLight,
+                        child: Center(
+                          child: Text(
+                            subject.name,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
-            );
-          },
-          borderRadius: BorderRadius.circular(18),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(18),
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Image.asset(
-                subject.thumbnailAsset,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: AppColors.primaryLight,
-                    child: Center(
-                      child: Text(
-                        subject.name,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
+              if (isLocked)
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.75),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.amber.withOpacity(0.6), width: 1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.4),
+                          blurRadius: 6,
                         ),
-                      ),
+                      ],
                     ),
-                  );
-                },
-              ),
-            ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.lock_rounded, color: Colors.amber, size: 13),
+                        SizedBox(width: 4),
+                        Text(
+                          'লকড (PRO)',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       ),
