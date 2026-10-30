@@ -219,7 +219,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           semester: 3,
                           iconAsset: 'assets/icons/ic_sem3.png',
                           blobColor: const Color(0xFFE0F2FE),
-                          accentLineColor: const Color(0xFF38BDF8),
                           buttonBgColor: const Color(0xFFE0F2FE),
                         ),
                       ),
@@ -230,7 +229,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           semester: 4,
                           iconAsset: 'assets/icons/ic_sem4.png',
                           blobColor: const Color(0xFFFEF3C7),
-                          accentLineColor: const Color(0xFFF59E0B),
                           buttonBgColor: const Color(0xFFFFEDD5),
                         ),
                       ),
@@ -844,7 +842,6 @@ class _HomeScreenState extends State<HomeScreen> {
     required int semester,
     required String iconAsset,
     required Color blobColor,
-    required Color accentLineColor,
     required Color buttonBgColor,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -854,10 +851,6 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-          width: 1.0,
-        ),
         boxShadow: [
           // 3D downward drop shadow matching user reference mockup
           BoxShadow(
@@ -959,13 +952,34 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 6),
                       Container(
-                        width: 28,
-                        height: 3.5,
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                         decoration: BoxDecoration(
-                          color: accentLineColor,
-                          borderRadius: BorderRadius.circular(2),
+                          color: isDark
+                              ? const Color(0xFF064E3B).withOpacity(0.45)
+                              : const Color(0xFFDCFCE7),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.bolt_rounded,
+                              size: 13,
+                              color: isDark ? const Color(0xFF34D399) : const Color(0xFF16A34A),
+                            ),
+                            const SizedBox(width: 2),
+                            Text(
+                              '99% Common',
+                              style: TextStyle(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.2,
+                                color: isDark ? const Color(0xFF34D399) : const Color(0xFF15803D),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -995,10 +1009,6 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-          width: 1.0,
-        ),
         boxShadow: [
           // 3D downward drop shadow matching user reference mockup
           BoxShadow(

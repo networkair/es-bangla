@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
+import '../../../core/services/entitlement_service.dart';
+import '../../auth/presentation/login_screen.dart';
 import '../data/youtube_helper.dart';
 import 'video_player_screen.dart';
 import 'course_subscription_screen.dart';
@@ -27,6 +30,16 @@ class LibraryTopicsScreen extends StatefulWidget {
 }
 
 class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (FirebaseAuth.instance.currentUser != null) {
+      EntitlementService.syncUserEntitlements().then((_) {
+        if (mounted) setState(() {});
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,7 +219,25 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () async {
-            if (!hasAccess) {
+            if (FirebaseAuth.instance.currentUser == null) {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+              );
+              if (FirebaseAuth.instance.currentUser == null) return;
+              await EntitlementService.syncUserEntitlements();
+              if (mounted) setState(() {});
+            }
+
+            final freshEntitlements = LocalStorageService().getEntitlements();
+            final bool updatedAccess = isFree ||
+                freshEntitlements.contains('video_library_all') ||
+                freshEntitlements.contains('video_library_sem${widget.semester}') ||
+                freshEntitlements.contains('combo_sem${widget.semester}') ||
+                freshEntitlements.contains('subject_${widget.subjectId}') ||
+                freshEntitlements.contains('subject_${widget.subjectName}');
+
+            if (!updatedAccess) {
               final bool? unlocked = await Navigator.push<bool>(
                 context,
                 MaterialPageRoute(

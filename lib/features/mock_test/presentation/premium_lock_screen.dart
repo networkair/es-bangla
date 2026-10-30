@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
+import '../../../core/services/entitlement_service.dart';
+import '../../auth/presentation/login_screen.dart';
 
 class PremiumLockScreen extends StatefulWidget {
   final String title;
@@ -34,67 +36,35 @@ class _PremiumLockScreenState extends State<PremiumLockScreen> {
     final key = _keyController.text.trim();
     if (key.isEmpty) return;
 
+    if (FirebaseAuth.instance.currentUser == null) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
+      if (FirebaseAuth.instance.currentUser == null) {
+        setState(() {
+          _feedbackMessage = 'কী রিডিম করতে অনুগ্রহ করে লগইন করুন।';
+          _isSuccess = false;
+        });
+        return;
+      }
+    }
+
     setState(() {
       _isRedeeming = true;
       _feedbackMessage = null;
     });
 
-    final user = FirebaseAuth.instance.currentUser;
-    final userEmail = LocalStorageService().userEmail;
-
     try {
-      final keyDocRef = FirebaseFirestore.instance.collection('access_keys').doc(key);
-      final userRef = FirebaseFirestore.instance.collection('users').doc(user?.uid ?? 'local_user');
-
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final snapshot = await transaction.get(keyDocRef);
-        if (!snapshot.exists) {
-          throw Exception('এই অ্যাক্সেস কী-টি অবৈধ বা খুঁজে পাওয়া যায়নি।');
-        }
-
-        final data = snapshot.data()!;
-        final status = data['status'];
-        final boundEmail = data['boundEmail'];
-
-        if (status == 'used') {
-          throw Exception('এই কী-টি ইতিমধ্যেই ব্যবহার করা হয়েছে।');
-        }
-
-        if (boundEmail != null && boundEmail.toString().isNotEmpty && boundEmail != userEmail) {
-          throw Exception('এই কী-টি অন্য একটি অ্যাকাউন্টের জন্য ইস্যু করা হয়েছে।');
-        }
-
-        // Mark as used
-        transaction.update(keyDocRef, {
-          'status': 'used',
-          'redeemedBy': userEmail,
-          'redeemedAt': FieldValue.serverTimestamp(),
-        });
-
-        // Add entitlement
-        final durationDays = data['durationDays'] ?? 365;
-        final grants = List<String>.from(data['grants'] ?? [widget.grantType]);
-
-        final entitlementRef = userRef.collection('entitlements').doc();
-        transaction.set(entitlementRef, {
-          'grants': grants,
-          'startsAt': FieldValue.serverTimestamp(),
-          'durationDays': durationDays,
-          'status': 'active',
-          'sourceKey': key,
-        });
-
-        // Cache locally
-        final currentEntitlements = LocalStorageService().getEntitlements();
-        for (var g in grants) {
-          if (!currentEntitlements.contains(g)) currentEntitlements.add(g);
-        }
-        await LocalStorageService().setEntitlements(currentEntitlements);
-      });
+      final result = await EntitlementService.redeemOrRestoreKey(
+        inputCode: key,
+        semester: LocalStorageService().semester,
+        fallbackGrants: [widget.grantType],
+      );
 
       setState(() {
         _isSuccess = true;
-        _feedbackMessage = 'অভিনন্দন! আপনার অ্যাক্সেস সফলভাবে সক্রিয় হয়েছে।';
+        _feedbackMessage = result.message;
         _isRedeeming = false;
       });
     } catch (e) {

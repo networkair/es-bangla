@@ -64,22 +64,24 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.11
-          name: "Es Bangla v1.3.11 (Refined Analytics Chart, Unfrozen Button & Es Bangla Strategy)"
+          tag_name: v1.3.12
+          name: "Es Bangla v1.3.12 (99% Common Badges, Seamless Guest Mode, Cloud Entitlements & Official Icons)"
           body: |
-            ### Es Bangla v1.3.11 Release Highlights:
-            - **Graph Section Redesign & 100% Text Overflow Fix**:
-              - Removed permanent tooltip indicator that was overflowing out of chart boundaries.
-              - Integrated dedicated `topTitles` percentage indicators with dynamic color matching (Green/Amber/Red).
-              - Added smooth background capacity track (`backDrawRodData`) up to 100%.
-              - Added mini performance legend (`≥70% High`, `50-69% Avg`, `<50% Focus`).
-              - Tooltips on touch now strictly fit within boundaries (`fitInsideVertically: true`).
-            - **Start Mock Test Button Fix**:
-              - Removed frozen floating overlay that was blocking chart and step cards during scroll.
-              - Button now scrolls naturally at the bottom of the screen.
-            - **Es Bangla Custom Strategy Steps**:
-              - Replaced all reference image texts with custom Es Bangla features and study strategy.
-              - Refined Subject Performance Detail Screen metrics and layout.
+            ### Es Bangla v1.3.12 Release Highlights:
+            - **Semester 3 & 4 '99% Common' Badges**:
+              - Added clean, vibrant `⚡ 99% Common` pill badges to Semester 3 and 4 cards on both Home and Video Library screens.
+              - Polished 3D card layout without clutter, with borderless 3D shadows.
+            - **Seamless Guest Exploration & Smart Auth Gates**:
+              - Guests can explore the app and take free mock tests without forced registration.
+              - Prompts login when watching video library classes, redeeming course codes, or accessing premium mock tests.
+              - Direct post-login access re-evaluation so users immediately proceed without double-tapping.
+            - **Cloud Firestore Entitlement Sync & Persistence**:
+              - Auto-syncs subscription and mock test unlocks across `users/{uid}`, `users/{uid}/entitlements`, and `access_keys`.
+              - Subscriptions persist permanently even if the user clears app storage or logs out/in.
+              - Restoring user's own previously used invite key is fully supported without errors.
+            - **3D Profile Screen & Official Assets**:
+              - Integrated official assets: Google 'G' icon, Saved Question Vault (`ic_saved_vault.jpg`), Subscription Status (`ic_subscription_status.jpg`), Activity & Streak (`ic_calendar_streak.jpg`), and Mock Analytics (`ic_mock_chart.jpg`).
+              - Added Guest Banner with fast Google Sign-In and responsive login/logout state switching.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

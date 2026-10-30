@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
+import '../../auth/presentation/login_screen.dart';
 import 'mock_subject_select_screen.dart';
 
 class MockTestLandingScreen extends StatelessWidget {
@@ -357,7 +359,15 @@ class MockTestLandingScreen extends StatelessWidget {
           _buildActionButton(
             text: 'Explore Premium Mock Tests',
             buttonColor: const Color(0xFFF59E0B),
-            onTap: () {
+            onTap: () async {
+              if (FirebaseAuth.instance.currentUser == null) {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                );
+                if (FirebaseAuth.instance.currentUser == null) return;
+              }
+              if (!context.mounted) return;
               Navigator.push(
                 context,
                 MaterialPageRoute(

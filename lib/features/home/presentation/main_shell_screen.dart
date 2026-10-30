@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
+import '../../../core/services/entitlement_service.dart';
 import 'home_screen.dart';
 import '../../video_library/presentation/library_main_screen.dart';
 import '../../mock_test/presentation/mock_test_landing_screen.dart';
@@ -22,6 +23,7 @@ class _MainShellScreenState extends State<MainShellScreen> with WidgetsBindingOb
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    EntitlementService.syncUserEntitlements();
   }
 
   @override

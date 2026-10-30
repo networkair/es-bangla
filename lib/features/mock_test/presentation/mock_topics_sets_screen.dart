@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
+import '../../../core/services/entitlement_service.dart';
+import '../../auth/presentation/login_screen.dart';
 import '../data/mock_test_repository.dart';
 import '../domain/mock_test_models.dart';
 import 'quiz_screen.dart';
@@ -30,6 +33,11 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
   @override
   void initState() {
     super.initState();
+    if (FirebaseAuth.instance.currentUser != null) {
+      EntitlementService.syncUserEntitlements().then((_) {
+        if (mounted) setState(() {});
+      });
+    }
     _loadTopics();
   }
 
@@ -339,8 +347,21 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            if (!isUnlocked) {
+          onTap: () async {
+            if (FirebaseAuth.instance.currentUser == null) {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+              );
+              if (FirebaseAuth.instance.currentUser == null) return;
+              await EntitlementService.syncUserEntitlements();
+              if (mounted) setState(() {});
+            }
+
+            final bool currentlyUnlocked = _isSetUnlocked(set);
+
+            if (!currentlyUnlocked) {
+              if (!mounted) return;
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -349,7 +370,9 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
                     grantType: 'premium_mock_sem${LocalStorageService().semester}',
                   ),
                 ),
-              );
+              ).then((_) {
+                if (mounted) setState(() {});
+              });
             } else {
               Navigator.push(
                 context,

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:in_app_review/in_app_review.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
+import '../../../core/services/entitlement_service.dart';
 import 'mock_analytics_screen.dart';
 import 'activity_streak_screen.dart';
 import 'saved_questions_screen.dart';
@@ -44,6 +45,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _currentSemester = _storage.semester;
     _isDarkMode = _storage.isDarkMode;
     _userAvatar = _storage.userAvatar;
+    EntitlementService.syncUserEntitlements().then((_) {
+      if (mounted) setState(() {});
+    });
   }
 
   void _showAvatarPicker() {
@@ -296,7 +300,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         content: const Text(
-          'Are you sure you want to log out? You can sign back in anytime to access your study materials and tests.',
+          'Are you sure you want to log out? You can continue using free mock tests as a Guest, and sign back in anytime.',
           style: TextStyle(fontSize: 14, color: Color(0xFF64748B), height: 1.4),
         ),
         actions: [
@@ -318,11 +322,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (confirm == true && mounted) {
       await FirebaseAuth.instance.signOut();
+      _storage.userName = '';
+      _storage.userEmail = '';
       if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-          (route) => false,
+        setState(() {});
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+                SizedBox(width: 10),
+                Text('Signed out. Continuing in Guest mode.', style: TextStyle(fontWeight: FontWeight.bold)),
+              ],
+            ),
+            backgroundColor: const Color(0xFF0F172A),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
         );
       }
     }
@@ -331,8 +347,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final displayName = _storage.userName.isNotEmpty ? _storage.userName : (user?.displayName ?? 'Student');
-    final email = _storage.userEmail.isNotEmpty ? _storage.userEmail : (user?.email ?? 'student@esbangla.app');
+    final isGuest = user == null;
+    final displayName = _storage.userName.isNotEmpty
+        ? _storage.userName
+        : (user?.displayName ?? (isGuest ? 'Guest Student' : 'Student'));
+    final email = _storage.userEmail.isNotEmpty
+        ? _storage.userEmail
+        : (user?.email ?? (isGuest ? 'Sign in to sync your data' : 'student@esbangla.app'));
     final entitlements = _storage.getEntitlements();
 
     final attempts = _storage.getAttemptHistory();
@@ -365,241 +386,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         child: Column(
           children: [
-            // 1. User Header 3D Card
+            // 1. User Header: 3D Guest Banner OR Logged In Header
+            if (isGuest)
+              _buildGuestBanner(isDark)
+            else
+              _buildLoggedUserHeader(isDark, displayName, email),
+            const SizedBox(height: 16),
+
+            // 2. 3D Quick Metrics Row (Works for both Guest & Logged In)
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                  color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-                  width: 1.2,
-                ),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.05),
-                    blurRadius: 18,
-                    offset: const Offset(0, 8),
-                  ),
-                  BoxShadow(
-                    color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.02),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
+                    color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.22 : 0.04),
+                    blurRadius: 14,
+                    offset: const Offset(0, 5),
                   ),
                 ],
               ),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: _showAvatarPicker,
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              width: 66,
-                              height: 66,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: _userAvatar.isEmpty
-                                    ? const LinearGradient(
-                                        colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      )
-                                    : null,
-                                color: _userAvatar.isNotEmpty
-                                    ? (isDark ? const Color(0xFF1E293B) : Colors.white)
-                                    : null,
-                                border: Border.all(
-                                  color: isDark ? const Color(0xFF3B82F6) : const Color(0xFF93C5FD),
-                                  width: 2.2,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF2563EB).withOpacity(0.28),
-                                    blurRadius: 14,
-                                    offset: const Offset(0, 6),
-                                  ),
-                                ],
-                              ),
-                              child: ClipOval(
-                                child: _userAvatar.isNotEmpty
-                                    ? Transform.scale(
-                                        scale: 1.12,
-                                        child: Image.asset(
-                                          _userAvatar,
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) => Center(
-                                            child: Text(
-                                              displayName.isNotEmpty ? displayName[0].toUpperCase() : 'S',
-                                              style: const TextStyle(
-                                                fontSize: 26,
-                                                fontWeight: FontWeight.w900,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : Center(
-                                        child: Text(
-                                          displayName.isNotEmpty ? displayName[0].toUpperCase() : 'S',
-                                          style: const TextStyle(
-                                            fontSize: 26,
-                                            fontWeight: FontWeight.w900,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: -2,
-                              right: -2,
-                              child: Container(
-                                width: 24,
-                                height: 24,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF2563EB),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                                    width: 2.2,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.22),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.add_rounded,
-                                    size: 16,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              displayName,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
-                                color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
-                                letterSpacing: -0.2,
-                              ),
-                            ),
-                            const SizedBox(height: 3),
-                            Text(
-                              email,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            InkWell(
-                              onTap: _changeSemester,
-                              borderRadius: BorderRadius.circular(20),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: isDark ? const Color(0xFF1E3A8A).withOpacity(0.4) : const Color(0xFFEFF6FF),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: isDark ? const Color(0xFF3B82F6).withOpacity(0.5) : const Color(0xFFBFDBFE),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(Icons.school_rounded, size: 13, color: Color(0xFF38BDF8)),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      'Class 12 • Sem $_currentSemester',
-                                      style: TextStyle(
-                                        fontSize: 11.5,
-                                        fontWeight: FontWeight.bold,
-                                        color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF1E40AF),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    const Icon(Icons.edit_rounded, size: 12, color: Color(0xFF38BDF8)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  _buildMetricPill(
+                    label: 'Tests Taken',
+                    value: '${attempts.length}',
+                    color: const Color(0xFF2563EB),
+                    icon: Icons.assignment_turned_in_rounded,
                   ),
-                  const SizedBox(height: 20),
-
-                  // 3D Quick Metrics Row
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildMetricPill(
-                          label: 'Tests Taken',
-                          value: '${attempts.length}',
-                          color: const Color(0xFF2563EB),
-                          icon: Icons.assignment_turned_in_rounded,
-                        ),
-                        Container(width: 1, height: 32, color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
-                        _buildMetricPill(
-                          label: 'Bookmarks',
-                          value: '${savedQuestions.length}',
-                          color: const Color(0xFFD97706),
-                          icon: Icons.bookmark_rounded,
-                        ),
-                        Container(width: 1, height: 32, color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
-                        _buildMetricPill(
-                          label: 'Avg. Accuracy',
-                          value: '$avgAccuracy%',
-                          color: const Color(0xFF16A34A),
-                          icon: Icons.trending_up_rounded,
-                        ),
-                      ],
-                    ),
+                  Container(width: 1, height: 32, color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
+                  _buildMetricPill(
+                    label: 'Bookmarks',
+                    value: '${savedQuestions.length}',
+                    color: const Color(0xFFD97706),
+                    icon: Icons.bookmark_rounded,
+                  ),
+                  Container(width: 1, height: 32, color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
+                  _buildMetricPill(
+                    label: 'Avg. Accuracy',
+                    value: '$avgAccuracy%',
+                    color: const Color(0xFF16A34A),
+                    icon: Icons.trending_up_rounded,
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
 
-            // 2. Study & Performance 3D Section
+            // 3. Study & Performance 3D Section
             _build3DSection(
               title: 'Study & Performance',
               items: [
                 _buildActionTile(
-                  icon: Icons.insights_rounded,
-                  iconColor: const Color(0xFF2563EB),
-                  iconBg: const Color(0xFFEFF6FF),
+                  imageAsset: 'assets/icons/ic_mock_chart.jpg',
+                  iconBg: Colors.white,
                   title: 'Mock Test Analytics',
                   onTap: () => Navigator.push(
                     context,
@@ -608,9 +450,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 _buildDivider(),
                 _buildActionTile(
-                  icon: Icons.local_fire_department_rounded,
-                  iconColor: const Color(0xFFEA580C),
-                  iconBg: const Color(0xFFFFF7ED),
+                  imageAsset: 'assets/icons/ic_calendar_streak.jpg',
+                  iconBg: Colors.white,
                   title: 'Activity & Streak',
                   onTap: () => Navigator.push(
                     context,
@@ -619,9 +460,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 _buildDivider(),
                 _buildActionTile(
-                  icon: Icons.collections_bookmark_rounded,
-                  iconColor: const Color(0xFFD97706),
-                  iconBg: const Color(0xFFFFFBEB),
+                  imageAsset: 'assets/icons/ic_saved_vault.jpg',
+                  iconBg: Colors.white,
                   title: 'Saved Question Vault',
                   badge: savedQuestions.isNotEmpty ? '${savedQuestions.length}' : null,
                   onTap: () => Navigator.push(
@@ -633,30 +473,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 16),
 
-            // 3. Plan & Access 3D Section
+            // 4. Plan & Access 3D Section
             _build3DSection(
               title: 'Plan & Membership',
               items: [
                 _buildActionTile(
-                  icon: Icons.verified_user_rounded,
-                  iconColor: const Color(0xFF7C3AED),
-                  iconBg: const Color(0xFFF5F3FF),
+                  imageAsset: 'assets/icons/ic_subscription_status.jpg',
+                  iconBg: Colors.white,
                   title: 'Subscription Status',
+                  onTap: () async {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Row(
+                          children: [
+                            SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                            ),
+                            SizedBox(width: 12),
+                            Text('Syncing subscriptions with database...'),
+                          ],
+                        ),
+                        duration: Duration(milliseconds: 1200),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                    final synced = await EntitlementService.syncUserEntitlements();
+                    if (mounted) {
+                      setState(() {});
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            synced.isNotEmpty
+                                ? 'Active subscriptions synced: ${synced.length} grant(s) active!'
+                                : 'No active paid subscriptions found on your account.',
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  },
                   trailing: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: entitlements.isEmpty ? const Color(0xFFF1F5F9) : const Color(0xFFDCFCE7),
+                      color: entitlements.isEmpty
+                          ? (isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9))
+                          : const Color(0xFFDCFCE7),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: entitlements.isEmpty ? const Color(0xFFE2E8F0) : const Color(0xFF86EFAC),
-                      ),
                     ),
                     child: Text(
-                      entitlements.isEmpty ? 'Free Plan' : 'Active Pro',
+                      entitlements.isEmpty ? (isGuest ? 'Guest Plan' : 'Free Plan') : 'Active Pro',
                       style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.bold,
-                        color: entitlements.isEmpty ? const Color(0xFF64748B) : const Color(0xFF16A34A),
+                        color: entitlements.isEmpty
+                            ? (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B))
+                            : const Color(0xFF16A34A),
                       ),
                     ),
                   ),
@@ -665,7 +538,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 16),
 
-            // 4. Preferences & System 3D Section
+            // 5. Preferences & System 3D Section
             _build3DSection(
               title: 'Preferences & System',
               items: [
@@ -738,19 +611,390 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                 ),
                 _buildDivider(),
-                _buildActionTile(
-                  icon: Icons.logout_rounded,
-                  iconColor: const Color(0xFFE11D48),
-                  iconBg: const Color(0xFFFFF1F2),
-                  title: 'Sign Out',
-                  titleColor: const Color(0xFFE11D48),
-                  onTap: _logout,
-                ),
+                if (!isGuest)
+                  _buildActionTile(
+                    icon: Icons.logout_rounded,
+                    iconColor: const Color(0xFFE11D48),
+                    iconBg: const Color(0xFFFFF1F2),
+                    title: 'Sign Out',
+                    titleColor: const Color(0xFFE11D48),
+                    onTap: _logout,
+                  )
+                else
+                  _buildActionTile(
+                    icon: Icons.login_rounded,
+                    iconColor: const Color(0xFF2563EB),
+                    iconBg: const Color(0xFFEFF6FF),
+                    title: 'Sign In to Account',
+                    titleColor: const Color(0xFF2563EB),
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                      );
+                      await EntitlementService.syncUserEntitlements();
+                      if (mounted) setState(() {});
+                    },
+                  ),
               ],
             ),
             const SizedBox(height: 24),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildGuestBanner(bool isDark) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF2563EB).withOpacity(isDark ? 0.22 : 0.07),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(isDark ? 0.2 : 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Top Row: Guest Badge + Semester Chip
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2563EB).withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(Icons.shield_outlined, size: 13, color: Color(0xFF2563EB)),
+                    SizedBox(width: 4),
+                    Text(
+                      'GUEST ACCOUNT',
+                      style: TextStyle(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF2563EB),
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: _changeSemester,
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF1E3A8A).withOpacity(0.4) : const Color(0xFFEFF6FF),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.school_rounded, size: 13, color: Color(0xFF38BDF8)),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Class 12 • Sem $_currentSemester',
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.bold,
+                          color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF1E40AF),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(Icons.edit_rounded, size: 12, color: Color(0xFF38BDF8)),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Title & Description
+          Text(
+            'Explore as Guest Student',
+            style: TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.w900,
+              color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+              letterSpacing: -0.3,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Sign in to sync your study data, track your mock test ranking & unlock premium video lectures.',
+            style: TextStyle(
+              fontSize: 13,
+              color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+              height: 1.4,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 18),
+
+          // 3D Vibrant Button: Sign In / Create Account
+          Container(
+            width: double.infinity,
+            height: 48,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF2563EB).withOpacity(0.38),
+                  blurRadius: 12,
+                  offset: const Offset(0, 5),
+                ),
+                BoxShadow(
+                  color: const Color(0xFF1D4ED8).withOpacity(0.25),
+                  blurRadius: 2,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(14),
+                onTap: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  );
+                  await EntitlementService.syncUserEntitlements();
+                  if (mounted) setState(() {});
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      padding: const EdgeInsets.all(2.5),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/icons/ic_google.jpg',
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => const Icon(
+                            Icons.login_rounded,
+                            size: 14,
+                            color: Color(0xFF2563EB),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Sign In / Create Account',
+                      style: TextStyle(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 16),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoggedUserHeader(bool isDark, String displayName, String email) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.05),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: _showAvatarPicker,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 66,
+                  height: 66,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: _userAvatar.isEmpty
+                        ? const LinearGradient(
+                            colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )
+                        : null,
+                    color: _userAvatar.isNotEmpty
+                        ? (isDark ? const Color(0xFF1E293B) : Colors.white)
+                        : null,
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF2563EB).withOpacity(0.28),
+                        blurRadius: 14,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: ClipOval(
+                    child: _userAvatar.isNotEmpty
+                        ? Transform.scale(
+                            scale: 1.12,
+                            child: Image.asset(
+                              _userAvatar,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Center(
+                                child: Text(
+                                  displayName.isNotEmpty ? displayName[0].toUpperCase() : 'S',
+                                  style: const TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Center(
+                            child: Text(
+                              displayName.isNotEmpty ? displayName[0].toUpperCase() : 'S',
+                              style: const TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
+                Positioned(
+                  bottom: -2,
+                  right: -2,
+                  child: Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2563EB),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.22),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.add_rounded,
+                        size: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  displayName,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                    letterSpacing: -0.2,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  email,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                InkWell(
+                  onTap: _changeSemester,
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF1E3A8A).withOpacity(0.4) : const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.school_rounded, size: 13, color: Color(0xFF38BDF8)),
+                        const SizedBox(width: 5),
+                        Text(
+                          'Class 12 • Sem $_currentSemester',
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF1E40AF),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.edit_rounded, size: 12, color: Color(0xFF38BDF8)),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -794,10 +1038,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-          width: 1.2,
-        ),
         boxShadow: [
           BoxShadow(
             color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.04),
@@ -844,9 +1084,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildActionTile({
-    required IconData icon,
-    required Color iconColor,
-    required Color iconBg,
+    IconData? icon,
+    String? imageAsset,
+    Color? iconColor,
+    Color? iconBg,
     required String title,
     String? subtitle,
     Color? titleColor,
@@ -857,14 +1098,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      leading: Container(
-        padding: const EdgeInsets.all(9),
-        decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF334155) : iconBg,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Icon(icon, color: iconColor, size: 21),
-      ),
+      leading: imageAsset != null
+          ? Container(
+              width: 42,
+              height: 42,
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(isDark ? 0.3 : 0.07),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(9),
+                child: Image.asset(
+                  imageAsset,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            )
+          : Container(
+              padding: const EdgeInsets.all(9),
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF334155) : (iconBg ?? const Color(0xFFEFF6FF)),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(icon, color: iconColor ?? const Color(0xFF2563EB), size: 21),
+            ),
       title: Text(
         title,
         style: TextStyle(
@@ -893,9 +1158,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF1E3A8A) : const Color(0xFFEFF6FF),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: isDark ? const Color(0xFF3B82F6) : const Color(0xFFBFDBFE),
-                    ),
                   ),
                   child: Text(
                     badge,

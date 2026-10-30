@@ -136,9 +136,7 @@ class EsBanglaApp extends StatelessWidget {
               theme: AppTheme.lightTheme,
               darkTheme: AppTheme.darkTheme,
               themeMode: themeMode,
-              home: FirebaseAuth.instance.currentUser != null
-                  ? const MainShellScreen()
-                  : const LoginScreen(),
+              home: const MainShellScreen(),
               builder: (context, child) {
                 // Strict Online-Only Blocker (PRD Section 23):
                 // Overlays entire navigator stack with un-dismissible OfflineScreen

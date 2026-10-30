@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import '../../../core/constants/api_constants.dart';
+import '../../../core/services/entitlement_service.dart';
+import '../../auth/presentation/login_screen.dart';
 import '../data/youtube_helper.dart';
 import 'video_player_screen.dart';
 import 'native_video_helper.dart';
@@ -37,82 +39,20 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
   }
 
   Future<String?> _redeemCode(String inputCode) async {
-    final code = inputCode.trim().toUpperCase();
-    if (code.isEmpty) {
-      return 'দয়া করে ইনভাইট কোডটি লিখুন';
-    }
-
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      final userEmail = LocalStorageService().userEmail;
-      final userUid = user?.uid ?? 'guest_${LocalStorageService().semester}';
+      final result = await EntitlementService.redeemOrRestoreKey(
+        inputCode: inputCode,
+        semester: widget.semester,
+        fallbackGrants: [
+          'video_library_sem${widget.semester}',
+          'subject_${widget.subjectId}',
+        ],
+      );
 
-      final keyDocRef = FirebaseFirestore.instance.collection('access_keys').doc(code);
-      final userRef = FirebaseFirestore.instance.collection('users').doc(userUid);
-
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final snapshot = await transaction.get(keyDocRef);
-        if (!snapshot.exists) {
-          throw Exception('ইনভাইট কোডটি সঠিক নয় বা খুঁজে পাওয়া যায়নি।');
-        }
-
-        final data = snapshot.data()!;
-        final status = data['status'] ?? 'active';
-        final boundEmail = data['boundEmail'];
-        final boundUid = data['boundUid'];
-
-        if (status == 'used') {
-          throw Exception('এই ইনভাইট কোডটি ইতিমধ্যে ব্যবহার করা হয়ে গেছে।');
-        }
-
-        if (boundEmail != null && boundEmail.toString().isNotEmpty && boundEmail != userEmail) {
-          throw Exception('এই কোডটি অন্য একটি ইমেইল অ্যাকাউন্টের জন্য বরাদ্দ করা।');
-        }
-
-        if (boundUid != null && boundUid.toString().isNotEmpty && boundUid != userUid) {
-          throw Exception('এই কোডটি অন্য একটি অ্যাকাউন্টের জন্য নির্ধারিত।');
-        }
-
-        // Check grants
-        final List<String> defaultGrants = ['video_library_sem${widget.semester}'];
-        final List<String> grants = data['grants'] != null
-            ? List<String>.from(data['grants'])
-            : defaultGrants;
-
-        final int durationDays = data['durationDays'] is num
-            ? (data['durationDays'] as num).toInt()
-            : 365;
-
-        // Mark key as used & bound
-        transaction.update(keyDocRef, {
-          'status': 'used',
-          'redeemedByEmail': userEmail,
-          'redeemedByUid': userUid,
-          'redeemedAt': FieldValue.serverTimestamp(),
-        });
-
-        // Store entitlement in user doc
-        final entitlementRef = userRef.collection('entitlements').doc();
-        transaction.set(entitlementRef, {
-          'grants': grants,
-          'startsAt': FieldValue.serverTimestamp(),
-          'durationDays': durationDays,
-          'sourceCode': code,
-          'semester': widget.semester,
-          'status': 'active',
-        });
-
-        // Save locally to cache immediately
-        final currentEntitlements = LocalStorageService().getEntitlements();
-        for (final g in grants) {
-          if (!currentEntitlements.contains(g)) {
-            currentEntitlements.add(g);
-          }
-        }
-        await LocalStorageService().setEntitlements(currentEntitlements);
-      });
-
-      return null; // Success!
+      if (result.success) {
+        return null;
+      }
+      return result.message;
     } catch (e) {
       return e.toString().replaceAll('Exception:', '').trim();
     }
@@ -253,6 +193,21 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
                               if (code.isEmpty) {
                                 setModalState(() => _errorMessage = 'দয়া করে ইনভাইট কোডটি লিখুন');
                                 return;
+                              }
+
+                              if (FirebaseAuth.instance.currentUser == null) {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                                );
+                                if (FirebaseAuth.instance.currentUser == null) {
+                                  if (modalCtx.mounted) {
+                                    setModalState(() {
+                                      _errorMessage = 'অ্যাক্টিভেশন কোড রিডিম করতে প্রথমে লগইন করুন';
+                                    });
+                                  }
+                                  return;
+                                }
                               }
 
                               setModalState(() {

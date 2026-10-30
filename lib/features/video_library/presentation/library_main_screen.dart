@@ -199,23 +199,56 @@ class LibraryMainScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Pill Badge: Class 12
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: badgeBg,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: badgeBorder, width: 1),
-                        ),
-                        child: Text(
-                          'Class 12',
-                          style: TextStyle(
-                            color: badgeTextColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.2,
+                      // Pill Badges: Class 12 & 99% Common
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: badgeBg,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: badgeBorder, width: 1),
+                            ),
+                            child: Text(
+                              'Class 12',
+                              style: TextStyle(
+                                color: badgeTextColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.2,
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? const Color(0xFF064E3B).withOpacity(0.45)
+                                  : const Color(0xFFDCFCE7),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.bolt_rounded,
+                                  size: 14,
+                                  color: isDark ? const Color(0xFF34D399) : const Color(0xFF16A34A),
+                                ),
+                                const SizedBox(width: 2),
+                                Text(
+                                  '99% Common',
+                                  style: TextStyle(
+                                    color: isDark ? const Color(0xFF34D399) : const Color(0xFF15803D),
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 10),
 

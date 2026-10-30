@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import '../../../core/constants/api_constants.dart';
+import '../../../core/services/entitlement_service.dart';
 import '../../home/presentation/main_shell_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -118,11 +119,18 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         }
       }
 
+      // Sync entitlements from Cloud Firestore into LocalStorage
+      await EntitlementService.syncUserEntitlements();
+
       if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const MainShellScreen()),
-        );
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context, true);
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const MainShellScreen()),
+          );
+        }
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -226,11 +234,18 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         }
       }
 
+      // Sync entitlements from Cloud Firestore into LocalStorage
+      await EntitlementService.syncUserEntitlements();
+
       if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const MainShellScreen()),
-        );
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context, true);
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const MainShellScreen()),
+          );
+        }
       }
     } on FirebaseAuthException catch (e) {
       debugPrint('Firebase Auth Error: ${e.code} - ${e.message}');
@@ -286,6 +301,21 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
     return Scaffold(
       backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        leading: Navigator.canPop(context)
+            ? IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 19,
+                  color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                ),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -669,11 +699,25 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   : Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        CustomPaint(
-                                          size: const Size(20, 20),
-                                          painter: _GoogleLogoPainter(),
+                                        Container(
+                                          width: 26,
+                                          height: 26,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Center(
+                                            child: ClipOval(
+                                              child: Image.asset(
+                                                'assets/icons/ic_google.jpg',
+                                                width: 22,
+                                                height: 22,
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                        const SizedBox(width: 10),
+                                        const SizedBox(width: 12),
                                         Text(
                                           'Continue with Google',
                                           style: TextStyle(
