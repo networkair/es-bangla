@@ -115,36 +115,21 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
     return Container(
       padding: EdgeInsets.fromLTRB(16, topPadding + 8, 16, 12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: const Border(bottom: BorderSide(color: AppColors.border, width: 1)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        color: Colors.white.withOpacity(0.92),
+        border: const Border(bottom: BorderSide(color: Color(0xFFE2E8F0), width: 0.8)),
       ),
       child: Row(
         children: [
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: AppColors.surface,
+              width: 38,
+              height: 38,
+              decoration: const BoxDecoration(
+                color: Colors.transparent,
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.border),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.03),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
               ),
-              child: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary, size: 20),
+              child: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary, size: 22),
             ),
           ),
           const SizedBox(width: 14),
@@ -160,25 +145,6 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          if (_totalPages > 0) ...[
-            const SizedBox(width: 10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.primaryLight,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.primary.withOpacity(0.15)),
-              ),
-              child: Text(
-                '$_currentPage / $_totalPages',
-                style: const TextStyle(
-                  color: AppColors.primaryDark,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ],
         ],
       ),
     );
@@ -191,21 +157,13 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
         width: 38,
         height: 38,
         decoration: BoxDecoration(
-          color: AppColors.surface.withOpacity(0.92),
+          color: Colors.black.withOpacity(0.08),
           shape: BoxShape.circle,
-          border: Border.all(color: AppColors.border),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.12),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ],
         ),
         child: const Icon(
           Icons.arrow_back_rounded,
-          color: AppColors.textPrimary,
-          size: 19,
+          color: Color(0xFF1E293B),
+          size: 20,
         ),
       ),
     );
@@ -273,31 +231,38 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
           passwordProvider: () => SecurityManager.getDecryptedPdfPassword(),
           params: PdfViewerParams(
             backgroundColor: Colors.white,
-            margin: 10.0,
+            margin: 0.0,
             enableTextSelection: false,
-          layoutPages: (pages, params) {
-            final width = pages.fold(0.0, (w, p) => max(w, p.width)) + params.margin * 2;
-            final pageLayout = <Rect>[];
-            // Generous top gap (~80px) so the first page starts cleanly below the header bar without top clipping
-            double y = (topPadding + 62.0) + 18.0;
+            pageDecoration: const BoxDecoration(
+              color: Colors.white,
+              boxShadow: [],
+            ),
+            getPageRenderingScale: (context, page, controller, estimatedScale) {
+              return max(estimatedScale, 2.0);
+            },
+            layoutPages: (pages, params) {
+              final width = pages.fold(0.0, (w, p) => max(w, p.width));
+              final pageLayout = <Rect>[];
+              // Generous top gap so the first page starts cleanly below the header bar without top clipping
+              double y = (topPadding + 62.0) + 12.0;
 
-            for (int i = 0; i < pages.length; i++) {
-              final page = pages[i];
-              final rect = Rect.fromLTWH(
-                (width - page.width) / 2,
-                y,
-                page.width,
-                page.height,
+              for (int i = 0; i < pages.length; i++) {
+                final page = pages[i];
+                final rect = Rect.fromLTWH(
+                  (width - page.width) / 2,
+                  y,
+                  page.width,
+                  page.height,
+                );
+                pageLayout.add(rect);
+                y += page.height; // Zero gap: seamless continuous long page
+              }
+
+              return PdfPageLayout(
+                pageLayouts: pageLayout,
+                documentSize: Size(width, y + 40.0),
               );
-              pageLayout.add(rect);
-              y += page.height + params.margin;
-            }
-
-            return PdfPageLayout(
-              pageLayouts: pageLayout,
-              documentSize: Size(width, y + 40.0),
-            );
-          },
+            },
           onPageChanged: (page) {
             if (mounted && page != null) {
               setState(() => _currentPage = page);

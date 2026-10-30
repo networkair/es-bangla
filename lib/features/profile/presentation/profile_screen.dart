@@ -482,6 +482,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   iconBg: Colors.white,
                   title: 'Subscription Status',
                   onTap: () async {
+                    if (isGuest) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('সাবস্ক্রিপশন দেখতে আপনার অ্যাকাউন্টে লগইন করুন।'),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                      return;
+                    }
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Row(
@@ -492,7 +501,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                             ),
                             SizedBox(width: 12),
-                            Text('Syncing subscriptions with database...'),
+                            Text('সার্ভার থেকে সাবস্ক্রিপশন যাচাই করা হচ্ছে...'),
                           ],
                         ),
                         duration: Duration(milliseconds: 1200),
@@ -506,8 +515,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SnackBar(
                           content: Text(
                             synced.isNotEmpty
-                                ? 'Active subscriptions synced: ${synced.length} grant(s) active!'
-                                : 'No active paid subscriptions found on your account.',
+                                ? 'সাবস্ক্রিপশন স্ট্যাটাস সফলভাবে আপডেট হয়েছে!'
+                                : 'আপনার অ্যাকাউন্টে কোনো সক্রিয় পেইড সাবস্ক্রিপশন পাওয়া যায়নি।',
                           ),
                           behavior: SnackBarBehavior.floating,
                         ),

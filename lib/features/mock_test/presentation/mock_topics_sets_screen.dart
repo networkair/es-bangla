@@ -348,32 +348,10 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () async {
-            if (FirebaseAuth.instance.currentUser == null) {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
-              );
-              if (FirebaseAuth.instance.currentUser == null) return;
-              await EntitlementService.syncUserEntitlements();
-              if (mounted) setState(() {});
-            }
+            final bool currentlyAccessible = _isSetAccessible(set);
 
-            final bool currentlyUnlocked = _isSetAccessible(set);
-
-            if (!currentlyUnlocked) {
-              if (!mounted) return;
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => PremiumLockScreen(
-                    title: set.title,
-                    grantType: 'premium_mock_sem${LocalStorageService().semester}',
-                  ),
-                ),
-              ).then((_) {
-                if (mounted) setState(() {});
-              });
-            } else {
+            if (currentlyAccessible) {
+              // Free mock tests or already accessible sets open directly without login
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -387,7 +365,51 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
                   ),
                 ),
               );
+              return;
             }
+
+            // Locked Premium mock test: Login is required to link access & preserve keys
+            if (FirebaseAuth.instance.currentUser == null) {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+              );
+              if (FirebaseAuth.instance.currentUser == null) return;
+              await EntitlementService.syncUserEntitlements();
+              if (mounted) setState(() {});
+            }
+
+            // If account already owns the entitlement after sync, launch directly
+            if (_isSetAccessible(set)) {
+              if (!mounted) return;
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => QuizScreen(
+                    subjectId: widget.subject.subjectId,
+                    subjectName: widget.subject.name,
+                    topicId: topic.topicId,
+                    topicName: topic.name,
+                    setFile: set.setFile,
+                    version: set.version,
+                  ),
+                ),
+              );
+              return;
+            }
+
+            if (!mounted) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PremiumLockScreen(
+                  title: set.title,
+                  grantType: 'premium_mock_sem${LocalStorageService().semester}',
+                ),
+              ),
+            ).then((_) {
+              if (mounted) setState(() {});
+            });
           },
           borderRadius: BorderRadius.circular(20),
           splashColor: (isUnlocked ? AppColors.primary : AppColors.premiumGold).withOpacity(0.12),

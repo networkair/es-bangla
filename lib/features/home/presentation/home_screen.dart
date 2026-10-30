@@ -780,14 +780,14 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 // Organic wave/bubble on the left matching mockup
                 Positioned(
-                  left: -15,
+                  left: -20,
                   top: -20,
                   bottom: -20,
                   child: Container(
-                    width: 85,
+                    width: 72,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: const Color(0xFF38BDF8).withOpacity(0.35),
+                      color: const Color(0xFF38BDF8).withOpacity(0.30),
                     ),
                   ),
                 ),
@@ -811,16 +811,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 14),
 
                       // Title
                       const Expanded(
                         child: Text(
                           'SET STUDY REMINDER',
                           style: TextStyle(
-                            fontSize: 15.5,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 0.8,
+                            fontFamily: 'sans-serif',
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5,
                             color: Colors.white,
                           ),
                         ),
@@ -946,6 +947,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         title,
                         style: TextStyle(
+                          fontFamily: 'sans-serif',
                           fontSize: 15,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 0.3,
@@ -1083,6 +1085,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Text(
                               title,
                               style: TextStyle(
+                                fontFamily: 'sans-serif',
                                 fontSize: 15.5,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 0.3,
