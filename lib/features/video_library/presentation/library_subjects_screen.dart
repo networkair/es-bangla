@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
+import '../../../core/services/entitlement_service.dart';
 import 'library_topics_screen.dart';
 import 'course_subscription_screen.dart';
 
@@ -135,54 +136,63 @@ class LibrarySubjectsScreen extends StatelessWidget {
                           .snapshots(),
                       builder: (context, lockSnapshot) {
                         final lockData = lockSnapshot.data?.data() as Map<String, dynamic>? ?? {};
-                        final entitlements = LocalStorageService().getEntitlements();
-                        final hasSemesterVip = entitlements.contains('video_library_sem$semester') ||
-                            entitlements.contains('video_library_all');
 
-                        return ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
-                          itemCount: subjects.length,
-                          itemBuilder: (context, index) {
-                            final subject = subjects[index];
-                            final isLocked = lockData['sem${semester}_${subject.id}_locked'] == true;
-                            final hasSubjectVip = hasSemesterVip || entitlements.contains('subject_${subject.id}');
-                            final showLocked = isLocked && !hasSubjectVip;
+                        return StreamBuilder<List<String>>(
+                          stream: EntitlementService.liveUserEntitlementsStream(),
+                          initialData: EntitlementService.currentEntitlements,
+                          builder: (context, entSnapshot) {
+                            final entitlements = entSnapshot.data ?? [];
+                            final hasSemesterVip = entitlements.contains('video_library_sem$semester') ||
+                                entitlements.contains('video_library_all') ||
+                                entitlements.contains('combo_sem$semester') ||
+                                entitlements.contains('combo_all');
 
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: _buildSubjectCard(
-                                context: context,
-                                subject: subject,
-                                isDark: isDark,
-                                isLocked: showLocked,
-                                onSubjectTap: () {
-                                  if (showLocked) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => CourseSubscriptionScreen(
-                                          semester: semester,
-                                          subjectName: subject.name,
-                                          subjectId: subject.id,
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => LibraryTopicsScreen(
-                                          semester: semester,
-                                          subjectId: subject.id,
-                                          subjectName: subject.name,
-                                          subjectThumbnailUrl: subject.thumbnailAsset,
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+                            return ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
+                              itemCount: subjects.length,
+                              itemBuilder: (context, index) {
+                                final subject = subjects[index];
+                                final isLocked = lockData['sem${semester}_${subject.id}_locked'] == true;
+                                final hasSubjectVip = hasSemesterVip || entitlements.contains('subject_${subject.id}');
+                                final showLocked = isLocked && !hasSubjectVip;
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: _buildSubjectCard(
+                                    context: context,
+                                    subject: subject,
+                                    isDark: isDark,
+                                    isLocked: showLocked,
+                                    onSubjectTap: () {
+                                      if (showLocked) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => CourseSubscriptionScreen(
+                                              semester: semester,
+                                              subjectName: subject.name,
+                                              subjectId: subject.id,
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => LibraryTopicsScreen(
+                                              semester: semester,
+                                              subjectId: subject.id,
+                                              subjectName: subject.name,
+                                              subjectThumbnailUrl: subject.thumbnailAsset,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
                             );
                           },
                         );

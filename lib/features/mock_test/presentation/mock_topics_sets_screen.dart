@@ -63,12 +63,8 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
 
   bool _isSetAccessible(TestSetModel set) {
     if (!set.isPremium && !widget.isPremiumMode) return true;
-    final entitlements = LocalStorageService().getEntitlements();
     final sem = LocalStorageService().semester;
-    return entitlements.contains('premium_mock_sem$sem') ||
-        entitlements.contains('premium_mock_all') ||
-        entitlements.contains('combo_all') ||
-        entitlements.contains('combo_sem$sem');
+    return EntitlementService.hasMockAccess(sem);
   }
 
   @override

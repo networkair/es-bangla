@@ -43,6 +43,7 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
       final result = await EntitlementService.redeemOrRestoreKey(
         inputCode: inputCode,
         semester: widget.semester,
+        expectedCategory: 'video_library',
         fallbackGrants: [
           'video_library_sem${widget.semester}',
         ],

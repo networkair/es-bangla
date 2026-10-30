@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
@@ -17,6 +18,7 @@ class MainShellScreen extends StatefulWidget {
 
 class _MainShellScreenState extends State<MainShellScreen> with WidgetsBindingObserver {
   int _currentIndex = 0;
+  StreamSubscription<List<String>>? _entitlementSub;
 
   @override
   void initState() {
@@ -24,17 +26,22 @@ class _MainShellScreenState extends State<MainShellScreen> with WidgetsBindingOb
     WidgetsBinding.instance.addObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     EntitlementService.syncUserEntitlements();
+    _entitlementSub = EntitlementService.liveUserEntitlementsStream().listen((_) {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+      EntitlementService.syncUserEntitlements();
     }
   }
 
   @override
   void dispose() {
+    _entitlementSub?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }

@@ -81,14 +81,18 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
               ),
             ),
 
-            // Real-Time Video Grid Stream
+            // Real-Time Video Grid Stream with Live Entitlement Sync
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('library_videos')
-                    .where('semester', isEqualTo: widget.semester)
-                    .snapshots(),
-                builder: (context, snapshot) {
+              child: StreamBuilder<List<String>>(
+                stream: EntitlementService.liveUserEntitlementsStream(),
+                initialData: EntitlementService.currentEntitlements,
+                builder: (context, entSnapshot) {
+                  return StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('library_videos')
+                        .where('semester', isEqualTo: widget.semester)
+                        .snapshots(),
+                    builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(
@@ -169,8 +173,10 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                     ),
                   );
                 },
-              ),
-            ),
+              );
+            },
+          ),
+        ),
 
             // Fixed Bottom Trust Banner (3D Card Design, Docked at Bottom)
             _buildFixedBottomBanner(),
@@ -186,13 +192,12 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
     final String youtubeInput = video['youtubeInput'] ?? '';
     final bool isFree = video['isFree'] ?? true;
 
-    final entitlements = LocalStorageService().getEntitlements();
     final bool hasAccess = isFree ||
-        entitlements.contains('video_library_all') ||
-        entitlements.contains('video_library_sem${widget.semester}') ||
-        entitlements.contains('combo_sem${widget.semester}') ||
-        entitlements.contains('subject_${widget.subjectId}') ||
-        entitlements.contains('subject_${widget.subjectName}');
+        EntitlementService.hasVideoAccess(
+          widget.semester,
+          subjectId: widget.subjectId,
+          subjectName: widget.subjectName,
+        );
 
     return Container(
       decoration: BoxDecoration(
@@ -229,13 +234,13 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
               if (mounted) setState(() {});
             }
 
-            final freshEntitlements = LocalStorageService().getEntitlements();
+            await EntitlementService.syncUserEntitlements();
             final bool updatedAccess = isFree ||
-                freshEntitlements.contains('video_library_all') ||
-                freshEntitlements.contains('video_library_sem${widget.semester}') ||
-                freshEntitlements.contains('combo_sem${widget.semester}') ||
-                freshEntitlements.contains('subject_${widget.subjectId}') ||
-                freshEntitlements.contains('subject_${widget.subjectName}');
+                EntitlementService.hasVideoAccess(
+                  widget.semester,
+                  subjectId: widget.subjectId,
+                  subjectName: widget.subjectName,
+                );
 
             if (!updatedAccess) {
               final bool? unlocked = await Navigator.push<bool>(

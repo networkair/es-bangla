@@ -59,6 +59,7 @@ class _PremiumLockScreenState extends State<PremiumLockScreen> {
       final result = await EntitlementService.redeemOrRestoreKey(
         inputCode: key,
         semester: LocalStorageService().semester,
+        expectedCategory: 'mock_test',
         fallbackGrants: [widget.grantType],
       );
 

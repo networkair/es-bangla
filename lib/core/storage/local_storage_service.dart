@@ -13,6 +13,8 @@ class LocalStorageService {
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
+    // Wipe any legacy entitlements cache from local storage completely
+    await _prefs.remove(_keyEntitlements);
     themeModeNotifier.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
     localNotificationsNotifier.value = getLocalNotifications();
     userAvatarNotifier.value = userAvatar;
@@ -131,14 +133,15 @@ class LocalStorageService {
     await _prefs.setString('api_cache_$key', data);
   }
 
-  // Entitlements
+  // Entitlements - Strictly Cloud Database Authoritative (No local storage persistence)
   List<String> getEntitlements() {
-    final list = _prefs.getStringList(_keyEntitlements);
-    return list ?? [];
+    return [];
   }
 
   Future<void> setEntitlements(List<String> list) async {
-    await _prefs.setStringList(_keyEntitlements, list);
+    // Intentionally no-op: subscriptions are never stored in offline local storage.
+    // They are live-streamed directly from Firestore users/{uid}.
+    await _prefs.remove(_keyEntitlements);
   }
 
   // App install tracking (prevents loading historical notifications created before install)

@@ -323,6 +323,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (confirm == true && mounted) {
       await FirebaseAuth.instance.signOut();
+      await EntitlementService.syncUserEntitlements();
       _storage.userName = '';
       _storage.userEmail = '';
       if (mounted) {
@@ -378,7 +379,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final email = _storage.userEmail.isNotEmpty
         ? _storage.userEmail
         : (user?.email ?? (isGuest ? 'Sign in to sync your data' : 'student@esbangla.app'));
-    final entitlements = _storage.getEntitlements();
+    final entitlements = EntitlementService.currentEntitlements;
 
     final attempts = _storage.getAttemptHistory();
     final savedQuestions = _storage.getSavedQuestions();
