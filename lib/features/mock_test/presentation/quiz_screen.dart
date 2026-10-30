@@ -361,10 +361,13 @@ class _QuizScreenState extends State<QuizScreen> {
 
           const SizedBox(height: 6),
 
-          // 3. Question & Options Content with Smooth Top-Aligned Transitions
+          // 3. Question & Options Content with Dynamic In & Out Animation
           Expanded(
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 250),
+              duration: const Duration(milliseconds: 320),
+              reverseDuration: const Duration(milliseconds: 240),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
               layoutBuilder: (currentChild, previousChildren) {
                 return Stack(
                   alignment: Alignment.topCenter,
@@ -373,6 +376,57 @@ class _QuizScreenState extends State<QuizScreen> {
                     if (currentChild != null) currentChild,
                   ],
                 );
+              },
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                // Determine whether child is entering (in) or leaving (out)
+                final isIncoming = (child.key as ValueKey<int>?)?.value == _currentIndex;
+
+                if (isIncoming) {
+                  // IN-ANIMATION: Glides gracefully up from slightly below (Y: 0.08) with smooth Fade & Scale
+                  final inSlide = Tween<Offset>(
+                    begin: const Offset(0.0, 0.08),
+                    end: Offset.zero,
+                  ).animate(CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ));
+
+                  final inScale = Tween<double>(
+                    begin: 0.96,
+                    end: 1.0,
+                  ).animate(CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ));
+
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: inSlide,
+                      child: ScaleTransition(
+                        scale: inScale,
+                        child: child,
+                      ),
+                    ),
+                  );
+                } else {
+                  // OUT-ANIMATION: Gracefully floats upward (Y: -0.06) while fading out
+                  final outSlide = Tween<Offset>(
+                    begin: const Offset(0.0, -0.06),
+                    end: Offset.zero,
+                  ).animate(CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeInCubic,
+                  ));
+
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: outSlide,
+                      child: child,
+                    ),
+                  );
+                }
               },
               child: SingleChildScrollView(
                 key: ValueKey<int>(_currentIndex),
