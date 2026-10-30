@@ -548,24 +548,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     }
                   },
-                  trailing: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: entitlements.isEmpty
-                          ? (isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9))
-                          : const Color(0xFFDCFCE7),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      entitlements.isEmpty ? (isGuest ? 'Guest Plan' : 'Free Plan') : 'Active Pro',
-                      style: TextStyle(
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.bold,
-                        color: entitlements.isEmpty
-                            ? (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B))
-                            : const Color(0xFF16A34A),
-                      ),
-                    ),
+                  trailing: StreamBuilder<List<String>>(
+                    stream: EntitlementService.liveUserEntitlementsStream(),
+                    initialData: EntitlementService.currentEntitlements,
+                    builder: (context, snapshot) {
+                      final active = snapshot.data ?? [];
+                      String planLabel = isGuest ? 'Guest Plan' : 'Free Plan';
+                      Color badgeBg = isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9);
+                      Color badgeText = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
+
+                      if (active.isNotEmpty) {
+                        badgeBg = const Color(0xFFFEF3C7);
+                        badgeText = const Color(0xFFB45309);
+                        if (active.contains('combo_all') || active.any((e) => e.startsWith('combo_'))) {
+                          planLabel = '👑 Combo VIP';
+                        } else if (active.any((e) => e.startsWith('premium_mock_'))) {
+                          planLabel = '👑 Mock Test VIP';
+                        } else if (active.any((e) => e.startsWith('video_library_'))) {
+                          planLabel = '👑 Video VIP';
+                        } else {
+                          planLabel = '👑 Active VIP';
+                        }
+                      }
+
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: badgeBg,
+                          borderRadius: BorderRadius.circular(12),
+                          border: active.isNotEmpty
+                              ? Border.all(color: const Color(0xFFFCD34D), width: 1)
+                              : null,
+                        ),
+                        child: Text(
+                          planLabel,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.bold,
+                            color: badgeText,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],

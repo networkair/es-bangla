@@ -72,6 +72,30 @@ class EntitlementService {
       }
 
       final data = snapshot.data()!;
+
+      // Check if VIP is explicitly deactivated
+      if (data['isVipActive'] == false) {
+        _activeEntitlements = [];
+        entitlementsNotifier.value = [];
+        return [];
+      }
+
+      // Check expiry date if specified
+      final expiresRaw = data['subscriptionExpiresAt'];
+      if (expiresRaw != null) {
+        DateTime? expiryDate;
+        if (expiresRaw is Timestamp) {
+          expiryDate = expiresRaw.toDate();
+        } else if (expiresRaw is String) {
+          expiryDate = DateTime.tryParse(expiresRaw);
+        }
+        if (expiryDate != null && DateTime.now().isAfter(expiryDate)) {
+          _activeEntitlements = [];
+          entitlementsNotifier.value = [];
+          return [];
+        }
+      }
+
       final List<dynamic> rawList = data['entitlements'] as List? ?? [];
       final List<String> activeGrants = rawList
           .where((e) => e != null && e.toString().trim().isNotEmpty)
@@ -85,6 +109,7 @@ class EntitlementService {
   }
 
   /// Authoritative single-fetch sync directly from Firestore users/{uid}.
+  /// Always tries Source.server first, falling back to cache if offline.
   /// Never persists to local storage. If user is guest or field is absent, returns empty list.
   static Future<List<String>> syncUserEntitlements() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -96,10 +121,39 @@ class EntitlementService {
 
     try {
       final userDocRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
-      final userDoc = await userDocRef.get(const GetOptions(source: Source.serverAndCache));
+      DocumentSnapshot<Map<String, dynamic>> userDoc;
+      try {
+        userDoc = await userDocRef.get(const GetOptions(source: Source.server));
+      } catch (_) {
+        userDoc = await userDocRef.get(const GetOptions(source: Source.cache));
+      }
 
       if (userDoc.exists && userDoc.data() != null) {
         final data = userDoc.data()!;
+
+        // Check if VIP is explicitly deactivated
+        if (data['isVipActive'] == false) {
+          _activeEntitlements = [];
+          entitlementsNotifier.value = [];
+          return [];
+        }
+
+        // Check expiry date if specified
+        final expiresRaw = data['subscriptionExpiresAt'];
+        if (expiresRaw != null) {
+          DateTime? expiryDate;
+          if (expiresRaw is Timestamp) {
+            expiryDate = expiresRaw.toDate();
+          } else if (expiresRaw is String) {
+            expiryDate = DateTime.tryParse(expiresRaw);
+          }
+          if (expiryDate != null && DateTime.now().isAfter(expiryDate)) {
+            _activeEntitlements = [];
+            entitlementsNotifier.value = [];
+            return [];
+          }
+        }
+
         final List<dynamic> rawList = data['entitlements'] as List? ?? [];
         final List<String> activeGrants = rawList
             .where((e) => e != null && e.toString().trim().isNotEmpty)

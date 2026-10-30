@@ -3,8 +3,10 @@ import 'package:lottie/lottie.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
+import '../../../core/services/entitlement_service.dart';
 import '../../auth/presentation/login_screen.dart';
 import 'mock_subject_select_screen.dart';
+import 'premium_lock_screen.dart';
 
 class MockTestLandingScreen extends StatelessWidget {
   const MockTestLandingScreen({super.key});
@@ -367,6 +369,26 @@ class MockTestLandingScreen extends StatelessWidget {
                 );
                 if (FirebaseAuth.instance.currentUser == null) return;
               }
+
+              final sem = LocalStorageService().semester;
+              await EntitlementService.syncUserEntitlements();
+              final hasAccess = EntitlementService.hasMockAccess(sem);
+
+              if (!context.mounted) return;
+
+              if (!hasAccess) {
+                final unlocked = await Navigator.push<bool>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => PremiumLockScreen(
+                      title: 'সেমিস্টার $sem প্রিমিয়াম মক টেস্ট',
+                      grantType: 'premium_mock_sem$sem',
+                    ),
+                  ),
+                );
+                if (unlocked != true) return;
+              }
+
               if (!context.mounted) return;
               Navigator.push(
                 context,

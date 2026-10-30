@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import '../../../core/constants/api_constants.dart';
@@ -28,34 +30,30 @@ class CourseSubscriptionScreen extends StatefulWidget {
 }
 
 class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
-  final TextEditingController _codeController = TextEditingController();
-  bool _isRedeeming = false;
-  String? _errorMessage;
+  bool _isChecking = false;
+  StreamSubscription<List<String>>? _entitlementSub;
+
+  @override
+  void initState() {
+    super.initState();
+    // Auto-listen to live Firestore updates: auto-celebrate if admin grants VIP
+    _entitlementSub = EntitlementService.liveUserEntitlementsStream().listen((grants) {
+      if (EntitlementService.hasVideoAccess(
+        widget.semester,
+        subjectId: widget.subjectId,
+        subjectName: widget.subjectName,
+      )) {
+        if (mounted) {
+          _showCelebrationDialog();
+        }
+      }
+    });
+  }
 
   @override
   void dispose() {
-    _codeController.dispose();
+    _entitlementSub?.cancel();
     super.dispose();
-  }
-
-  Future<String?> _redeemCode(String inputCode) async {
-    try {
-      final result = await EntitlementService.redeemOrRestoreKey(
-        inputCode: inputCode,
-        semester: widget.semester,
-        expectedCategory: 'video_library',
-        fallbackGrants: [
-          'video_library_sem${widget.semester}',
-        ],
-      );
-
-      if (result.success) {
-        return null;
-      }
-      return result.message;
-    } catch (e) {
-      return e.toString().replaceAll('Exception:', '').trim();
-    }
   }
 
   void _showCelebrationDialog() {
@@ -72,7 +70,7 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
           ],
         ),
         content: Text(
-          'আপনার সেমিস্টার ${widget.semester}-এর কোর্স সফলভাবে সক্রিয় হয়েছে। এখন আপনি সমস্ত ভিডিও লেকচার সরাসরি দেখতে পারবেন।',
+          'আপনার সেমিস্টার ${widget.semester}-এর কোর্স সফলভাবে সক্রিয় হয়েছে! এখন আপনি সমস্ত ভিডিও লেকচার সরাসরি দেখতে পারবেন।',
           style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.4),
         ),
         actions: [
@@ -93,198 +91,116 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
     );
   }
 
-  void _showRedeemBottomSheet() {
-    setState(() => _errorMessage = null);
-    _codeController.clear();
+  Future<void> _checkSubscriptionStatus() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
+      if (FirebaseAuth.instance.currentUser == null) return;
+    }
 
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (modalCtx) {
-        return StatefulBuilder(
-          builder: (modalCtx, setModalState) {
-            return Container(
-              decoration: const BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-              ),
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 20,
-                bottom: MediaQuery.of(modalCtx).viewInsets.bottom + 24,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: AppColors.border,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  const Text(
-                    'ইনভাইট কোড দিয়ে আনলক করুন',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'হোয়াটসঅ্যাপে পেমেন্ট করার পর আপনাকে যে বিশেষ ইনভাইট কোডটি দেওয়া হয়েছে, সেটি এখানে লিখুন:',
-                    style: TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.4),
-                  ),
-                  const SizedBox(height: 18),
+    setState(() => _isChecking = true);
 
-                  TextField(
-                    controller: _codeController,
-                    textCapitalization: TextCapitalization.characters,
-                    decoration: InputDecoration(
-                      hintText: 'যেমন: SEM3-VIP-9988',
-                      labelText: 'ইনভাইট / অ্যাক্টিভেশন কোড',
-                      prefixIcon: const Icon(Icons.vpn_key_rounded, color: AppColors.primary),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        borderSide: const BorderSide(color: AppColors.border),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-                      ),
-                    ),
-                  ),
+    try {
+      await EntitlementService.syncUserEntitlements();
+      final hasAccess = EntitlementService.hasVideoAccess(
+        widget.semester,
+        subjectId: widget.subjectId,
+        subjectName: widget.subjectName,
+      );
 
-                  if (_errorMessage != null) ...[
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Icon(Icons.error_outline_rounded, color: AppColors.wrongRed, size: 16),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            _errorMessage!,
-                            style: const TextStyle(color: AppColors.wrongRed, fontSize: 12, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+      if (!mounted) return;
+      setState(() => _isChecking = false);
 
-                  const SizedBox(height: 20),
-
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: _isRedeeming
-                          ? null
-                          : () async {
-                              final code = _codeController.text.trim().toUpperCase();
-                              if (code.isEmpty) {
-                                setModalState(() => _errorMessage = 'দয়া করে ইনভাইট কোডটি লিখুন');
-                                return;
-                              }
-
-                              if (FirebaseAuth.instance.currentUser == null) {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                                );
-                                if (FirebaseAuth.instance.currentUser == null) {
-                                  if (modalCtx.mounted) {
-                                    setModalState(() {
-                                      _errorMessage = 'অ্যাক্টিভেশন কোড রিডিম করতে প্রথমে লগইন করুন';
-                                    });
-                                  }
-                                  return;
-                                }
-                              }
-
-                              setModalState(() {
-                                _isRedeeming = true;
-                                _errorMessage = null;
-                              });
-
-                              final error = await _redeemCode(code);
-                              if (error != null) {
-                                if (modalCtx.mounted) {
-                                  setModalState(() {
-                                    _isRedeeming = false;
-                                    _errorMessage = error;
-                                  });
-                                }
-                              } else {
-                                if (modalCtx.mounted) {
-                                  Navigator.pop(modalCtx); // Close sheet first
-                                }
-                                if (mounted) {
-                                  setState(() => _isRedeeming = false);
-                                  _showCelebrationDialog();
-                                }
-                              }
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                      ),
-                      child: _isRedeeming
-                          ? const SizedBox(
-                              width: 22,
-                              height: 22,
-                              child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation(Colors.white)),
-                            )
-                          : const Text(
-                              'কোড সক্রিয় করুন (Activate Now)',
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
+      if (hasAccess) {
+        _showCelebrationDialog();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('আপনার অ্যাকাউন্টে এখনো ভিডিও কোর্স সক্রিয় হয়নি। হোয়াটসঅ্যাপে মেসেজ পাঠিয়ে থাকলে অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন।'),
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 4),
+          ),
         );
-      },
-    );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isChecking = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('যাচাই করতে সমস্যা হয়েছে: $e'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
   }
 
-  void _openWhatsAppContact() {
-    final String message = Uri.encodeComponent(
-      'হ্যালো Es Bangla! আমি দ্বাদশ শ্রেণির সেমিস্টার ${widget.semester}-এর ${widget.subjectName.isNotEmpty ? widget.subjectName : "ভিডিও কোর্স"} নিতে আগ্রহী। দয়া করে পেমেন্ট কিউআর কোড (QR Code) ও ইনভাইট কোড পাওয়ার নিয়ম জানান।',
-    );
-    final String url = '${ApiConstants.whatsappUrl}?text=$message';
+  Future<void> _openWhatsAppContact() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
+      if (FirebaseAuth.instance.currentUser == null) return;
+    }
 
-    Clipboard.setData(ClipboardData(text: ApiConstants.defaultWhatsappNumber));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('হোয়াটসঅ্যাপ নম্বর (${ApiConstants.defaultWhatsappNumber}) কপি করা হয়েছে! যোগাযোগ করুন: $url'),
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 4),
-        action: SnackBarAction(
-          label: 'কপি লিংক',
-          textColor: Colors.white,
-          onPressed: () {
-            Clipboard.setData(ClipboardData(text: url));
-          },
-        ),
-      ),
-    );
+    final currentUser = FirebaseAuth.instance.currentUser;
+    final name = currentUser?.displayName?.isNotEmpty == true
+        ? currentUser!.displayName!
+        : LocalStorageService().userName;
+    final email = currentUser?.email ?? LocalStorageService().userEmail;
+    final uid = currentUser?.uid ?? 'অজ্ঞাত';
+    final course = widget.subjectName.isNotEmpty ? widget.subjectName : 'সেমিস্টার ${widget.semester} ভিডিও কোর্স';
+
+    final String message = '''
+হ্যালো Es Bangla টিম!
+আমি দ্বাদশ শ্রেণির সেমিস্টার ${widget.semester} এর ভিডিও লাইব্রেরি VIP কোর্স নিতে চাই।
+
+📌 কোর্স: $course
+👤 শিক্ষার্থী: $name
+📧 ইমেইল: $email
+🔑 ইউজার আইডি (UID): $uid
+
+অনুগ্রহ করে আমাকে কোর্স ফি ও পেমেন্ট কিউআর কোড (QR Code) পাঠান। ধন্যবাদ!
+'''.trim();
+
+    Clipboard.setData(ClipboardData(text: 'UID: $uid\nEmail: $email'));
+
+    final phone = ApiConstants.defaultWhatsappNumber.replaceAll('+', '').replaceAll(' ', '');
+    final uri = Uri.parse('https://wa.me/$phone?text=${Uri.encodeComponent(message)}');
+
+    try {
+      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('হোয়াটসঅ্যাপ ওপেন করা সম্ভব হয়নি। নম্বর: ${ApiConstants.defaultWhatsappNumber} (আপনার UID ও তথ্য কপি করা হয়েছে)'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final name = user?.displayName?.isNotEmpty == true
+        ? user!.displayName!
+        : LocalStorageService().userName;
+    final email = user?.email?.isNotEmpty == true
+        ? user!.email!
+        : (LocalStorageService().userEmail.isNotEmpty ? LocalStorageService().userEmail : 'লগইন করা নেই');
+    final uid = user?.uid ?? 'লগইন করার পর তৈরি হবে';
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -293,9 +209,9 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
             // Top Navigation Bar
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.surface,
-                border: const Border(bottom: BorderSide(color: AppColors.border, width: 1)),
+                border: Border(bottom: BorderSide(color: AppColors.border, width: 1)),
               ),
               child: Row(
                 children: [
@@ -325,7 +241,7 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'কোর্স অ্যাক্সেস ও জয়েন',
+                          'কোর্স অ্যাক্সেস ও সাবস্ক্রিপশন',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -437,9 +353,91 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
                       ),
                     ),
 
+                    const SizedBox(height: 20),
+
+                    // Student Account Info Card (For Admin Direct Grant Linking)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF8FAFC),
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Icon(Icons.badge_outlined, size: 18, color: AppColors.primary),
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                'আপনার শিক্ষার্থী অ্যাকাউন্ট তথ্য',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13.5,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                              const Spacer(),
+                              InkWell(
+                                onTap: () {
+                                  Clipboard.setData(ClipboardData(text: uid));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('ইউজার আইডি (UID) কপি করা হয়েছে!'),
+                                      behavior: SnackBarBehavior.floating,
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                },
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: const Color(0xFFCBD5E1)),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.copy_rounded, size: 12, color: AppColors.primary),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        'UID কপি',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          _buildAccountInfoRow('নাম:', name),
+                          const SizedBox(height: 4),
+                          _buildAccountInfoRow('ইমেইল:', email),
+                          const SizedBox(height: 4),
+                          _buildAccountInfoRow('ইউজার আইডি:', uid),
+                        ],
+                      ),
+                    ),
+
                     const SizedBox(height: 22),
 
-                    // Free Demo Videos Section (User Requirement: ডেমো ভিডিও সাজানো থাকবে)
+                    // Free Demo Videos Section
                     const Text(
                       'ফ্রি ডেমো ভিডিও লেকচার (Demo Classes)',
                       style: TextStyle(
@@ -505,18 +503,18 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
                             ],
                           ),
                           const SizedBox(height: 14),
-                          _buildStepItem('1', 'হোয়াটসঅ্যাপে মেসেজ পাঠান', 'নিচের বাটনে ট্যাপ করে আমাদের হোয়াটসঅ্যাপে যোগাযোগ করুন।'),
+                          _buildStepItem('১', 'হোয়াটসঅ্যাপে যোগাযোগ করুন', 'নিচের বাটনে ট্যাপ করে সরাসরি আমাদের অফিশিয়াল হোয়াটসঅ্যাপে মেসেজ পাঠান।'),
                           const SizedBox(height: 10),
-                          _buildStepItem('2', 'পেমেন্ট সম্পন্ন করুন', 'আমরা হোয়াটসঅ্যাপে আপনাকে অফিশিয়াল কিউআর কোড (QR Code) পাঠাবো।'),
+                          _buildStepItem('২', 'পেমেন্ট সম্পন্ন করুন', 'আমরা হোয়াটসঅ্যাপে আপনাকে অফিশিয়াল কিউআর কোড (QR Code) পাঠাবো।'),
                           const SizedBox(height: 10),
-                          _buildStepItem('3', 'ইনভাইট কোড নিয়ে জয়েন করুন', 'পেমেন্টের পর আপনাকে একটি ইউনিক ইনভাইট কোড দেওয়া হবে যা দিয়ে সাথে সাথে কোর্স আনলক হবে।'),
+                          _buildStepItem('৩', 'সরাসরি সাবস্ক্রিপশন সক্রিয়করণ', 'পেমেন্ট সম্পন্ন হলে আমাদের টিম সরাসরি আপনার অ্যাকাউন্টে সাবস্ক্রিপশন চালু করে দেবে। কোনো কোডের প্রয়োজন নেই।'),
                         ],
                       ),
                     ),
 
                     const SizedBox(height: 24),
 
-                    // WhatsApp Contact Button
+                    // Primary WhatsApp Contact Button
                     SizedBox(
                       width: double.infinity,
                       height: 52,
@@ -524,8 +522,8 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
                         onPressed: _openWhatsAppContact,
                         icon: const Icon(Icons.chat_bubble_rounded, size: 20),
                         label: const Text(
-                          'হোয়াটসঅ্যাপে যোগাযোগ ও পেমেন্ট কিউআর কোড',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5),
+                          'হোয়াটসঅ্যাপে যোগাযোগ করুন',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF25D366), // WhatsApp Green
@@ -536,23 +534,27 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 12),
 
-                    // Join with Invite Code Button (Primary Action)
+                    // Secondary Refresh / Check Status Button
                     SizedBox(
                       width: double.infinity,
-                      height: 52,
-                      child: ElevatedButton.icon(
-                        onPressed: _showRedeemBottomSheet,
-                        icon: const Icon(Icons.vpn_key_rounded, size: 20),
-                        label: const Text(
-                          'ইনভাইট কোড দিয়ে আনলক করুন (Join with Code)',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5),
+                      height: 50,
+                      child: OutlinedButton.icon(
+                        onPressed: _isChecking ? null : _checkSubscriptionStatus,
+                        icon: _isChecking
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                              )
+                            : const Icon(Icons.refresh_rounded, size: 20, color: AppColors.primary),
+                        label: Text(
+                          _isChecking ? 'সার্ভার যাচাই হচ্ছে...' : 'সাবস্ক্রিপশন স্ট্যাটাস রিফ্রেশ করুন',
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.primary),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: AppColors.primary, width: 1.2),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         ),
                       ),
@@ -564,6 +566,29 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAccountInfoRow(String label, String value) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+        ),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/theme/app_colors.dart';
@@ -29,16 +30,26 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
   List<TopicModel> _topics = [];
   bool _isLoading = true;
   String? _error;
+  StreamSubscription<List<String>>? _entitlementSub;
 
   @override
   void initState() {
     super.initState();
+    _entitlementSub = EntitlementService.liveUserEntitlementsStream().listen((_) {
+      if (mounted) setState(() {});
+    });
     if (FirebaseAuth.instance.currentUser != null) {
       EntitlementService.syncUserEntitlements().then((_) {
         if (mounted) setState(() {});
       });
     }
     _loadTopics();
+  }
+
+  @override
+  void dispose() {
+    _entitlementSub?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadTopics() async {
@@ -62,7 +73,8 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
   }
 
   bool _isSetAccessible(TestSetModel set) {
-    if (!set.isPremium && !widget.isPremiumMode) return true;
+    // Only Set 1 in Free Mode is accessible for free. All other sets require active VIP subscription.
+    if (set.setNumber == 1 && !widget.isPremiumMode) return true;
     final sem = LocalStorageService().semester;
     return EntitlementService.hasMockAccess(sem);
   }
@@ -216,7 +228,7 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
     // Filter topics if in premium mode
     final validTopics = _topics.where((t) {
       if (!widget.isPremiumMode) return t.sets.isNotEmpty;
-      return t.sets.any((s) => s.isPremium);
+      return t.sets.any((s) => s.isPremium || s.setNumber > 1);
     }).toList();
 
     if (validTopics.isEmpty) {
@@ -254,7 +266,7 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
       itemBuilder: (context, index) {
         final topic = validTopics[index];
         final setsToShow = widget.isPremiumMode
-            ? topic.sets.where((s) => s.isPremium).toList()
+            ? topic.sets.where((s) => s.isPremium || s.setNumber > 1).toList()
             : topic.sets;
 
         return Padding(
