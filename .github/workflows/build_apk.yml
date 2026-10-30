@@ -64,21 +64,18 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.13
-          name: "Es Bangla v1.3.13 (Privacy Policy Integration, Seamless PDF Viewer & Study Reminder Polish)"
+          tag_name: v1.3.14
+          name: "Es Bangla v1.3.14 (Dynamic In/Out Quiz Question Animations & Polish)"
           body: |
-            ### Es Bangla v1.3.13 Release Highlights:
-            - **Privacy Policy & Terms Integration**:
-              - Added official Privacy Policy option in Profile section linked to secure web documentation.
-              - Standardized legal disclosures conforming to Google Play guidelines.
-            - **Seamless Continuous PDF Viewer**:
-              - Removed page shadow lines and gaps for smooth continuous scrolling.
-              - Transparent back button and removed redundant page counter badge.
-              - Enhanced rendering scale to eliminate zoom blur on high-DPI devices.
-            - **Typography & UI Polish**:
-              - Straightened Study Reminder typography and optimized background bubble overlap.
-              - Free mock tests accessible directly without forcing login.
-              - Refined Bengali subscription status server messaging.
+            ### Es Bangla v1.3.14 Release Highlights:
+            - **Dynamic In & Out Quiz Question Animations**:
+              - Added smooth Out-Animation: When moving to the next question, the current question and options float upward gently while fading out.
+              - Added smooth In-Animation: The incoming question and options glide upward from below with smooth cubic scaling (0.96 -> 1.0) and fade in.
+              - Lag-free, responsive transition preserving the app's clean 3D card layout and zero battery drain.
+            - **All v1.3.13 Upgrades Maintained**:
+              - Official Privacy Policy linked in Profile section.
+              - Seamless continuous PDF notes scrolling.
+              - Free mock tests accessible directly without forced login.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
