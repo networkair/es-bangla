@@ -233,10 +233,6 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
             backgroundColor: Colors.white,
             margin: 0.0,
             enableTextSelection: false,
-            pageDecoration: const BoxDecoration(
-              color: Colors.white,
-              boxShadow: [],
-            ),
             getPageRenderingScale: (context, page, controller, estimatedScale) {
               return max(estimatedScale, 2.0);
             },
