@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import '../data/mock_test_repository.dart';
@@ -67,22 +68,27 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
       _statusMessage = null;
     });
 
+    final authUser = FirebaseAuth.instance.currentUser;
     final storage = LocalStorageService();
-    final name = storage.userName;
-    final email = storage.userEmail;
+    final name = (authUser?.displayName != null && authUser!.displayName!.trim().isNotEmpty)
+        ? authUser.displayName!.trim()
+        : (storage.userName.trim().isNotEmpty ? storage.userName.trim() : 'Student');
+    final email = (authUser?.email != null && authUser!.email!.trim().isNotEmpty)
+        ? authUser.email!.trim()
+        : (storage.userEmail.trim().isNotEmpty ? storage.userEmail.trim() : 'student@esbangla.app');
+    final uid = authUser?.uid ?? (storage.userId.isNotEmpty ? storage.userId : 'guest_student');
 
     final contextStr =
         'Class ${widget.metadata.className} | Semester ${widget.metadata.semester} | ${widget.metadata.subjectName} | ${widget.metadata.topicName} | Set ${widget.metadata.setNumber} | Q${widget.questionIndex + 1} (${widget.question.qId})';
 
     final meta = {
+      'uid': uid,
       'test_title': '${widget.metadata.subjectName} - ${widget.metadata.topicName} (Set ${widget.metadata.setNumber})',
       'question_id': widget.question.qId,
       'question_text': widget.question.questionText,
       'correct_answer_id': widget.question.correctOption,
       'selected_option': widget.selectedOption ?? 'unanswered',
-      'options': widget.question.options.entries
-          .map((e) => {'id': e.key, 'text': e.value})
-          .toList(),
+      'options': widget.question.options,
       'explanation': widget.question.explanation,
       'class': widget.metadata.className,
       'semester': widget.metadata.semester,
@@ -100,7 +106,7 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
         'correct_option': widget.question.correctOption,
         'selected_option': widget.selectedOption ?? 'unanswered',
       },
-      'app_version': '1.1.7',
+      'app_version': '1.3.21',
     };
 
     final finalMessage = message.isNotEmpty

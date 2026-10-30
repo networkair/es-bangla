@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/constants/api_constants.dart';
@@ -250,7 +249,8 @@ class MockTestRepository {
     throw Exception('Failed to load test paper');
   }
 
-  /// Submit Question Report or Feedback (Firebase Realtime DB + Firestore + API Fallback)
+  /// Submit Question Report or Feedback directly to dedicated Report API
+  /// (Delivers directly to Telegram Admin Channel via Cloudflare Pages Function)
   Future<bool> sendReport({
     required String type,
     required String name,
@@ -260,74 +260,75 @@ class MockTestRepository {
     Map<String, dynamic>? meta,
   }) async {
     final clientRequestId = const Uuid().v4();
+    final currentUser = FirebaseAuth.instance.currentUser;
+    final uid = meta?['uid'] ?? currentUser?.uid ?? _storage.userId;
+
     final jsonPayload = {
       'client_request_id': clientRequestId,
       'type': type,
-      'name': name.isEmpty ? 'Student' : name,
-      'email': email.isEmpty ? 'student@esbangla.app' : email,
+      'name': name.trim().isEmpty ? 'Student' : name.trim(),
+      'email': email.trim().isEmpty ? 'student@esbangla.app' : email.trim(),
+      'uid': uid,
       'message': message,
       'context': contextSummary,
       if (meta != null) 'meta': meta,
       'timestamp': DateTime.now().toIso8601String(),
-      'status': 'pending',
     };
 
-    bool delivered = false;
-
-    // 1. Firebase Realtime Database (100% open write & guaranteed real-time delivery to Admin Panel)
+    String? idToken;
     try {
-      final rtdbResponse = await _dio.post(
-        'https://es-bangla-225f2-default-rtdb.firebaseio.com/question_reports.json',
-        data: jsonPayload,
-        options: Options(
-          headers: {'Content-Type': 'application/json'},
-          validateStatus: (status) => status != null && status < 500,
-        ),
-      );
-      if (rtdbResponse.statusCode == 200) {
-        delivered = true;
-      }
-    } catch (_) {}
-
-    // 2. Direct Firestore Submission (to question_reports and users subcollection)
-    try {
-      final firestorePayload = {
-        ...jsonPayload,
-        'created_at': FieldValue.serverTimestamp(),
-      };
-      await FirebaseFirestore.instance.collection('question_reports').add(firestorePayload);
-      delivered = true;
-    } catch (_) {}
-
-    try {
-      final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(currentUser.uid)
-            .collection('reports')
-            .add({
-          ...jsonPayload,
-          'created_at': FieldValue.serverTimestamp(),
-        });
-        delivered = true;
+        idToken = await currentUser.getIdToken();
       }
     } catch (_) {}
 
-    // 3. HTTP Endpoint Sync
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (idToken != null && idToken.isNotEmpty) 'Authorization': 'Bearer $idToken',
+    };
+
+    // 1. Primary: Direct Cloudflare Edge Function -> Telegram
     try {
       final response = await _dio.post(
         ApiConstants.reportEndpoint,
         data: jsonPayload,
         options: Options(
-          headers: {'Content-Type': 'application/json'},
+          headers: headers,
           validateStatus: (status) => status != null && status < 500,
         ),
       );
-      if (response.statusCode == 200) delivered = true;
-    } catch (_) {}
+      if (response.statusCode == 200) {
+        final data = response.data is String ? jsonDecode(response.data) : response.data;
+        if (data is Map && (data['status'] == 'success' || data['duplicate'] == true)) {
+          return true;
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) print('Primary Report API error: $e');
+    }
 
-    return delivered;
+    // 2. Fallback: Legacy endpoint if primary endpoint fails
+    try {
+      final response = await _dio.post(
+        ApiConstants.legacyReportEndpoint,
+        data: jsonPayload,
+        options: Options(
+          headers: headers,
+          validateStatus: (status) => status != null && status < 500,
+        ),
+      );
+      if (response.statusCode == 200) {
+        final data = response.data is String ? jsonDecode(response.data) : response.data;
+        if (data is Map && (data['status'] == 'success' || data['duplicate'] == true)) {
+          return true;
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) print('Legacy Report API error: $e');
+    }
+
+    return false;
   }
 }
 

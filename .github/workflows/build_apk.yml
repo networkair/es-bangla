@@ -64,18 +64,19 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.20
-          name: "Es Bangla v1.3.20 (100% Free Mock Test Section & Strict VIP Premium Mock Mode)"
+          tag_name: v1.3.21
+          name: "Es Bangla v1.3.21 (Dedicated Telegram Report API & Pure Cloud Authority)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.20 Release Highlights:
-            - **100% Completely Free Mock Test Section**:
-              - All sets in the Free Mock Test section are fully unlocked, free, and accessible for all students without restriction.
+            ### Es Bangla v1.3.21 Release Highlights:
+            - **Dedicated Telegram Report Engine**:
+              - Question reports and feedback are routed directly through Cloudflare Edge Function (`/api/v1/report`) to private Telegram Admin Channel as rich, beautiful HTML cards.
+              - Completely removed Firebase Realtime Database and Firestore writes for reporting.
+            - **100% Free Mock Test Section**:
+              - All sets in the Free Mock Test section are fully unlocked and accessible for all students.
             - **Strict Premium Mock Test Mode**:
-              - The Premium Mock Test section requires active VIP entitlement. Unsubscribed users are presented with the VIP subscription and direct WhatsApp activation screen.
-            - **Direct VIP WhatsApp Activation**:
-              - Quick 1-tap UID copy, pre-filled WhatsApp message, and instant cloud sync.
+              - Premium Mock Test section requires active VIP entitlement with direct 1-tap WhatsApp activation.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
