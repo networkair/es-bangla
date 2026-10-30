@@ -76,7 +76,7 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
     final email = (authUser?.email != null && authUser!.email!.trim().isNotEmpty)
         ? authUser.email!.trim()
         : (storage.userEmail.trim().isNotEmpty ? storage.userEmail.trim() : 'student@esbangla.app');
-    final uid = authUser?.uid ?? (storage.userId.isNotEmpty ? storage.userId : 'guest_student');
+    final uid = authUser?.uid ?? 'guest_student';
 
     final contextStr =
         'Class ${widget.metadata.className} | Semester ${widget.metadata.semester} | ${widget.metadata.subjectName} | ${widget.metadata.topicName} | Set ${widget.metadata.setNumber} | Q${widget.questionIndex + 1} (${widget.question.qId})';

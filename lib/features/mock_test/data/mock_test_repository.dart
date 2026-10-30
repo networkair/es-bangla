@@ -261,7 +261,7 @@ class MockTestRepository {
   }) async {
     final clientRequestId = const Uuid().v4();
     final currentUser = FirebaseAuth.instance.currentUser;
-    final uid = meta?['uid'] ?? currentUser?.uid ?? _storage.userId;
+    final uid = meta?['uid'] ?? currentUser?.uid ?? 'guest_student';
 
     final jsonPayload = {
       'client_request_id': clientRequestId,
