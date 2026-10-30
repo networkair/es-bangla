@@ -64,19 +64,20 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.16
-          name: "Es Bangla v1.3.16 (Restored & Refined v1.3.6 Smooth Crossfade)"
+          tag_name: v1.3.17
+          name: "Es Bangla v1.3.17 (Isolated Subscriptions, Cloud Revocation Sync & Subject Locks)"
           body: |
-            ### Es Bangla v1.3.16 Release Highlights:
-            - **Restored & Refined v1.3.6 Smooth Crossfade Animation**:
-              - Restored the highly comfortable, top-aligned crossfade from v1.3.6 that eliminates all eye-strain.
-              - Enhanced with natural cubic easing curves (`Curves.easeOutCubic` & `Curves.easeInCubic`) for silky soft dissolution.
-              - Calibrated 260ms duration with zero bouncing, zero sliding, and zero jerky motion ("ঢটকা").
-            - **All Modern Features Preserved**:
-              - Profile Avatar Selection & Saved Questions.
-              - Official Privacy Policy in Profile screen.
-              - Smooth continuous PDF viewer.
-              - Free mock tests accessible without mandatory login.
+            ### Es Bangla v1.3.17 Release Highlights:
+            - **Strict Subscription Isolation**:
+              - Mock Test and Video Library accesses are strictly independent.
+              - Unlocking a Video Library course will not leak access to Mock Tests, and vice versa.
+            - **Authoritative Cloud Revocation Sync**:
+              - Instant local storage cache invalidation when subscriptions are revoked or deleted from the admin panel.
+            - **Video Library Subject Master Lock**:
+              - Real-time listening to cloud subject locks (`app_settings/subject_locks`).
+              - Instant redirection to Course Subscription screen when tapping a locked subject without VIP access.
+            - **Smooth Crossfade Quiz Transition**:
+              - Silky soft v1.3.6 cubic crossfade animation in quiz screen.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
