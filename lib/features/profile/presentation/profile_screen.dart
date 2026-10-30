@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import '../../../core/services/entitlement_service.dart';
@@ -344,6 +345,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _openPrivacyPolicy() async {
+    const urlString = 'https://airstudent2.github.io/es-bangla-privacy-policy/';
+    final Uri url = Uri.parse(urlString);
+    try {
+      final launched = await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) {
+        await launchUrl(url, mode: LaunchMode.platformDefault);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('ওয়েবসাইট লিঙ্ক খুলতে সমস্যা হয়েছে। অনুগ্রহ করে ব্রাউজার চেক করুন।'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -618,6 +642,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       inAppReview.requestReview();
                     }
                   },
+                ),
+                _buildDivider(),
+                _buildActionTile(
+                  icon: Icons.shield_outlined,
+                  iconColor: const Color(0xFF0D9488),
+                  iconBg: const Color(0xFFF0FDFA),
+                  title: 'Privacy Policy',
+                  subtitle: 'Student data safety & policy terms',
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: isDark ? const Color(0xFF0F766E).withOpacity(0.3) : const Color(0xFFCCFBF1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.open_in_new_rounded,
+                              size: 11,
+                              color: isDark ? const Color(0xFF2DD4BF) : const Color(0xFF0F766E),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Official',
+                              style: TextStyle(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w700,
+                                color: isDark ? const Color(0xFF2DD4BF) : const Color(0xFF0F766E),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 13,
+                        color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
+                      ),
+                    ],
+                  ),
+                  onTap: _openPrivacyPolicy,
                 ),
                 _buildDivider(),
                 if (!isGuest)
