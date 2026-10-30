@@ -28,76 +28,32 @@ class EntitlementService {
     }
 
     final userUid = user.uid;
-    final userEmail = (user.email ?? LocalStorageService().userEmail).trim().toLowerCase();
-
-    final Set<String> allGrants = Set<String>.from(LocalStorageService().getEntitlements());
 
     try {
       final userDocRef = FirebaseFirestore.instance.collection('users').doc(userUid);
-
-      // 1. Direct array field on user document
       final userDoc = await userDocRef.get();
+
+      // 1. Authoritative check on users/{uid} document
       if (userDoc.exists) {
         final data = userDoc.data();
-        if (data != null && data['entitlements'] is List) {
-          for (final item in data['entitlements']) {
-            if (item != null && item.toString().isNotEmpty) {
-              allGrants.add(item.toString());
-            }
-          }
+        if (data != null && data.containsKey('entitlements')) {
+          final List<dynamic> rawList = data['entitlements'] as List? ?? [];
+          final List<String> activeGrants = rawList
+              .where((e) => e != null && e.toString().trim().isNotEmpty)
+              .map((e) => e.toString().trim())
+              .toList();
+
+          // Authoritative sync: overwrite local cache with server state!
+          await LocalStorageService().setEntitlements(activeGrants);
+          debugPrint('Entitlements synced from user doc (Authoritative): $activeGrants');
+          return activeGrants;
         }
       }
 
-      // 2. Subcollection users/{uid}/entitlements
-      final entitlementsSnap = await userDocRef.collection('entitlements').get();
-      for (final doc in entitlementsSnap.docs) {
-        final data = doc.data();
-        final status = data['status'] ?? 'active';
-        if (status == 'active' && data['grants'] is List) {
-          for (final item in data['grants']) {
-            if (item != null && item.toString().isNotEmpty) {
-              allGrants.add(item.toString());
-            }
-          }
-        }
-      }
+      // 2. If userDoc doesn't have the field yet, check active keys in access_keys
+      final Set<String> activeGrants = {};
 
-      // 3. Look up access_keys redeemed by user's email or UID (fail-safe recovery)
-      if (userEmail.isNotEmpty) {
-        try {
-          final keysByEmailSnap = await FirebaseFirestore.instance
-              .collection('access_keys')
-              .where('redeemedByEmail', isEqualTo: userEmail)
-              .get();
-
-          for (final doc in keysByEmailSnap.docs) {
-            final data = doc.data();
-            if (data['grants'] is List) {
-              for (final g in data['grants']) {
-                if (g != null && g.toString().isNotEmpty) allGrants.add(g.toString());
-              }
-            }
-          }
-
-          final keysByLegacyEmail = await FirebaseFirestore.instance
-              .collection('access_keys')
-              .where('redeemedBy', isEqualTo: userEmail)
-              .get();
-
-          for (final doc in keysByLegacyEmail.docs) {
-            final data = doc.data();
-            if (data['grants'] is List) {
-              for (final g in data['grants']) {
-                if (g != null && g.toString().isNotEmpty) allGrants.add(g.toString());
-              }
-            }
-          }
-        } catch (queryErr) {
-          debugPrint('Query access_keys by email note: $queryErr');
-        }
-      }
-
-      try {
+      if (userUid.isNotEmpty) {
         final keysByUidSnap = await FirebaseFirestore.instance
             .collection('access_keys')
             .where('redeemedByUid', isEqualTo: userUid)
@@ -105,30 +61,23 @@ class EntitlementService {
 
         for (final doc in keysByUidSnap.docs) {
           final data = doc.data();
-          if (data['grants'] is List) {
+          final status = data['status'] ?? 'active';
+          if (status != 'cancelled' && status != 'revoked' && data['grants'] is List) {
             for (final g in data['grants']) {
-              if (g != null && g.toString().isNotEmpty) allGrants.add(g.toString());
+              if (g != null && g.toString().isNotEmpty) activeGrants.add(g.toString());
             }
           }
         }
-      } catch (queryErr) {
-        debugPrint('Query access_keys by UID note: $queryErr');
       }
 
-      final resultList = allGrants.toList();
-
-      // Persist to local cache immediately
+      final resultList = activeGrants.toList();
       await LocalStorageService().setEntitlements(resultList);
+      await userDocRef.set({
+        'entitlements': resultList,
+        'lastEntitlementSyncAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
 
-      // Keep Firestore user doc synchronized with canonical list
-      if (resultList.isNotEmpty) {
-        await userDocRef.set({
-          'entitlements': resultList,
-          'lastEntitlementSyncAt': FieldValue.serverTimestamp(),
-        }, SetOptions(merge: true));
-      }
-
-      debugPrint('Entitlements synced successfully: $resultList');
+      debugPrint('Entitlements synced from access_keys: $resultList');
       return resultList;
     } catch (e) {
       debugPrint('Entitlement sync error: $e');

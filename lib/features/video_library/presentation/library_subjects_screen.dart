@@ -130,7 +130,7 @@ class LibrarySubjectsScreen extends StatelessWidget {
                     )
                   : StreamBuilder<DocumentSnapshot>(
                       stream: FirebaseFirestore.instance
-                          .collection('library_settings')
+                          .collection('app_settings')
                           .doc('subject_locks')
                           .snapshots(),
                       builder: (context, lockSnapshot) {

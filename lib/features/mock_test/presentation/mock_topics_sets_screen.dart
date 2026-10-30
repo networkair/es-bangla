@@ -66,7 +66,8 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
     final entitlements = LocalStorageService().getEntitlements();
     final sem = LocalStorageService().semester;
     return entitlements.contains('premium_mock_sem$sem') ||
-        entitlements.contains('subject_${widget.subject.subjectId}') ||
+        entitlements.contains('premium_mock_all') ||
+        entitlements.contains('combo_all') ||
         entitlements.contains('combo_sem$sem');
   }
 

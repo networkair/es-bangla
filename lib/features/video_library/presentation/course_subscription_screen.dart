@@ -45,7 +45,6 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
         semester: widget.semester,
         fallbackGrants: [
           'video_library_sem${widget.semester}',
-          'subject_${widget.subjectId}',
         ],
       );
 
