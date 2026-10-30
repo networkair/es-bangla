@@ -73,8 +73,10 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
   }
 
   bool _isSetAccessible(TestSetModel set) {
-    // Only Set 1 in Free Mode is accessible for free. All other sets require active VIP subscription.
-    if (set.setNumber == 1 && !widget.isPremiumMode) return true;
+    // 1. Free Mock Test section is 100% free for all students
+    if (!widget.isPremiumMode) return true;
+
+    // 2. Premium Mock Test section strictly requires active VIP mock entitlement
     final sem = LocalStorageService().semester;
     return EntitlementService.hasMockAccess(sem);
   }
@@ -469,7 +471,9 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
                       ),
                       const SizedBox(width: 5),
                       Text(
-                        isUnlocked ? 'Full Free' : 'Premium',
+                        isUnlocked
+                            ? (widget.isPremiumMode ? 'VIP Active' : 'Full Free')
+                            : 'Premium',
                         style: TextStyle(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w700,
@@ -479,7 +483,7 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
                           letterSpacing: 0.2,
                         ),
                       ),
-                      if (isUnlocked) ...[
+                      if (isUnlocked && !widget.isPremiumMode) ...[
                         const SizedBox(width: 4),
                         Image.asset(
                           'assets/icons/ic_coin.png',
