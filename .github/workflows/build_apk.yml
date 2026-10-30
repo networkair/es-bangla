@@ -64,19 +64,19 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.15
-          name: "Es Bangla v1.3.15 (Ultra-Smooth Silky In/Out Quiz Transitions)"
+          tag_name: v1.3.16
+          name: "Es Bangla v1.3.16 (Restored & Refined v1.3.6 Smooth Crossfade)"
           body: |
-            ### Es Bangla v1.3.15 Release Highlights:
-            - **Ultra-Smooth Silky Quiz Question Transitions**:
-              - Completely eliminated jerky/abrupt snap ("ঢটকা") during question changes.
-              - Out-Animation: Smoothly glides upward (Y: -0.20) with cubic easing and dissolves into 100% transparency before removal.
-              - In-Animation: Gracefully glides up from below (Y: 0.22) with gentle cubic deceleration (easeOutCubic) and smooth fade-in.
-              - Wrapped in ClipRect for zero edge bleed and 60fps/120fps fluid performance.
-            - **All Core Features Preserved**:
-              - Official Privacy Policy in Profile section.
-              - Seamless continuous PDF notes viewer.
-              - Free mock tests accessible without login.
+            ### Es Bangla v1.3.16 Release Highlights:
+            - **Restored & Refined v1.3.6 Smooth Crossfade Animation**:
+              - Restored the highly comfortable, top-aligned crossfade from v1.3.6 that eliminates all eye-strain.
+              - Enhanced with natural cubic easing curves (`Curves.easeOutCubic` & `Curves.easeInCubic`) for silky soft dissolution.
+              - Calibrated 260ms duration with zero bouncing, zero sliding, and zero jerky motion ("ঢটকা").
+            - **All Modern Features Preserved**:
+              - Profile Avatar Selection & Saved Questions.
+              - Official Privacy Policy in Profile screen.
+              - Smooth continuous PDF viewer.
+              - Free mock tests accessible without mandatory login.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
