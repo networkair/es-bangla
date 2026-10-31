@@ -35,7 +35,7 @@ class AppNotificationService {
   static void handleNotificationClick({String? actionUrl}) {
     try {
       appNavigatorKey.currentState?.popUntil((route) => route.isFirst);
-      MainShellScreen.shellKey.currentState?.selectHomeTab();
+      MainShellScreen.currentState?.selectHomeTab();
     } catch (e) {
       debugPrint('Navigation to Home error: $e');
     }

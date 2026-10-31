@@ -10,8 +10,8 @@ import '../../mock_test/presentation/mock_test_landing_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
 
 class MainShellScreen extends StatefulWidget {
-  static final GlobalKey<MainShellScreenState> shellKey = GlobalKey<MainShellScreenState>();
-  MainShellScreen({Key? key}) : super(key: key ?? shellKey);
+  static MainShellScreenState? currentState;
+  const MainShellScreen({super.key});
 
   @override
   State<MainShellScreen> createState() => MainShellScreenState();
@@ -30,6 +30,7 @@ class MainShellScreenState extends State<MainShellScreen> with WidgetsBindingObs
   @override
   void initState() {
     super.initState();
+    MainShellScreen.currentState = this;
     WidgetsBinding.instance.addObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     EntitlementService.syncUserEntitlements();
@@ -48,6 +49,9 @@ class MainShellScreenState extends State<MainShellScreen> with WidgetsBindingObs
 
   @override
   void dispose() {
+    if (MainShellScreen.currentState == this) {
+      MainShellScreen.currentState = null;
+    }
     _entitlementSub?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
