@@ -782,7 +782,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'উচ্চমাধ্যমিক সেমিস্টার সহায়িকা · Version 1.3.26',
+                    'উচ্চমাধ্যমিক সেমিস্টার সহায়িকা · Version 1.3.27',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,

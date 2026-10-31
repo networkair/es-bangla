@@ -64,15 +64,16 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.26
-          name: "Es Bangla v1.3.26 (Official Brand Typography & Animated Splash Screen)"
+          tag_name: v1.3.27
+          name: "Es Bangla v1.3.27 (Perfected App Launcher Icon & Zero Border Golden Bar)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.26 Release Highlights:
+            ### Es Bangla v1.3.27 Release Highlights:
+            - **Perfected App Launcher Icon**: 'Es' and 'Bangla' precisely left-aligned (0px offset).
+            - **Radiant Golden Bar**: Eliminated dark border outline; pure #F59E0B golden amber bar.
             - **Animated Splash Screen**: Brand reveal animation with golden underline expansion and academic tagline.
             - **Native Brand Typography**: Pure responsive vector typography for Es Bangla across home and login screens.
-            - **Refined App Icon**: High-resolution pure white background app launcher icons across all screen densities.
             - **Report Issue Feedback**: Professional English feedback message assuring quick review and user notification.
             - **Mock Analytics Polish**: Refined section titles, streamlined study strategy to 5 actionable steps.
             - **Modern Test Set Cards**: Soft bottom-only drop shadow and 24px rounded corners matching reference design.
