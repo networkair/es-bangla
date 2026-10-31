@@ -64,15 +64,15 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.25
-          name: "Es Bangla v1.3.25 (UI Enhancements, Seamless PDF Reader & Analytics Polish)"
+          tag_name: v1.3.26
+          name: "Es Bangla v1.3.26 (Official Brand Typography & Animated Splash Screen)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.25 Release Highlights:
-            - **Seamless PDF Reader**: Removed page drop shadows for unified continuous page reading.
-            - **Quiz Result Save Feedback**: Added cute floating save message with app logo.
-            - **Smooth Navigation UX**: Eliminated tap highlight shadow freeze and enabled smooth page transitions app-wide.
+            ### Es Bangla v1.3.26 Release Highlights:
+            - **Animated Splash Screen**: Brand reveal animation with golden underline expansion and academic tagline.
+            - **Native Brand Typography**: Pure responsive vector typography for Es Bangla across home and login screens.
+            - **Refined App Icon**: High-resolution pure white background app launcher icons across all screen densities.
             - **Report Issue Feedback**: Professional English feedback message assuring quick review and user notification.
             - **Mock Analytics Polish**: Refined section titles, streamlined study strategy to 5 actionable steps.
             - **Modern Test Set Cards**: Soft bottom-only drop shadow and 24px rounded corners matching reference design.

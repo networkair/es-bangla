@@ -15,6 +15,7 @@ import 'features/reminder/data/reminder_notification_service.dart';
 import 'core/notifications/app_notification_service.dart';
 import 'features/auth/presentation/login_screen.dart';
 import 'features/home/presentation/main_shell_screen.dart';
+import 'features/splash/presentation/splash_screen.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -133,7 +134,7 @@ class EsBanglaApp extends StatelessWidget {
               theme: AppTheme.lightTheme,
               darkTheme: AppTheme.darkTheme,
               themeMode: themeMode,
-              home: const MainShellScreen(),
+              home: const SplashScreen(),
               builder: (context, child) {
                 // Strict Online-Only Blocker (PRD Section 23):
                 // Overlays entire navigator stack with un-dismissible OfflineScreen

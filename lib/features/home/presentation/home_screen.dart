@@ -105,73 +105,45 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: 20,
-        title: Row(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(isDark ? 0.3 : 0.06),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Es ',
+                    style: TextStyle(
+                      fontFamily: 'AppTitleFont',
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const TextSpan(
+                    text: 'Bangla',
+                    style: TextStyle(
+                      fontFamily: 'AppTitleFont',
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0070F3), // Vibrant Royal Blue
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ],
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  'assets/images/app_logo.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
             ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Es ',
-                        style: TextStyle(
-                          fontFamily: 'AppTitleFont',
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const TextSpan(
-                        text: 'Bangla',
-                        style: TextStyle(
-                          fontFamily: 'AppTitleFont',
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0070F3), // Vibrant Royal Blue
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Golden brushstroke accent below 'Bangla' matching mockup
-                Container(
-                  margin: const EdgeInsets.only(left: 36, top: 1),
-                  width: 44,
-                  height: 3,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF59E0B),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ],
+            // Golden brushstroke accent below 'Bangla' matching user layout
+            Container(
+              margin: const EdgeInsets.only(left: 38, top: 1),
+              width: 44,
+              height: 3,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF59E0B),
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ],
         ),

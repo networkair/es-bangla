@@ -323,41 +323,64 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Official Es Bangla App Logo
-                Container(
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(22),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF0070F3).withOpacity(isDark ? 0.35 : 0.15),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
+                // Clean Brand Typography Header (No blocky image)
+                Column(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Es ',
+                            style: TextStyle(
+                              fontFamily: 'AppTitleFont',
+                              fontSize: 34,
+                              fontWeight: FontWeight.bold,
+                              color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          const TextSpan(
+                            text: 'Bangla',
+                            style: TextStyle(
+                              fontFamily: 'AppTitleFont',
+                              fontSize: 34,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF0070F3), // Vibrant Royal Blue
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(22),
-                    child: Image.asset(
-                      'assets/images/app_logo.png',
-                      fit: BoxFit.contain,
                     ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // App Title
-                Text(
-                  'Es Bangla',
-                  style: TextStyle(
-                    fontFamily: 'AppTitleFont',
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
-                    letterSpacing: -0.5,
-                  ),
+                    const SizedBox(height: 3),
+                    // Golden accent bar underneath
+                    Container(
+                      margin: const EdgeInsets.only(left: 44),
+                      width: 52,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF59E0B),
+                        borderRadius: BorderRadius.circular(2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFF59E0B).withOpacity(0.4),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'উচ্চমাধ্যমিক সেমিস্টার সহায়িকা',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 28),
 

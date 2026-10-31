@@ -743,45 +743,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             const SizedBox(height: 32),
-            // Official Es Bangla Brand Stamp
+            // Clean Brand Footer
             Center(
               child: Column(
                 children: [
-                  Container(
-                    width: 58,
-                    height: 58,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(isDark ? 0.3 : 0.06),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Es ',
+                          style: TextStyle(
+                            fontFamily: 'AppTitleFont',
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                          ),
+                        ),
+                        const TextSpan(
+                          text: 'Bangla',
+                          style: TextStyle(
+                            fontFamily: 'AppTitleFont',
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0070F3),
+                          ),
                         ),
                       ],
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.asset(
-                        'assets/images/app_logo.png',
-                        fit: BoxFit.contain,
-                      ),
+                  ),
+                  const SizedBox(height: 2),
+                  Container(
+                    width: 32,
+                    height: 2.5,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF59E0B),
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Es Bangla',
-                    style: TextStyle(
-                      fontFamily: 'AppTitleFont',
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Version 1.3.25',
+                    'উচ্চমাধ্যমিক সেমিস্টার সহায়িকা · Version 1.3.26',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
