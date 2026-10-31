@@ -174,12 +174,12 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
             ),
             const SizedBox(height: 24),
 
-            // 1. Total Solved Questions Section
+            // 1. Solved Questions Overview Section
             _buildHeader(
               icon: Icons.menu_book_rounded,
               iconColor: const Color(0xFF16A34A),
               iconBg: const Color(0xFFDCFCE7),
-              title: 'Total Solved Questions',
+              title: 'Solved Questions Overview',
               isDark: isDark,
             ),
             const SizedBox(height: 14),
@@ -283,12 +283,12 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
 
             const SizedBox(height: 26),
 
-            // 2. Your Strength Topics Section
+            // 2. Mastered Topics & Subjects Section
             _buildHeader(
               icon: Icons.fitness_center_rounded,
               iconColor: const Color(0xFFD97706),
               iconBg: const Color(0xFFFEF3C7),
-              title: 'Your Strength Topics',
+              title: 'Mastered Topics & Subjects',
               isDark: isDark,
             ),
             const SizedBox(height: 14),
@@ -452,12 +452,12 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
 
             const SizedBox(height: 26),
 
-            // 3. Your Weak Topics Section
+            // 3. Topics Needing Revision Section
             _buildHeader(
               icon: Icons.trending_down_rounded,
               iconColor: const Color(0xFFE11D48),
               iconBg: const Color(0xFFFFE4E6),
-              title: 'Your Weak Topics',
+              title: 'Topics Needing Revision',
               isDark: isDark,
             ),
             const SizedBox(height: 14),
@@ -558,12 +558,12 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
 
             const SizedBox(height: 26),
 
-            // 4. Overall Performance Bar Chart
+            // 4. Overall Accuracy & Progress Bar Chart
             _buildHeader(
               icon: Icons.bar_chart_rounded,
               iconColor: const Color(0xFF2563EB),
               iconBg: const Color(0xFFDBEAFE),
-              title: 'Overall Performance',
+              title: 'Overall Accuracy & Progress',
               isDark: isDark,
             ),
             const SizedBox(height: 14),
@@ -777,32 +777,32 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
 
             const SizedBox(height: 26),
 
-            // 5. Preparation Guide by Es Bangla (Tailored Action Steps)
+            // 5. Smart Preparation Roadmap (Tailored Action Steps)
             _buildHeader(
               icon: Icons.auto_awesome_rounded,
               iconColor: const Color(0xFFD97706),
               iconBg: const Color(0xFFFEF3C7),
-              title: 'Es Bangla Study Strategy',
+              title: 'Smart Preparation Roadmap',
               isDark: isDark,
             ),
             const SizedBox(height: 14),
 
             SizedBox(
-              height: 148,
+              height: 154,
               child: ListView(
+                clipBehavior: Clip.none,
                 scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(vertical: 4),
                 children: [
-                  _buildStepCard('Step 1', 'Textbook Concepts', 'Read chapters from textbook thoroughly to build strong fundamentals.', isDark),
+                  _buildStepCard('Step 1', 'Core Concept Clarity', 'Read textbook chapters attentively to build solid conceptual foundation.', isDark),
                   const SizedBox(width: 14),
-                  _buildStepCard('Step 2', 'Es Bangla Suggestions', 'Study curated suggestions & smart chapter notes in Es Bangla App.', isDark),
+                  _buildStepCard('Step 2', 'Smart Study Notes', 'Explore curated suggestions and key topic notes in Es Bangla app.', isDark),
                   const SizedBox(width: 14),
-                  _buildStepCard('Step 3', 'Chapter MCQ Practice', 'Test your understanding with topic quizzes & questions in the app.', isDark),
+                  _buildStepCard('Step 3', 'Topic-wise Practice', 'Attempt topic quizzes to evaluate understanding and accuracy.', isDark),
                   const SizedBox(width: 14),
-                  _buildStepCard('Step 4', 'Analyze Explanations', 'Review detailed solution explanations to eliminate mistakes.', isDark),
+                  _buildStepCard('Step 4', 'Analyze & Learn', 'Review solution explanations carefully to identify and fix mistakes.', isDark),
                   const SizedBox(width: 14),
-                  _buildStepCard('Step 5', 'Revise Weak Topics', 'Spend extra revision time on chapters flagged as weak areas.', isDark),
-                  const SizedBox(width: 14),
-                  _buildStepCard('Step 6', 'Es Bangla Mock Test', 'Retake full mock tests to track your score progression & mastery.', isDark),
+                  _buildStepCard('Step 5', 'Targeted Mock Revision', 'Revisit weak chapters and retake full mock tests for guaranteed mastery.', isDark),
                 ],
               ),
             ),
@@ -953,16 +953,26 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
 
   Widget _buildStepCard(String stepTitle, String subtitle, String description, bool isDark) {
     return Container(
-      width: 185,
+      width: 190,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0).withOpacity(0.8),
+          width: 1.0,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.3 : 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.35 : 0.08),
+            blurRadius: 18,
+            spreadRadius: -2,
+            offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
           ),
         ],
       ),

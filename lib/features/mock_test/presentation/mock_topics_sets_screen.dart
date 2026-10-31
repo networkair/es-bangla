@@ -309,10 +309,11 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
 
               // 2. Horizontal Scrollable Row of Set Cards (Left-to-Right)
               SizedBox(
-                height: 165,
+                height: 172,
                 child: ListView.separated(
+                  clipBehavior: Clip.none,
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
                   itemCount: setsToShow.length,
                   separatorBuilder: (_, __) => const SizedBox(width: 14),
                   itemBuilder: (context, sIndex) {
@@ -329,29 +330,32 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
   }
 
   Widget _buildHorizontalSetCard(TopicModel topic, TestSetModel set) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final isUnlocked = _isSetAccessible(set);
 
     return Container(
       width: 148,
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: isUnlocked
-              ? AppColors.border.withOpacity(0.8)
-              : AppColors.premiumGold.withOpacity(0.35),
-          width: 1.2,
+              ? (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0).withOpacity(0.8))
+              : AppColors.premiumGold.withOpacity(0.4),
+          width: 1.0,
         ),
         boxShadow: [
+          // Soft bottom-only drop shadow matching user reference image
           BoxShadow(
-            color: const Color(0xFF0F172A).withOpacity(0.04),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.35 : 0.08),
+            blurRadius: 20,
+            spreadRadius: -2,
+            offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: (isUnlocked ? AppColors.primary : AppColors.premiumGold).withOpacity(0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 2),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -422,7 +426,7 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
               if (mounted) setState(() {});
             });
           },
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           child: Padding(
@@ -434,10 +438,10 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
                 // Top: Set Name in English (e.g. Set 1, Set 2)
                 Text(
                   'Set ${set.setNumber}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
                     fontSize: 20,
-                    color: AppColors.textPrimary,
+                    color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                     letterSpacing: -0.3,
                   ),
                 ),
