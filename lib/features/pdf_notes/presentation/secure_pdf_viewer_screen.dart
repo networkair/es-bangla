@@ -231,6 +231,7 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
           passwordProvider: () => SecurityManager.getDecryptedPdfPassword(),
           params: PdfViewerParams(
             backgroundColor: Colors.white,
+            pageDropShadow: null,
             margin: 0.0,
             enableTextSelection: false,
             getPageRenderingScale: (context, page, controller, estimatedScale) {
