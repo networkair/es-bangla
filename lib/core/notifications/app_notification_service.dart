@@ -103,6 +103,9 @@ class AppNotificationService {
       final sem = _storage.semester;
       fcm.subscribeToTopic('all').catchError((e) => debugPrint('FCM topic all error: $e'));
       fcm.subscribeToTopic('c12_sem$sem').catchError((e) => debugPrint('FCM topic sem error: $e'));
+      fcm.subscribeToTopic('sem$sem').catchError((e) => debugPrint('FCM topic sem error: $e'));
+      fcm.subscribeToTopic('c12_sem3').catchError((e) => debugPrint('FCM topic sem3 error: $e'));
+      fcm.subscribeToTopic('c12_sem4').catchError((e) => debugPrint('FCM topic sem4 error: $e'));
 
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         final notification = message.notification;
@@ -112,8 +115,7 @@ class AppNotificationService {
         final actionUrl = (data['actionUrl'] ?? data['link'] ?? '').toString().trim();
         final imageUrl = (notification?.android?.imageUrl ?? data['imageUrl'] ?? '').toString().trim();
 
-
-        final msgKey = message.messageId ?? '${title}_${body}';
+        final msgKey = message.messageId ?? '${DateTime.now().millisecondsSinceEpoch}';
 
         // 1. Save directly into device local storage
         _storage.saveLocalNotification({
@@ -125,10 +127,6 @@ class AppNotificationService {
           'timestamp': DateTime.now().millisecondsSinceEpoch,
         });
         _updateUnreadCount();
-
-        if (_seenDocIds.contains(msgKey)) return;
-        _seenDocIds.add(msgKey);
-        _storage.addSeenNotificationId(msgKey);
 
         showSystemNotification(
           id: (message.messageId?.hashCode ?? DateTime.now().millisecondsSinceEpoch) & 0x7FFFFFFF,
@@ -222,18 +220,23 @@ class AppNotificationService {
                 audience == '0';
             if (!isTarget) continue;
 
-            final createdAtStamp = data['createdAt'] as Timestamp?;
-            final createdAt = createdAtStamp?.toDate();
-            final createdAtMs = createdAt?.millisecondsSinceEpoch ?? 0;
+            DateTime? createdAt;
+            final rawCreated = data['createdAt'];
+            if (rawCreated is Timestamp) {
+              createdAt = rawCreated.toDate();
+            } else if (rawCreated is String) {
+              createdAt = DateTime.tryParse(rawCreated);
+            } else if (rawCreated is num) {
+              createdAt = DateTime.fromMillisecondsSinceEpoch(rawCreated.toInt());
+            }
+            createdAt ??= DateTime.now();
+            final createdAtMs = createdAt.millisecondsSinceEpoch;
 
-            // Only show in inbox if created AFTER app installation and within 7 days
-            final bool isPostInstall = createdAtMs >= installTime;
-            final bool isWithinSevenDays = createdAt != null &&
-                DateTime.now().difference(createdAt).inDays <= 7;
+            final bool isWithinSevenDays = DateTime.now().difference(createdAt).inDays <= 7;
 
             final title = (data['title'] ?? '').toString().trim();
             final body = (data['body'] ?? data['message'] ?? '').toString().trim();
-            if (isPostInstall && isWithinSevenDays) {
+            if (isWithinSevenDays) {
               _storage.saveLocalNotification({
                 'id': doc.id,
                 'title': title,
@@ -272,9 +275,16 @@ class AppNotificationService {
               audience == '0';
           if (!isTarget) continue;
 
-          final createdAtStamp = data['createdAt'] as Timestamp?;
-          final createdAt = createdAtStamp?.toDate();
-          if (createdAt == null) continue;
+          DateTime? createdAt;
+          final rawCreated = data['createdAt'];
+          if (rawCreated is Timestamp) {
+            createdAt = rawCreated.toDate();
+          } else if (rawCreated is String) {
+            createdAt = DateTime.tryParse(rawCreated);
+          } else if (rawCreated is num) {
+            createdAt = DateTime.fromMillisecondsSinceEpoch(rawCreated.toInt());
+          }
+          createdAt ??= DateTime.now();
 
           final title = (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
           final body = (data['body'] ?? data['message'] ?? '').toString().trim();
@@ -291,9 +301,8 @@ class AppNotificationService {
             'timestamp': createdAt.millisecondsSinceEpoch,
           });
 
-          // Strictly real-time: created AFTER current app session started and within 90 seconds
-          final bool isRealtime = createdAt.isAfter(_serviceStartTime) &&
-              DateTime.now().difference(createdAt).inSeconds.abs() <= 90;
+          // Strictly real-time: created recently within 5 minutes
+          final bool isRealtime = DateTime.now().difference(createdAt).inMinutes.abs() <= 5;
 
           if (isRealtime) {
             showSystemNotification(
@@ -416,7 +425,7 @@ class AppNotificationService {
             } else if (createdAtRaw is String) {
               createdAt = DateTime.tryParse(createdAtRaw);
             }
-            if (createdAt == null) return;
+            createdAt ??= DateTime.now();
 
             final title = (map['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
             final body = (map['body'] ?? map['message'] ?? '').toString().trim();
@@ -433,8 +442,7 @@ class AppNotificationService {
               'timestamp': createdAt.millisecondsSinceEpoch,
             });
 
-            final bool isRealtime = createdAt.isAfter(_serviceStartTime) &&
-                DateTime.now().difference(createdAt).inSeconds.abs() <= 90;
+            final bool isRealtime = DateTime.now().difference(createdAt).inMinutes.abs() <= 5;
 
             if (isRealtime) {
               showSystemNotification(

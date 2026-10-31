@@ -64,18 +64,18 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.23
-          name: "Es Bangla v1.3.23 (Notification Click -> Home Screen Navigation)"
+          tag_name: v1.3.24
+          name: "Es Bangla v1.3.24 (Guaranteed Status Bar Notifications & Home Navigation)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.23 Release Highlights:
-            - **Notification Click -> Home Screen Auto-Navigation**:
-              - Tapping any status bar notification directly brings the user into the app and navigates to the Home Screen (`HomeScreen`).
-              - Added `FLUTTER_NOTIFICATION_CLICK` intent-filter to `MainActivity`.
-              - Handled cold start launches via `FirebaseMessaging.instance.getInitialMessage()` and local notifications.
-            - **FCM v1 Status Bar Push Integration**:
-              - System drawer heads-up notifications even when app is killed or device is sleeping.
+            ### Es Bangla v1.3.24 Release Highlights:
+            - **Guaranteed Real-time & Background Delivery**:
+              - Unconditional heads-up status bar display in both foreground and background.
+              - Robust multi-format parsing for Firestore (Timestamp, String ISO, and epoch milliseconds).
+              - Subscribed to all relevant FCM topics (`all`, `c12_sem3`, `c12_sem4`).
+            - **Auto-Navigation to Home**:
+              - Tapping the status bar notification brings the app directly to the Home Screen (`HomeScreen`).
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
