@@ -97,11 +97,6 @@ class AppNotificationService {
         final actionUrl = (data['actionUrl'] ?? data['link'] ?? '').toString().trim();
         final imageUrl = (notification?.android?.imageUrl ?? data['imageUrl'] ?? '').toString().trim();
 
-        // Discard any dummy/test notification
-        if ((title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
-            (body.toLowerCase() == 'test' || body.isEmpty)) {
-          return;
-        }
 
         final msgKey = message.messageId ?? '${title}_${body}';
 
@@ -207,10 +202,7 @@ class AppNotificationService {
 
             final title = (data['title'] ?? '').toString().trim();
             final body = (data['body'] ?? data['message'] ?? '').toString().trim();
-            final isTest = (title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
-                (body.toLowerCase() == 'test' || body.isEmpty);
-
-            if (isPostInstall && isWithinSevenDays && !isTest) {
+            if (isPostInstall && isWithinSevenDays) {
               _storage.saveLocalNotification({
                 'id': doc.id,
                 'title': title,
@@ -255,9 +247,6 @@ class AppNotificationService {
 
           final title = (data['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
           final body = (data['body'] ?? data['message'] ?? '').toString().trim();
-          final isTest = (title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
-              (body.toLowerCase() == 'test' || body.isEmpty);
-          if (isTest) continue;
 
           final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
           final imageUrl = (data['imageUrl'] ?? data['image'] ?? '').toString().trim();
@@ -352,10 +341,7 @@ class AppNotificationService {
 
               final title = (map['title'] ?? '').toString().trim();
               final body = (map['body'] ?? map['message'] ?? '').toString().trim();
-              final isTest = (title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
-                  (body.toLowerCase() == 'test' || body.isEmpty);
-
-              if (isPostInstall && isWithinSevenDays && !isTest) {
+              if (isPostInstall && isWithinSevenDays) {
                 _storage.saveLocalNotification({
                   'id': key,
                   'title': title,
@@ -403,9 +389,6 @@ class AppNotificationService {
 
             final title = (map['title'] ?? 'নতুন বিজ্ঞপ্তি 📢').toString().trim();
             final body = (map['body'] ?? map['message'] ?? '').toString().trim();
-            final isTest = (title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
-                (body.toLowerCase() == 'test' || body.isEmpty);
-            if (isTest) return;
 
             final actionUrl = (map['actionUrl'] ?? map['link'] ?? map['redirectUrl'] ?? '').toString().trim();
             final imageUrl = (map['imageUrl'] ?? map['image'] ?? '').toString().trim();

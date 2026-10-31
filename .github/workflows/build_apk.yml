@@ -64,19 +64,19 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.21
-          name: "Es Bangla v1.3.21 (Dedicated Telegram Report API & Pure Cloud Authority)"
+          tag_name: v1.3.22
+          name: "Es Bangla v1.3.22 (FCM v1 Status Bar Push Notifications & Android 13+ Support)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.21 Release Highlights:
-            - **Dedicated Telegram Report Engine**:
-              - Question reports and feedback are routed directly through Cloudflare Edge Function (`/api/v1/report`) to private Telegram Admin Channel as rich, beautiful HTML cards.
-              - Completely removed Firebase Realtime Database and Firestore writes for reporting.
-            - **100% Free Mock Test Section**:
-              - All sets in the Free Mock Test section are fully unlocked and accessible for all students.
-            - **Strict Premium Mock Test Mode**:
-              - Premium Mock Test section requires active VIP entitlement with direct 1-tap WhatsApp activation.
+            ### Es Bangla v1.3.22 Release Highlights:
+            - **FCM v1 High-Priority Push Notifications**:
+              - Direct system integration with Google FCM v1 API and Android Google Play Services.
+              - Notifications pop up directly in the top Mobile Status Bar / System Notification Drawer even when the app is completely closed or killed.
+            - **Android 13+ Post-Notification Optimization**:
+              - Configured high-importance notification channel `es_bangla_announcements` with sound, vibration, and public visibility.
+            - **Enhanced Realtime Delivery**:
+              - Removed restrictive test filters to ensure immediate display of all incoming admin broadcasts.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

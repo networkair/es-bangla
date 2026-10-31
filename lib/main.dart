@@ -30,12 +30,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     final actionUrl = (data['actionUrl'] ?? data['link'] ?? data['redirectUrl'] ?? '').toString().trim();
     final msgId = message.messageId ?? 'notif_${DateTime.now().millisecondsSinceEpoch}';
 
-    // Discard any dummy/test notification
-    if ((title.toLowerCase().contains('test') || title.contains('টেস্টিং')) &&
-        (body.toLowerCase() == 'test' || body.isEmpty)) {
-      return;
-    }
-
     // 1. Save directly into device local storage (SharedPreferences)
     final prefs = await SharedPreferences.getInstance();
     const storageKey = 'user_local_notifications';
@@ -64,14 +58,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     list.insert(0, notifMap);
     await prefs.setString(storageKey, jsonEncode(list));
 
-    // 2. Display Status Bar Notification
-    await AppNotificationService().showSystemNotification(
-      id: msgId.hashCode & 0x7FFFFFFF,
-      title: title,
-      body: body,
-      actionUrl: actionUrl,
-      imageUrl: imageUrl,
-    );
+    // 2. Display Status Bar Notification if notification payload wasn't automatically shown by system
+    if (notification == null) {
+      await AppNotificationService().showSystemNotification(
+        id: msgId.hashCode & 0x7FFFFFFF,
+        title: title,
+        body: body,
+        actionUrl: actionUrl,
+        imageUrl: imageUrl,
+      );
+    }
   } catch (e) {
     debugPrint('FCM background handler error: $e');
   }
