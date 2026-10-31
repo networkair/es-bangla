@@ -10,15 +10,22 @@ import '../../mock_test/presentation/mock_test_landing_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
 
 class MainShellScreen extends StatefulWidget {
-  const MainShellScreen({super.key});
+  static final GlobalKey<MainShellScreenState> shellKey = GlobalKey<MainShellScreenState>();
+  MainShellScreen({Key? key}) : super(key: key ?? shellKey);
 
   @override
-  State<MainShellScreen> createState() => _MainShellScreenState();
+  State<MainShellScreen> createState() => MainShellScreenState();
 }
 
-class _MainShellScreenState extends State<MainShellScreen> with WidgetsBindingObserver {
+class MainShellScreenState extends State<MainShellScreen> with WidgetsBindingObserver {
   int _currentIndex = 0;
   StreamSubscription<List<String>>? _entitlementSub;
+
+  void selectHomeTab() {
+    if (mounted && _currentIndex != 0) {
+      setState(() => _currentIndex = 0);
+    }
+  }
 
   @override
   void initState() {

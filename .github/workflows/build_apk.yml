@@ -64,19 +64,18 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.22
-          name: "Es Bangla v1.3.22 (FCM v1 Status Bar Push Notifications & Android 13+ Support)"
+          tag_name: v1.3.23
+          name: "Es Bangla v1.3.23 (Notification Click -> Home Screen Navigation)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.22 Release Highlights:
-            - **FCM v1 High-Priority Push Notifications**:
-              - Direct system integration with Google FCM v1 API and Android Google Play Services.
-              - Notifications pop up directly in the top Mobile Status Bar / System Notification Drawer even when the app is completely closed or killed.
-            - **Android 13+ Post-Notification Optimization**:
-              - Configured high-importance notification channel `es_bangla_announcements` with sound, vibration, and public visibility.
-            - **Enhanced Realtime Delivery**:
-              - Removed restrictive test filters to ensure immediate display of all incoming admin broadcasts.
+            ### Es Bangla v1.3.23 Release Highlights:
+            - **Notification Click -> Home Screen Auto-Navigation**:
+              - Tapping any status bar notification directly brings the user into the app and navigates to the Home Screen (`HomeScreen`).
+              - Added `FLUTTER_NOTIFICATION_CLICK` intent-filter to `MainActivity`.
+              - Handled cold start launches via `FirebaseMessaging.instance.getInitialMessage()` and local notifications.
+            - **FCM v1 Status Bar Push Integration**:
+              - System drawer heads-up notifications even when app is killed or device is sleeping.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

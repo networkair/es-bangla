@@ -113,6 +113,8 @@ void _initBackgroundServices() async {
   } catch (_) {}
 }
 
+final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
+
 class EsBanglaApp extends StatelessWidget {
   const EsBanglaApp({super.key});
 
@@ -127,12 +129,13 @@ class EsBanglaApp extends StatelessWidget {
           valueListenable: connectivityService.isOnlineNotifier,
           builder: (context, isOnline, child) {
             return MaterialApp(
+              navigatorKey: appNavigatorKey,
               title: 'Es Bangla',
               debugShowCheckedModeBanner: false,
               theme: AppTheme.lightTheme,
               darkTheme: AppTheme.darkTheme,
               themeMode: themeMode,
-              home: const MainShellScreen(),
+              home: MainShellScreen(),
               builder: (context, child) {
                 // Strict Online-Only Blocker (PRD Section 23):
                 // Overlays entire navigator stack with un-dismissible OfflineScreen

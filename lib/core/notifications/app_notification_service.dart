@@ -5,8 +5,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import '../storage/local_storage_service.dart';
 import '../utils/security_manager.dart';
+import '../../main.dart';
+import '../../features/home/presentation/main_shell_screen.dart';
 
 class AppNotificationService {
   static final AppNotificationService _instance = AppNotificationService._internal();
@@ -27,6 +30,21 @@ class AppNotificationService {
 
   /// Real-time count of unread announcements for the top-bar bell badge
   final ValueNotifier<int> unreadCountNotifier = ValueNotifier<int>(0);
+
+  /// Seamlessly brings the user to the Home Screen and processes any deep link / URL
+  static void handleNotificationClick({String? actionUrl}) {
+    try {
+      appNavigatorKey.currentState?.popUntil((route) => route.isFirst);
+      MainShellScreen.shellKey.currentState?.selectHomeTab();
+    } catch (e) {
+      debugPrint('Navigation to Home error: $e');
+    }
+
+    final payload = actionUrl?.trim() ?? '';
+    if (payload.isNotEmpty && (payload.startsWith('http://') || payload.startsWith('https://'))) {
+      SecurityManager.openExternalUrl(payload);
+    }
+  }
 
   Future<void> initialize() async {
     if (_initialized) return;
@@ -49,10 +67,7 @@ class AppNotificationService {
     await _notificationsPlugin.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        final payload = response.payload?.trim() ?? '';
-        if (payload.isNotEmpty && (payload.startsWith('http://') || payload.startsWith('https://'))) {
-          SecurityManager.openExternalUrl(payload);
-        }
+        handleNotificationClick(actionUrl: response.payload);
       },
     );
 
@@ -126,10 +141,26 @@ class AppNotificationService {
 
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
         final actionUrl = message.data['actionUrl'] ?? message.data['link'] ?? '';
-        if (actionUrl.isNotEmpty && (actionUrl.startsWith('http://') || actionUrl.startsWith('https://'))) {
-          SecurityManager.openExternalUrl(actionUrl);
-        }
+        handleNotificationClick(actionUrl: actionUrl);
       });
+
+      // Cold start: App opened from completely terminated state via FCM notification click
+      fcm.getInitialMessage().then((RemoteMessage? message) {
+        if (message != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final actionUrl = message.data['actionUrl'] ?? message.data['link'] ?? '';
+            handleNotificationClick(actionUrl: actionUrl);
+          });
+        }
+      }).catchError((e) => debugPrint('FCM getInitialMessage note: $e'));
+
+      _notificationsPlugin.getNotificationAppLaunchDetails().then((details) {
+        if (details != null && details.didNotificationLaunchApp) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            handleNotificationClick(actionUrl: details.notificationResponse?.payload);
+          });
+        }
+      }).catchError((e) => debugPrint('Notification launch details note: $e'));
     } catch (e) {
       debugPrint('FCM init note: $e');
     }
