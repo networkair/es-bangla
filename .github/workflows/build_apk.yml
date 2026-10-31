@@ -64,18 +64,19 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.24
-          name: "Es Bangla v1.3.24 (Guaranteed Status Bar Notifications & Home Navigation)"
+          tag_name: v1.3.25
+          name: "Es Bangla v1.3.25 (UI Enhancements, Seamless PDF Reader & Analytics Polish)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.24 Release Highlights:
-            - **Guaranteed Real-time & Background Delivery**:
-              - Unconditional heads-up status bar display in both foreground and background.
-              - Robust multi-format parsing for Firestore (Timestamp, String ISO, and epoch milliseconds).
-              - Subscribed to all relevant FCM topics (`all`, `c12_sem3`, `c12_sem4`).
-            - **Auto-Navigation to Home**:
-              - Tapping the status bar notification brings the app directly to the Home Screen (`HomeScreen`).
+            ### Es Bangla v1.3.25 Release Highlights:
+            - **Seamless PDF Reader**: Removed page drop shadows for unified continuous page reading.
+            - **Quiz Result Save Feedback**: Added cute floating save message with app logo.
+            - **Smooth Navigation UX**: Eliminated tap highlight shadow freeze and enabled smooth page transitions app-wide.
+            - **Report Issue Feedback**: Professional English feedback message assuring quick review and user notification.
+            - **Mock Analytics Polish**: Refined section titles, streamlined study strategy to 5 actionable steps.
+            - **Modern Test Set Cards**: Soft bottom-only drop shadow and 24px rounded corners matching reference design.
+            - **Library & VIP Polish**: Clean cards without 99% badge, streamlined VIP payment screens.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
