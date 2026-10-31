@@ -65,17 +65,18 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.28
-          name: "Es Bangla v1.3.28 (Smooth 3s Splash, Instant Clean Launch, & UI Logo Integration)"
+          tag_name: v1.3.29
+          name: "Es Bangla v1.3.29 (Vibrant 3D Home Icons: Semesters, PYQ & Store)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.28 Release Highlights:
-            - **Instant Clean Launch**: Suppressed Android 12+ OS static splash icon flash with API 31+ styles.
-            - **Smooth 3s Animated Splash**: Logo reveal and golden underline hold for 3.2s before smooth fade transition.
-            - **Home AppBar Logo Integration**: App logo icon elegantly placed beside 'Es Bangla' brand title.
-            - **Profile Footer Polish**: Added app logo icon, 'Made with ES Bangla & Rk son 🇮🇳', and version subtitle.
-            - **Perfected App Launcher Icon**: 'Es' and 'Bangla' precisely left-aligned with pure #F59E0B golden bar.
+            ### Es Bangla v1.3.29 Release Highlights:
+            - **Vibrant Home Icons**: Replaced Semester 3 & 4 icons with the new illuminated stack of knowledge books.
+            - **New PYQ Icon**: Replaced Previous Years Questions card with the new checklist & magnifying glass emblem.
+            - **New Store Icon**: Replaced Premium Store card with the colorful 3D storefront & shopping cart emblem.
+            - **Instant Clean Launch**: Suppressed Android 12+ OS static splash icon flash.
+            - **Smooth 3s Animated Splash**: Logo reveal and golden underline hold for 3.2s before transition.
+            - **Home & Profile Logo Integration**: Official brand logo in Home AppBar and Profile footer.
             - **Report Issue Feedback**: Professional English feedback message assuring quick review and user notification.
             - **Mock Analytics Polish**: Refined section titles, streamlined study strategy to 5 actionable steps.
             - **Modern Test Set Cards**: Soft bottom-only drop shadow and 24px rounded corners matching reference design.

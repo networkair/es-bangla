@@ -824,7 +824,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       Text(
-                        'Version 1.3.28',
+                        'Version 1.3.29',
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
