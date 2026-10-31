@@ -127,12 +127,12 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
         _isSending = false;
         _isSuccess = success;
         _statusMessage = success
-            ? 'ধন্যবাদ! আপনার রিপোর্টটি সফলভাবে গ্রহণ করা হয়েছে।'
-            : 'রিপোর্ট পাঠানো সম্ভব হয়নি, অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।';
+            ? 'Thank you! We will review and fix any errors shortly, and you will be notified.'
+            : 'Unable to submit report. Please check your connection and try again.';
       });
 
       if (success) {
-        Future.delayed(const Duration(milliseconds: 1600), () {
+        Future.delayed(const Duration(milliseconds: 2500), () {
           if (mounted) Navigator.pop(context, true);
         });
       }
@@ -288,13 +288,38 @@ class _ReportBottomSheetState extends State<ReportBottomSheet> {
           ),
 
           if (_statusMessage != null) ...[
-            const SizedBox(height: 10),
-            Text(
-              _statusMessage!,
-              style: TextStyle(
-                color: _isSuccess ? AppColors.correctGreen : AppColors.wrongRed,
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: _isSuccess ? const Color(0xFFDCFCE7) : const Color(0xFFFFE4E6),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: _isSuccess ? const Color(0xFF86EFAC) : const Color(0xFFFDA4AF),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    _isSuccess ? Icons.check_circle_rounded : Icons.error_outline_rounded,
+                    color: _isSuccess ? const Color(0xFF16A34A) : const Color(0xFFE11D48),
+                    size: 18,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      _statusMessage!,
+                      style: TextStyle(
+                        color: _isSuccess ? const Color(0xFF15803D) : const Color(0xFFBE123C),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12.5,
+                        height: 1.35,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
