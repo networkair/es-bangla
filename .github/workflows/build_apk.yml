@@ -60,6 +60,7 @@ jobs:
           name: es-bangla-apk
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
+          retention-days: 1
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
