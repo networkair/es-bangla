@@ -323,26 +323,26 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Clean 3D Logo Container (Ready for App Logo)
+                // Official Es Bangla App Logo
                 Container(
-                  width: 82,
-                  height: 82,
+                  width: 90,
+                  height: 90,
                   decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                    borderRadius: BorderRadius.circular(24),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(22),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF0052D4).withOpacity(isDark ? 0.35 : 0.14),
+                        color: const Color(0xFF0070F3).withOpacity(isDark ? 0.35 : 0.15),
                         blurRadius: 20,
                         offset: const Offset(0, 8),
                       ),
                     ],
                   ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.school_rounded,
-                      color: Color(0xFF0052D4),
-                      size: 44,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(22),
+                    child: Image.asset(
+                      'assets/images/app_logo.png',
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
