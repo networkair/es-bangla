@@ -423,8 +423,8 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
             });
           },
           borderRadius: BorderRadius.circular(20),
-          splashColor: (isUnlocked ? AppColors.primary : AppColors.premiumGold).withOpacity(0.12),
-          highlightColor: (isUnlocked ? AppColors.primary : AppColors.premiumGold).withOpacity(0.06),
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           child: Padding(
             padding: const EdgeInsets.all(15),
             child: Column(

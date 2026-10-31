@@ -322,8 +322,8 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
             );
           },
           borderRadius: BorderRadius.circular(26),
-          splashColor: theme.color.withOpacity(0.08),
-          highlightColor: theme.color.withOpacity(0.04),
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
             child: Column(
