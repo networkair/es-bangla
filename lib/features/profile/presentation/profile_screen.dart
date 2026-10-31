@@ -747,47 +747,91 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Center(
               child: Column(
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Es ',
-                          style: TextStyle(
-                            fontFamily: 'AppTitleFont',
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
-                          ),
-                        ),
-                        const TextSpan(
-                          text: 'Bangla',
-                          style: TextStyle(
-                            fontFamily: 'AppTitleFont',
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF0070F3),
-                          ),
+                  // App Logo Icon
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(isDark ? 0.35 : 0.08),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Container(
-                    width: 32,
-                    height: 2.5,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF59E0B),
-                      borderRadius: BorderRadius.circular(2),
+                    clipBehavior: Clip.antiAlias,
+                    child: Image.asset(
+                      'assets/icons/app_logo.png',
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'উচ্চমাধ্যমিক সেমিস্টার সহায়িকা · Version 1.3.27',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
+                  const SizedBox(height: 10),
+                  // Made with ES Bangla & Rk son 🇮🇳
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontFamily: 'AppTitleFont',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? const Color(0xFFE2E8F0) : const Color(0xFF334155),
+                      ),
+                      children: [
+                        const TextSpan(text: 'Made with '),
+                        const TextSpan(
+                          text: 'ES Bangla',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0070F3), // Royal Blue
+                          ),
+                        ),
+                        const TextSpan(text: ' & '),
+                        TextSpan(
+                          text: 'Rk son',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? const Color(0xFFF59E0B) : const Color(0xFFD97706), // Amber
+                          ),
+                        ),
+                        const TextSpan(text: ' 🇮🇳'),
+                      ],
                     ),
+                  ),
+                  const SizedBox(height: 5),
+                  // App Name & Version (replacing 'উচ্চমাধ্যমিক সেমিস্টার সহায়িকা')
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Es Bangla',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 6),
+                        width: 3,
+                        height: 3,
+                        decoration: BoxDecoration(
+                          color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      Text(
+                        'Version 1.3.28',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

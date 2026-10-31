@@ -105,45 +105,72 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: 20,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        title: Row(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Es ',
-                    style: TextStyle(
-                      fontFamily: 'AppTitleFont',
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  const TextSpan(
-                    text: 'Bangla',
-                    style: TextStyle(
-                      fontFamily: 'AppTitleFont',
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0070F3), // Vibrant Royal Blue
-                      letterSpacing: 0.5,
-                    ),
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(isDark ? 0.35 : 0.08),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
-            ),
-            // Golden brushstroke accent below 'Bangla' matching user layout
-            Container(
-              margin: const EdgeInsets.only(left: 38, top: 1),
-              width: 44,
-              height: 3,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF59E0B),
-                borderRadius: BorderRadius.circular(2),
+              clipBehavior: Clip.antiAlias,
+              child: Image.asset(
+                'assets/icons/app_logo.png',
+                fit: BoxFit.cover,
               ),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Es ',
+                        style: TextStyle(
+                          fontFamily: 'AppTitleFont',
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const TextSpan(
+                        text: 'Bangla',
+                        style: TextStyle(
+                          fontFamily: 'AppTitleFont',
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0070F3), // Vibrant Royal Blue
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Golden brushstroke accent below 'Bangla'
+                Container(
+                  margin: const EdgeInsets.only(left: 34, top: 1),
+                  width: 40,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF59E0B),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

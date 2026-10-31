@@ -64,8 +64,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _controller.forward();
 
-    // 4. Auto-navigate to MainShellScreen after 2.3 seconds
-    _navigationTimer = Timer(const Duration(milliseconds: 2400), _navigateToHome);
+    // 4. Auto-navigate to MainShellScreen after 3.2 seconds
+    _navigationTimer = Timer(const Duration(milliseconds: 3200), _navigateToHome);
   }
 
   void _navigateToHome() {
