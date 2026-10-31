@@ -99,7 +99,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
   }
 
   Future<void> _toggleBookmark({
-    required MockTestMetadata meta,
+    required TestMetadataModel meta,
     required QuestionModel q,
     required bool wasSaved,
   }) async {
