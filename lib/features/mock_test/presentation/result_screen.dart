@@ -98,6 +98,116 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     await LocalStorageService().recordAttempt(record);
   }
 
+  Future<void> _toggleBookmark({
+    required MockTestMetadata meta,
+    required QuestionModel q,
+    required bool wasSaved,
+  }) async {
+    final qData = {
+      'test_id': meta.testId,
+      'q_id': q.qId,
+      'question_text': q.questionText,
+      'image_url': q.imageUrl,
+      'options': q.options,
+      'correct_option': q.correctOption,
+      'explanation': q.explanation,
+      'subject_id': meta.subjectId,
+      'subject_name': meta.subjectName,
+      'topic_name': meta.topicName,
+      'set_title': meta.title,
+      'saved_at': DateTime.now().toIso8601String(),
+    };
+    await LocalStorageService().toggleSaveQuestion(qData);
+    if (mounted) {
+      setState(() {});
+      _showCuteSaveToast(isSaved: !wasSaved);
+    }
+  }
+
+  void _showCuteSaveToast({required bool isSaved}) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        padding: EdgeInsets.zero,
+        margin: const EdgeInsets.only(bottom: 24, left: 24, right: 24),
+        duration: const Duration(milliseconds: 2000),
+        content: Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF0F172A),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.14),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.28),
+                  blurRadius: 14,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Cute App Logo / Icon Badge
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF0052D4), Color(0xFF0070F3)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF0070F3).withOpacity(0.35),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.school_rounded,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                // Feedback Text
+                Text(
+                  isSaved ? 'সেভ সাকসেসফুল' : 'বুকমার্ক সরানো হয়েছে',
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(
+                  isSaved ? Icons.check_circle_rounded : Icons.info_outline_rounded,
+                  color: isSaved ? const Color(0xFF10B981) : const Color(0xFF94A3B8),
+                  size: 16,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final meta = widget.testPaper.metadata;
@@ -578,6 +688,24 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                           ),
                           const Spacer(),
 
+                          // Quick 1-Tap Bookmark Action Button
+                          GestureDetector(
+                            onTap: () => _toggleBookmark(
+                              meta: meta,
+                              q: q,
+                              wasSaved: isSaved,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                              child: Icon(
+                                isSaved ? Icons.bookmark_rounded : Icons.bookmark_outline_rounded,
+                                size: 22,
+                                color: isSaved ? AppColors.primary : const Color(0xFF94A3B8),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+
                           // 3-Dots Menu (Bookmark & Report)
                           PopupMenuButton<String>(
                             icon: const Icon(Icons.more_vert_rounded, color: Color(0xFF64748B), size: 20),
@@ -586,22 +714,11 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             onSelected: (val) async {
                               if (val == 'bookmark') {
-                                final qData = {
-                                  'test_id': meta.testId,
-                                  'q_id': q.qId,
-                                  'question_text': q.questionText,
-                                  'image_url': q.imageUrl,
-                                  'options': q.options,
-                                  'correct_option': q.correctOption,
-                                  'explanation': q.explanation,
-                                  'subject_id': meta.subjectId,
-                                  'subject_name': meta.subjectName,
-                                  'topic_name': meta.topicName,
-                                  'set_title': meta.title,
-                                  'saved_at': DateTime.now().toIso8601String(),
-                                };
-                                await LocalStorageService().toggleSaveQuestion(qData);
-                                setState(() {});
+                                await _toggleBookmark(
+                                  meta: meta,
+                                  q: q,
+                                  wasSaved: isSaved,
+                                );
                               } else if (val == 'report') {
                                 showModalBottomSheet(
                                   context: context,
