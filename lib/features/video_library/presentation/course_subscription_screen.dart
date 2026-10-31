@@ -192,15 +192,6 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    final name = user?.displayName?.isNotEmpty == true
-        ? user!.displayName!
-        : LocalStorageService().userName;
-    final email = user?.email?.isNotEmpty == true
-        ? user!.email!
-        : (LocalStorageService().userEmail.isNotEmpty ? LocalStorageService().userEmail : 'লগইন করা নেই');
-    final uid = user?.uid ?? 'লগইন করার পর তৈরি হবে';
-
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -355,87 +346,7 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
 
                     const SizedBox(height: 20),
 
-                    // Student Account Info Card (For Admin Direct Grant Linking)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF8FAFC),
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(color: const Color(0xFFE2E8F0)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: const Icon(Icons.badge_outlined, size: 18, color: AppColors.primary),
-                              ),
-                              const SizedBox(width: 8),
-                              const Text(
-                                'আপনার শিক্ষার্থী অ্যাকাউন্ট তথ্য',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13.5,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                              const Spacer(),
-                              InkWell(
-                                onTap: () {
-                                  Clipboard.setData(ClipboardData(text: uid));
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('ইউজার আইডি (UID) কপি করা হয়েছে!'),
-                                      behavior: SnackBarBehavior.floating,
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                },
-                                borderRadius: BorderRadius.circular(8),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: const Color(0xFFCBD5E1)),
-                                  ),
-                                  child: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(Icons.copy_rounded, size: 12, color: AppColors.primary),
-                                      SizedBox(width: 4),
-                                      Text(
-                                        'UID কপি',
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.primary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          _buildAccountInfoRow('নাম:', name),
-                          const SizedBox(height: 4),
-                          _buildAccountInfoRow('ইমেইল:', email),
-                          const SizedBox(height: 4),
-                          _buildAccountInfoRow('ইউজার আইডি:', uid),
-                        ],
-                      ),
-                    ),
 
-                    const SizedBox(height: 22),
 
                     // Free Demo Videos Section
                     const Text(
@@ -507,7 +418,7 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
                           const SizedBox(height: 10),
                           _buildStepItem('২', 'পেমেন্ট সম্পন্ন করুন', 'আমরা হোয়াটসঅ্যাপে আপনাকে অফিশিয়াল কিউআর কোড (QR Code) পাঠাবো।'),
                           const SizedBox(height: 10),
-                          _buildStepItem('৩', 'সরাসরি সাবস্ক্রিপশন সক্রিয়করণ', 'পেমেন্ট সম্পন্ন হলে আমাদের টিম সরাসরি আপনার অ্যাকাউন্টে সাবস্ক্রিপশন চালু করে দেবে। কোনো কোডের প্রয়োজন নেই।'),
+                          _buildStepItem('৩', 'সরাসরি সাবস্ক্রিপশন সক্রিয়করণ', 'পেমেন্ট সম্পন্ন হলে সরাসরি আপনার অ্যাকাউন্টে সাবস্ক্রিপশন অ্যাক্টিভ হয়ে যাবে।'),
                         ],
                       ),
                     ),
@@ -569,28 +480,7 @@ class _CourseSubscriptionScreenState extends State<CourseSubscriptionScreen> {
     );
   }
 
-  Widget _buildAccountInfoRow(String label, String value) {
-    return Row(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-        ),
-        const SizedBox(width: 6),
-        Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
-    );
-  }
+
 
   Widget _buildBenefitItem(IconData icon, String text) {
     return Row(

@@ -180,15 +180,6 @@ class _PremiumLockScreenState extends State<PremiumLockScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    final name = user?.displayName?.isNotEmpty == true
-        ? user!.displayName!
-        : LocalStorageService().userName;
-    final email = user?.email?.isNotEmpty == true
-        ? user!.email!
-        : (LocalStorageService().userEmail.isNotEmpty ? LocalStorageService().userEmail : 'লগইন করা নেই');
-    final uid = user?.uid ?? 'লগইন করার পর তৈরি হবে';
-
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -284,108 +275,7 @@ class _PremiumLockScreenState extends State<PremiumLockScreen> {
 
             const SizedBox(height: 18),
 
-            // 2. Student Account Information Box
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFFE2E8F0)),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF0F172A).withOpacity(0.03),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: const [
-                      Icon(Icons.badge_outlined, size: 20, color: AppColors.primary),
-                      SizedBox(width: 8),
-                      Text(
-                        'আপনার শিক্ষার্থী অ্যাকাউন্ট তথ্য:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  _buildAccountInfoRow('নাম:', name),
-                  const SizedBox(height: 6),
-                  _buildAccountInfoRow('ইমেইল:', email),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      const Text(
-                        'ইউজার আইডি (UID): ',
-                        style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                      ),
-                      Expanded(
-                        child: Text(
-                          uid,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontFamily: 'monospace',
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.copy_rounded, size: 16, color: AppColors.primary),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        tooltip: 'UID কপি করুন',
-                        onPressed: () {
-                          Clipboard.setData(ClipboardData(text: uid));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('ইউজার আইডি (UID) কপি করা হয়েছে!'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF8FAFC),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xFFE2E8F0)),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Icon(Icons.info_outline_rounded, size: 15, color: Color(0xFF64748B)),
-                        SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            'হোয়াটসঅ্যাপে যোগাযোগ করার সময় এই ইউজার আইডি স্বয়ংক্রিয়ভাবে মেসেজে যুক্ত হয়ে যাবে।',
-                            style: TextStyle(fontSize: 11, color: Color(0xFF64748B), height: 1.3),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 18),
-
-            // 3. How to Activate Guide Card
+            // 2. How to Activate Guide Card
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(18),
@@ -410,7 +300,7 @@ class _PremiumLockScreenState extends State<PremiumLockScreen> {
                   const SizedBox(height: 10),
                   _buildStep('২', 'পেমেন্ট সম্পন্ন করুন', 'আমরা হোয়াটসঅ্যাপে আপনাকে অফিশিয়াল কিউআর কোড (QR Code) পাঠাবো।'),
                   const SizedBox(height: 10),
-                  _buildStep('৩', 'সরাসরি সাবস্ক্রিপশন চালু', 'পেমেন্ট সম্পন্ন হলে আমাদের টিম সরাসরি আপনার অ্যাকাউন্টে সাবস্ক্রিপশন সক্রিয় করে দেবে। কোনো কোডের প্রয়োজন নেই।'),
+                  _buildStep('৩', 'সরাসরি সাবস্ক্রিপশন চালু', 'পেমেন্ট সম্পন্ন হলে সরাসরি আপনার অ্যাকাউন্টে সাবস্ক্রিপশন অ্যাক্টিভ হয়ে যাবে।'),
                 ],
               ),
             ),
@@ -489,28 +379,7 @@ class _PremiumLockScreenState extends State<PremiumLockScreen> {
     );
   }
 
-  Widget _buildAccountInfoRow(String label, String value) {
-    return Row(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-        ),
-        const SizedBox(width: 6),
-        Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
-    );
-  }
+
 
   Widget _buildStep(String number, String title, String subtitle) {
     return Row(
