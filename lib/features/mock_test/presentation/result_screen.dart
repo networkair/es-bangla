@@ -156,31 +156,29 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Cute App Logo / Icon Badge
+                // Official Es Bangla App Logo Badge
                 Container(
                   width: 28,
                   height: 28,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF0052D4), Color(0xFF0070F3)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.2),
+                      width: 1,
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF0070F3).withOpacity(0.35),
+                        color: Colors.black.withOpacity(0.2),
                         blurRadius: 4,
                         offset: const Offset(0, 1),
                       ),
                     ],
                   ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.school_rounded,
-                      color: Colors.white,
-                      size: 16,
-                    ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Image.asset(
+                    'assets/icons/app_logo.png',
+                    fit: BoxFit.cover,
                   ),
                 ),
                 const SizedBox(width: 10),

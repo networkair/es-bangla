@@ -65,19 +65,18 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.29
-          name: "Es Bangla v1.3.29 (Vibrant 3D Home Icons: Semesters, PYQ & Store)"
+          tag_name: v1.3.30
+          name: "Es Bangla v1.3.30 (Mock Test Data Distribution & Result Save Icon)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.29 Release Highlights:
-            - **Vibrant Home Icons**: Replaced Semester 3 & 4 icons with the new illuminated stack of knowledge books.
-            - **New PYQ Icon**: Replaced Previous Years Questions card with the new checklist & magnifying glass emblem.
-            - **New Store Icon**: Replaced Premium Store card with the colorful 3D storefront & shopping cart emblem.
-            - **Instant Clean Launch**: Suppressed Android 12+ OS static splash icon flash.
-            - **Smooth 3s Animated Splash**: Logo reveal and golden underline hold for 3.2s before transition.
-            - **Home & Profile Logo Integration**: Official brand logo in Home AppBar and Profile footer.
-            - **Report Issue Feedback**: Professional English feedback message assuring quick review and user notification.
+            ### Es Bangla v1.3.30 Release Highlights:
+            - **Intelligent Mock Test Distribution**:
+              - All regular / free mock test sets are universally accessible in both Free and Premium Mock Test portals.
+              - Dedicated premium mock tests are strictly routed to the Premium Mock Test portal and excluded from the Free portal.
+              - Set cards are naturally sorted numerically (Set 1, 2, 3... 20) with distinct status badges (Full Free vs VIP Exclusive / VIP Active).
+            - **Official Logo in Result Screen Save Toast**:
+              - Question save & unsave feedback pill now displays the crisp official Es Bangla brand logo badge.
             - **Mock Analytics Polish**: Refined section titles, streamlined study strategy to 5 actionable steps.
             - **Modern Test Set Cards**: Soft bottom-only drop shadow and 24px rounded corners matching reference design.
             - **Library & VIP Polish**: Clean cards without 99% badge, streamlined VIP payment screens.

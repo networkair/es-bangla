@@ -72,6 +72,21 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
     }
   }
 
+  bool _isDedicatedPremium(TestSetModel set) {
+    if (set.isPremium) return true;
+    final title = set.title.toLowerCase();
+    if (title.contains('premium') ||
+        title.contains('প্রিমিয়াম') ||
+        title.contains('প্রিমিয়াম')) {
+      return true;
+    }
+    final file = set.setFile.toLowerCase();
+    if (file.contains('premium')) {
+      return true;
+    }
+    return false;
+  }
+
   bool _isSetAccessible(TestSetModel set) {
     // 1. Free Mock Test section is 100% free for all students
     if (!widget.isPremiumMode) return true;
@@ -227,10 +242,14 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
       );
     }
 
-    // Filter topics if in premium mode
+    // Filter topics:
+    // - Free mode: show only topics that have at least one free/general set (exclude dedicated premium)
+    // - Premium mode: show all topics that have any set (both general and dedicated premium)
     final validTopics = _topics.where((t) {
-      if (!widget.isPremiumMode) return t.sets.isNotEmpty;
-      return t.sets.any((s) => s.isPremium || s.setNumber > 1);
+      if (!widget.isPremiumMode) {
+        return t.sets.any((s) => !_isDedicatedPremium(s));
+      }
+      return t.sets.isNotEmpty;
     }).toList();
 
     if (validTopics.isEmpty) {
@@ -267,9 +286,16 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
       itemCount: validTopics.length,
       itemBuilder: (context, index) {
         final topic = validTopics[index];
-        final setsToShow = widget.isPremiumMode
-            ? topic.sets.where((s) => s.isPremium || s.setNumber > 1).toList()
-            : topic.sets;
+
+        // - Free mode: only regular/free sets (exclude any dedicated premium set)
+        // - Premium mode: ALL sets (both regular/free sets and dedicated premium sets)
+        final rawSets = widget.isPremiumMode
+            ? topic.sets
+            : topic.sets.where((s) => !_isDedicatedPremium(s)).toList();
+
+        // Sort sets numerically by setNumber so Set 1, 2, 3... are in perfect order
+        final setsToShow = List<TestSetModel>.from(rawSets)
+          ..sort((a, b) => a.setNumber.compareTo(b.setNumber));
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 24),
@@ -332,6 +358,7 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
   Widget _buildHorizontalSetCard(TopicModel topic, TestSetModel set) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isUnlocked = _isSetAccessible(set);
+    final isDedicated = _isDedicatedPremium(set);
 
     return Container(
       width: 148,
@@ -446,17 +473,17 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
                   ),
                 ),
 
-                // Middle: "Full Free" Badge in English (No Coins / No Question counts)
+                // Middle: Badge
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4.5),
                   decoration: BoxDecoration(
                     color: isUnlocked
-                        ? const Color(0xFFECFDF5)
+                        ? (isDedicated ? AppColors.premiumLight : const Color(0xFFECFDF5))
                         : AppColors.premiumLight,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: isUnlocked
-                          ? const Color(0xFFA7F3D0)
+                          ? (isDedicated ? AppColors.premiumGold.withOpacity(0.4) : const Color(0xFFA7F3D0))
                           : AppColors.premiumGold.withOpacity(0.4),
                       width: 1,
                     ),
@@ -466,23 +493,25 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
                     children: [
                       Icon(
                         isUnlocked
-                            ? Icons.check_circle_rounded
+                            ? (isDedicated ? Icons.workspace_premium_rounded : Icons.check_circle_rounded)
                             : Icons.lock_rounded,
                         size: 13,
                         color: isUnlocked
-                            ? const Color(0xFF10B981)
+                            ? (isDedicated ? AppColors.premiumGold : const Color(0xFF10B981))
                             : AppColors.premiumGold,
                       ),
                       const SizedBox(width: 5),
                       Text(
                         isUnlocked
-                            ? (widget.isPremiumMode ? 'VIP Active' : 'Full Free')
+                            ? (widget.isPremiumMode
+                                ? (isDedicated ? 'VIP Exclusive' : 'VIP Active')
+                                : 'Full Free')
                             : 'Premium',
                         style: TextStyle(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w700,
                           color: isUnlocked
-                              ? const Color(0xFF047857)
+                              ? (isDedicated ? AppColors.premiumGold : const Color(0xFF047857))
                               : AppColors.premiumGold,
                           letterSpacing: 0.2,
                         ),
