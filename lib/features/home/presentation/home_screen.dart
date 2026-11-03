@@ -99,9 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFFCF7F3),
+      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFFCF7F3),
+        backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: 20,
@@ -472,11 +472,22 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          width: 1.0,
+        ),
         boxShadow: [
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.06),
-            blurRadius: 14,
-            offset: const Offset(0, 5),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.30 : 0.06),
+            offset: const Offset(0, 8),
+            blurRadius: 18,
+            spreadRadius: -2,
+          ),
+          BoxShadow(
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
+            offset: const Offset(0, 1),
+            blurRadius: 3,
+            spreadRadius: 0,
           ),
         ],
       ),
@@ -769,7 +780,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildStudyReminderTile() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      height: 60,
+      height: 62,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isDark
@@ -778,19 +789,29 @@ class _HomeScreenState extends State<HomeScreen> {
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(
+          color: isDark ? const Color(0xFF3B82F6).withOpacity(0.3) : const Color(0xFF60A5FA).withOpacity(0.35),
+          width: 1.0,
+        ),
         boxShadow: [
-          // 3D downward drop shadow matching mockup
+          // Dual-layer rich royal blue downward drop shadow matching mockup
           BoxShadow(
             color: (isDark ? Colors.black : const Color(0xFF0052D4)).withOpacity(isDark ? 0.35 : 0.28),
-            offset: const Offset(0, 6),
-            blurRadius: 16,
+            offset: const Offset(0, 8),
+            blurRadius: 18,
             spreadRadius: -2,
+          ),
+          BoxShadow(
+            color: (isDark ? Colors.black : const Color(0xFF0052D4)).withOpacity(isDark ? 0.15 : 0.08),
+            offset: const Offset(0, 2),
+            blurRadius: 4,
+            spreadRadius: 0,
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(32),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -806,8 +827,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   // White circular badge with golden ringing bell
                   Container(
-                    width: 42,
-                    height: 42,
+                    width: 44,
+                    height: 44,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
@@ -816,7 +837,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Icon(
                         Icons.notifications_active_rounded,
                         color: Color(0xFFF59E0B), // Golden amber bell
-                        size: 23,
+                        size: 24,
                       ),
                     ),
                   ),
@@ -824,7 +845,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Vertical divider line matching reference
                   Container(
                     width: 1.5,
-                    height: 24,
+                    height: 26,
                     margin: const EdgeInsets.symmetric(horizontal: 14),
                     color: Colors.white.withOpacity(0.40),
                   ),
@@ -837,7 +858,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontFamily: 'sans-serif',
                         fontSize: 15.5,
                         fontWeight: FontWeight.w900,
-                        letterSpacing: 0.7,
+                        letterSpacing: 0.8,
                         color: Colors.white,
                       ),
                     ),
@@ -860,30 +881,40 @@ class _HomeScreenState extends State<HomeScreen> {
     required Color buttonIconColor,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardBg = isDark ? const Color(0xFF1E293B) : Colors.white;
 
     return Container(
       decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(24),
+        gradient: isDark
+            ? null
+            : const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFFFFFFF), Color(0xFFFCFCFC), Color(0xFFF8FAFC)],
+              ),
+        color: isDark ? const Color(0xFF1E293B) : null,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          width: 1.0,
+        ),
         boxShadow: [
-          // 3D downward drop shadow matching user reference mockup
+          // Dual-layer soft ambient + directional drop shadow matching Safollo & mockup
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.35 : 0.06),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.30 : 0.06),
             offset: const Offset(0, 8),
             blurRadius: 18,
             spreadRadius: -2,
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.15 : 0.02),
-            offset: const Offset(0, 2),
-            blurRadius: 4,
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
+            offset: const Offset(0, 1),
+            blurRadius: 3,
             spreadRadius: 0,
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -897,8 +928,8 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 // Top-right action arrow circle
                 Positioned(
-                  top: 12,
-                  right: 12,
+                  top: 10,
+                  right: 10,
                   child: Container(
                     width: 32,
                     height: 32,
@@ -909,7 +940,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Center(
                       child: Icon(
                         Icons.arrow_forward_ios_rounded,
-                        size: 12,
+                        size: 11,
                         color: buttonIconColor,
                       ),
                     ),
@@ -927,8 +958,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Large 3D Icon matching mockup
                         Image.asset(
                           iconAsset,
-                          width: 84,
-                          height: 84,
+                          width: 82,
+                          height: 82,
                           fit: BoxFit.contain,
                         ),
                         const SizedBox(height: 10),
@@ -950,7 +981,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: isDark
                                 ? const Color(0xFF064E3B).withOpacity(0.45)
                                 : const Color(0xFFDCFCE7),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: isDark
+                                  ? const Color(0xFF059669).withOpacity(0.3)
+                                  : const Color(0xFF86EFAC).withOpacity(0.4),
+                              width: 0.8,
+                            ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -996,30 +1033,40 @@ class _HomeScreenState extends State<HomeScreen> {
     bool isTwoLineTitle = false,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardBg = isDark ? const Color(0xFF1E293B) : Colors.white;
 
     return Container(
       decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(24),
+        gradient: isDark
+            ? null
+            : const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFFFFFFF), Color(0xFFFCFCFC), Color(0xFFF8FAFC)],
+              ),
+        color: isDark ? const Color(0xFF1E293B) : null,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          width: 1.0,
+        ),
         boxShadow: [
-          // 3D downward drop shadow matching user reference mockup
+          // Dual-layer soft ambient + directional drop shadow matching Safollo & mockup
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.35 : 0.06),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.30 : 0.06),
             offset: const Offset(0, 8),
             blurRadius: 18,
             spreadRadius: -2,
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.15 : 0.02),
-            offset: const Offset(0, 2),
-            blurRadius: 4,
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
+            offset: const Offset(0, 1),
+            blurRadius: 3,
             spreadRadius: 0,
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -1031,15 +1078,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Large 3D Icon matching mockup
                   Image.asset(
                     iconAsset,
-                    width: 82,
-                    height: 82,
+                    width: 80,
+                    height: 80,
                     fit: BoxFit.contain,
                   ),
 
                   // Crisp Vertical Divider
                   Container(
                     width: 1.2,
-                    height: 44,
+                    height: 40,
                     margin: const EdgeInsets.symmetric(horizontal: 14),
                     color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
                   ),
@@ -1077,8 +1124,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   // Right Action Arrow Circle
                   Container(
-                    width: 42,
-                    height: 42,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF334155) : buttonBgColor,
                       shape: BoxShape.circle,
@@ -1086,7 +1133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Center(
                       child: Icon(
                         Icons.arrow_forward_ios_rounded,
-                        size: 14,
+                        size: 13,
                         color: buttonIconColor,
                       ),
                     ),
@@ -1103,24 +1150,35 @@ class _HomeScreenState extends State<HomeScreen> {
   // ==================== 6. AUTHENTIC ES BANGLA SOCIAL HUB ====================
   Widget _buildSocialMediaSection() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardBg = isDark ? const Color(0xFF1E293B) : Colors.white;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
       decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(24),
+        gradient: isDark
+            ? null
+            : const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFFFFFFF), Color(0xFFFCFCFC), Color(0xFFF8FAFC)],
+              ),
+        color: isDark ? const Color(0xFF1E293B) : null,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          width: 1.0,
+        ),
         boxShadow: [
+          // Dual-layer soft ambient + directional drop shadow matching Safollo & mockup
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.35 : 0.06),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.30 : 0.06),
             offset: const Offset(0, 8),
             blurRadius: 18,
             spreadRadius: -2,
           ),
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.15 : 0.02),
-            offset: const Offset(0, 2),
-            blurRadius: 4,
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
+            offset: const Offset(0, 1),
+            blurRadius: 3,
             spreadRadius: 0,
           ),
         ],
