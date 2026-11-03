@@ -65,29 +65,29 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.33
-          name: "Es Bangla v1.3.33 (Complete 66 Official Semester 3 Notes Library Integration)"
+          tag_name: v1.3.34
+          name: "Es Bangla v1.3.34 (Clean Header-Free Notes & Unified 66 PDF Library)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.33 Release Highlights:
-            - **Complete 66 Official Semester 3 Notes Library Integration**:
-              - All 9 Class 12 Semester 3 subjects configured with 66 official syllabus chapters:
-                - Bengali (6 chapters)
-                - English (6 chapters)
-                - Education (10 chapters)
-                - Geography (13 chapters)
-                - Political Science (6 chapters)
-                - History (5 chapters)
-                - Sanskrit (10 chapters)
-                - Computer Application (2 chapters)
-                - Philosophy (8 chapters)
-            - **100% Free Access for All Students**:
-              - All Semester 3 and 4 notes completely open with zero paywall.
-            - **Anti-Piracy Master Password Lock**:
-              - All 66 PDFs encrypted with AESv2 master password for seamless in-app decryption while completely preventing external copying/theft.
+            ### Es Bangla v1.3.34 Release Highlights:
+            - **Clean & Professional Reading Experience**:
+              - Completely removed cluttering subtitle badges and redundant semester headers across all 66 PDFs.
+              - Uniform, clean publication-quality topic headings across all 9 subjects.
+            - **Complete 66 Official Semester 3 Notes Library**:
+              - Bengali (6 chapters)
+              - English (6 chapters)
+              - Education (10 chapters)
+              - Geography (13 chapters)
+              - Political Science (6 chapters)
+              - History (5 chapters)
+              - Sanskrit (10 chapters)
+              - Computer Application (2 chapters)
+              - Philosophy (8 chapters)
+            - **Anti-Piracy AESv2 Master Password Lock**:
+              - All 66 PDFs encrypted with AESv2 128-bit master password for seamless in-app decryption while completely preventing external copying/theft.
             - **Ultra-Compact Assets**:
-              - Entire 66 PDF library optimized to ~19.5 MB for instant loading.
+              - Entire 66 PDF library optimized to ~19.7 MB for instant loading.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
