@@ -65,16 +65,18 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.34
-          name: "Es Bangla v1.3.34 (Clean Header-Free Notes & Unified 66 PDF Library)"
+          tag_name: v1.3.35
+          name: "Es Bangla v1.3.35 (Accurate Official WBCHSE Syllabus Titles & Author Details)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.34 Release Highlights:
-            - **Clean & Professional Reading Experience**:
-              - Completely removed cluttering subtitle badges and redundant semester headers across all 66 PDFs.
-              - Uniform, clean publication-quality topic headings across all 9 subjects.
-            - **Complete 66 Official Semester 3 Notes Library**:
+            ### Es Bangla v1.3.35 Release Highlights:
+            - **100% Accurate WBCHSE Syllabus Genres & Authors**:
+              - Corrected Bengali literary genres (Short Story vs Essay vs Poem vs Indian/International translations).
+              - Fixed author attributions (Nabanita Dev Sen for Digbijoyer Rupkotha, Shankarrao Kharat for Potraj, Pablo Neruda for Tar Songe).
+              - Updated English and Sanskrit literary genres and author credits.
+            - **Unified 66 Official Chapter Notes**:
+              - Complete 66 Semester 3 chapters across all 9 subjects.
               - Bengali (6 chapters)
               - English (6 chapters)
               - Education (10 chapters)
