@@ -1,5 +1,5 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import '../../mock_test/presentation/mock_subject_select_screen.dart';
@@ -12,35 +12,35 @@ class MockAnalyticsScreen extends StatefulWidget {
 }
 
 class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
-  String _timeframe = 'Daily'; // 'Daily', 'Weekly', 'Monthly'
+  String _timeframe = 'Weekly'; // Default to Weekly for a rich, immediate activity view
+  int? _selectedSubjectIndex;
 
   List<Map<String, dynamic>> _filterAttempts(List<Map<String, dynamic>> all) {
     if (all.isEmpty) return [];
     final now = DateTime.now();
 
-    // If Daily, attempts within last 36 hours (or fallback to recent)
     if (_timeframe == 'Daily') {
-      final list = all.where((a) {
+      final todayStart = DateTime(now.year, now.month, now.day);
+      return all.where((a) {
         final dt = DateTime.tryParse(a['date']?.toString() ?? '');
-        if (dt == null) return true;
-        return now.difference(dt).inHours <= 36;
+        if (dt == null) return false;
+        return dt.isAfter(todayStart);
       }).toList();
-      return list.isNotEmpty ? list : all;
     } else if (_timeframe == 'Weekly') {
-      final list = all.where((a) {
+      final weekAgo = now.subtract(const Duration(days: 7));
+      return all.where((a) {
         final dt = DateTime.tryParse(a['date']?.toString() ?? '');
-        if (dt == null) return true;
-        return now.difference(dt).inDays <= 7;
+        if (dt == null) return false;
+        return dt.isAfter(weekAgo);
       }).toList();
-      return list.isNotEmpty ? list : all;
     } else {
-      // Monthly
-      final list = all.where((a) {
+      // Monthly (last 30 days)
+      final monthAgo = now.subtract(const Duration(days: 30));
+      return all.where((a) {
         final dt = DateTime.tryParse(a['date']?.toString() ?? '');
-        if (dt == null) return true;
-        return now.difference(dt).inDays <= 30;
+        if (dt == null) return false;
+        return dt.isAfter(monthAgo);
       }).toList();
-      return list.isNotEmpty ? list : all;
     }
   }
 
@@ -50,7 +50,7 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
     final allAttempts = LocalStorageService().getAttemptHistory();
     final attempts = _filterAttempts(allAttempts);
 
-    // Grouping by Subject
+    // Grouping strictly by canonical Subject Name
     final Map<String, List<Map<String, dynamic>>> subjectMap = {};
     for (var a in attempts) {
       final sName = a['subject_name']?.toString().trim().isNotEmpty == true
@@ -59,7 +59,8 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
       subjectMap.putIfAbsent(sName, () => []).add(a);
     }
 
-    // Identify Strong Topics (>= 70%) and Weak Topics (< 60%)
+    // Identify Strong Subjects (>= 70%) and Weak Subjects (< 70%)
+    // MUTUALLY EXCLUSIVE: A subject will NEVER appear in both Mastered and Revision!
     final List<Map<String, dynamic>> strongTopics = [];
     final List<Map<String, dynamic>> weakTopics = [];
 
@@ -84,46 +85,14 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
       if (avgAccuracy >= 70.0) {
         strongTopics.add(summary);
       } else {
-        // Less than 60% or needs improvement
         weakTopics.add(summary);
       }
     });
 
-    // Also check chapter/topic level
-    final Map<String, List<Map<String, dynamic>>> topicMap = {};
-    for (var a in attempts) {
-      final tName = a['topic_name']?.toString().trim().isNotEmpty == true
-          ? a['topic_name'].toString().trim()
-          : (a['title']?.toString().trim() ?? '');
-      if (tName.isNotEmpty) {
-        topicMap.putIfAbsent(tName, () => []).add(a);
-      }
-    }
-
-    topicMap.forEach((tName, list) {
-      int totalQ = 0;
-      int correctQ = 0;
-      String sub = '';
-      for (var item in list) {
-        totalQ += (item['total_questions'] as num?)?.toInt() ?? 0;
-        correctQ += (item['correct'] as num?)?.toInt() ?? 0;
-        if (sub.isEmpty) sub = item['subject_name']?.toString() ?? '';
-      }
-      final double acc = totalQ > 0 ? (correctQ / totalQ) * 100 : 0.0;
-      final topicSummary = {
-        'topic_name': tName,
-        'subject_name': sub.isNotEmpty ? sub : tName,
-        'accuracy': acc,
-        'total_questions': totalQ,
-        'correct_questions': correctQ,
-        'attempts_count': list.length,
-        'attempts': list,
-      };
-
-      if (acc >= 70.0 && !strongTopics.any((s) => s['subject_name'] == sub || s['subject_name'] == tName)) {
-        strongTopics.add(topicSummary);
-      }
-    });
+    // Sort strong topics descending (highest score first)
+    strongTopics.sort((a, b) => (b['accuracy'] as double).compareTo(a['accuracy'] as double));
+    // Sort weak topics ascending (lowest score first so student knows what needs revision most)
+    weakTopics.sort((a, b) => (a['accuracy'] as double).compareTo(b['accuracy'] as double));
 
     return Scaffold(
       backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
@@ -568,211 +537,9 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
             ),
             const SizedBox(height: 14),
 
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(14, 18, 16, 16),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                borderRadius: BorderRadius.circular(22),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
-                    blurRadius: 14,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: subjectMap.isEmpty
-                  ? SizedBox(
-                      height: 180,
-                      child: Center(
-                        child: Text(
-                          'Attempt tests to generate performance chart.',
-                          style: TextStyle(
-                            fontSize: 13.5,
-                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                          ),
-                        ),
-                      ),
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Legend Row
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            _buildChartLegendDot(const Color(0xFF10B981), '≥70% High', isDark),
-                            const SizedBox(width: 12),
-                            _buildChartLegendDot(const Color(0xFFF59E0B), '50-69% Avg', isDark),
-                            const SizedBox(width: 12),
-                            _buildChartLegendDot(const Color(0xFFEF4444), '<50% Focus', isDark),
-                          ],
-                        ),
-                        const SizedBox(height: 14),
-
-                        SizedBox(
-                          height: 240,
-                          child: BarChart(
-                            BarChartData(
-                              alignment: BarChartAlignment.spaceAround,
-                              maxY: 100,
-                              minY: 0,
-                              barTouchData: BarTouchData(
-                                enabled: true,
-                                touchTooltipData: BarTouchTooltipData(
-                                  fitInsideVertically: true,
-                                  fitInsideHorizontally: true,
-                                  tooltipRoundedRadius: 8,
-                                  tooltipPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                  getTooltipColor: (_) => isDark ? const Color(0xFF334155) : const Color(0xFF0F172A),
-                                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                                    final subject = subjectMap.keys.elementAt(group.x);
-                                    return BarTooltipItem(
-                                      '$subject\n${rod.toY.toStringAsFixed(1)}%',
-                                      const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-                                    );
-                                  },
-                                ),
-                              ),
-                              gridData: FlGridData(
-                                show: true,
-                                drawVerticalLine: false,
-                                horizontalInterval: 20,
-                                getDrawingHorizontalLine: (val) => FlLine(
-                                  color: isDark ? const Color(0xFF334155).withOpacity(0.6) : const Color(0xFFE2E8F0),
-                                  strokeWidth: 1,
-                                ),
-                              ),
-                              borderData: FlBorderData(show: false),
-                              titlesData: FlTitlesData(
-                                topTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    reservedSize: 26,
-                                    getTitlesWidget: (val, meta) {
-                                      final index = val.toInt();
-                                      if (index < 0 || index >= subjectMap.keys.length) {
-                                        return const SizedBox.shrink();
-                                      }
-                                      final sName = subjectMap.keys.elementAt(index);
-                                      final sAttempts = subjectMap[sName]!;
-                                      int totalQ = 0;
-                                      int correctQ = 0;
-                                      for (var item in sAttempts) {
-                                        totalQ += (item['total_questions'] as num?)?.toInt() ?? 0;
-                                        correctQ += (item['correct'] as num?)?.toInt() ?? 0;
-                                      }
-                                      final double acc = totalQ > 0 ? (correctQ / totalQ) * 100 : 0.0;
-
-                                      Color textColor = const Color(0xFFEF4444);
-                                      if (acc >= 70) {
-                                        textColor = const Color(0xFF10B981);
-                                      } else if (acc >= 50) {
-                                        textColor = const Color(0xFFF59E0B);
-                                      }
-
-                                      return Center(
-                                        child: Text(
-                                          '${acc.toStringAsFixed(1)}%',
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.bold,
-                                            color: textColor,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                leftTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    reservedSize: 32,
-                                    interval: 20,
-                                    getTitlesWidget: (val, meta) {
-                                      if (val % 20 != 0 || val > 100) return const SizedBox.shrink();
-                                      return Text(
-                                        val.toInt().toString(),
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w500,
-                                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    reservedSize: 32,
-                                    getTitlesWidget: (val, meta) {
-                                      final index = val.toInt();
-                                      if (index < 0 || index >= subjectMap.keys.length) {
-                                        return const SizedBox.shrink();
-                                      }
-                                      final subject = subjectMap.keys.elementAt(index);
-                                      return Padding(
-                                        padding: const EdgeInsets.only(top: 8.0),
-                                        child: Text(
-                                          subject,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 12.5,
-                                            fontWeight: FontWeight.w600,
-                                            color: isDark ? const Color(0xFFCBD5E1) : const Color(0xFF334155),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                              barGroups: List.generate(subjectMap.keys.length, (i) {
-                                final sName = subjectMap.keys.elementAt(i);
-                                final sAttempts = subjectMap[sName]!;
-                                int totalQ = 0;
-                                int correctQ = 0;
-                                for (var item in sAttempts) {
-                                  totalQ += (item['total_questions'] as num?)?.toInt() ?? 0;
-                                  correctQ += (item['correct'] as num?)?.toInt() ?? 0;
-                                }
-                                final double acc = totalQ > 0 ? (correctQ / totalQ) * 100 : 0.0;
-
-                                Color barColor = const Color(0xFFEF4444);
-                                if (acc >= 70) {
-                                  barColor = const Color(0xFF10B981);
-                                } else if (acc >= 50) {
-                                  barColor = const Color(0xFFF59E0B);
-                                }
-
-                                return BarChartGroupData(
-                                  x: i,
-                                  barRods: [
-                                    BarChartRodData(
-                                      toY: acc,
-                                      color: barColor,
-                                      width: 38,
-                                      borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
-                                      backDrawRodData: BackgroundBarChartRodData(
-                                        show: true,
-                                        toY: 100,
-                                        color: isDark
-                                            ? const Color(0xFF334155).withOpacity(0.3)
-                                            : const Color(0xFFF1F5F9),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+            _buildAdvancedPerformanceBarChart(
+              subjectMap: subjectMap,
+              isDark: isDark,
             ),
 
             const SizedBox(height: 26),
@@ -925,6 +692,405 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
           fontSize: 13,
           color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
         ),
+      ),
+    );
+  }
+
+  Widget _buildAdvancedPerformanceBarChart({
+    required Map<String, List<Map<String, dynamic>>> subjectMap,
+    required bool isDark,
+  }) {
+    if (subjectMap.isEmpty) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 20),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E293B) : Colors.white,
+          borderRadius: BorderRadius.circular(22),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+              blurRadius: 14,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Column(
+            children: [
+              Icon(
+                Icons.insert_chart_outlined_rounded,
+                size: 46,
+                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Attempt tests to generate performance chart.',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final List<Map<String, dynamic>> subjectStats = [];
+    subjectMap.forEach((sName, list) {
+      int totalQ = 0;
+      int correctQ = 0;
+      for (var item in list) {
+        totalQ += (item['total_questions'] as num?)?.toInt() ?? 0;
+        correctQ += (item['correct'] as num?)?.toInt() ?? 0;
+      }
+      final double acc = totalQ > 0 ? (correctQ / totalQ) * 100 : 0.0;
+      subjectStats.add({
+        'name': sName,
+        'accuracy': acc,
+        'totalQ': totalQ,
+        'correctQ': correctQ,
+        'attempts': list,
+      });
+    });
+
+    final selectedIdx = (_selectedSubjectIndex != null &&
+            _selectedSubjectIndex! < subjectStats.length)
+        ? _selectedSubjectIndex!
+        : 0;
+    final selectedSubject = subjectStats[selectedIdx];
+    final selectedAcc = selectedSubject['accuracy'] as double;
+    final selectedColor = selectedAcc >= 70
+        ? const Color(0xFF10B981)
+        : (selectedAcc >= 50 ? const Color(0xFFF59E0B) : const Color(0xFFEF4444));
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 18, 14, 16),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 1. Legend Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _buildChartLegendDot(const Color(0xFF10B981), '≥70% High', isDark),
+              const SizedBox(width: 10),
+              _buildChartLegendDot(const Color(0xFFF59E0B), '50-69% Avg', isDark),
+              const SizedBox(width: 10),
+              _buildChartLegendDot(const Color(0xFFEF4444), '<50% Focus', isDark),
+            ],
+          ),
+          const SizedBox(height: 14),
+
+          // 2. Main Chart: Sticky Left Y-Axis + Horizontally Scrollable Bar Canvas
+          SizedBox(
+            height: 250,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Fixed Left Y-Axis
+                SizedBox(
+                  width: 30,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _buildYAxisLabel('100', isDark),
+                      _buildYAxisLabel('80', isDark),
+                      _buildYAxisLabel('60', isDark),
+                      _buildYAxisLabel('40', isDark),
+                      _buildYAxisLabel('20', isDark),
+                      _buildYAxisLabel('0', isDark),
+                      const SizedBox(height: 44),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(width: 6),
+
+                // Vertical Divider Line
+                Container(
+                  width: 1,
+                  height: 195,
+                  color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                ),
+
+                // Horizontally Scrollable Bars
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final availableWidth = constraints.maxWidth;
+                      final double colWidth = math.max(
+                        74.0,
+                        availableWidth / math.max(1, subjectStats.length),
+                      );
+
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        child: Stack(
+                          children: [
+                            // Background horizontal grid lines
+                            Positioned.fill(
+                              bottom: 44,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: List.generate(
+                                  6,
+                                  (_) => Container(
+                                    width: colWidth * subjectStats.length,
+                                    height: 1,
+                                    color: isDark
+                                        ? const Color(0xFF334155).withOpacity(0.4)
+                                        : const Color(0xFFE2E8F0).withOpacity(0.7),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // Row of Bar Columns
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: List.generate(subjectStats.length, (idx) {
+                                final s = subjectStats[idx];
+                                final acc = s['accuracy'] as double;
+                                final isSelected = idx == selectedIdx;
+
+                                Color barColor = const Color(0xFFEF4444);
+                                if (acc >= 70) {
+                                  barColor = const Color(0xFF10B981);
+                                } else if (acc >= 50) {
+                                  barColor = const Color(0xFFF59E0B);
+                                }
+
+                                const double maxBarHeight = 160.0;
+                                final double filledHeight =
+                                    (maxBarHeight * (acc / 100)).clamp(4.0, maxBarHeight);
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedSubjectIndex = idx;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: colWidth,
+                                    color: Colors.transparent,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        // Accuracy Percentage Value
+                                        Text(
+                                          '${acc.toStringAsFixed(1)}%',
+                                          style: TextStyle(
+                                            fontSize: 11.5,
+                                            fontWeight: isSelected ? FontWeight.w900 : FontWeight.bold,
+                                            color: barColor,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+
+                                        // Bar with Rounded Track
+                                        Container(
+                                          width: 36,
+                                          height: maxBarHeight,
+                                          decoration: BoxDecoration(
+                                            color: isDark
+                                                ? const Color(0xFF334155).withOpacity(0.3)
+                                                : const Color(0xFFF1F5F9),
+                                            borderRadius:
+                                                const BorderRadius.vertical(top: Radius.circular(8)),
+                                          ),
+                                          alignment: Alignment.bottomCenter,
+                                          child: AnimatedContainer(
+                                            duration: const Duration(milliseconds: 350),
+                                            curve: Curves.easeOutCubic,
+                                            width: 36,
+                                            height: filledHeight,
+                                            decoration: BoxDecoration(
+                                              color: barColor,
+                                              borderRadius:
+                                                  const BorderRadius.vertical(top: Radius.circular(8)),
+                                              boxShadow: isSelected
+                                                  ? [
+                                                      BoxShadow(
+                                                        color: barColor.withOpacity(0.45),
+                                                        blurRadius: 8,
+                                                        offset: const Offset(0, 2),
+                                                      ),
+                                                    ]
+                                                  : null,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+
+                                        // Dedicated Subject Label (Never Overlaps!)
+                                        SizedBox(
+                                          height: 36,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                                            child: Text(
+                                              s['name'],
+                                              maxLines: 2,
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                                                color: isSelected
+                                                    ? (isDark ? Colors.white : const Color(0xFF0F172A))
+                                                    : (isDark ? const Color(0xFFCBD5E1) : const Color(0xFF475569)),
+                                                height: 1.25,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          if (subjectStats.length > 4) ...[
+            const SizedBox(height: 6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.swap_horiz_rounded,
+                  size: 15,
+                  color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  'ডানে-বামে স্ক্রোল করে সব বিষয় দেখুন (Swipe to view all)',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
+                  ),
+                ),
+              ],
+            ),
+          ],
+
+          const SizedBox(height: 12),
+
+          // 3. Interactive Subject Focus Card (MarkerView for active bar)
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => SubjectPerformanceDetailScreen(
+                    subjectName: selectedSubject['name'],
+                    attempts: (selectedSubject['attempts'] as List).cast<Map<String, dynamic>>(),
+                  ),
+                ),
+              );
+            },
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: selectedColor.withOpacity(0.35),
+                  width: 1.2,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: selectedColor.withOpacity(0.12),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        '${selectedAcc.toStringAsFixed(0)}%',
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w900,
+                          color: selectedColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          selectedSubject['name'],
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? Colors.white : const Color(0xFF0F172A),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          '${selectedSubject['correctQ']} / ${selectedSubject['totalQ']} প্রশ্ন সঠিক (${(selectedSubject['attempts'] as List).length} টি টেস্ট)',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    size: 20,
+                    color: selectedColor,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildYAxisLabel(String text, bool isDark) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: 10.5,
+        fontWeight: FontWeight.w600,
+        color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
       ),
     );
   }
