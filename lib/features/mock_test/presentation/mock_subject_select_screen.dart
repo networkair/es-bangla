@@ -31,6 +31,24 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
     final sem = LocalStorageService().semester;
     try {
       final list = await _repository.getSubjects(sem);
+      const canonicalOrders = {
+        'bengali': 1,
+        'english': 2,
+        'political_science': 3,
+        'polscience': 3,
+        'education': 4,
+        'history': 5,
+        'philosophy': 6,
+        'sanskrit': 7,
+        'geography': 8,
+        'computer_application': 9,
+        'computer': 9,
+      };
+      list.sort((a, b) {
+        final orderA = canonicalOrders[a.subjectId.toLowerCase()] ?? 99;
+        final orderB = canonicalOrders[b.subjectId.toLowerCase()] ?? 99;
+        return orderA.compareTo(orderB);
+      });
       if (mounted) {
         setState(() {
           _subjects = list;
@@ -49,33 +67,73 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFFCF8F4),
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFFCF8F4),
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        title: const Text(
-          'Choose Subject',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-            letterSpacing: -0.4,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+            size: 24,
           ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        titleSpacing: 0,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 1.2,
+              height: 22,
+              margin: const EdgeInsets.only(right: 12),
+              color: isDark ? const Color(0xFF334155) : const Color(0xFFCBD5E1),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Choose Subject',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                    letterSpacing: -0.3,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 2),
+                  width: 42,
+                  height: 3.5,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF59E0B), // Golden Yellow Accent Underline
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 16),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: widget.isPremiumMode ? AppColors.premiumLight : AppColors.primaryLight,
+              color: widget.isPremiumMode
+                  ? (isDark ? const Color(0xFF332005) : const Color(0xFFFEF3C7))
+                  : (isDark ? const Color(0xFF0C2A4D) : const Color(0xFFE0F2FE)),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: widget.isPremiumMode
-                    ? AppColors.premiumGold.withOpacity(0.4)
-                    : AppColors.primary.withOpacity(0.3),
+                    ? const Color(0xFFFCD34D)
+                    : const Color(0xFFBAE6FD),
                 width: 1,
               ),
             ),
@@ -85,17 +143,21 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
                 Icon(
                   widget.isPremiumMode
                       ? Icons.workspace_premium_rounded
-                      : Icons.verified_outlined,
-                  size: 14,
-                  color: widget.isPremiumMode ? AppColors.premiumGold : AppColors.primaryDark,
+                      : Icons.verified_user_rounded,
+                  size: 15,
+                  color: widget.isPremiumMode
+                      ? const Color(0xFFD97706)
+                      : const Color(0xFF0070F3),
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: 5),
                 Text(
                   widget.isPremiumMode ? 'PREMIUM' : 'FREE',
                   style: TextStyle(
-                    color: widget.isPremiumMode ? AppColors.premiumGold : AppColors.primaryDark,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 11,
+                    color: widget.isPremiumMode
+                        ? const Color(0xFFD97706)
+                        : const Color(0xFF0070F3),
+                    fontWeight: FontWeight.w800,
+                    fontSize: 12,
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -104,13 +166,13 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
           ),
         ],
       ),
-      body: _buildBody(),
+      body: _buildBody(isDark),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(bool isDark) {
     if (_isLoading) {
-      return _buildLoadingGrid();
+      return _buildLoadingGrid(isDark);
     }
 
     if (_error != null && _subjects.isEmpty) {
@@ -144,33 +206,36 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Clean, elegant 1-line subtitle
-        const Padding(
-          padding: EdgeInsets.fromLTRB(18, 4, 18, 14),
+        // Subtitle matching reference mockup
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
           child: Text(
-            'মক টেস্ট দিতে আপনার বিষয়টি বেছে নিন',
+            widget.isPremiumMode
+                ? 'প্রিমিয়াম মক টেস্ট দিতে আপনার বিষয়টি বেছে নিন'
+                : 'মক টেস্ট দিতে আপনার বিষয়টি বেছে নিন',
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: AppColors.textSecondary,
+              color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
             ),
           ),
         ),
 
-        // 2-column Modern Subject Cards Grid
+        // 2-column Modern Subject Cards Grid matching reference
         Expanded(
           child: GridView.builder(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            physics: const BouncingScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.68,
+              childAspectRatio: 0.85,
               crossAxisSpacing: 16,
-              mainAxisSpacing: 18,
+              mainAxisSpacing: 16,
             ),
             itemCount: _subjects.length,
             itemBuilder: (context, index) {
               final subject = _subjects[index];
-              return _buildSubjectCard(subject);
+              return _buildSubjectCard(subject, isDark);
             },
           ),
         ),
@@ -178,18 +243,18 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
     );
   }
 
-  Widget _buildLoadingGrid() {
+  Widget _buildLoadingGrid(bool isDark) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(18, 4, 18, 14),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
           child: Text(
             'মক টেস্ট দিতে আপনার বিষয়টি বেছে নিন',
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: AppColors.textSecondary,
+              color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
             ),
           ),
         ),
@@ -199,52 +264,21 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.68,
+              childAspectRatio: 0.85,
               crossAxisSpacing: 16,
-              mainAxisSpacing: 18,
+              mainAxisSpacing: 16,
             ),
             itemCount: 6,
             itemBuilder: (context, index) {
               return AppShimmer(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(22),
-                    border: Border.all(color: AppColors.border, width: 1.5),
-                  ),
-                  padding: const EdgeInsets.fromLTRB(14, 20, 14, 16),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Container(
-                        width: 95,
-                        height: 18,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                      ),
-                      const Spacer(),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF1F5F9),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
-                      ),
-                    ],
+                    color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                      width: 1.2,
+                    ),
                   ),
                 ),
               );
@@ -253,6 +287,32 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
         ),
       ],
     );
+  }
+
+  String _getCleanDisplayName(String rawName, String id) {
+    final lowerId = id.toLowerCase();
+    final lowerName = rawName.toLowerCase();
+
+    if (lowerId.contains('bengali') || lowerId.contains('bangla') || lowerName.contains('বাংলা')) {
+      return 'বাংলা';
+    } else if (lowerId.contains('english') || lowerName.contains('english') || lowerName.contains('ইংরেজি')) {
+      return 'English';
+    } else if (lowerId.contains('pol') || lowerName.contains('রাষ্ট্র')) {
+      return 'রাষ্ট্রবিজ্ঞান';
+    } else if (lowerId.contains('edu') || lowerName.contains('শিক্ষা')) {
+      return 'শিক্ষাবিজ্ঞান';
+    } else if (lowerId.contains('hist') || lowerName.contains('ইতিহাস')) {
+      return 'ইতিহাস';
+    } else if (lowerId.contains('phil') || lowerName.contains('দর্শন')) {
+      return 'দর্শন';
+    } else if (lowerId.contains('san') || lowerName.contains('সংস্কৃত')) {
+      return 'সংস্কৃত';
+    } else if (lowerId.contains('geo') || lowerName.contains('ভূগোল')) {
+      return 'ভূগোল';
+    } else if (lowerId.contains('comp') || lowerName.contains('কম্পিউটার')) {
+      return 'কম্পিউটার';
+    }
+    return rawName;
   }
 
   String _getSubjectAsset(SubjectModel subject) {
@@ -264,16 +324,16 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
       return 'assets/icons/subjects/ic_sub_bangla.png';
     } else if (id.contains('english') || name.contains('english') || name.contains('ইংরেজি') || name.contains('ইংরাজি') || nameEn.contains('english')) {
       return 'assets/icons/subjects/ic_sub_english.png';
-    } else if (id.contains('hist') || name.contains('ইতিহাস') || nameEn.contains('history')) {
-      return 'assets/icons/subjects/ic_sub_history.png';
-    } else if (id.contains('geo') || name.contains('ভূগোল') || nameEn.contains('geography')) {
-      return 'assets/icons/subjects/ic_sub_geography.png';
     } else if (id.contains('pol') || name.contains('রাষ্ট্র') || nameEn.contains('pol')) {
       return 'assets/icons/subjects/ic_sub_polscience.png';
     } else if (id.contains('edu') || name.contains('শিক্ষা') || nameEn.contains('education')) {
       return 'assets/icons/subjects/ic_sub_education.png';
+    } else if (id.contains('hist') || name.contains('ইতিহাস') || nameEn.contains('history')) {
+      return 'assets/icons/subjects/ic_sub_history.png';
     } else if (id.contains('phil') || name.contains('দর্শন') || nameEn.contains('philosophy')) {
       return 'assets/icons/subjects/ic_sub_philosophy.png';
+    } else if (id.contains('geo') || name.contains('ভূগোল') || nameEn.contains('geography')) {
+      return 'assets/icons/subjects/ic_sub_geography.png';
     } else if (id.contains('san') || name.contains('সংস্কৃত') || nameEn.contains('sanskrit')) {
       return 'assets/icons/subjects/ic_sub_sanskrit.png';
     } else if (id.contains('comp') || name.contains('কম্পিউটার') || nameEn.contains('computer')) {
@@ -286,94 +346,111 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
     return 'assets/icons/subjects/ic_sub_bangla.png';
   }
 
-  Widget _buildSubjectCard(SubjectModel subject) {
+  Widget _buildSubjectCard(SubjectModel subject, bool isDark) {
     final theme = _getSubjectTheme(subject);
+    final displayName = _getCleanDisplayName(subject.name, subject.subjectId);
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(26),
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: widget.isPremiumMode
-              ? AppColors.premiumGold.withOpacity(0.35)
-              : const Color(0xFFE2E8F0).withOpacity(0.8),
-          width: widget.isPremiumMode ? 1.4 : 1.0,
+              ? const Color(0xFFFDE68A)
+              : (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
+          width: widget.isPremiumMode ? 1.4 : 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F172A).withOpacity(0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
+            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.35 : 0.05),
+            offset: const Offset(0, 8),
+            blurRadius: 18,
+            spreadRadius: -2,
+          ),
+          BoxShadow(
+            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.15 : 0.02),
+            offset: const Offset(0, 2),
+            blurRadius: 4,
+            spreadRadius: 0,
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => MockTopicsSetsScreen(
-                  subject: subject,
-                  isPremiumMode: widget.isPremiumMode,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MockTopicsSetsScreen(
+                    subject: subject,
+                    isPremiumMode: widget.isPremiumMode,
+                  ),
                 ),
-              ),
-            );
-          },
-          borderRadius: BorderRadius.circular(26),
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 1. Top Section: Large 3D Subject Icon directly on card (NO background)
-                Expanded(
-                  child: Center(
-                    child: Image.asset(
-                      _getSubjectAsset(subject),
-                      width: 95,
-                      height: 95,
-                      fit: BoxFit.contain,
-                      errorBuilder: (_, __, ___) => Icon(
-                        theme.icon,
-                        size: 54,
-                        color: theme.color,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 16, 12, 14),
+              child: Column(
+                children: [
+                  // 1. Top Section: Large 3D Subject Icon directly on card
+                  Expanded(
+                    child: Center(
+                      child: Image.asset(
+                        _getSubjectAsset(subject),
+                        width: 88,
+                        height: 88,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) => Icon(
+                          theme.icon,
+                          size: 54,
+                          color: theme.color,
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 12),
+                  const SizedBox(height: 10),
 
-                // 2. Subject Name
-                Text(
-                  subject.name,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF0F172A),
-                    letterSpacing: -0.3,
-                    height: 1.2,
+                  // 2. Bottom Row: Subject Name on Left, Double Arrow Button on Right
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          displayName,
+                          style: TextStyle(
+                            fontSize: displayName.length > 8 ? 16.0 : 17.5,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        width: 34,
+                        height: 34,
+                        decoration: BoxDecoration(
+                          color: isDark ? const Color(0xFF334155) : const Color(0xFFE0F2FE),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.keyboard_double_arrow_right_rounded,
+                            size: 20,
+                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0070F3),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
-                const SizedBox(height: 6),
-
-                // 3. Double Arrow (») matching reference image
-                const Align(
-                  alignment: Alignment.bottomRight,
-                  child: Icon(
-                    Icons.keyboard_double_arrow_right_rounded,
-                    size: 30,
-                    color: Color(0xFF0F172A),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

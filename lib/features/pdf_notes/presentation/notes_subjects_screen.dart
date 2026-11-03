@@ -25,6 +25,24 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
 
   Future<void> _loadNotes() async {
     final list = await _repo.getNotesForSemester(widget.semester);
+    const canonicalOrders = {
+      'bengali': 1,
+      'english': 2,
+      'polscience': 3,
+      'political_science': 3,
+      'education': 4,
+      'history': 5,
+      'philosophy': 6,
+      'sanskrit': 7,
+      'geography': 8,
+      'computer': 9,
+      'computer_application': 9,
+    };
+    list.sort((a, b) {
+      final orderA = canonicalOrders[a.subjectId.toLowerCase()] ?? 99;
+      final orderB = canonicalOrders[b.subjectId.toLowerCase()] ?? 99;
+      return orderA.compareTo(orderB);
+    });
     if (mounted) {
       setState(() {
         _subjects = list;
@@ -35,15 +53,115 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFFCF8F4),
+      appBar: AppBar(
+        backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFFCF8F4),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+            size: 24,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        titleSpacing: 0,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 1.2,
+              height: 22,
+              margin: const EdgeInsets.only(right: 12),
+              color: isDark ? const Color(0xFF334155) : const Color(0xFFCBD5E1),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Choose Subject',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                    letterSpacing: -0.3,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 2),
+                  width: 42,
+                  height: 3.5,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF59E0B), // Golden Yellow Accent Underline
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE0F2FE),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: const Color(0xFFBAE6FD),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.school_rounded,
+                  size: 15,
+                  color: Color(0xFF0070F3),
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  'SEM ${widget.semester}',
+                  style: const TextStyle(
+                    color: Color(0xFF0070F3),
+                    fontWeight: FontWeight.w800,
+                    fontSize: 12,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Modern Header matching reference layout
-            _buildHeader(context),
+            // Subtitle matching reference mockup
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+              child: Text(
+                widget.semester == 3
+                    ? 'সেমিস্টার ৩-এর হ্যান্ডনোটস পড়তে আপনার বিষয়টি বেছে নিন'
+                    : 'সেমিস্টার ${widget.semester}-এর হ্যান্ডনোটস পড়তে বিষয়টি বেছে নিন',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                ),
+              ),
+            ),
 
-            // Subject Cards Grid (Dynamic, renders whatever subjects are in manifest)
+            // Subject Cards Grid
             Expanded(
               child: _isLoading
                   ? const Center(
@@ -54,18 +172,18 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
                   : _subjects.isEmpty
                       ? _buildComingSoonState()
                       : GridView.builder(
-                          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                           physics: const BouncingScrollPhysics(),
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 14,
+                            crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
-                            childAspectRatio: 0.68,
+                            childAspectRatio: 0.85,
                           ),
                           itemCount: _subjects.length,
                           itemBuilder: (context, index) {
                             final subject = _subjects[index];
-                            return _buildSubjectCard(subject);
+                            return _buildSubjectCard(subject, isDark);
                           },
                         ),
             ),
@@ -75,83 +193,30 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 20, 16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: const Border(bottom: BorderSide(color: AppColors.border, width: 1)),
-      ),
-      child: Row(
-        children: [
-          // Circular White Back Button with soft shadow
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.border),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: const Icon(Icons.arrow_back_rounded, color: AppColors.textPrimary, size: 20),
-            ),
-          ),
-          const SizedBox(width: 16),
+  String _getCleanDisplayName(String rawName, String id) {
+    final lowerId = id.toLowerCase();
+    final lowerName = rawName.toLowerCase();
 
-          // Title & Subtitle
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Semester ${widget.semester}',
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                    letterSpacing: -0.3,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                const Text(
-                  'Class 12',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Right Illustration Badge
-          Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              color: AppColors.primaryLight,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.primary.withOpacity(0.15)),
-            ),
-            child: const Icon(
-              Icons.school_rounded,
-              color: AppColors.primary,
-              size: 26,
-            ),
-          ),
-        ],
-      ),
-    );
+    if (lowerId.contains('bengali') || lowerId.contains('bangla') || lowerName.contains('বাংলা')) {
+      return 'বাংলা';
+    } else if (lowerId.contains('english') || lowerName.contains('english') || lowerName.contains('ইংরেজি')) {
+      return 'English';
+    } else if (lowerId.contains('pol') || lowerName.contains('রাষ্ট্র')) {
+      return 'রাষ্ট্রবিজ্ঞান';
+    } else if (lowerId.contains('edu') || lowerName.contains('শিক্ষা')) {
+      return 'শিক্ষাবিজ্ঞান';
+    } else if (lowerId.contains('hist') || lowerName.contains('ইতিহাস')) {
+      return 'ইতিহাস';
+    } else if (lowerId.contains('phil') || lowerName.contains('দর্শন')) {
+      return 'দর্শন';
+    } else if (lowerId.contains('san') || lowerName.contains('সংস্কৃত')) {
+      return 'সংস্কৃত';
+    } else if (lowerId.contains('geo') || lowerName.contains('ভূগোল')) {
+      return 'ভূগোল';
+    } else if (lowerId.contains('comp') || lowerName.contains('কম্পিউটার')) {
+      return 'কম্পিউটার';
+    }
+    return rawName;
   }
 
   String _getSubjectAsset(String id, String name, String nameEn) {
@@ -181,78 +246,99 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
     return 'assets/icons/subjects/ic_sub_bangla.png';
   }
 
-  Widget _buildSubjectCard(NoteSubject subject) {
+  Widget _buildSubjectCard(NoteSubject subject, bool isDark) {
+    final displayName = _getCleanDisplayName(subject.subjectName, subject.subjectId);
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(26),
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: const Color(0xFFE2E8F0).withOpacity(0.8),
-          width: 1.0,
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F172A).withOpacity(0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
+            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.35 : 0.05),
+            offset: const Offset(0, 8),
+            blurRadius: 18,
+            spreadRadius: -2,
+          ),
+          BoxShadow(
+            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.15 : 0.02),
+            offset: const Offset(0, 2),
+            blurRadius: 4,
+            spreadRadius: 0,
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(26),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => NotesTopicsScreen(
-                  subject: subject,
-                  semester: widget.semester,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(24),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => NotesTopicsScreen(
+                    subject: subject,
+                    semester: widget.semester,
+                  ),
                 ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 16, 12, 14),
+              child: Column(
+                children: [
+                  // 1. Large 3D Subject Icon sitting directly on the card
+                  Expanded(
+                    child: Center(
+                      child: _buildSubjectEmblem(subject),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // 2. Bottom Row: Subject Title on Left, Double Arrow Button on Right
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          displayName,
+                          style: TextStyle(
+                            fontSize: displayName.length > 8 ? 16.0 : 17.5,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        width: 34,
+                        height: 34,
+                        decoration: BoxDecoration(
+                          color: isDark ? const Color(0xFF334155) : const Color(0xFFE0F2FE),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.keyboard_double_arrow_right_rounded,
+                            size: 20,
+                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0070F3),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 1. Large 3D Subject Icon sitting directly on the card with NO background
-                Expanded(
-                  child: Center(
-                    child: _buildSubjectEmblem(subject),
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                // 2. Subject Title
-                Text(
-                  subject.subjectName,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF0F172A),
-                    letterSpacing: -0.3,
-                    height: 1.2,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
-                const SizedBox(height: 6),
-
-                // 3. Double Arrow (») matching reference image
-                const Align(
-                  alignment: Alignment.bottomRight,
-                  child: Icon(
-                    Icons.keyboard_double_arrow_right_rounded,
-                    size: 30,
-                    color: Color(0xFF0F172A),
-                  ),
-                ),
-              ],
             ),
           ),
         ),
@@ -267,8 +353,8 @@ class _NotesSubjectsScreenState extends State<NotesSubjectsScreen> {
 
     return Image.asset(
       assetPath,
-      width: 95,
-      height: 95,
+      width: 88,
+      height: 88,
       fit: BoxFit.contain,
       errorBuilder: (_, __, ___) => _buildFallbackEmblem(subject),
     );
