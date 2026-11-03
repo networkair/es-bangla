@@ -65,29 +65,25 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.31
-          name: "Es Bangla v1.3.31 (Design Overhaul: Home, Subject Select & Quiz Mockup)"
+          tag_name: v1.3.32
+          name: "Es Bangla v1.3.32 (Safollo Analytics Chart & Tactile Home Cards Overhaul)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.31 Release Highlights:
-            - **HomeScreen Redesign Matching Mockup**:
-              - Pure white cards with 24px border radius, subtle border, and soft drop shadow.
-              - Brand header with vertical divider and golden brush accent under "Es Bangla".
-              - Updated 3D icons for PYQ, Semester 3, Semester 4, and Store.
-            - **Subject Selection Screens Redesign**:
-              - Warm ivory background tone (`#FCF8F4`) across Free Mock Test, Premium Mock Test, and Semester Notes.
-              - "Choose Subject" title with golden accent underline.
-              - Centered 3D subject graphics with bottom label and circular double-arrow button.
-              - Canonical subject ordering (বাংলা, English, রাষ্ট্রবিজ্ঞান, শিক্ষাবিজ্ঞান, ইতিহাস, দর্শন, সংস্কৃত, ভূগোল, কম্পিউটার).
-            - **Quiz Screen Complete Mockup Realization**:
-              - Warm ivory background with top header featuring rounded square back button and vertical divider.
-              - Blue pill question counter badge (`Question 1 of 10`).
-              - Segmented capsule progress bar ("কাটা কাটা লোডিং বার") with dynamic feedback colors.
-              - Pure white question card featuring a golden-yellow accent underline bar (`#F59E0B`).
-              - Option cards with circular letter badges (A, B, C, D) and instant buzzer sound effects.
-              - Next Question button with muted slate resting state and royal blue active state.
-              - Report Question action directly below the Next button.
+            ### Es Bangla v1.3.32 Release Highlights:
+            - **Safollo-Grade Advanced Mock Test Analytics Chart**:
+              - Researched Safollo APK (`com.aspd.suggestionforclass10`) & MPAndroidChart.
+              - Replaced horizontal label collision with a horizontally scrollable bouncing canvas with minimum 74px column width.
+              - Sticky left Y-axis scale (0% to 100%) with dashed grid lines.
+              - Mutually exclusive subject categorization (>=70% Mastered, <70% Revision Needed) eliminating conflicting percentages.
+              - Interactive MarkerView card on bar tap showing attempts, score, and link to chapter analytics.
+            - **Safollo-Grade Tactile Home Cards & Elevation Shadow Overhaul**:
+              - Applied Safollo's 3-stop micro-gradient (`#FFFFFF` -> `#FCFCFC` -> `#F7F8FA`) giving physical depth.
+              - Crisp 1px micro-border stroke (`#E2E8F0`) defining clean edges.
+              - Dual-layer spot and ambient elevation shadow with negative spread (`spreadRadius: -2`) hugging the bottom edge.
+              - Exact 22dp card corner radius matching Safollo's native specification.
+              - Pill-shaped `99% Common` badge (`BorderRadius.circular(20)`).
+              - Refreshing cool pearl white canvas background (`#F8FAFC`).
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
