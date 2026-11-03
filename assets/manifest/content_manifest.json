@@ -9,9 +9,34 @@
           "icon_asset": "assets/icons/subjects/ic_sub_bangla.png",
           "topics": [
             {
-              "topic_id": "topic_sem3_ben_dhormo",
-              "title": "ধর্ম - কবিতা (শ্রীজাত)",
-              "file_path": "assets/notes/sem3/bengali_dhormo.pdf"
+              "topic_id": "topic_sem3_ben_adorini",
+              "title": "গল্প : আদরিণী (প্রভাতকুমার মুখোপাধ্যায়)",
+              "file_path": "assets/notes/sem3/bengali_adorini.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_ben_dharma",
+              "title": "কবিতা : ধর্ম (শ্রীজাত)",
+              "file_path": "assets/notes/sem3/bengali_dharma.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_ben_digbijoy",
+              "title": "কবিতা : দিগ্বিজয়ের রূপকথা (নীরেন্দ্রনাথ চক্রবর্তী)",
+              "file_path": "assets/notes/sem3/bengali_digbijoyer_rupkotha.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_ben_bangala_bhasha",
+              "title": "প্রবন্ধ : বাঙ্গালা ভাষা (স্বামী বিবেকানন্দ)",
+              "file_path": "assets/notes/sem3/bengali_bangala_bhasha.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_ben_potraj",
+              "title": "প্রবন্ধ : পটরাজ (দেবেশ রায়)",
+              "file_path": "assets/notes/sem3/bengali_potraj.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_ben_tar_songe",
+              "title": "প্রবন্ধ : তার সঙ্গে (সুধীর চক্রবর্তী)",
+              "file_path": "assets/notes/sem3/bengali_tar_songe.pdf"
             }
           ]
         },
@@ -22,9 +47,203 @@
           "icon_asset": "assets/icons/subjects/ic_sub_english.png",
           "topics": [
             {
+              "topic_id": "topic_sem3_eng_strong_roots",
+              "title": "Prose: Strong Roots (A.P.J. Abdul Kalam)",
+              "file_path": "assets/notes/sem3/english_strong_roots.pdf"
+            },
+            {
               "topic_id": "topic_sem3_eng_night_train",
-              "title": "The Night Train at Deoli - Ruskin Bond",
-              "file_path": "assets/notes/sem3/english_night_train.pdf"
+              "title": "Prose: The Night Train at Deoli (Ruskin Bond)",
+              "file_path": "assets/notes/sem3/english_the_night_train_at_deoli.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_eng_casuarina_tree",
+              "title": "Poetry: Our Casuarina Tree (Toru Dutt)",
+              "file_path": "assets/notes/sem3/english_our_casuarina_tree.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_eng_the_bet",
+              "title": "Play/Prose: The Bet (Anton Chekhov)",
+              "file_path": "assets/notes/sem3/english_the_bet.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_eng_ulysses",
+              "title": "Poetry: Ulysses (Alfred Lord Tennyson)",
+              "file_path": "assets/notes/sem3/english_ulysses.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_eng_riders_to_sea",
+              "title": "Drama: Riders to the Sea (J.M. Synge)",
+              "file_path": "assets/notes/sem3/english_riders_to_the_sea.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "education",
+          "subject_name": "শিক্ষাবিজ্ঞান",
+          "subject_name_en": "Education",
+          "icon_asset": "assets/icons/subjects/ic_sub_education.png",
+          "topics": [
+            {
+              "topic_id": "topic_sem3_edu_commissions",
+              "title": "স্বাধীন ভারতের শিক্ষা কমিশনসমূহ (বিশ্ববিদ্যালয়, মুদালিয়র, কোঠারি)",
+              "file_path": "assets/notes/sem3/education_topic_01_commissions.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_edu_nep",
+              "title": "জাতীয় শিক্ষানীতি - ১৯৮৬ ও NEP ২০২০",
+              "file_path": "assets/notes/sem3/education_topic_02_nep.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_edu_equality",
+              "title": "শিক্ষায় সমসুযোগ ও সাংবিধানিক নির্দেশ",
+              "file_path": "assets/notes/sem3/education_topic_03_equality.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_edu_indian_educators",
+              "title": "ভারতীয় শিক্ষাবিদদের অবদান (গান্ধীজি, রবীন্দ্রনাথ, বিবেকানন্দ)",
+              "file_path": "assets/notes/sem3/education_topic_04_indian_educators.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_edu_western_educators",
+              "title": "পাশ্চাত্য শিক্ষাবিদদের অবদান (রুশো, পেস্তালৎসি, ফ্রয়েবেল, ডিউই)",
+              "file_path": "assets/notes/sem3/education_topic_05_western_educators.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_edu_cwsn",
+              "title": "বিশেষ চাহিদাসম্পন্ন শিশুদের শিক্ষা (CWSN)",
+              "file_path": "assets/notes/sem3/education_topic_06_cwsn.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_edu_inclusive",
+              "title": "অন্তর্ভুক্তিমূলক শিক্ষা (Inclusive Education)",
+              "file_path": "assets/notes/sem3/education_topic_07_inclusive_education.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_edu_delors",
+              "title": "ডেলর কমিশন ও শিক্ষার চারটি স্তম্ভ",
+              "file_path": "assets/notes/sem3/education_topic_08_delors_commission.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_edu_elementary",
+              "title": "প্রাথমিক শিক্ষার সার্বজনীনতা ও সর্বশিক্ষা অভিযান",
+              "file_path": "assets/notes/sem3/education_topic_09_universal_elementary_education.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_edu_positive_psychology",
+              "title": "ইতিবাচক মনোবিজ্ঞান ও মানসিক স্বাস্থ্য",
+              "file_path": "assets/notes/sem3/education_topic_10_positive_psychology.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "geography",
+          "subject_name": "ভূগোল",
+          "subject_name_en": "Geography",
+          "icon_asset": "assets/icons/subjects/ic_sub_geography.png",
+          "topics": [
+            {
+              "topic_id": "topic_sem3_geo_geotectonics",
+              "title": "ভূসংস্থান : মহীসঞ্চরণ ও পাতসংস্থান তত্ত্ব",
+              "file_path": "assets/notes/sem3/geography_01_geotectonics.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_geomorphic",
+              "title": "ভূমিরূপ গঠনকারী প্রক্রিয়া ও সংশ্লিষ্ট ভূমিরূপ",
+              "file_path": "assets/notes/sem3/geography_02_geomorphic_processes.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_climatology",
+              "title": "আবহাওয়া ও জলবায়ুবিদ্যা",
+              "file_path": "assets/notes/sem3/geography_03_climatology.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_hydrosphere",
+              "title": "বারিমণ্ডল ও সমুদ্রবিদ্যা",
+              "file_path": "assets/notes/sem3/geography_04_hydrosphere.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_biosphere",
+              "title": "জীবমণ্ডল ও বাস্তুতন্ত্র",
+              "file_path": "assets/notes/sem3/geography_05_biosphere.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_human_population",
+              "title": "মানবীয় ভূগোল : জনসংখ্যা গতিবিদ্যা",
+              "file_path": "assets/notes/sem3/geography_06_human_population.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_human_settlement",
+              "title": "মানবীয় ভূগোল : জনবসতি",
+              "file_path": "assets/notes/sem3/geography_07_human_settlement.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_india_population",
+              "title": "ভারতের ভূগোল : জনসংখ্যা ও নগরায়ন",
+              "file_path": "assets/notes/sem3/geography_08_india_population.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_india_water",
+              "title": "ভারতের ভূগোল : জলসম্পদ ও সেচ",
+              "file_path": "assets/notes/sem3/geography_09_india_water_resources.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_india_minerals",
+              "title": "ভারতের ভূগোল : খনিজ ও শক্তি সম্পদ",
+              "file_path": "assets/notes/sem3/geography_10_india_minerals_energy.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_india_agriculture",
+              "title": "ভারতের ভূগোল : কৃষিকাজ",
+              "file_path": "assets/notes/sem3/geography_11_india_agriculture.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_india_transport",
+              "title": "ভারতের ভূগোল : পরিবহন ও যোগাযোগ",
+              "file_path": "assets/notes/sem3/geography_12_india_transport.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_geo_india_trade",
+              "title": "ভারতের ভূগোল : বাণিজ্য এবং অর্থনীতি",
+              "file_path": "assets/notes/sem3/geography_13_india_trade_economy.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "polscience",
+          "subject_name": "রাষ্ট্রবিজ্ঞান",
+          "subject_name_en": "Political Science",
+          "icon_asset": "assets/icons/subjects/ic_sub_polscience.png",
+          "topics": [
+            {
+              "topic_id": "topic_sem3_pol_cold_war",
+              "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক ও ঠান্ডা লড়াই",
+              "file_path": "assets/notes/sem3/polscience_chapter_01_cold_war.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_pol_organizations",
+              "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ (জাতিপুঞ্জ)",
+              "file_path": "assets/notes/sem3/polscience_chapter_02_international_organizations.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_pol_security",
+              "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ",
+              "file_path": "assets/notes/sem3/polscience_chapter_03_security_in_contemporary_world.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_pol_nation_building",
+              "title": "জাতি গঠনের আহ্বান ও জাতীয় সংহতি",
+              "file_path": "assets/notes/sem3/polscience_chapter_04_challenges_of_nation_building.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_pol_parties",
+              "title": "রাজনৈতিক দল এবং দলব্যবস্থা",
+              "file_path": "assets/notes/sem3/polscience_chapter_05_political_parties.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_pol_foreign_policy",
+              "title": "ভারতের পররাষ্ট্রনীতি ও বিশ্ব রাজনীতি",
+              "file_path": "assets/notes/sem3/polscience_chapter_06_indias_foreign_policy.pdf"
             }
           ]
         },
@@ -36,47 +255,28 @@
           "topics": [
             {
               "topic_id": "topic_sem3_hist_foreign_travelers",
-              "title": "বৈদেশিক পর্যটকদের বিবরণ - ইউনিট ১.১",
-              "file_path": "assets/notes/sem3/history_unit1_1.pdf"
-            }
-          ]
-        },
-        {
-          "subject_id": "geography",
-          "subject_name": "ভূগোল",
-          "subject_name_en": "Geography",
-          "icon_asset": "assets/icons/subjects/ic_sub_geography.png",
-          "topics": [
+              "title": "বৈদেশিক পর্যটকদের বিবরণ",
+              "file_path": "assets/notes/sem3/history_01_foreign_travellers.pdf"
+            },
             {
-              "topic_id": "topic_sem3_geo_plate_tectonics",
-              "title": "প্রথম অধ্যায়: ভূসংস্থান - মহীসঞ্চরণ ও পাতসংস্থান তত্ত্ব",
-              "file_path": "assets/notes/sem3/geography_unit1.pdf"
-            }
-          ]
-        },
-        {
-          "subject_id": "polscience",
-          "subject_name": "রাষ্ট্রবিজ্ঞান",
-          "subject_name_en": "Political Science",
-          "icon_asset": "assets/icons/subjects/ic_sub_polscience.png",
-          "topics": [
+              "topic_id": "topic_sem3_hist_bhakti_sufi",
+              "title": "সাংস্কৃতিক সংমিশ্রণ : ভক্তি ও সুফি আন্দোলন",
+              "file_path": "assets/notes/sem3/history_02_bhakti_sufi_movements.pdf"
+            },
             {
-              "topic_id": "topic_sem3_pol_post_ww2",
-              "title": "প্রথম অধ্যায়: দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক",
-              "file_path": "assets/notes/sem3/polscience_unit1.pdf"
-            }
-          ]
-        },
-        {
-          "subject_id": "education",
-          "subject_name": "শিক্ষাবিজ্ঞান",
-          "subject_name_en": "Education",
-          "icon_asset": "assets/icons/subjects/ic_sub_education.png",
-          "topics": [
+              "topic_id": "topic_sem3_hist_imperial_capitals",
+              "title": "সাম্রাজ্যিক রাজধানী : বিজয়নগর, বাহমনি ও বাংলা সালতানাত",
+              "file_path": "assets/notes/sem3/history_03_imperial_capitals.pdf"
+            },
             {
-              "topic_id": "topic_sem3_edu_nep",
-              "title": "প্রথম অধ্যায় (খণ্ড-খ): জাতীয় শিক্ষানীতি - ১৯৮৬ ও ২০২০",
-              "file_path": "assets/notes/sem3/education_unit1.pdf"
+              "topic_id": "topic_sem3_hist_colonialism",
+              "title": "ঊনবিংশ ও বিংশ শতকে উপনিবেশিকতাবাদ ও সাম্রাজ্যবাদ",
+              "file_path": "assets/notes/sem3/history_04_colonialism_imperialism.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_hist_colonial_control",
+              "title": "ঔপনিবেশিক নিয়ন্ত্রণযন্ত্র : প্রশাসন, আইন ও বিচার",
+              "file_path": "assets/notes/sem3/history_05_colonial_control_administration.pdf"
             }
           ]
         },
@@ -87,9 +287,44 @@
           "icon_asset": "assets/icons/subjects/ic_sub_philosophy.png",
           "topics": [
             {
+              "topic_id": "topic_sem3_phi_substance",
+              "title": "পাশ্চাত্য দর্শন : দ্রব্য (Substance)",
+              "file_path": "assets/notes/sem3/philosophy_01_substance.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_phi_causality",
+              "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ (Causality)",
+              "file_path": "assets/notes/sem3/philosophy_02_causality.pdf"
+            },
+            {
               "topic_id": "topic_sem3_phi_mind_body",
-              "title": "দেহমন সমস্যা - বিশদ আলোচনা ও প্রশ্নোত্তর",
-              "file_path": "assets/notes/sem3/philosophy_dehomon.pdf"
+              "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা (Mind-Body)",
+              "file_path": "assets/notes/sem3/philosophy_03_mind_body.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_phi_vedanta",
+              "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা",
+              "file_path": "assets/notes/sem3/philosophy_04_vedanta_basic.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_phi_brahman_maya",
+              "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া",
+              "file_path": "assets/notes/sem3/philosophy_05_brahman_maya.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_phi_society_state",
+              "title": "সমাজ ও রাষ্ট্রদর্শন : সমাজ, সম্প্রদায়, রাষ্ট্র ও আইন",
+              "file_path": "assets/notes/sem3/philosophy_06_society_state_law.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_phi_suicide_euthanasia",
+              "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা",
+              "file_path": "assets/notes/sem3/philosophy_07_suicide_euthanasia.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_phi_environmental",
+              "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা",
+              "file_path": "assets/notes/sem3/philosophy_08_environmental_ethics.pdf"
             }
           ]
         },
@@ -100,9 +335,54 @@
           "icon_asset": "assets/icons/subjects/ic_sub_sanskrit.png",
           "topics": [
             {
-              "topic_id": "topic_sem3_san_rajbahan",
-              "title": "গদ্য: রাজবাহনচরিতম্ (দণ্ডী)",
-              "file_path": "assets/notes/sem3/sanskrit_rajbahan.pdf"
+              "topic_id": "topic_sem3_san_rajavahana",
+              "title": "গদ্যাংশ : রাজবাহনচরিতম্ (দণ্ডী)",
+              "file_path": "assets/notes/sem3/sanskrit_01_rajavahana.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_san_yogah_karmasu",
+              "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ (শ্রীমদ্ভগবদ্গীতা)",
+              "file_path": "assets/notes/sem3/sanskrit_02_yogah_karmasu.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_san_durbasa",
+              "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ (অভিজ্ঞানশকুন্তলম্)",
+              "file_path": "assets/notes/sem3/sanskrit_03_durbasa_abhishapa.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_san_karak",
+              "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি",
+              "file_path": "assets/notes/sem3/sanskrit_04_karak_vibhakti.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_san_samasa",
+              "title": "সংস্কৃত ব্যাকরণ : সমাস প্রকরণ",
+              "file_path": "assets/notes/sem3/sanskrit_05_samasa.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_san_taddhita",
+              "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয়",
+              "file_path": "assets/notes/sem3/sanskrit_06_taddhita_pratyaya.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_san_namadhatu",
+              "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয়",
+              "file_path": "assets/notes/sem3/sanskrit_07_namadhatu_pratyaya.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_san_purana",
+              "title": "সংস্কৃত সাহিত্যের ইতিহাস : পুরাণের সংক্ষিপ্ত পরিচয়",
+              "file_path": "assets/notes/sem3/sanskrit_08_purana_parichay.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_san_bhasa_kalidasa",
+              "title": "সংস্কৃত সাহিত্যের ইতিহাস : ভাস, কালিদাস ও ভবভূতি",
+              "file_path": "assets/notes/sem3/sanskrit_09_bhasa_kalidasa_bhavabhuti.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_san_aryabhata",
+              "title": "সংস্কৃত সাহিত্যের ইতিহাস : প্রাচীন ভারতীয় বিজ্ঞানচর্চা",
+              "file_path": "assets/notes/sem3/sanskrit_10_aryabhata_brahmagupta.pdf"
             }
           ]
         },
@@ -114,8 +394,13 @@
           "topics": [
             {
               "topic_id": "topic_sem3_comp_python",
-              "title": "পাইথন প্রোগ্রামিং (Python Programming) - হ্যান্ডনোটস",
-              "file_path": "assets/notes/sem3/computer_python.pdf"
+              "title": "ইউনিট ১: পাইথন প্রোগ্রামিং (Python Programming)",
+              "file_path": "assets/notes/sem3/computer_application_01_python_programming.pdf"
+            },
+            {
+              "topic_id": "topic_sem3_comp_ecommerce",
+              "title": "ইউনিট ২: ই-কমার্স ও ই-গভর্ন্যান্স (E-Commerce & E-Governance)",
+              "file_path": "assets/notes/sem3/computer_application_02_ecommerce_egovernance.pdf"
             }
           ]
         }
