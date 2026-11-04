@@ -14,9 +14,17 @@ class MainActivity: FlutterActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            splashScreen.setOnExitAnimationListener { splashScreenView ->
+                splashScreenView.remove()
+            }
+        }
         applyCutoutAndFullscreen()
         NotificationAlarmReceiver.scheduleAlarm(this)
     }
+
+    @Suppress("DEPRECATION")
+    override fun provideSplashScreen(): io.flutter.embedding.android.SplashScreen? = null
 
     override fun onResume() {
         super.onResume()
