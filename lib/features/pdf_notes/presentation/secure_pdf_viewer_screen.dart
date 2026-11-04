@@ -228,7 +228,7 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
           _pdfBytes!,
           sourceName: widget.assetPath,
           controller: _controller,
-          passwordProvider: () => SecurityManager.getDecryptedPdfPassword(),
+          passwordProvider: () => SecurityManager.getDecryptedPdfPassword(widget.assetPath),
           params: PdfViewerParams(
             backgroundColor: Colors.white,
             pageDropShadow: null,
