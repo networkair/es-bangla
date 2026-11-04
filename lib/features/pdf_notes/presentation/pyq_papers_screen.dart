@@ -206,7 +206,8 @@ class PyqPapersScreen extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            if (paper.pdfAsset.isNotEmpty) {
+            // Only 2027 displays the PDFs; 2026 shows the full card & thumbnail layout but prompts Coming Soon on tap
+            if (year == '2027' && paper.pdfAsset.isNotEmpty) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
