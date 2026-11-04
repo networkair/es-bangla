@@ -23,7 +23,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final LocalStorageService _storage = LocalStorageService();
   late int _currentSemester;
-  late bool _isDarkMode;
   late String _userAvatar;
 
   static const List<String> _availableAvatars = [
@@ -44,7 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     _storage.notificationsEnabled = true;
     _currentSemester = _storage.semester;
-    _isDarkMode = _storage.isDarkMode;
     _userAvatar = _storage.userAvatar;
     EntitlementService.syncUserEntitlements().then((_) {
       if (mounted) setState(() {});
@@ -515,36 +513,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 ),
-                _buildDivider(),
-                SwitchListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                  secondary: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      Icons.dark_mode_outlined,
-                      color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF334155),
-                      size: 20,
-                    ),
-                  ),
-                  title: Text(
-                    'Dark Theme (ডার্ক মোড)',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
-                    ),
-                  ),
-                  value: _isDarkMode,
-                  activeColor: const Color(0xFF2563EB),
-                  onChanged: (val) {
-                    setState(() => _isDarkMode = val);
-                    _storage.isDarkMode = val;
-                  },
-                ),
+
                 _buildDivider(),
                 _buildActionTile(
                   icon: Icons.star_outline_rounded,
