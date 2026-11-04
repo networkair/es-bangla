@@ -126,20 +126,27 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
             ),
             const SizedBox(height: 18),
 
-            // Pill Filter Bar (Daily | Weekly | Monthly)
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0).withOpacity(0.7),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Row(
-                children: [
-                  _buildPillTab('Daily', isDark),
-                  _buildPillTab('Weekly', isDark),
-                  _buildPillTab('Monthly', isDark),
-                ],
-              ),
+            // Modern Segmented Timeframe Switcher (Daily | Weekly | Monthly)
+            Row(
+              children: [
+                _buildTimeframeTab(
+                  title: 'Daily',
+                  icon: Icons.bolt_rounded,
+                  isDark: isDark,
+                ),
+                const SizedBox(width: 8),
+                _buildTimeframeTab(
+                  title: 'Weekly',
+                  icon: Icons.calendar_view_week_rounded,
+                  isDark: isDark,
+                ),
+                const SizedBox(width: 8),
+                _buildTimeframeTab(
+                  title: 'Monthly',
+                  icon: Icons.calendar_month_rounded,
+                  isDark: isDark,
+                ),
+              ],
             ),
             const SizedBox(height: 24),
 
@@ -611,28 +618,76 @@ class _MockAnalyticsScreenState extends State<MockAnalyticsScreen> {
     );
   }
 
-  Widget _buildPillTab(String title, bool isDark) {
+  Widget _buildTimeframeTab({
+    required String title,
+    required IconData icon,
+    required bool isDark,
+  }) {
     final isSelected = _timeframe == title;
     return Expanded(
       child: GestureDetector(
         onTap: () => setState(() => _timeframe = title),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF2563EB) : Colors.transparent,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13.5,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+            gradient: isSelected
+                ? const LinearGradient(
+                    colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : null,
+            color: isSelected
+                ? null
+                : (isDark ? const Color(0xFF1E293B) : Colors.white),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
               color: isSelected
-                  ? Colors.white
-                  : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF334155)),
+                  ? const Color(0xFF3B82F6)
+                  : (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
+              width: 1.2,
             ),
+            boxShadow: [
+              if (isSelected)
+                BoxShadow(
+                  color: const Color(0xFF2563EB).withOpacity(0.35),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                )
+              else
+                BoxShadow(
+                  color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 15,
+                color: isSelected
+                    ? Colors.white
+                    : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B)),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                  color: isSelected
+                      ? Colors.white
+                      : (isDark ? const Color(0xFF94A3B8) : const Color(0xFF475569)),
+                  letterSpacing: 0.2,
+                ),
+              ),
+            ],
           ),
         ),
       ),
