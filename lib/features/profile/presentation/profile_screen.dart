@@ -8,6 +8,7 @@ import '../../../core/services/entitlement_service.dart';
 import 'mock_analytics_screen.dart';
 import 'activity_streak_screen.dart';
 import 'saved_questions_screen.dart';
+import 'help_support_screen.dart';
 import '../../auth/presentation/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -21,7 +22,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final LocalStorageService _storage = LocalStorageService();
-  late bool _notificationsEnabled;
   late int _currentSemester;
   late bool _isDarkMode;
   late String _userAvatar;
@@ -42,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _notificationsEnabled = _storage.notificationsEnabled;
+    _storage.notificationsEnabled = true;
     _currentSemester = _storage.semester;
     _isDarkMode = _storage.isDarkMode;
     _userAvatar = _storage.userAvatar;
@@ -498,33 +498,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 16),
 
-            // 5. Preferences & System 3D Section
+            // 5. Support & Preferences 3D Section
             _build3DSection(
-              title: 'Preferences & System',
+              title: 'Support & Preferences',
               items: [
-                SwitchListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                  secondary: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF334155) : const Color(0xFFEFF6FF),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(Icons.notifications_active_outlined, color: Color(0xFF2563EB), size: 20),
-                  ),
-                  title: Text(
-                    'Study Alerts & Reminders',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
-                    ),
-                  ),
-                  value: _notificationsEnabled,
-                  activeColor: const Color(0xFF2563EB),
-                  onChanged: (val) {
-                    setState(() => _notificationsEnabled = val);
-                    _storage.notificationsEnabled = val;
+                _buildActionTile(
+                  icon: Icons.support_agent_rounded,
+                  iconColor: const Color(0xFF2563EB),
+                  iconBg: isDark ? const Color(0xFF1E3A8A).withOpacity(0.4) : const Color(0xFFEFF6FF),
+                  title: 'Help & Support (সহায়তা ও সাপোর্ট)',
+                  subtitle: 'যে কোনো বিষয়ে সরাসরি আমাদের সাহায্য চান',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const HelpSupportScreen()),
+                    );
                   },
                 ),
                 _buildDivider(),
