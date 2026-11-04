@@ -18,8 +18,8 @@ class AppTheme {
       splashFactory: NoSplash.splashFactory,
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.android: SmoothSlidePageTransitionsBuilder(),
+          TargetPlatform.iOS: SmoothSlidePageTransitionsBuilder(),
         },
       ),
       colorScheme: ColorScheme.light(
@@ -118,8 +118,8 @@ class AppTheme {
       splashFactory: NoSplash.splashFactory,
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.android: SmoothSlidePageTransitionsBuilder(),
+          TargetPlatform.iOS: SmoothSlidePageTransitionsBuilder(),
         },
       ),
       colorScheme: const ColorScheme.dark(
@@ -205,3 +205,51 @@ class AppTheme {
     );
   }
 }
+
+/// Ultra-smooth slide page transition with a stationary background.
+/// Prevents the previous screen from parallax-shifting or jumping when going back.
+class SmoothSlidePageTransitionsBuilder extends PageTransitionsBuilder {
+  const SmoothSlidePageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    // Only the top page slides and fades; the underlying page remains 100% stationary and anchored
+    final curvedAnimation = CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
+
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(1.0, 0.0),
+        end: Offset.zero,
+      ).animate(curvedAnimation),
+      child: FadeTransition(
+        opacity: Tween<double>(
+          begin: 0.85,
+          end: 1.0,
+        ).animate(curvedAnimation),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 16,
+                offset: const Offset(-4, 0),
+              ),
+            ],
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
