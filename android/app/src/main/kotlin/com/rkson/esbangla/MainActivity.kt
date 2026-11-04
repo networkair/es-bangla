@@ -23,8 +23,6 @@ class MainActivity: FlutterActivity() {
         NotificationAlarmReceiver.scheduleAlarm(this)
     }
 
-    @Suppress("DEPRECATION")
-    override fun provideSplashScreen(): io.flutter.embedding.android.SplashScreen? = null
 
     override fun onResume() {
         super.onResume()
