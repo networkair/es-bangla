@@ -20,7 +20,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
   late Animation<double> _barAnimation;
-  late Animation<double> _subtitleFadeAnimation;
   Timer? _navigationTimer;
 
   @override
@@ -51,14 +50,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       CurvedAnimation(
         parent: _controller,
         curve: const Interval(0.35, 0.75, curve: Curves.easeOutCubic),
-      ),
-    );
-
-    // 3. Academic Tagline Fade In
-    _subtitleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.60, 1.0, curve: Curves.easeIn),
       ),
     );
 
@@ -159,35 +150,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         ],
                       ),
 
-                      const SizedBox(height: 28),
-
-                      // Academic Subtitle Tagline
-                      FadeTransition(
-                        opacity: _subtitleFadeAnimation,
-                        child: Column(
-                          children: [
-                            Text(
-                              'উচ্চমাধ্যমিক সেমিস্টার সহায়িকা',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF475569),
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Class 11 & 12 · Bengali & Arts',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: isDark ? const Color(0xFF64748B) : const Color(0xFF94A3B8),
-                                letterSpacing: 0.8,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
