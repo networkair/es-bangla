@@ -405,7 +405,184 @@
           ]
         }
       ],
-      "pyq": []
+      "pyq": [
+        {
+          "subject_id": "bengali",
+          "subject_name": "বাংলা",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "Bengali Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_bengali_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "Bengali Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_bengali_sem3.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "english",
+          "subject_name": "English",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "English Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_english_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "English Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_english_sem3.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "education",
+          "subject_name": "শিক্ষাবিজ্ঞান",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "Education Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_education_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "Education Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_education_sem3.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "history",
+          "subject_name": "ইতিহাস",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "History Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_history_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "History Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_history_sem3.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "geography",
+          "subject_name": "ভূগোল",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "Geography Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_geography_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "Geography Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_geography_sem3.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "polscience",
+          "subject_name": "রাষ্ট্রবিজ্ঞান",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "Political Science Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_polscience_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "Political Science Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_polscience_sem3.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "philosophy",
+          "subject_name": "দর্শন",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "Philosophy Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_philosophy_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "Philosophy Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_philosophy_sem3.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "sanskrit",
+          "subject_name": "সংস্কৃত",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "Sanskrit Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_sanskrit_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "Sanskrit Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_sanskrit_sem3.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "economics",
+          "subject_name": "অর্থনীতি",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "Economics Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_economics_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "Economics Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_economics_sem3.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "envs",
+          "subject_name": "পরিবেশ বিদ্যা",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "Environmental Studies Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_envs_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "Environmental Studies Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_envs_sem3.pdf"
+            }
+          ]
+        },
+        {
+          "subject_id": "coma",
+          "subject_name": "কম্পিউটার অ্যাপ্লিকেশন",
+          "papers": [
+            {
+              "year": "2026",
+              "title": "Modern Computer Application Question Paper 2026",
+              "file_path": "assets/notes/sem3/pyq_coma_sem3.pdf"
+            },
+            {
+              "year": "2027",
+              "title": "Modern Computer Application Question Paper 2027",
+              "file_path": "assets/notes/sem3/pyq_coma_sem3.pdf"
+            }
+          ]
+        }
+      ]
     },
     "4": {
       "notes": [],

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import 'secure_pdf_viewer_screen.dart';
 
 class PyqPaperItem {
   final String subjectName;
   final String thumbnailAsset;
+  final String pdfAsset;
 
   const PyqPaperItem({
     required this.subjectName,
     required this.thumbnailAsset,
+    required this.pdfAsset,
   });
 }
 
@@ -25,16 +28,63 @@ class PyqPapersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Pre-configured subjects for Semester 3
+    // Pre-configured subjects for Semester 3 (available for both 2026 and 2027)
     final List<PyqPaperItem> papers = semester == 3
-        ? [
-            const PyqPaperItem(
+        ? const [
+            PyqPaperItem(
               subjectName: 'Class 12 Bengali',
               thumbnailAsset: 'assets/images/pyq_bengali_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_bengali_sem3.pdf',
             ),
-            const PyqPaperItem(
+            PyqPaperItem(
               subjectName: 'Class 12 English',
               thumbnailAsset: 'assets/images/pyq_english_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_english_sem3.pdf',
+            ),
+            PyqPaperItem(
+              subjectName: 'Class 12 Education',
+              thumbnailAsset: 'assets/images/pyq_education_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_education_sem3.pdf',
+            ),
+            PyqPaperItem(
+              subjectName: 'Class 12 History',
+              thumbnailAsset: 'assets/images/pyq_history_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_history_sem3.pdf',
+            ),
+            PyqPaperItem(
+              subjectName: 'Class 12 Geography',
+              thumbnailAsset: 'assets/images/pyq_geography_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_geography_sem3.pdf',
+            ),
+            PyqPaperItem(
+              subjectName: 'Class 12 Political Science',
+              thumbnailAsset: 'assets/images/pyq_polscience_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_polscience_sem3.pdf',
+            ),
+            PyqPaperItem(
+              subjectName: 'Class 12 Philosophy',
+              thumbnailAsset: 'assets/images/pyq_philosophy_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_philosophy_sem3.pdf',
+            ),
+            PyqPaperItem(
+              subjectName: 'Class 12 Sanskrit',
+              thumbnailAsset: 'assets/images/pyq_sanskrit_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_sanskrit_sem3.pdf',
+            ),
+            PyqPaperItem(
+              subjectName: 'Class 12 Economics',
+              thumbnailAsset: 'assets/images/pyq_economics_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_economics_sem3.pdf',
+            ),
+            PyqPaperItem(
+              subjectName: 'Class 12 Environmental Studies',
+              thumbnailAsset: 'assets/images/pyq_envs_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_envs_sem3.pdf',
+            ),
+            PyqPaperItem(
+              subjectName: 'Class 12 Computer Application',
+              thumbnailAsset: 'assets/images/pyq_coma_sem3.png',
+              pdfAsset: 'assets/notes/sem3/pyq_coma_sem3.pdf',
             ),
           ]
         : [];
@@ -155,7 +205,21 @@ class PyqPapersScreen extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => _showComingSoonModal(context, paper.subjectName, isDark),
+          onTap: () {
+            if (paper.pdfAsset.isNotEmpty) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => SecurePdfViewerScreen(
+                    title: '${paper.subjectName} ($year)',
+                    assetPath: paper.pdfAsset,
+                  ),
+                ),
+              );
+            } else {
+              _showComingSoonModal(context, paper.subjectName, isDark);
+            }
+          },
           borderRadius: BorderRadius.circular(16),
           child: Padding(
             padding: const EdgeInsets.all(10),
