@@ -27,18 +27,22 @@ class LibrarySubjectsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Pre-configured static subjects for Semester 3
-    final List<LibrarySubjectItem> subjects = semester == 3
+    // Pre-configured static subjects for Semester 3 and Semester 4
+    final List<LibrarySubjectItem> subjects = (semester == 3 || semester == 4)
         ? [
-            const LibrarySubjectItem(
+            LibrarySubjectItem(
               id: 'bengali',
               name: 'বাংলা',
-              thumbnailAsset: 'assets/images/lib_sub_bengali_sem3.png',
+              thumbnailAsset: semester == 4
+                  ? 'assets/images/lib_sub_bengali_sem4.png'
+                  : 'assets/images/lib_sub_bengali_sem3.png',
             ),
-            const LibrarySubjectItem(
+            LibrarySubjectItem(
               id: 'english',
               name: 'English',
-              thumbnailAsset: 'assets/images/lib_sub_english_sem3.png',
+              thumbnailAsset: semester == 4
+                  ? 'assets/images/lib_sub_english_sem4.png'
+                  : 'assets/images/lib_sub_english_sem3.png',
             ),
           ]
         : [];

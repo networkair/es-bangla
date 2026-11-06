@@ -65,30 +65,21 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.36
-          name: "Es Bangla v1.3.36 (PYQ 2027 Integration, AES-256 Security & UI Refinements)"
+          tag_name: v1.3.37
+          name: "Es Bangla v1.3.37 (Semester 4 Video Library & Real-Time Admin Sync)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.36 Release Highlights:
-            - **Semester 3 PYQ (Previous Year Questions) Integration**:
-              - 11 Official Subject Question Papers for Class 12 Semester 3.
-              - Streamlined for 2027 access with Coming Soon prompts for other years.
-              - High-resolution thumbnails and ultra-compact PDFs (~2.2 MB total).
-            - **Enterprise-Grade AES-256 PDF Security**:
-              - Protected with military-grade 256-bit AES (AESv3 / R=6) encryption.
-              - Cryptographic 31-character user passphrase & 48-character owner lock.
-              - Dynamic in-memory bitwise XOR obfuscation in SecurityManager to prevent binary reverse-engineering.
-              - Completely blocks external piracy/extraction while providing seamless zero-prompt in-app viewing.
-            - **Splash & Launch Optimization**:
-              - Android 12+ native splash icon flash eliminated via transparent vector drawable and dynamic exit animation listener.
-              - Removed redundant subtitles under the splash animation.
-            - **Profile & Support Enhancements**:
-              - Added direct 200-word Help & Support screen connecting to Telegram/Cloudflare reporting API.
-              - Cleaned up Profile by removing redundant Plan and Dark Theme toggles.
-            - **Navigation & Analytics Polish**:
-              - Smooth page transitions with stationary anchored underlying screens.
-              - Redesigned Mock Analytics timeframe segment switcher.
+            ### Es Bangla v1.3.37 Release Highlights:
+            - **Semester 4 Video Library Enabled**:
+              - Unlocked Semester 4 Video Library with identical high-quality UI & UX matching Semester 3.
+              - Live subject listing for বাংলা (Bengali) and English with tailored 16:9 cards.
+              - Real-time synchronization with Firestore (`library_videos` and `subject_locks`).
+            - **Admin Panel Full Integration**:
+              - Seamless video addition, editing, and subject lock toggles from the Admin App (`es-admin-app`).
+              - Instant access control for free lectures and VIP students with active Semester 4 entitlements (`video_library_sem4`, `combo_sem4`).
+            - **Performance & Stability**:
+              - Cleaned up routing and smooth transition states.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
