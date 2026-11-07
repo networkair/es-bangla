@@ -65,19 +65,17 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.41
-          name: "Es Bangla v1.3.41 (Eliminate Splash Bottom Bar & A+ Common Badge)"
+          tag_name: v1.3.42
+          name: "Es Bangla v1.3.42 (English '99% Common' Badge & Clean Edge-to-Edge Splash)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.41 Release Highlights:
-            - **Complete Elimination of Dark Bottom Navigation Bar on Splash Screen**:
-              - Fixed Android system dark theme override where `values-night` and `MainActivity.kt` painted `#0F172A` over the navigation bar.
-              - Status bar and navigation bar are now permanently transparent with `LIGHT_NAVIGATION_BAR` enabled across all themes and Android versions.
-              - Flutter splash screen now flows 100% seamlessly edge-to-edge without any dark bar or scrim.
-            - **Updated Home Screen Badge to 'A+ কমন'**:
-              - Replaced '99% Common' with 'A+ কমন' on Semester 3 and Semester 4 cards.
-              - Maintained uniform Royal Ice Blue background and black text typography.
+            ### Es Bangla v1.3.42 Release Highlights:
+            - **Restored '99% Common' Badge in English**:
+              - Restored the badge text to English '99% Common' on Semester 3 & 4 cards as requested.
+              - Preserved the clean unified Royal Ice Blue background and solid black text.
+            - **Seamless Edge-to-Edge Splash Screen**:
+              - Completely eliminated bottom navigation bar color artifacts across all Android system themes.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
