@@ -1,5 +1,6 @@
 package com.rkson.esbangla
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -45,18 +46,25 @@ class MainActivity: FlutterActivity() {
             window.attributes = params
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        window.statusBarColor = Color.WHITE
-        window.navigationBarColor = Color.WHITE
-        window.decorView.setBackgroundColor(Color.WHITE)
+
+        val isNight = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        val bgCol = if (isNight) Color.parseColor("#0F172A") else Color.WHITE
+
+        window.statusBarColor = bgCol
+        window.navigationBarColor = bgCol
+        window.decorView.setBackgroundColor(bgCol)
 
         @Suppress("DEPRECATION")
-        window.decorView.systemUiVisibility = (
+        var flags = (
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
             or View.SYSTEM_UI_FLAG_FULLSCREEN
             or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         )
+        if (!isNight) {
+            flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+        window.decorView.systemUiVisibility = flags
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
