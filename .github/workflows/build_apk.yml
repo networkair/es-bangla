@@ -65,23 +65,17 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.38
-          name: "Es Bangla v1.3.38 (Mock Test 3D Redesign, Seamless Splash & Topic Badges)"
+          tag_name: v1.3.39
+          name: "Es Bangla v1.3.39 (Refined Quiz Card Layout & Balanced Banner Buffer)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.38 Release Highlights:
-            - **Mock Test Practice Screen Overhaul**:
-              - Sleeker, slender 3D tactile card design for Questions and Options matching the Result Screen.
-              - Compact, elegant Back button at top-left.
-              - Screen content shifted upward with reserved bottom buffer for future banner ad integration.
-              - Silky-smooth horizontal directional slide and fade transition between questions.
-            - **Zero-Flash Native Splash Screen Launch**:
-              - Completely eliminated millisecond native app icon flash on app start across Android 12+ light & dark modes.
-              - Standardized 108dp adaptive splash vector and dedicated `values-night-v31` resource handling.
-            - **Topic Badges & Home UI**:
-              - Breathing pulse animation with glowing emerald aura on Free library badges.
-              - Cleaned up 99% Common badge styling on Home semester cards.
+            ### Es Bangla v1.3.39 Release Highlights:
+            - **Refined Mock Test Practice Screen Proportions**:
+              - Expanded Question and Option cards with comfortable breathing room and natural vertical padding.
+              - Moved content down into the upper 50% of the previous empty space for superior readability.
+              - Preserved a clean 50% bottom buffer for future banner ad integration.
+              - Balanced 3D tactile elevation and crisp typography across all question and option cards.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

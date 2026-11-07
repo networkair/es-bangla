@@ -177,18 +177,18 @@ class _QuizScreenState extends State<QuizScreen> {
 
     if (_isLoading) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
           children: [
-            AppShimmer.box(width: double.infinity, height: 38, borderRadius: 10),
-            const SizedBox(height: 10),
-            AppShimmer.box(width: double.infinity, height: 95, borderRadius: 16),
-            const SizedBox(height: 12),
+            AppShimmer.box(width: double.infinity, height: 42, borderRadius: 10),
+            const SizedBox(height: 14),
+            AppShimmer.box(width: double.infinity, height: 115, borderRadius: 18),
+            const SizedBox(height: 14),
             ...List.generate(
               4,
               (index) => Padding(
-                padding: const EdgeInsets.only(bottom: 9),
-                child: AppShimmer.box(width: double.infinity, height: 50, borderRadius: 14),
+                padding: const EdgeInsets.only(bottom: 12),
+                child: AppShimmer.box(width: double.infinity, height: 56, borderRadius: 16),
               ),
             ),
           ],
@@ -234,12 +234,12 @@ class _QuizScreenState extends State<QuizScreen> {
     final card3DShadow = isDark
         ? const BoxShadow(
             color: Color(0xFF0F172A),
-            offset: Offset(0, 3),
+            offset: Offset(0, 3.5),
             blurRadius: 0,
           )
         : BoxShadow(
-            color: const Color(0xFFCBD5E1).withOpacity(0.6),
-            offset: const Offset(0, 3),
+            color: const Color(0xFFCBD5E1).withOpacity(0.65),
+            offset: const Offset(0, 3.5),
             blurRadius: 0,
           );
 
@@ -247,10 +247,10 @@ class _QuizScreenState extends State<QuizScreen> {
       children: [
         // 1. Sleek Compact Top Header: Compact Back button + Divider + Question counter pill badge
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 6, 16, 4),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
           child: Row(
             children: [
-              // Compact rounded square card with back arrow (sleek 36x36)
+              // Compact rounded square card with back arrow (clean 38x38)
               InkWell(
                 onTap: () async {
                   final shouldLeave = await _onWillPop();
@@ -260,8 +260,8 @@ class _QuizScreenState extends State<QuizScreen> {
                 },
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
-                  width: 36,
-                  height: 36,
+                  width: 38,
+                  height: 38,
                   decoration: BoxDecoration(
                     color: cardBg,
                     borderRadius: BorderRadius.circular(10),
@@ -277,19 +277,19 @@ class _QuizScreenState extends State<QuizScreen> {
                   child: Center(
                     child: Icon(
                       Icons.arrow_back_rounded,
-                      size: 19,
+                      size: 20,
                       color: textColor,
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
 
               // Vertical Divider Line
               Container(
                 width: 1.2,
-                height: 20,
+                height: 22,
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF334155) : const Color(0xFFCBD5E1),
                   borderRadius: BorderRadius.circular(1),
@@ -300,7 +300,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
               // Question Counter Pill Badge (Clean, compact & 3D subtle depth)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5.5),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF1E293B) : const Color(0xFFEBF5FF),
                   borderRadius: BorderRadius.circular(20),
@@ -321,7 +321,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 child: Text(
                   'Question ${_currentIndex + 1} of ${questions.length}',
                   style: const TextStyle(
-                    fontSize: 12.5,
+                    fontSize: 12.8,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF0066FF),
                     letterSpacing: 0.1,
@@ -334,7 +334,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
         // 2. Segmented Capsule Progress Bar ("কাটা কাটা লোডিং বার")
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           child: Row(
             children: List.generate(questions.length, (idx) {
               final userAns = _userAnswers[idx];
@@ -358,7 +358,7 @@ class _QuizScreenState extends State<QuizScreen> {
               return Expanded(
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
-                  height: 4.5,
+                  height: 5.0,
                   margin: EdgeInsets.only(
                     right: idx == questions.length - 1 ? 0 : 3.5,
                   ),
@@ -372,7 +372,7 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
         ),
 
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
 
         // 3. Question & Options Content with Silky Smooth Directional Slide + Fade Transition
         Expanded(
@@ -413,17 +413,17 @@ class _QuizScreenState extends State<QuizScreen> {
               },
               child: SingleChildScrollView(
                 key: ValueKey<int>(_currentIndex),
-                padding: const EdgeInsets.fromLTRB(16, 2, 16, 16),
+                padding: const EdgeInsets.fromLTRB(16, 6, 16, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Sleek 3D Question Card with Golden Accent Underline
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
                       decoration: BoxDecoration(
                         color: cardBg,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(18),
                         border: Border.all(color: borderColor, width: 1.2),
                         boxShadow: [
                           card3DShadow,
@@ -440,27 +440,27 @@ class _QuizScreenState extends State<QuizScreen> {
                           Text(
                             currentQ.questionText,
                             style: TextStyle(
-                              fontSize: 16.5,
+                              fontSize: 17.5,
                               fontWeight: FontWeight.bold,
                               color: textColor,
-                              height: 1.38,
-                              letterSpacing: -0.15,
+                              height: 1.42,
+                              letterSpacing: -0.2,
                             ),
                           ),
                           // Golden yellow accent underline bar
                           Container(
-                            margin: const EdgeInsets.only(top: 8),
-                            width: 38,
-                            height: 3.5,
+                            margin: const EdgeInsets.only(top: 10),
+                            width: 44,
+                            height: 4,
                             decoration: BoxDecoration(
                               color: const Color(0xFFF59E0B),
                               borderRadius: BorderRadius.circular(2),
                             ),
                           ),
                           if (currentQ.imageUrl.isNotEmpty) ...[
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 14),
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(12),
                               child: Image.network(
                                 currentQ.imageUrl,
                                 fit: BoxFit.cover,
@@ -472,7 +472,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 14),
 
                     // Sleek 3D Option Cards (A, B, C, D)
                     ...currentQ.options.entries.map((entry) {
@@ -497,7 +497,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           badgeBorderColor = const Color(0xFF86EFAC);
                           badgeTextColor = const Color(0xFF15803D);
                           shadow3DColor = isDark ? const Color(0xFF065F46) : const Color(0xFF86EFAC);
-                          statusIcon = const Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 20);
+                          statusIcon = const Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 22);
                         } else if (key == selectedOpt) {
                           optionBg = isDark ? const Color(0xFF7F1D1D).withOpacity(0.3) : const Color(0xFFFEF2F2);
                           optBorderColor = const Color(0xFFEF4444);
@@ -506,21 +506,21 @@ class _QuizScreenState extends State<QuizScreen> {
                           badgeBorderColor = const Color(0xFFFCA5A5);
                           badgeTextColor = const Color(0xFFDC2626);
                           shadow3DColor = isDark ? const Color(0xFF991B1B) : const Color(0xFFFCA5A5);
-                          statusIcon = const Icon(Icons.cancel_rounded, color: Color(0xFFEF4444), size: 20);
+                          statusIcon = const Icon(Icons.cancel_rounded, color: Color(0xFFEF4444), size: 22);
                         }
                       }
 
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 9),
+                        padding: const EdgeInsets.only(bottom: 12),
                         child: InkWell(
                           onTap: () => _selectOption(key),
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(16),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 180),
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13.5),
                             decoration: BoxDecoration(
                               color: optionBg,
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(16),
                               border: Border.all(
                                 color: optBorderColor,
                                 width: isAnswered && (key == currentQ.correctOption || key == selectedOpt) ? 1.6 : 1.2,
@@ -529,7 +529,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                 BoxShadow(
                                   color: shadow3DColor,
                                   blurRadius: 0,
-                                  offset: const Offset(0, 2.5),
+                                  offset: const Offset(0, 3),
                                 ),
                               ],
                             ),
@@ -537,8 +537,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               children: [
                                 // Circular Letter Badge
                                 Container(
-                                  width: 32,
-                                  height: 32,
+                                  width: 36,
+                                  height: 36,
                                   decoration: BoxDecoration(
                                     color: badgeBg,
                                     shape: BoxShape.circle,
@@ -552,21 +552,21 @@ class _QuizScreenState extends State<QuizScreen> {
                                       key,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w800,
-                                        fontSize: 14,
+                                        fontSize: 15,
                                         color: badgeTextColor,
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 13),
+                                const SizedBox(width: 14),
                                 Expanded(
                                   child: Text(
                                     text,
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 15.8,
                                       fontWeight: FontWeight.w600,
                                       color: optTextColor,
-                                      height: 1.3,
+                                      height: 1.34,
                                     ),
                                   ),
                                 ),
@@ -581,21 +581,21 @@ class _QuizScreenState extends State<QuizScreen> {
                       );
                     }),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
 
                     // Next Question / Submit Test Button with 3D tactile style
                     InkWell(
                       onTap: isAnswered ? _onNext : null,
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(16),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 180),
                         width: double.infinity,
-                        height: 48,
+                        height: 52,
                         decoration: BoxDecoration(
                           color: isAnswered
                               ? (isLast ? const Color(0xFF16A34A) : const Color(0xFF0066FF))
                               : (isDark ? const Color(0xFF334155) : const Color(0xFFCAD7E5)),
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
                               color: isAnswered
@@ -603,7 +603,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                       ? (isDark ? const Color(0xFF14532D) : const Color(0xFF15803D))
                                       : (isDark ? const Color(0xFF1E40AF) : const Color(0xFF1D4ED8)))
                                   : (isDark ? const Color(0xFF1E293B) : const Color(0xFF94A3B8).withOpacity(0.4)),
-                              offset: const Offset(0, 3),
+                              offset: const Offset(0, 3.5),
                               blurRadius: 0,
                             ),
                           ],
@@ -615,7 +615,7 @@ class _QuizScreenState extends State<QuizScreen> {
                               Text(
                                 isLast ? 'Submit Test' : 'Next Question',
                                 style: TextStyle(
-                                  fontSize: 15.5,
+                                  fontSize: 16.5,
                                   fontWeight: FontWeight.bold,
                                   color: isAnswered
                                       ? Colors.white
@@ -628,7 +628,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                 Icon(
                                   isLast ? Icons.check_circle_outline_rounded : Icons.arrow_forward_rounded,
                                   color: Colors.white,
-                                  size: 19,
+                                  size: 20,
                                 ),
                               ],
                             ],
@@ -637,7 +637,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
 
                     // Report Question Action (placed directly below Next button)
                     Center(
@@ -665,14 +665,14 @@ class _QuizScreenState extends State<QuizScreen> {
                             children: [
                               Icon(
                                 Icons.flag_outlined,
-                                size: 16,
+                                size: 17,
                                 color: textMuted,
                               ),
                               const SizedBox(width: 6),
                               Text(
                                 'Report Question',
                                 style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 13.5,
                                   fontWeight: FontWeight.w600,
                                   color: textMuted,
                                 ),
@@ -683,8 +683,8 @@ class _QuizScreenState extends State<QuizScreen> {
                       ),
                     ),
 
-                    // Reserved buffer space at bottom for future banner ad
-                    const SizedBox(height: 56),
+                    // Reserved buffer space at bottom for future banner ad (50% remaining space)
+                    const SizedBox(height: 72),
                   ],
                 ),
               ),
