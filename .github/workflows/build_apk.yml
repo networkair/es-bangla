@@ -65,17 +65,16 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.42
-          name: "Es Bangla v1.3.42 (English '99% Common' Badge & Clean Edge-to-Edge Splash)"
+          tag_name: v1.3.43
+          name: "Es Bangla v1.3.43 (Animated Rosette 'FREE' Seal Badge on Video Cards)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.42 Release Highlights:
-            - **Restored '99% Common' Badge in English**:
-              - Restored the badge text to English '99% Common' on Semester 3 & 4 cards as requested.
-              - Preserved the clean unified Royal Ice Blue background and solid black text.
-            - **Seamless Edge-to-Edge Splash Screen**:
-              - Completely eliminated bottom navigation bar color artifacts across all Android system themes.
+            ### Es Bangla v1.3.43 Release Highlights:
+            - **Animated Rosette Starburst 'FREE' Badge**:
+              - Redesigned the video library topic cards' FREE badge to match the user's reference design.
+              - Implemented a vibrant red 8-lobe scalloped rosette seal with bold white 'FREE' text.
+              - Added smooth breathing scale animation, gentle ambient red glow, and subtle micro-tilt dynamics.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

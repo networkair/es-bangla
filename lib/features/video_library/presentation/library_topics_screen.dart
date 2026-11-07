@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -499,49 +500,7 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
   Widget _buildVideoBadge({required bool isFree, required bool hasAccess}) {
     if (hasAccess) {
       if (isFree) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 7.5, vertical: 3.5),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF047857), Color(0xFF059669)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.35),
-              width: 0.8,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF047857).withOpacity(0.35),
-                blurRadius: 4,
-                offset: const Offset(0, 1.5),
-              ),
-              BoxShadow(
-                color: Colors.black.withOpacity(0.20),
-                blurRadius: 3,
-                offset: const Offset(0, 1),
-              ),
-            ],
-          ),
-          child: const Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.play_arrow_rounded, size: 12, color: Colors.white),
-              SizedBox(width: 3),
-              Text(
-                'FREE',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                  letterSpacing: 0.8,
-                ),
-              ),
-            ],
-          ),
-        );
+        return const _AnimatedRosetteFreeBadge();
       } else {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 7.5, vertical: 3.5),
@@ -624,5 +583,143 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
       ),
     );
   }
+}
+
+/// Animated Rosette Starburst "FREE" Badge matching reference design.
+/// Features smooth breathing scale, gentle ambient glow, and micro-tilt.
+class _AnimatedRosetteFreeBadge extends StatefulWidget {
+  const _AnimatedRosetteFreeBadge();
+
+  @override
+  State<_AnimatedRosetteFreeBadge> createState() => _AnimatedRosetteFreeBadgeState();
+}
+
+class _AnimatedRosetteFreeBadgeState extends State<_AnimatedRosetteFreeBadge>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _glowAnimation;
+  late Animation<double> _tiltAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+
+    _scaleAnimation = Tween<double>(begin: 0.93, end: 1.05).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOutSine),
+    );
+
+    _glowAnimation = Tween<double>(begin: 0.35, end: 0.85).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    _tiltAnimation = Tween<double>(begin: -0.04, end: 0.04).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOutSine),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _scaleAnimation.value,
+          child: Transform.rotate(
+            angle: _tiltAnimation.value,
+            child: Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFFF0000).withOpacity(_glowAnimation.value * 0.45),
+                    blurRadius: 7,
+                    spreadRadius: 1,
+                    offset: const Offset(0, 2),
+                  ),
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.25),
+                    blurRadius: 4,
+                    offset: const Offset(0, 1.5),
+                  ),
+                ],
+              ),
+              child: Image.asset(
+                'assets/images/free_badge_rosette_clean.png',
+                width: 38,
+                height: 38,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => _buildFallbackRosette(),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildFallbackRosette() {
+    return CustomPaint(
+      size: const Size(38, 38),
+      painter: _RosetteFallbackPainter(),
+      child: const Center(
+        child: Text(
+          'FREE',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 9.5,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RosetteFallbackPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2;
+    final cy = size.height / 2;
+    final rMax = size.width / 2;
+    final rMin = rMax * 0.84;
+
+    final path = Path();
+    const int steps = 96;
+    for (int i = 0; i <= steps; i++) {
+      final theta = (i * 2 * math.pi) / steps;
+      final r = (rMax + rMin) / 2 + ((rMax - rMin) / 2) * math.cos(8 * theta);
+      final x = cx + r * math.cos(theta);
+      final y = cy + r * math.sin(theta);
+      if (i == 0) {
+        path.moveTo(x, y);
+      } else {
+        path.lineTo(x, y);
+      }
+    }
+    path.close();
+
+    final paint = Paint()
+      ..color = const Color(0xFFFF0000)
+      ..style = PaintingStyle.fill
+      ..isAntiAlias = true;
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
