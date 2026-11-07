@@ -65,17 +65,21 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.39
-          name: "Es Bangla v1.3.39 (Refined Quiz Card Layout & Balanced Banner Buffer)"
+          tag_name: v1.3.40
+          name: "Es Bangla v1.3.40 (Professional Video Badges, Seamless Edge-to-Edge Splash, Unified Home Badges)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.39 Release Highlights:
-            - **Refined Mock Test Practice Screen Proportions**:
-              - Expanded Question and Option cards with comfortable breathing room and natural vertical padding.
-              - Moved content down into the upper 50% of the previous empty space for superior readability.
-              - Preserved a clean 50% bottom buffer for future banner ad integration.
-              - Balanced 3D tactile elevation and crisp typography across all question and option cards.
+            ### Es Bangla v1.3.40 Release Highlights:
+            - **Seamless Edge-to-Edge Splash Screen**:
+              - Completely eliminated bottom navigation bar scrim and contrast artifacts on Android 10+ (Q+).
+              - Full edge-to-edge transparent system navigation bar integration.
+            - **Professional Video Library Badges**:
+              - Redesigned FREE, UNLOCKED, and LOCKED badges with broadcast-grade rectangular chips, crisp icons, and refined gradients.
+              - Removed vibrating/pulsing animations for an ultra-clean, modern aesthetic.
+            - **Unified Home Screen "99% Common" Badges**:
+              - Synchronized both Semester 3 & Semester 4 cards to the same Royal Ice Blue tint (`#EFF6FF`).
+              - Formatted typography in solid black for maximum contrast and readability.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
