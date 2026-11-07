@@ -65,21 +65,23 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.37
-          name: "Es Bangla v1.3.37 (Semester 4 Video Library & Real-Time Admin Sync)"
+          tag_name: v1.3.38
+          name: "Es Bangla v1.3.38 (Mock Test 3D Redesign, Seamless Splash & Topic Badges)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.37 Release Highlights:
-            - **Semester 4 Video Library Enabled**:
-              - Unlocked Semester 4 Video Library with identical high-quality UI & UX matching Semester 3.
-              - Live subject listing for বাংলা (Bengali) and English with tailored 16:9 cards.
-              - Real-time synchronization with Firestore (`library_videos` and `subject_locks`).
-            - **Admin Panel Full Integration**:
-              - Seamless video addition, editing, and subject lock toggles from the Admin App (`es-admin-app`).
-              - Instant access control for free lectures and VIP students with active Semester 4 entitlements (`video_library_sem4`, `combo_sem4`).
-            - **Performance & Stability**:
-              - Cleaned up routing and smooth transition states.
+            ### Es Bangla v1.3.38 Release Highlights:
+            - **Mock Test Practice Screen Overhaul**:
+              - Sleeker, slender 3D tactile card design for Questions and Options matching the Result Screen.
+              - Compact, elegant Back button at top-left.
+              - Screen content shifted upward with reserved bottom buffer for future banner ad integration.
+              - Silky-smooth horizontal directional slide and fade transition between questions.
+            - **Zero-Flash Native Splash Screen Launch**:
+              - Completely eliminated millisecond native app icon flash on app start across Android 12+ light & dark modes.
+              - Standardized 108dp adaptive splash vector and dedicated `values-night-v31` resource handling.
+            - **Topic Badges & Home UI**:
+              - Breathing pulse animation with glowing emerald aura on Free library badges.
+              - Cleaned up 99% Common badge styling on Home semester cards.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
