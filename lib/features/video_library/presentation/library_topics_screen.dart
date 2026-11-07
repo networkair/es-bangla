@@ -307,50 +307,90 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
                     color: Colors.black.withOpacity(0.35),
                   ),
 
-                // Top-Right 3D Badge (FREE / UNLOCKED / LOCKED)
+                // Top-Right Polished Badge (FREE / UNLOCKED / LOCKED)
                 Positioned(
                   top: 8,
                   right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: hasAccess
-                            ? (isFree ? AppColors.correctGreen : AppColors.primary)
-                            : AppColors.wrongRed,
-                        width: 1.2,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.14),
-                          blurRadius: 5,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (!hasAccess) ...[
-                          const Icon(Icons.lock_rounded, size: 10, color: AppColors.wrongRed),
-                          const SizedBox(width: 3),
-                        ],
-                        Text(
-                          hasAccess ? (isFree ? 'FREE' : 'UNLOCKED') : 'LOCKED',
-                          style: TextStyle(
-                            fontSize: 9.5,
-                            fontWeight: FontWeight.bold,
-                            color: hasAccess
-                                ? (isFree ? AppColors.correctGreen : AppColors.primary)
-                                : AppColors.wrongRed,
-                            letterSpacing: 0.3,
+                  child: hasAccess
+                      ? (isFree
+                          ? const _AnimatedFreeBadge()
+                          : Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.5, vertical: 3.5),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFF0284C7), Color(0xFF2563EB)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.40),
+                                  width: 0.8,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF0284C7).withOpacity(0.35),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.18),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 1.5),
+                                  ),
+                                ],
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.lock_open_rounded, size: 10.5, color: Colors.white),
+                                  SizedBox(width: 3.5),
+                                  Text(
+                                    'UNLOCKED',
+                                    style: TextStyle(
+                                      fontSize: 9.5,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ))
+                      : Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.5, vertical: 3.5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF0F172A).withOpacity(0.85),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.22),
+                              width: 0.8,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.30),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.lock_rounded, size: 10.5, color: Color(0xFFF87171)),
+                              SizedBox(width: 3.5),
+                              Text(
+                                'LOCKED',
+                                style: TextStyle(
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
                 ),
 
                 // Bottom-Right 3D Circular Button (Play or Lock)
@@ -535,3 +575,111 @@ class _LibraryTopicsScreenState extends State<LibraryTopicsScreen> {
     );
   }
 }
+
+class _AnimatedFreeBadge extends StatefulWidget {
+  const _AnimatedFreeBadge();
+
+  @override
+  State<_AnimatedFreeBadge> createState() => _AnimatedFreeBadgeState();
+}
+
+class _AnimatedFreeBadgeState extends State<_AnimatedFreeBadge>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _glowAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    )..repeat(reverse: true);
+
+    _scaleAnimation = Tween<double>(begin: 0.96, end: 1.04).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    _glowAnimation = Tween<double>(begin: 0.25, end: 0.65).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _scaleAnimation.value,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8.5, vertical: 3.5),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF059669), Color(0xFF10B981)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.40),
+                width: 0.8,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF10B981).withOpacity(_glowAnimation.value),
+                  blurRadius: 8,
+                  spreadRadius: 0.5,
+                  offset: const Offset(0, 2),
+                ),
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.20),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1.5),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 5.5,
+                  height: 5.5,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.9),
+                        blurRadius: 3.5,
+                        spreadRadius: 0.5,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 4.5),
+                const Text(
+                  'FREE',
+                  style: TextStyle(
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+

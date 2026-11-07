@@ -975,40 +975,40 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? const Color(0xFF064E3B).withOpacity(0.45)
-                                : const Color(0xFFDCFCE7),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: isDark
-                                  ? const Color(0xFF059669).withOpacity(0.3)
-                                  : const Color(0xFF86EFAC).withOpacity(0.4),
-                              width: 0.8,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.bolt_rounded,
-                                size: 14,
-                                color: isDark ? const Color(0xFF34D399) : const Color(0xFF16A34A),
+                        Builder(
+                          builder: (context) {
+                            final isSem3 = semester == 3;
+                            final badgeBgColor = isDark
+                                ? (isSem3 ? const Color(0xFF0C4A6E).withOpacity(0.50) : const Color(0xFF7C2D12).withOpacity(0.50))
+                                : (isSem3 ? const Color(0xFFF0F9FF) : const Color(0xFFFFF7ED));
+                            final badgeBorderColor = isDark
+                                ? (isSem3 ? const Color(0xFF0284C7).withOpacity(0.40) : const Color(0xFFF97316).withOpacity(0.40))
+                                : (isSem3 ? const Color(0xFFBAE6FD) : const Color(0xFFFED7AA));
+                            final badgeTextColor = isDark
+                                ? (isSem3 ? const Color(0xFF38BDF8) : const Color(0xFFFB923C))
+                                : (isSem3 ? const Color(0xFF0369A1) : const Color(0xFFC2410C));
+
+                            return Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
+                              decoration: BoxDecoration(
+                                color: badgeBgColor,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: badgeBorderColor,
+                                  width: 1.0,
+                                ),
                               ),
-                              const SizedBox(width: 3),
-                              Text(
+                              child: Text(
                                 '99% Common',
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w800,
-                                  letterSpacing: 0.2,
-                                  color: isDark ? const Color(0xFF34D399) : const Color(0xFF15803D),
+                                  letterSpacing: 0.3,
+                                  color: badgeTextColor,
                                 ),
                               ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
                       ],
                     ),
