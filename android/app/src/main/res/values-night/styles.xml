@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
         <item name="android:windowBackground">@drawable/launch_background</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
-        <item name="android:statusBarColor">#0F172A</item>
-        <item name="android:navigationBarColor">#0F172A</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
     </style>
-    <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar.Fullscreen">
-        <item name="android:windowBackground">#0F172A</item>
+    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
-        <item name="android:statusBarColor">#0F172A</item>
-        <item name="android:navigationBarColor">#0F172A</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
     </style>
     <style name="PlayerTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowBackground">#0F172A</item>

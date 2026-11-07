@@ -47,30 +47,26 @@ class MainActivity: FlutterActivity() {
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
-        val isNight = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
-        val bgCol = if (isNight) Color.parseColor("#0F172A") else Color.WHITE
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             window.isNavigationBarContrastEnforced = false
             window.isStatusBarContrastEnforced = false
         }
 
-        window.statusBarColor = bgCol
-        window.navigationBarColor = bgCol
-        window.decorView.setBackgroundColor(bgCol)
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
+        window.decorView.setBackgroundColor(Color.WHITE)
 
         @Suppress("DEPRECATION")
         var flags = (
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
             or View.SYSTEM_UI_FLAG_FULLSCREEN
             or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         )
-        if (!isNight) {
-            flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                flags = flags or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            flags = flags or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
         window.decorView.systemUiVisibility = flags
     }

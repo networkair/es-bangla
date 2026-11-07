@@ -998,7 +998,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               child: Text(
-                                '99% Common',
+                                'A+ কমন',
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w800,
