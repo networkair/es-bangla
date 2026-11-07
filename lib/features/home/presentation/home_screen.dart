@@ -977,16 +977,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(height: 8),
                         Builder(
                           builder: (context) {
-                            final isSem3 = semester == 3;
                             final badgeBgColor = isDark
-                                ? (isSem3 ? const Color(0xFF0C4A6E).withOpacity(0.50) : const Color(0xFF7C2D12).withOpacity(0.50))
-                                : (isSem3 ? const Color(0xFFF0F9FF) : const Color(0xFFFFF7ED));
+                                ? const Color(0xFF1E293B)
+                                : const Color(0xFFEFF6FF);
                             final badgeBorderColor = isDark
-                                ? (isSem3 ? const Color(0xFF0284C7).withOpacity(0.40) : const Color(0xFFF97316).withOpacity(0.40))
-                                : (isSem3 ? const Color(0xFFBAE6FD) : const Color(0xFFFED7AA));
+                                ? const Color(0xFF334155)
+                                : const Color(0xFFBFDBFE);
                             final badgeTextColor = isDark
-                                ? (isSem3 ? const Color(0xFF38BDF8) : const Color(0xFFFB923C))
-                                : (isSem3 ? const Color(0xFF0369A1) : const Color(0xFFC2410C));
+                                ? const Color(0xFFF8FAFC)
+                                : const Color(0xFF000000);
 
                             return Container(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),

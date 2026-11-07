@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../home/presentation/main_shell_screen.dart';
 
 /// Premium Animated Splash Screen for Es Bangla.
@@ -87,10 +88,19 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     const banglaColor = Color(0xFF0070F3); // Vibrant Royal Blue
     const goldColor = Color(0xFFF59E0B);   // Golden Amber
 
-    return Scaffold(
-      backgroundColor: bgColor,
-      body: SafeArea(
-        child: Center(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+        systemNavigationBarColor: bgColor,
+        systemNavigationBarDividerColor: Colors.transparent,
+        systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        systemNavigationBarContrastEnforced: false,
+      ),
+      child: Scaffold(
+        backgroundColor: bgColor,
+        body: Center(
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
