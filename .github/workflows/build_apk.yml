@@ -65,16 +65,18 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.43
-          name: "Es Bangla v1.3.43 (Animated Rosette 'FREE' Seal Badge on Video Cards)"
+          tag_name: v1.3.44
+          name: "Es Bangla v1.3.44 (Premium Card UI Redesign — Smooth Rounded 30px & Bottom Drop Shadow)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.43 Release Highlights:
-            - **Animated Rosette Starburst 'FREE' Badge**:
-              - Redesigned the video library topic cards' FREE badge to match the user's reference design.
-              - Implemented a vibrant red 8-lobe scalloped rosette seal with bold white 'FREE' text.
-              - Added smooth breathing scale animation, gentle ambient red glow, and subtle micro-tilt dynamics.
+            ### Es Bangla v1.3.44 Release Highlights:
+            - **Premium Card UI Redesign (HTML Demo Standard)**:
+              - Standardized all Home Screen option cards with smooth 30px rounded corners (`BorderRadius.circular(30)`).
+              - Implemented soft 3-tier bottom-weighted natural drop shadow matching the HTML demo (`box-shadow: 0 2px 4px, 0 7px 12px, 0 15px 22px`).
+              - Applied subtle, clean 1px border (`#E8EDF4` in light mode, `#334155` in dark mode).
+              - Rebuilt card internal layout with circular icon containers on the left, bold centered typography, and circular right action arrow buttons.
+              - Unified design system across Study Reminder, Semester 3 & 4 cards, PYQ, Premium Store, and Social Media Hub while strictly preserving all original colors.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -240,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   // 2. Study Reminder Pill Button
                   _buildStudyReminderTile(),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
 
                   // 3. Semester 3 & Semester 4 Cards (Side by Side in a Row)
                   Row(
@@ -266,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
 
                   // 4. Previous Year Questions (PYQ) Horizontal Card
                   _buildActionTile(
@@ -283,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
 
                   // 5. Premium Store Horizontal Card
                   _buildActionTile(
@@ -300,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
 
                   // 6. Authentic Es Bangla Social Media Hub
                   _buildSocialMediaSection(),
@@ -468,31 +468,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBannerCard(Map<String, dynamic> item, bool isDark) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(26),
         border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE8EDF4),
           width: 1.0,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.30 : 0.06),
-            offset: const Offset(0, 8),
-            blurRadius: 18,
-            spreadRadius: -2,
-          ),
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
-            offset: const Offset(0, 1),
-            blurRadius: 3,
-            spreadRadius: 0,
-          ),
-        ],
+        boxShadow: _buildPremiumCardShadow(isDark),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(26),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -776,42 +763,68 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ==================== PREMIUM CARD BOTTOM SHADOW (HTML DEMO SPEC) ====================
+  List<BoxShadow> _buildPremiumCardShadow(bool isDark) {
+    if (isDark) {
+      return [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.35),
+          offset: const Offset(0, 2),
+          blurRadius: 4,
+        ),
+        BoxShadow(
+          color: Colors.black.withOpacity(0.30),
+          offset: const Offset(0, 7),
+          blurRadius: 12,
+        ),
+        BoxShadow(
+          color: Colors.black.withOpacity(0.25),
+          offset: const Offset(0, 15),
+          blurRadius: 22,
+        ),
+      ];
+    }
+    return [
+      BoxShadow(
+        color: const Color(0xFF18273D).withOpacity(0.045),
+        offset: const Offset(0, 2),
+        blurRadius: 4,
+      ),
+      BoxShadow(
+        color: const Color(0xFF18273D).withOpacity(0.055),
+        offset: const Offset(0, 7),
+        blurRadius: 12,
+      ),
+      BoxShadow(
+        color: const Color(0xFF18273D).withOpacity(0.045),
+        offset: const Offset(0, 15),
+        blurRadius: 22,
+      ),
+      BoxShadow(
+        color: const Color(0xFF233650).withOpacity(0.035),
+        offset: const Offset(0, 20),
+        blurRadius: 26,
+        spreadRadius: -4,
+      ),
+    ];
+  }
+
   // ==================== 2. STUDY REMINDER CARD ====================
   Widget _buildStudyReminderTile() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
-      height: 62,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isDark
-              ? const [Color(0xFF1E3A8A), Color(0xFF0F172A)]
-              : const [Color(0xFF0066FF), Color(0xFF0052D4)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-        borderRadius: BorderRadius.circular(32),
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(30),
         border: Border.all(
-          color: isDark ? const Color(0xFF3B82F6).withOpacity(0.3) : const Color(0xFF60A5FA).withOpacity(0.35),
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE8EDF4),
           width: 1.0,
         ),
-        boxShadow: [
-          // Dual-layer rich royal blue downward drop shadow matching mockup
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0052D4)).withOpacity(isDark ? 0.35 : 0.28),
-            offset: const Offset(0, 8),
-            blurRadius: 18,
-            spreadRadius: -2,
-          ),
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0052D4)).withOpacity(isDark ? 0.15 : 0.08),
-            offset: const Offset(0, 2),
-            blurRadius: 4,
-            spreadRadius: 0,
-          ),
-        ],
+        boxShadow: _buildPremiumCardShadow(isDark),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(30),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -822,44 +835,55 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
               child: Row(
                 children: [
-                  // White circular badge with golden ringing bell
+                  // Left: Circular container with golden ringing bell
                   Container(
-                    width: 44,
-                    height: 44,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
+                    width: 52,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF334155) : const Color(0xFFFEF3C7),
                       shape: BoxShape.circle,
                     ),
                     child: const Center(
                       child: Icon(
                         Icons.notifications_active_rounded,
                         color: Color(0xFFF59E0B), // Golden amber bell
-                        size: 24,
+                        size: 26,
                       ),
                     ),
                   ),
+                  const SizedBox(width: 16),
 
-                  // Vertical divider line matching reference
-                  Container(
-                    width: 1.5,
-                    height: 26,
-                    margin: const EdgeInsets.symmetric(horizontal: 14),
-                    color: Colors.white.withOpacity(0.40),
-                  ),
-
-                  // Title
-                  const Expanded(
+                  // Center: Title
+                  Expanded(
                     child: Text(
                       'SET STUDY REMINDER',
                       style: TextStyle(
                         fontFamily: 'sans-serif',
                         fontSize: 15.5,
                         fontWeight: FontWeight.w900,
-                        letterSpacing: 0.8,
-                        color: Colors.white,
+                        letterSpacing: 0.5,
+                        color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+
+                  // Right: Action Arrow Circle
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF334155) : const Color(0xFFFEF3C7),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 14,
+                        color: Color(0xFFD97706),
                       ),
                     ),
                   ),
@@ -884,37 +908,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        gradient: isDark
-            ? null
-            : const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFFFFFFFF), Color(0xFFFCFCFC), Color(0xFFF8FAFC)],
-              ),
-        color: isDark ? const Color(0xFF1E293B) : null,
-        borderRadius: BorderRadius.circular(22),
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(30),
         border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE8EDF4),
           width: 1.0,
         ),
-        boxShadow: [
-          // Dual-layer soft ambient + directional drop shadow matching Safollo & mockup
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.30 : 0.06),
-            offset: const Offset(0, 8),
-            blurRadius: 18,
-            spreadRadius: -2,
-          ),
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
-            offset: const Offset(0, 1),
-            blurRadius: 3,
-            spreadRadius: 0,
-          ),
-        ],
+        boxShadow: _buildPremiumCardShadow(isDark),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(30),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -928,8 +931,8 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 // Top-right action arrow circle
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: 14,
+                  right: 14,
                   child: Container(
                     width: 32,
                     height: 32,
@@ -949,7 +952,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 // Main centered card content
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
+                  padding: const EdgeInsets.fromLTRB(14, 18, 14, 18),
                   child: Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -1035,62 +1038,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        gradient: isDark
-            ? null
-            : const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFFFFFFFF), Color(0xFFFCFCFC), Color(0xFFF8FAFC)],
-              ),
-        color: isDark ? const Color(0xFF1E293B) : null,
-        borderRadius: BorderRadius.circular(22),
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(30),
         border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE8EDF4),
           width: 1.0,
         ),
-        boxShadow: [
-          // Dual-layer soft ambient + directional drop shadow matching Safollo & mockup
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.30 : 0.06),
-            offset: const Offset(0, 8),
-            blurRadius: 18,
-            spreadRadius: -2,
-          ),
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
-            offset: const Offset(0, 1),
-            blurRadius: 3,
-            spreadRadius: 0,
-          ),
-        ],
+        boxShadow: _buildPremiumCardShadow(isDark),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(30),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
               child: Row(
                 children: [
-                  // Large 3D Icon matching mockup
-                  Image.asset(
-                    iconAsset,
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.contain,
-                  ),
-
-                  // Crisp Vertical Divider
+                  // Left: Circular icon wrap matching HTML demo
                   Container(
-                    width: 1.2,
-                    height: 40,
-                    margin: const EdgeInsets.symmetric(horizontal: 14),
-                    color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                    width: 78,
+                    height: 78,
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF334155) : buttonBgColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        iconAsset,
+                        width: 54,
+                        height: 54,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
+                  const SizedBox(width: 16),
 
-                  // Title & Accent Underline
+                  // Center: Title & Accent Underline matching demo
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1100,16 +1085,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           title,
                           style: TextStyle(
                             fontFamily: 'sans-serif',
-                            fontSize: isTwoLineTitle ? 15.0 : 16.0,
+                            fontSize: isTwoLineTitle ? 15.5 : 17.0,
                             fontWeight: FontWeight.w900,
-                            letterSpacing: 0.3,
-                            height: 1.2,
+                            letterSpacing: -0.2,
+                            height: 1.22,
                             color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
                           ),
                         ),
                         const SizedBox(height: 6),
                         Container(
-                          width: 38,
+                          width: 36,
                           height: 3.5,
                           decoration: BoxDecoration(
                             color: accentLineColor,
@@ -1119,12 +1104,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 12),
 
-                  // Right Action Arrow Circle
+                  // Right: Action Arrow Circle matching demo
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 44,
+                    height: 44,
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF334155) : buttonBgColor,
                       shape: BoxShape.circle,
@@ -1132,7 +1117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Center(
                       child: Icon(
                         Icons.arrow_forward_ios_rounded,
-                        size: 13,
+                        size: 14,
                         color: buttonIconColor,
                       ),
                     ),
@@ -1151,36 +1136,15 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
       decoration: BoxDecoration(
-        gradient: isDark
-            ? null
-            : const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFFFFFFFF), Color(0xFFFCFCFC), Color(0xFFF8FAFC)],
-              ),
-        color: isDark ? const Color(0xFF1E293B) : null,
-        borderRadius: BorderRadius.circular(22),
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(30),
         border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE8EDF4),
           width: 1.0,
         ),
-        boxShadow: [
-          // Dual-layer soft ambient + directional drop shadow matching Safollo & mockup
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.30 : 0.06),
-            offset: const Offset(0, 8),
-            blurRadius: 18,
-            spreadRadius: -2,
-          ),
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
-            offset: const Offset(0, 1),
-            blurRadius: 3,
-            spreadRadius: 0,
-          ),
-        ],
+        boxShadow: _buildPremiumCardShadow(isDark),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1188,8 +1152,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 42,
+                height: 42,
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF334155) : const Color(0xFFE0F2FE),
                   shape: BoxShape.circle,
@@ -1197,7 +1161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Center(
                   child: Icon(
                     Icons.share_rounded,
-                    size: 18,
+                    size: 19,
                     color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0070F3),
                   ),
                 ),
@@ -1216,7 +1180,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
 
           // 4 Social Channels in a Row
           Row(
