@@ -242,29 +242,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   _buildStudyReminderTile(),
                   const SizedBox(height: 20),
 
-                  // 3. Semester 3 & Semester 4 Cards (Side by Side in a Row)
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildSemesterTile(
-                          title: 'SEMESTER 3',
-                          semester: 3,
-                          iconAsset: 'assets/icons/ic_sem3.png',
-                          buttonBgColor: const Color(0xFFE0F2FE),
-                          buttonIconColor: const Color(0xFF0070F3),
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: _buildSemesterTile(
-                          title: 'SEMESTER 4',
-                          semester: 4,
-                          iconAsset: 'assets/icons/ic_sem4.png',
-                          buttonBgColor: const Color(0xFFFFEDD5),
-                          buttonIconColor: const Color(0xFFD97706),
-                        ),
-                      ),
-                    ],
+                  // 3. Semester 3 Card (Wide Horizontal Card)
+                  _buildSemesterTile(
+                    title: 'SEMESTER 3',
+                    semester: 3,
+                    iconAsset: 'assets/icons/ic_sem3.png',
+                    buttonBgColor: const Color(0xFFE0F2FE),
+                    buttonIconColor: const Color(0xFF0070F3),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // 4. Semester 4 Card (Wide Horizontal Card)
+                  _buildSemesterTile(
+                    title: 'SEMESTER 4',
+                    semester: 4,
+                    iconAsset: 'assets/icons/ic_sem4.png',
+                    buttonBgColor: const Color(0xFFFFEDD5),
+                    buttonIconColor: const Color(0xFFD97706),
                   ),
                   const SizedBox(height: 20),
 
@@ -896,7 +890,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ==================== 3. SEMESTER 3 & 4 CARDS (SIDE BY SIDE) ====================
+  // ==================== 3. SEMESTER CARDS (WIDE HORIZONTAL) ====================
   Widget _buildSemesterTile({
     required String title,
     required int semester,
@@ -927,54 +921,52 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute(builder: (_) => NotesSubjectsScreen(semester: semester)),
               );
             },
-            child: Stack(
-              children: [
-                // Top-right action arrow circle
-                Positioned(
-                  top: 14,
-                  right: 14,
-                  child: Container(
-                    width: 32,
-                    height: 32,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+              child: Row(
+                children: [
+                  // Left: Circular Logo Wrap
+                  Container(
+                    width: 78,
+                    height: 78,
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF334155) : buttonBgColor,
                       shape: BoxShape.circle,
                     ),
                     child: Center(
-                      child: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 11,
-                        color: buttonIconColor,
+                      child: Image.asset(
+                        iconAsset,
+                        width: 54,
+                        height: 54,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(width: 16),
 
-                // Main centered card content
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(14, 18, 14, 18),
-                  child: Center(
+                  // Center/Right: Title, Accent Underline & '99% Common' Badge
+                  Expanded(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // Large 3D Icon matching mockup
-                        Image.asset(
-                          iconAsset,
-                          width: 82,
-                          height: 82,
-                          fit: BoxFit.contain,
-                        ),
-                        const SizedBox(height: 10),
                         Text(
                           title,
-                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'sans-serif',
-                            fontSize: 15.5,
+                            fontSize: 17.5,
                             fontWeight: FontWeight.w900,
-                            letterSpacing: 0.4,
+                            letterSpacing: 0.3,
                             color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Container(
+                          width: 36,
+                          height: 3.5,
+                          decoration: BoxDecoration(
+                            color: buttonIconColor,
+                            borderRadius: BorderRadius.circular(2),
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -1015,8 +1007,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 12),
+
+                  // Right: Action Arrow Circle
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF334155) : buttonBgColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 14,
+                        color: buttonIconColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

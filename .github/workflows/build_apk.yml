@@ -65,18 +65,16 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.44
-          name: "Es Bangla v1.3.44 (Premium Card UI Redesign — Smooth Rounded 30px & Bottom Drop Shadow)"
+          tag_name: v1.3.45
+          name: "Es Bangla v1.3.45 (Stacked Wide Semester 3 & 4 Cards — Horizontal Layout)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.44 Release Highlights:
-            - **Premium Card UI Redesign (HTML Demo Standard)**:
-              - Standardized all Home Screen option cards with smooth 30px rounded corners (`BorderRadius.circular(30)`).
-              - Implemented soft 3-tier bottom-weighted natural drop shadow matching the HTML demo (`box-shadow: 0 2px 4px, 0 7px 12px, 0 15px 22px`).
-              - Applied subtle, clean 1px border (`#E8EDF4` in light mode, `#334155` in dark mode).
-              - Rebuilt card internal layout with circular icon containers on the left, bold centered typography, and circular right action arrow buttons.
-              - Unified design system across Study Reminder, Semester 3 & 4 cards, PYQ, Premium Store, and Social Media Hub while strictly preserving all original colors.
+            ### Es Bangla v1.3.45 Release Highlights:
+            - **Stacked Wide Semester 3 & 4 Cards**:
+              - Transformed Semester 3 and Semester 4 from narrow side-by-side cards to full-width, spacious horizontal cards stacked one below the other.
+              - Positioned 3D logo in circular container on the left, clear bold semester title and '99% Common' badge in the middle, and circular action arrow on the right.
+              - Applied 30px smooth corner radius, 1px subtle border, and 3-tier bottom drop shadow matching the premium card design system.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
