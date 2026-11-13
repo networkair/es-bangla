@@ -63,6 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Image.asset(
                 'assets/icons/app_logo.png',
                 fit: BoxFit.cover,
+                cacheWidth: 100,
+                cacheHeight: 100,
               ),
             ),
             Container(
@@ -213,6 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -230,66 +233,73 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 2. Quick Action Cards (Notepad + Study Reminder)
-                  _buildQuickActionCardsRow(isDark),
+                  RepaintBoundary(
+                    child: _buildQuickActionCardsRow(isDark),
+                  ),
                   const SizedBox(height: 12),
 
                   // 3. Active Semester Card (Shows only the selected semester)
-                  if (currentSem == 3) ...[
-                    _buildSemesterTile(
-                      title: 'SEMESTER 3',
-                      semester: 3,
-                      iconAsset: 'assets/icons/ic_sem3.png',
-                      buttonBgColor: const Color(0xFFE0F2FE),
-                      buttonIconColor: const Color(0xFF0070F3),
-                    ),
-                    const SizedBox(height: 13),
-                  ] else ...[
-                    _buildSemesterTile(
-                      title: 'SEMESTER 4',
-                      semester: 4,
-                      iconAsset: 'assets/icons/ic_sem4.png',
-                      buttonBgColor: const Color(0xFFFFEDD5),
-                      buttonIconColor: const Color(0xFFD97706),
-                    ),
-                    const SizedBox(height: 13),
-                  ],
+                  RepaintBoundary(
+                    child: currentSem == 3
+                        ? _buildSemesterTile(
+                            title: 'SEMESTER 3',
+                            semester: 3,
+                            iconAsset: 'assets/icons/ic_sem3.png',
+                            buttonBgColor: const Color(0xFFE0F2FE),
+                            buttonIconColor: const Color(0xFF0070F3),
+                          )
+                        : _buildSemesterTile(
+                            title: 'SEMESTER 4',
+                            semester: 4,
+                            iconAsset: 'assets/icons/ic_sem4.png',
+                            buttonBgColor: const Color(0xFFFFEDD5),
+                            buttonIconColor: const Color(0xFFD97706),
+                          ),
+                  ),
+                  const SizedBox(height: 13),
 
                   // 4. Previous Year Questions (PYQ) Horizontal Card
-                  _buildActionTile(
-                    title: 'PREVIOUS YEARS\nQUESTIONS',
-                    iconAsset: 'assets/icons/ic_pyq.png',
-                    accentLineColor: const Color(0xFF0070F3),
-                    buttonBgColor: const Color(0xFFE0F2FE),
-                    buttonIconColor: const Color(0xFF0070F3),
-                    isTwoLineTitle: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const PyqScreen()),
-                      );
-                    },
+                  RepaintBoundary(
+                    child: _buildActionTile(
+                      title: 'PREVIOUS YEARS\nQUESTIONS',
+                      iconAsset: 'assets/icons/ic_pyq.png',
+                      accentLineColor: const Color(0xFF0070F3),
+                      buttonBgColor: const Color(0xFFE0F2FE),
+                      buttonIconColor: const Color(0xFF0070F3),
+                      isTwoLineTitle: true,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const PyqScreen()),
+                        );
+                      },
+                    ),
                   ),
                   const SizedBox(height: 13),
 
                   // 5. Premium Store Horizontal Card
-                  _buildActionTile(
-                    title: 'PREMIUM STORE',
-                    iconAsset: 'assets/icons/ic_store.png',
-                    accentLineColor: const Color(0xFFF59E0B),
-                    buttonBgColor: const Color(0xFFFFEDD5),
-                    buttonIconColor: const Color(0xFFD97706),
-                    isTwoLineTitle: false,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const BookNotesScreen()),
-                      );
-                    },
+                  RepaintBoundary(
+                    child: _buildActionTile(
+                      title: 'PREMIUM STORE',
+                      iconAsset: 'assets/icons/ic_store.png',
+                      accentLineColor: const Color(0xFFF59E0B),
+                      buttonBgColor: const Color(0xFFFFEDD5),
+                      buttonIconColor: const Color(0xFFD97706),
+                      isTwoLineTitle: false,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const BookNotesScreen()),
+                        );
+                      },
+                    ),
                   ),
                   const SizedBox(height: 13),
 
                   // 6. Authentic Es Bangla Social Media Hub
-                  _buildSocialMediaSection(),
+                  RepaintBoundary(
+                    child: _buildSocialMediaSection(),
+                  ),
                 ],
               ),
             ),
@@ -426,48 +436,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ==================== PREMIUM CARD BOTTOM SHADOW (HTML DEMO SPEC) ====================
+  // ==================== PREMIUM CARD BOTTOM SHADOW (HARDWARE-ACCELERATED) ====================
   List<BoxShadow> _buildPremiumCardShadow(bool isDark) {
     if (isDark) {
       return [
         BoxShadow(
-          color: Colors.black.withOpacity(0.35),
-          offset: const Offset(0, 2),
-          blurRadius: 4,
-        ),
-        BoxShadow(
-          color: Colors.black.withOpacity(0.30),
-          offset: const Offset(0, 7),
-          blurRadius: 12,
-        ),
-        BoxShadow(
-          color: Colors.black.withOpacity(0.25),
-          offset: const Offset(0, 15),
-          blurRadius: 22,
+          color: Colors.black.withOpacity(0.28),
+          offset: const Offset(0, 4),
+          blurRadius: 8,
         ),
       ];
     }
     return [
       BoxShadow(
-        color: const Color(0xFF18273D).withOpacity(0.045),
-        offset: const Offset(0, 2),
-        blurRadius: 4,
-      ),
-      BoxShadow(
-        color: const Color(0xFF18273D).withOpacity(0.055),
-        offset: const Offset(0, 7),
-        blurRadius: 12,
-      ),
-      BoxShadow(
-        color: const Color(0xFF18273D).withOpacity(0.045),
-        offset: const Offset(0, 15),
-        blurRadius: 22,
-      ),
-      BoxShadow(
-        color: const Color(0xFF233650).withOpacity(0.035),
-        offset: const Offset(0, 20),
-        blurRadius: 26,
-        spreadRadius: -4,
+        color: const Color(0xFF18273D).withOpacity(0.06),
+        offset: const Offset(0, 4),
+        blurRadius: 8,
       ),
     ];
   }
@@ -544,104 +528,106 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         boxShadow: _buildPremiumCardShadow(isDark),
       ),
-      child: ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(22),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-              child: Row(
-                children: [
-                  // Icon Circle with 3D Image Asset
-                  Container(
-                    width: 38,
-                    height: 38,
-                    decoration: BoxDecoration(
-                      color: iconBgColor,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
-                          blurRadius: 4,
-                          offset: const Offset(0, 1.5),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        iconAsset,
-                        width: 25,
-                        height: 25,
-                        fit: BoxFit.contain,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(22),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+            child: Row(
+              children: [
+                // Icon Circle with 3D Image Asset
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: iconBgColor,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.04),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1.5),
                       ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      iconAsset,
+                      width: 25,
+                      height: 25,
+                      fit: BoxFit.contain,
+                      cacheWidth: 80,
+                      cacheHeight: 80,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                ),
+                const SizedBox(width: 8),
 
-                  // Title (2 lines)
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          titleLine1,
-                          style: TextStyle(
-                            fontFamily: 'sans-serif',
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.3,
-                            height: 1.15,
-                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                // Title (2 lines)
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        titleLine1,
+                        style: TextStyle(
+                          fontFamily: 'sans-serif',
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.3,
+                          height: 1.15,
+                          color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
                         ),
-                        Text(
-                          titleLine2,
-                          style: TextStyle(
-                            fontFamily: 'sans-serif',
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.3,
-                            height: 1.15,
-                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-
-                  // Small chevron arrow button
-                  Container(
-                    width: 26,
-                    height: 26,
-                    decoration: BoxDecoration(
-                      color: arrowBgColor,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
-                          blurRadius: 3,
-                          offset: const Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 10,
-                        color: arrowColor,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
+                      Text(
+                        titleLine2,
+                        style: TextStyle(
+                          fontFamily: 'sans-serif',
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.3,
+                          height: 1.15,
+                          color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 4),
+
+                // Small chevron arrow button
+                Container(
+                  width: 26,
+                  height: 26,
+                  decoration: BoxDecoration(
+                    color: arrowBgColor,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.04),
+                        blurRadius: 3,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 10,
+                      color: arrowColor,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -665,34 +651,37 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(30),
         boxShadow: _buildPremiumCardShadow(isDark),
       ),
-      child: ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(30),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => NotesSubjectsScreen(semester: semester)),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-              child: Row(
-                children: [
-                  // Left: 3D Semester Book Icon (uses icon's own circular badge, no duplicate background)
-                  SizedBox(
-                    width: 76,
-                    height: 76,
-                    child: Center(
-                      child: Image.asset(
-                        iconAsset,
-                        width: 76,
-                        height: 76,
-                        fit: BoxFit.contain,
-                      ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(30),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => NotesSubjectsScreen(semester: semester)),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+            child: Row(
+              children: [
+                // Left: 3D Semester Book Icon (uses icon's own circular badge, no duplicate background)
+                SizedBox(
+                  width: 76,
+                  height: 76,
+                  child: Center(
+                    child: Image.asset(
+                      iconAsset,
+                      width: 76,
+                      height: 76,
+                      fit: BoxFit.contain,
+                      cacheWidth: 200,
+                      cacheHeight: 200,
                     ),
                   ),
+                ),
                   const SizedBox(width: 16),
 
                   // Center/Right: Title, Accent Underline & '99% Common' Badge
@@ -763,8 +752,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   // ==================== 4 & 5. ACTION CARDS (PYQ & PREMIUM STORE) ====================
@@ -785,66 +773,68 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(30),
         boxShadow: _buildPremiumCardShadow(isDark),
       ),
-      child: ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(30),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-              child: Row(
-                children: [
-                  // Left: Circular icon wrap matching HTML demo
-                  Container(
-                    width: 78,
-                    height: 78,
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF334155) : buttonBgColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        iconAsset,
-                        width: 54,
-                        height: 54,
-                        fit: BoxFit.contain,
-                      ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(30),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+            child: Row(
+              children: [
+                // Left: Circular icon wrap matching HTML demo
+                Container(
+                  width: 78,
+                  height: 78,
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF334155) : buttonBgColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      iconAsset,
+                      width: 54,
+                      height: 54,
+                      fit: BoxFit.contain,
+                      cacheWidth: 160,
+                      cacheHeight: 160,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                ),
+                const SizedBox(width: 16),
 
-                  // Center: Title & Accent Underline matching demo
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontFamily: 'sans-serif',
-                            fontSize: isTwoLineTitle ? 15.5 : 17.0,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -0.2,
-                            height: 1.22,
-                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
-                          ),
+                // Center: Title & Accent Underline matching demo
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontFamily: 'sans-serif',
+                          fontSize: isTwoLineTitle ? 15.5 : 17.0,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -0.2,
+                          height: 1.22,
+                          color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
                         ),
-                        const SizedBox(height: 6),
-                        Container(
-                          width: 36,
-                          height: 3.5,
-                          decoration: BoxDecoration(
-                            color: accentLineColor,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        width: 36,
+                        height: 3.5,
+                        decoration: BoxDecoration(
+                          color: accentLineColor,
+                          borderRadius: BorderRadius.circular(2),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -941,128 +931,130 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         boxShadow: _buildPremiumCardShadow(isDark),
       ),
-      child: ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(24),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => SecurityManager.openExternalUrl(ApiConstants.whatsappUrl),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-              child: Row(
-                children: [
-                  // WhatsApp 3D Icon wrap with subtle green glow
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF064E3B).withOpacity(0.5) : const Color(0xFFDCFCE7),
-                      shape: BoxShape.circle,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(24),
+          onTap: () => SecurityManager.openExternalUrl(ApiConstants.whatsappUrl),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+            child: Row(
+              children: [
+                // WhatsApp 3D Icon wrap with subtle green glow
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF064E3B).withOpacity(0.5) : const Color(0xFFDCFCE7),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/icons/ic_whatsapp.png',
+                      width: 32,
+                      height: 32,
+                      fit: BoxFit.contain,
+                      cacheWidth: 100,
+                      cacheHeight: 100,
                     ),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/icons/ic_whatsapp.png',
-                        width: 32,
-                        height: 32,
-                        fit: BoxFit.contain,
+                  ),
+                ),
+                const SizedBox(width: 14),
+
+                // Texts: Title + Subtitle
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              'WhatsApp Channel',
+                              style: TextStyle(
+                                fontFamily: 'sans-serif',
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.2,
+                                color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF16A34A),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: const Text(
+                              'OFFICIAL',
+                              style: TextStyle(
+                                fontSize: 8.5,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'সবার আগে আপডেট ও নোটস পেতে যুক্ত হন',
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w600,
+                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 14),
+                ),
+                const SizedBox(width: 10),
 
-                  // Texts: Title + Subtitle
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                'WhatsApp Channel',
-                                style: TextStyle(
-                                  fontFamily: 'sans-serif',
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 0.2,
-                                  color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF16A34A),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: const Text(
-                                'OFFICIAL',
-                                style: TextStyle(
-                                  fontSize: 8.5,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'সবার আগে আপডেট ও নোটস পেতে যুক্ত হন',
-                          style: TextStyle(
-                            fontSize: 11.5,
-                            fontWeight: FontWeight.w600,
-                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
+                // Highlighted Action Button (Green Pill)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF16A34A),
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF16A34A).withOpacity(0.3),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-
-                  // Highlighted Action Button (Green Pill)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF16A34A),
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF16A34A).withOpacity(0.3),
-                          blurRadius: 6,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text(
-                          'যুক্ত হন',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Icon(
-                          Icons.arrow_forward_rounded,
-                          size: 13,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text(
+                        'যুক্ত হন',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(
+                        Icons.arrow_forward_rounded,
+                        size: 13,
+                        color: Colors.white,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -1089,70 +1081,72 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         boxShadow: _buildPremiumCardShadow(isDark),
       ),
-      child: ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(22),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => SecurityManager.openExternalUrl(url),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              child: Row(
-                children: [
-                  // Icon container with comfortable pastel tint
-                  Container(
-                    width: 38,
-                    height: 38,
-                    decoration: BoxDecoration(
-                      color: iconBgColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        iconAsset,
-                        width: 25,
-                        height: 25,
-                        fit: BoxFit.contain,
-                      ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(22),
+          onTap: () => SecurityManager.openExternalUrl(url),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            child: Row(
+              children: [
+                // Icon container with comfortable pastel tint
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: iconBgColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      iconAsset,
+                      width: 25,
+                      height: 25,
+                      fit: BoxFit.contain,
+                      cacheWidth: 80,
+                      cacheHeight: 80,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                ),
+                const SizedBox(width: 10),
 
-                  // Channel Name (Clean, single bold line, strictly NO subtitles)
-                  Expanded(
-                    child: Text(
-                      name,
-                      style: TextStyle(
-                        fontFamily: 'sans-serif',
-                        fontSize: 13.0,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.2,
-                        color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                // Channel Name (Clean, single bold line, strictly NO subtitles)
+                Expanded(
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                      fontFamily: 'sans-serif',
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.2,
+                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(width: 4),
+                ),
+                const SizedBox(width: 4),
 
-                  // Small right circular arrow button
-                  Container(
-                    width: 26,
-                    height: 26,
-                    decoration: BoxDecoration(
-                      color: arrowBgColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 10,
-                        color: arrowColor,
-                      ),
+                // Small right circular arrow button
+                Container(
+                  width: 26,
+                  height: 26,
+                  decoration: BoxDecoration(
+                    color: arrowBgColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 10,
+                      color: arrowColor,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -1353,7 +1347,7 @@ class _HomeNewsSliderState extends State<_HomeNewsSlider> {
                         ? _buildBannerCard(newsList[0], widget.isDark)
                         : PageView.builder(
                             controller: _pageController,
-                            physics: const BouncingScrollPhysics(),
+                            physics: const PageScrollPhysics(parent: ClampingScrollPhysics()),
                             onPageChanged: (idx) {
                               final actualIndex = ((idx % newsList.length) + newsList.length) % newsList.length;
                               if (_currentSlideNotifier.value != actualIndex) {

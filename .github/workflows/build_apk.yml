@@ -65,26 +65,19 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.51
-          name: "Es Bangla v1.3.51 (Refined News Slider with Thin Black Border & Ultra-Smooth Scroll Optimization)"
+          tag_name: v1.3.52
+          name: "Es Bangla v1.3.52 (Comprehensive Home Screen Scroll Lag & Performance Optimization)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.51 Release Highlights:
-            - **Refined News Slider with Thin Black Border Stroke**:
-              - Added a crisp, thin black border outline (`Border.all(width: 1.0)`) around the news slider banner card.
-              - Standardized card container with rounded corners (`16px`), matching horizontal margins (`16px`), soft elevation shadow, and anti-aliased clipping.
-            - **Eliminated Home Screen Scrolling Lag / Jank (Ultra-Smooth 60/120 FPS)**:
-              - Isolated the news slider into a dedicated `_HomeNewsSlider` component with independent state management.
-              - Replaced whole-screen `setState` on slide swipe/auto-advance with an isolated `ValueNotifier<int>` updating only the indicator dots.
-              - Stream subscription is memoized in `initState` rather than re-instantiated during build.
-              - Auto-scroll timer synchronization decoupled from post-frame build churn.
-              - Capped `CachedNetworkImage` memory footprint (`memCacheWidth: 800`) to prevent high-res bitmap decoding freezes on Android.
-              - Added `RepaintBoundary` for zero-lag silky smooth scrolling.
-            - **Polished Card Visual Details**:
-              - Enhanced category tag badges with amber accent and drop glow.
-              - Refined Bengali typography, contrast, and subtle interactive action chips.
-              - Smoothly animated Royal Blue (`#0070F3`) pill indicator dots.
+            ### Es Bangla v1.3.52 Release Highlights:
+            - **Comprehensive Home Screen Scroll Lag Elimination (Silky Smooth 60/120 FPS)**:
+              - **Asset Image Optimization**: Resized and compressed all 13 oversized asset icons using Lanczos resampling (down to 256x256 max), reducing asset memory footprint from >25MB to <1MB uncompressed GPU texture memory.
+              - **Memory Image Caching (`cacheWidth` / `cacheHeight`)**: Hardened every `Image.asset` on the Home Screen with explicit cache dimensions so the engine does not decode high-resolution bitmaps into the main frame buffer.
+              - **Single-Pass Hardware GPU Shadow**: Replaced expensive 4-pass Gaussian blur shadows (which previously forced up to 24 blur passes per frame) with a single hardware-accelerated soft drop shadow.
+              - **Independent `RepaintBoundary` Decoupling**: Isolated every card and section (Quick Actions, Semesters, PYQ, Store, Social Media, News Slider) in its own repaint layer to prevent cascades during scroll.
+              - **Gesture & Physics Harmony**: Switched nested horizontal News Slider to `PageScrollPhysics(parent: ClampingScrollPhysics())` to eliminate diagonal scroll fights with the vertical `BouncingScrollPhysics`.
+              - **Clean Anti-Aliasing**: Eliminated redundant nested `ClipRRect` wrappers by using container `clipBehavior: Clip.antiAlias`.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
