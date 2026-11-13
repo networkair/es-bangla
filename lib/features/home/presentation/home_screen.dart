@@ -118,57 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
-          // Dynamic Semester Switcher Pill (Interactive)
-          GestureDetector(
-            onTap: () {
-              AcademicSelectionModal.show(
-                context,
-                isDismissible: true,
-                onSaved: (_) {
-                  if (mounted) setState(() {});
-                  widget.onSemesterChanged();
-                },
-              );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(right: 6),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5.5),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: isDark ? const Color(0xFF334155) : const Color(0xFFBFDBFE),
-                  width: 1.0,
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.school_rounded,
-                    size: 13,
-                    color: currentSem == 3 ? const Color(0xFF0070F3) : const Color(0xFFD97706),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Sem $currentSem',
-                    style: TextStyle(
-                      fontFamily: 'sans-serif',
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w800,
-                      color: currentSem == 3 ? const Color(0xFF0070F3) : const Color(0xFFD97706),
-                    ),
-                  ),
-                  const SizedBox(width: 2),
-                  Icon(
-                    Icons.arrow_drop_down_rounded,
-                    size: 16,
-                    color: currentSem == 3 ? const Color(0xFF0070F3) : const Color(0xFFD97706),
-                  ),
-                ],
-              ),
-            ),
-          ),
           IconButton(
             onPressed: () {
               Navigator.push(
@@ -280,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // 5. Premium Store Horizontal Card
                   RepaintBoundary(
                     child: _buildActionTile(
-                      title: 'PREMIUM STORE',
+                      title: 'সাজেশন Store',
                       iconAsset: 'assets/icons/ic_store.png',
                       accentLineColor: const Color(0xFFF59E0B),
                       buttonBgColor: const Color(0xFFFFEDD5),
@@ -1006,7 +955,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'সবার আগে আপডেট ও নোটস পেতে যুক্ত হন',
+                        'Join for latest notes & updates',
                         style: TextStyle(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w600,
@@ -1038,9 +987,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: const [
                       Text(
-                        'যুক্ত হন',
+                        'Join Channel',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 11.5,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -1213,22 +1162,26 @@ class _HomeNewsSliderState extends State<_HomeNewsSlider> {
     super.initState();
     _newsStream = FirebaseFirestore.instance.collection('news').snapshots();
     _pageController = PageController(viewportFraction: 1.0, initialPage: 1200);
+    _startTimer(3);
   }
 
-  void _syncTimer(int count) {
-    if (_itemCount == count) return;
-    _itemCount = count;
+  void _startTimer(int count) {
     _sliderTimer?.cancel();
+    _itemCount = count;
     if (count > 1) {
-      _sliderTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      _sliderTimer = Timer.periodic(const Duration(milliseconds: 3800), (_) {
         if (_pageController.hasClients && mounted) {
           _pageController.nextPage(
-            duration: const Duration(milliseconds: 550),
+            duration: const Duration(milliseconds: 650),
             curve: Curves.easeInOutCubic,
           );
         }
       });
     }
+  }
+
+  void _resetTimer() {
+    _startTimer(_itemCount);
   }
 
   @override
@@ -1310,10 +1263,9 @@ class _HomeNewsSliderState extends State<_HomeNewsSlider> {
             newsList = _fallbackSlides;
           }
 
-          if (_itemCount != newsList.length) {
-            _itemCount = newsList.length;
+          if (_itemCount != newsList.length || _sliderTimer == null) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) _syncTimer(newsList.length);
+              if (mounted) _startTimer(newsList.length);
             });
           }
 
@@ -1353,6 +1305,7 @@ class _HomeNewsSliderState extends State<_HomeNewsSlider> {
                               if (_currentSlideNotifier.value != actualIndex) {
                                 _currentSlideNotifier.value = actualIndex;
                               }
+                              _resetTimer();
                             },
                             itemBuilder: (context, virtualIndex) {
                               final index = ((virtualIndex % newsList.length) + newsList.length) % newsList.length;

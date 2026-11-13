@@ -321,7 +321,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('ওয়েবসাইট লিঙ্ক খুলতে সমস্যা হয়েছে। অনুগ্রহ করে ব্রাউজার চেক করুন।'),
+            content: Text('Could not open link. Please check your browser.'),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -466,8 +466,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   icon: Icons.support_agent_rounded,
                   iconColor: const Color(0xFF2563EB),
                   iconBg: isDark ? const Color(0xFF1E3A8A).withOpacity(0.4) : const Color(0xFFEFF6FF),
-                  title: 'Help & Support (সহায়তা ও সাপোর্ট)',
-                  subtitle: 'যে কোনো বিষয়ে সরাসরি আমাদের সাহায্য চান',
+                  title: 'Help & Support',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -495,7 +494,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   iconColor: const Color(0xFF0D9488),
                   iconBg: const Color(0xFFF0FDFA),
                   title: 'Privacy Policy',
-                  subtitle: 'Student data safety & policy terms',
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

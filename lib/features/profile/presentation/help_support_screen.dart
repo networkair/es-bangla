@@ -215,7 +215,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Help & Support (সহায়তা)',
+          'Help & Support',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

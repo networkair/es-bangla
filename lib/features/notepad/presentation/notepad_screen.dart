@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
+import 'note_detail_screen.dart';
 
 class NotepadScreen extends StatefulWidget {
   const NotepadScreen({super.key});
@@ -547,7 +548,31 @@ class _NotepadScreenState extends State<NotepadScreen> {
                             borderRadius: BorderRadius.circular(22),
                             onTap: () {
                               final originalIdx = _notes.indexOf(item);
-                              _showAddOrEditNoteDialog(note: item, originalIndex: originalIdx);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => NoteDetailScreen(
+                                    note: item,
+                                    noteIndex: originalIdx,
+                                    onUpdate: (updatedNote) {
+                                      setState(() {
+                                        if (originalIdx >= 0 && originalIdx < _notes.length) {
+                                          _notes[originalIdx] = updatedNote;
+                                        }
+                                      });
+                                      _saveNotes();
+                                    },
+                                    onDelete: () {
+                                      setState(() {
+                                        if (originalIdx >= 0 && originalIdx < _notes.length) {
+                                          _notes.removeAt(originalIdx);
+                                        }
+                                      });
+                                      _saveNotes();
+                                    },
+                                  ),
+                                ),
+                              );
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(16),

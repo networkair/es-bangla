@@ -133,28 +133,14 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'ক্লাস ও সেমিস্টার নির্বাচন করুন',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w900,
-                          color: primaryTextColor,
-                          letterSpacing: 0.2,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'আপনার একাডেমিক সেশন সিলেক্ট করুন',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: secondaryTextColor,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    'Select Class & Semester',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      color: primaryTextColor,
+                      letterSpacing: 0.2,
+                    ),
                   ),
                 ),
                 if (widget.isDismissible)
@@ -168,11 +154,11 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
                   ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
             // Section 1: Class (Class 12)
             Text(
-              'শ্রেণি (CLASS)',
+              'CLASS',
               style: TextStyle(
                 fontSize: 11.5,
                 fontWeight: FontWeight.w800,
@@ -183,7 +169,7 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
             const SizedBox(height: 8),
 
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(18),
@@ -195,8 +181,8 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
               child: Row(
                 children: [
                   Container(
-                    width: 36,
-                    height: 36,
+                    width: 38,
+                    height: 38,
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE0F2FE),
                       shape: BoxShape.circle,
@@ -205,32 +191,19 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
                       child: Icon(
                         Icons.menu_book_rounded,
                         color: Color(0xFF0070F3),
-                        size: 18,
+                        size: 19,
                       ),
                     ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Class 12 (দ্বাদশ শ্রেণি)',
-                          style: TextStyle(
-                            fontSize: 14.5,
-                            fontWeight: FontWeight.bold,
-                            color: primaryTextColor,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'WBCHSE Higher Secondary Education',
-                          style: TextStyle(
-                            fontSize: 11.5,
-                            color: secondaryTextColor,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      'Class 12',
+                      style: TextStyle(
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.bold,
+                        color: primaryTextColor,
+                      ),
                     ),
                   ),
                   const Icon(
@@ -245,7 +218,7 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
 
             // Section 2: Semester Selection
             Text(
-              'সেমিস্টার নির্বাচন করুন (SEMESTER)',
+              'SELECT SEMESTER',
               style: TextStyle(
                 fontSize: 11.5,
                 fontWeight: FontWeight.w800,
@@ -259,7 +232,6 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
             _buildSemesterSelectCard(
               semester: 3,
               title: 'Semester 3',
-              subtitle: 'নোটস, লাইব্রেরি ক্লাস ও মক টেস্ট',
               iconAsset: 'assets/icons/ic_sem3.png',
               accentColor: const Color(0xFF0070F3),
               isSelected: _selectedSemester == 3,
@@ -272,14 +244,13 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
             _buildSemesterSelectCard(
               semester: 4,
               title: 'Semester 4',
-              subtitle: 'নোটস, লাইব্রেরি ক্লাস ও মক টেস্ট',
               iconAsset: 'assets/icons/ic_sem4.png',
               accentColor: const Color(0xFFD97706),
               isSelected: _selectedSemester == 4,
               isDark: isDark,
               onTap: () => setState(() => _selectedSemester = 4),
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 24),
 
             // Confirm Button
             SizedBox(
@@ -299,7 +270,7 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     Text(
-                      'নির্বাচন নিশ্চিত করুন',
+                      'Confirm Selection',
                       style: TextStyle(
                         fontSize: 15.5,
                         fontWeight: FontWeight.bold,
@@ -326,7 +297,6 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
   Widget _buildSemesterSelectCard({
     required int semester,
     required String title,
-    required String subtitle,
     required String iconAsset,
     required Color accentColor,
     required bool isSelected,
@@ -334,7 +304,6 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
     required VoidCallback onTap,
   }) {
     final primaryTextColor = isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36);
-    final secondaryTextColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B);
 
     final cardBg = isSelected
         ? (isDark ? accentColor.withOpacity(0.12) : accentColor.withOpacity(0.06))
@@ -349,7 +318,7 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
       borderRadius: BorderRadius.circular(18),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
           color: cardBg,
           borderRadius: BorderRadius.circular(18),
@@ -375,50 +344,37 @@ class _AcademicSelectionModalState extends State<AcademicSelectionModal> {
             ),
             const SizedBox(width: 14),
 
-            // Title & Subtitle
+            // Title & ACTIVE Badge
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w900,
-                          color: primaryTextColor,
-                        ),
-                      ),
-                      if (isSelected) ...[
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: accentColor,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: const Text(
-                            'ACTIVE',
-                            style: TextStyle(
-                              fontSize: 9,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  const SizedBox(height: 2),
                   Text(
-                    subtitle,
+                    title,
                     style: TextStyle(
-                      fontSize: 11.5,
-                      color: secondaryTextColor,
+                      fontSize: 15.5,
+                      fontWeight: FontWeight.w900,
+                      color: primaryTextColor,
                     ),
                   ),
+                  if (isSelected) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: accentColor,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        'ACTIVE',
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

@@ -28,6 +28,7 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
   String? _errorMessage;
   Uint8List? _pdfBytes;
   bool _isHeaderVisible = true;
+  bool _isLandscape = false;
 
   @override
   void initState() {
@@ -37,9 +38,30 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
     _loadPdfAsset();
   }
 
+  void _toggleOrientation() {
+    setState(() {
+      _isLandscape = !_isLandscape;
+    });
+    if (_isLandscape) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    } else {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    }
+  }
+
   @override
   void dispose() {
-    // Unblock when leaving
+    // Restore default portrait orientation when leaving PDF viewer
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     SecurityManager.disableSecureScreen();
     super.dispose();
   }
@@ -106,6 +128,50 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
               ),
             ),
           ),
+
+          // 4. Compact Floating Orientation Toggle (Visible when full header is hidden)
+          Positioned(
+            top: topPadding + 10,
+            right: 16,
+            child: AnimatedScale(
+              scale: _isHeaderVisible ? 0.0 : 1.0,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOutBack,
+              child: AnimatedOpacity(
+                opacity: _isHeaderVisible ? 0.0 : 1.0,
+                duration: const Duration(milliseconds: 180),
+                child: GestureDetector(
+                  onTap: _toggleOrientation,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.65),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _isLandscape ? Icons.screen_lock_portrait_rounded : Icons.screen_lock_landscape_rounded,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          _isLandscape ? 'Portrait' : 'Landscape',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -115,8 +181,15 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
     return Container(
       padding: EdgeInsets.fromLTRB(16, topPadding + 8, 16, 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.92),
+        color: Colors.white.withOpacity(0.95),
         border: const Border(bottom: BorderSide(color: Color(0xFFE2E8F0), width: 0.8)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -143,6 +216,42 @@ class _SecurePdfViewerScreenState extends State<SecurePdfViewerScreen> {
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Orientation Toggle Button (Portrait / Landscape)
+          InkWell(
+            onTap: _toggleOrientation,
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: _isLandscape ? const Color(0xFFEFF6FF) : const Color(0xFFF1F5F9),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: _isLandscape ? const Color(0xFF0070F3) : const Color(0xFFCBD5E1),
+                  width: 1.0,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    _isLandscape ? Icons.screen_lock_portrait_rounded : Icons.screen_lock_landscape_rounded,
+                    size: 16,
+                    color: _isLandscape ? const Color(0xFF0070F3) : const Color(0xFF475569),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    _isLandscape ? 'Portrait' : 'Landscape',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: _isLandscape ? const Color(0xFF0070F3) : const Color(0xFF475569),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
