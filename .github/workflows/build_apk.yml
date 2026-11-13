@@ -65,25 +65,26 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.50
-          name: "Es Bangla v1.3.50 (Class 12 & Semester 3/4 Onboarding Selection, Single-Semester UI Mode & Icon Fix)"
+          tag_name: v1.3.51
+          name: "Es Bangla v1.3.51 (Refined News Slider with Thin Black Border & Ultra-Smooth Scroll Optimization)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.50 Release Highlights:
-            - **Class 12 & Semester 3/4 Onboarding & Selection Modal**:
-              - Prompts guests and authenticated users upon entering the app to select Class 12 and their active Semester (Semester 3 or Semester 4).
-              - Seamlessly remembered in local storage with instant real-time synchronization.
-              - Interactive top-bar semester switcher chip allows changing semesters at any time with 1 tap.
-            - **Personalized Single-Semester App Experience**:
-              - **Home Screen**: Displays only the active semester's card (Semester 3 or Semester 4).
-              - **Library Screen**: Displays only the active semester's video classes & subjects.
-              - **Mock Test Screen**: Automatically adapts and loads quizzes for the active semester.
-              - **Previous Years Questions (PYQ)**: Displays only the active semester card.
-            - **Fixed Semester Icon Background**:
-              - Completely removed the duplicate outer circular background from the semester book icon, allowing the icon's native circular badge to fit perfectly without double borders.
-            - **Frictionless Auth**:
-              - Removed class/semester questions from the login/signup form; class and semester are selected inside the app as requested.
+            ### Es Bangla v1.3.51 Release Highlights:
+            - **Refined News Slider with Thin Black Border Stroke**:
+              - Added a crisp, thin black border outline (`Border.all(width: 1.0)`) around the news slider banner card.
+              - Standardized card container with rounded corners (`16px`), matching horizontal margins (`16px`), soft elevation shadow, and anti-aliased clipping.
+            - **Eliminated Home Screen Scrolling Lag / Jank (Ultra-Smooth 60/120 FPS)**:
+              - Isolated the news slider into a dedicated `_HomeNewsSlider` component with independent state management.
+              - Replaced whole-screen `setState` on slide swipe/auto-advance with an isolated `ValueNotifier<int>` updating only the indicator dots.
+              - Stream subscription is memoized in `initState` rather than re-instantiated during build.
+              - Auto-scroll timer synchronization decoupled from post-frame build churn.
+              - Capped `CachedNetworkImage` memory footprint (`memCacheWidth: 800`) to prevent high-res bitmap decoding freezes on Android.
+              - Added `RepaintBoundary` for zero-lag silky smooth scrolling.
+            - **Polished Card Visual Details**:
+              - Enhanced category tag badges with amber accent and drop glow.
+              - Refined Bengali typography, contrast, and subtle interactive action chips.
+              - Smoothly animated Royal Blue (`#0070F3`) pill indicator dots.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

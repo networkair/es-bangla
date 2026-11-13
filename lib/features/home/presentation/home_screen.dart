@@ -28,72 +28,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final LocalStorageService _storage = LocalStorageService();
-  late final PageController _sliderController;
-  int _currentSlide = 0;
-  Timer? _sliderTimer;
-  int _sliderItemCount = 0;
-
-  final List<Map<String, dynamic>> _fallbackSlides = [
-    {
-      'title': 'উচ্চ মাধ্যমিক বাংলা ও ইংরেজি সহায়িকা',
-      'subtitle': 'সেমিস্টার ৩ ও ৪-এর সম্পূর্ণ সিলেবাস, সাজেশন ও অধ্যায়ভিত্তিক নোটস',
-      'tag': 'ES BANGLA',
-      'redirectUrl': '',
-      'gradientColors': [Color(0xFF1E3A8A), Color(0xFF0F172A)],
-      'icon': Icons.menu_book_rounded,
-      'order': 1,
-    },
-    {
-      'title': 'অনলাইন অধ্যায়ভিত্তিক মক টেস্ট',
-      'subtitle': 'প্রতিটি সেটে অংশগ্রহণ করে নিজের প্রস্তুতি তাৎক্ষণিক যাচাই করুন',
-      'tag': 'MOCK TEST',
-      'redirectUrl': '',
-      'gradientColors': [Color(0xFF065F46), Color(0xFF064E3B)],
-      'icon': Icons.timer_outlined,
-      'order': 2,
-    },
-    {
-      'title': 'বিগত বছরের প্রশ্নপত্র ও সমাধান (PYQ)',
-      'subtitle': 'পরীক্ষায় সর্বোচ্চ নম্বর পেতে প্রিভিয়াস ইয়ার কোশ্চেন অনুশীলন করুন',
-      'tag': 'PYQ ARCHIVE',
-      'redirectUrl': '',
-      'gradientColors': [Color(0xFF4C1D95), Color(0xFF2E1065)],
-      'icon': Icons.quiz_outlined,
-      'order': 3,
-    },
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _sliderController = PageController(
-      viewportFraction: 1.0,
-      initialPage: 1200,
-    );
-  }
-
-  void _syncSliderTimer(int count) {
-    if (_sliderItemCount == count) return;
-    _sliderItemCount = count;
-    _sliderTimer?.cancel();
-    if (count > 1) {
-      _sliderTimer = Timer.periodic(const Duration(seconds: 4), (_) {
-        if (_sliderController.hasClients && mounted) {
-          _sliderController.nextPage(
-            duration: const Duration(milliseconds: 550),
-            curve: Curves.easeInOutCubic,
-          );
-        }
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _sliderTimer?.cancel();
-    _sliderController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -282,8 +216,12 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Hero News Slider (3D Peeking Carousel with Blue Dots)
-            _buildNewsSlider(currentSem, isDark),
+            // 1. Hero News Slider (Smooth, Isolated, Thin Black Stroke Border)
+            _HomeNewsSlider(
+              currentSem: currentSem,
+              isDark: isDark,
+              onNewsTap: _showNewsDetailsModal,
+            ),
 
             // Content Area with Clean, Balanced Spacing & Matching Canvas
             Padding(
@@ -361,306 +299,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ==================== 1. NEWS SLIDER ====================
-  Widget _buildNewsSlider(int currentSem, bool isDark) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('news').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final sliderHeight = constraints.maxWidth * (9.0 / 16.0);
-              return AppShimmer.box(
-                width: double.infinity,
-                height: sliderHeight,
-                borderRadius: 0,
-              );
-            },
-          );
-        }
+  // ==================== 1. NEWS DETAILS MODAL ====================
 
-        List<Map<String, dynamic>> newsList = [];
-
-        if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-          for (final doc in snapshot.data!.docs) {
-            final data = doc.data() as Map<String, dynamic>? ?? {};
-            final bool isActive = data['isActive'] ?? true;
-            if (!isActive) continue;
-
-            final targetSem = data['targetSemester'];
-            if (targetSem != null &&
-                targetSem != 0 &&
-                targetSem != '0' &&
-                targetSem != 'all' &&
-                targetSem != currentSem) {
-              continue;
-            }
-
-            final title = (data['title'] ?? '').toString().trim();
-            if (title.isEmpty) continue;
-
-            newsList.add({
-              'id': doc.id,
-              'title': title,
-              'subtitle': (data['subtitle'] ?? data['description'] ?? '').toString().trim(),
-              'tag': (data['tag'] ?? 'LATEST NEWS').toString().toUpperCase().trim(),
-              'redirectUrl': (data['redirectUrl'] ?? data['link'] ?? data['url'] ?? '').toString().trim(),
-              'imageUrl': (data['imageUrl'] ?? data['image'] ?? '').toString().trim(),
-              'imageAsset': (data['imageAsset'] ?? '').toString().trim(),
-              'order': data['order'] is num ? (data['order'] as num).toInt() : 0,
-            });
-          }
-
-          newsList.sort((a, b) => (a['order'] as int).compareTo(b['order'] as int));
-        }
-
-        if (newsList.isEmpty) {
-          newsList = _fallbackSlides;
-        }
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) _syncSliderTimer(newsList.length);
-        });
-
-        final safeSlideIndex = _currentSlide >= newsList.length ? 0 : _currentSlide;
-
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            // Exact 16:9 widescreen aspect ratio flush to screen edges
-            final sliderHeight = constraints.maxWidth * (9.0 / 16.0);
-
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: sliderHeight,
-                  child: newsList.length == 1
-                      ? _buildBannerCard(newsList[0], isDark)
-                      : PageView.builder(
-                          controller: _sliderController,
-                          onPageChanged: (idx) {
-                            final actualIndex = ((idx % newsList.length) + newsList.length) % newsList.length;
-                            if (_currentSlide != actualIndex) {
-                              setState(() => _currentSlide = actualIndex);
-                            }
-                          },
-                          itemBuilder: (context, virtualIndex) {
-                            final index = ((virtualIndex % newsList.length) + newsList.length) % newsList.length;
-                            final item = newsList[index];
-                            return _buildBannerCard(item, isDark);
-                          },
-                        ),
-                ),
-
-                // Indicator Dots (Centered Royal Blue Dots Below Slider matching mockup)
-                if (newsList.length > 1) ...[
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(newsList.length, (idx) {
-                      final isSelected = safeSlideIndex == idx;
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        curve: Curves.easeOut,
-                        width: isSelected ? 8 : 6,
-                        height: isSelected ? 8 : 6,
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isSelected
-                              ? const Color(0xFF0070F3) // Vibrant Royal Blue
-                              : (isDark ? const Color(0xFF475569) : const Color(0xFFBAE6FD)),
-                          boxShadow: isSelected
-                              ? [
-                                  BoxShadow(
-                                    color: const Color(0xFF0070F3).withOpacity(0.35),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 1),
-                                  ),
-                                ]
-                              : null,
-                        ),
-                      );
-                    }),
-                  ),
-                ],
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildBannerCard(Map<String, dynamic> item, bool isDark) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      margin: EdgeInsets.zero,
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: BorderRadius.zero,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => _showNewsDetailsModal(item),
-          child: _buildBannerImage(item, isDark),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBannerImage(Map<String, dynamic> item, bool isDark) {
-    final imageUrl = (item['imageUrl'] ?? '').toString().trim();
-
-    if (imageUrl.isNotEmpty) {
-      if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-        return CachedNetworkImage(
-          imageUrl: imageUrl,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-          placeholder: (context, url) => AppShimmer.box(
-            width: double.infinity,
-            height: double.infinity,
-            borderRadius: 0,
-          ),
-          errorWidget: (context, url, error) => _buildBannerFallback(item, isDark),
-        );
-      } else {
-        return Image.asset(
-          imageUrl,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-          errorBuilder: (_, __, ___) => _buildBannerFallback(item, isDark),
-        );
-      }
-    }
-
-    return _buildBannerFallback(item, isDark);
-  }
-
-  Widget _buildBannerFallback(Map<String, dynamic> item, bool isDark) {
-    final title = item['title'] ?? '';
-    final subtitle = item['subtitle'] ?? '';
-    final tag = (item['tag'] ?? 'ES BANGLA').toString().toUpperCase();
-    final List<Color> gradientColors = item['gradientColors'] is List<Color>
-        ? (item['gradientColors'] as List<Color>)
-        : const [Color(0xFF1E3A8A), Color(0xFF0F172A)];
-    final IconData iconData = item['icon'] is IconData
-        ? (item['icon'] as IconData)
-        : Icons.school_rounded;
-
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: gradientColors,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Stack(
-        children: [
-          // Decorative Subtle Watermark Icon
-          Positioned(
-            right: -8,
-            bottom: -12,
-            child: Icon(
-              iconData,
-              size: 105,
-              color: Colors.white.withOpacity(0.08),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF59E0B),
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFFF59E0B).withOpacity(0.35),
-                            blurRadius: 4,
-                            offset: const Offset(0, 1),
-                          ),
-                        ],
-                      ),
-                      child: Text(
-                        tag,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0F172A),
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        height: 1.25,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (subtitle.isNotEmpty) ...[
-                      const SizedBox(height: 3),
-                      Text(
-                        subtitle,
-                        style: const TextStyle(
-                          fontSize: 11.5,
-                          color: Colors.white70,
-                          height: 1.2,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text(
-                      'বিস্তারিত জানতে ট্যাপ করুন',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Color(0xFFFCD34D),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(width: 4),
-                    Icon(Icons.arrow_forward_rounded, size: 12, color: Color(0xFFFCD34D)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   void _showNewsDetailsModal(Map<String, dynamic> item) {
     final title = item['title'] ?? '';
@@ -710,6 +350,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
+                      memCacheWidth: 800,
+                      memCacheHeight: 450,
                       placeholder: (context, url) => AppShimmer.banner16x9(borderRadius: 12),
                       errorWidget: (_, __, ___) => const SizedBox.shrink(),
                     ),
@@ -1514,6 +1156,432 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ==================== 1. ISOLATED HIGH-PERFORMANCE NEWS SLIDER ====================
+class _HomeNewsSlider extends StatefulWidget {
+  final int currentSem;
+  final bool isDark;
+  final void Function(Map<String, dynamic> item) onNewsTap;
+
+  const _HomeNewsSlider({
+    required this.currentSem,
+    required this.isDark,
+    required this.onNewsTap,
+  });
+
+  @override
+  State<_HomeNewsSlider> createState() => _HomeNewsSliderState();
+}
+
+class _HomeNewsSliderState extends State<_HomeNewsSlider> {
+  late final Stream<QuerySnapshot> _newsStream;
+  late final PageController _pageController;
+  final ValueNotifier<int> _currentSlideNotifier = ValueNotifier<int>(0);
+  Timer? _sliderTimer;
+  int _itemCount = 0;
+
+  static const List<Map<String, dynamic>> _fallbackSlides = [
+    {
+      'title': 'উচ্চ মাধ্যমিক বাংলা ও ইংরেজি সহায়িকা',
+      'subtitle': 'সেমিস্টার ৩ ও ৪-এর সম্পূর্ণ সিলেবাস, সাজেশন ও অধ্যায়ভিত্তিক নোটস',
+      'tag': 'ES BANGLA',
+      'redirectUrl': '',
+      'gradientColors': [Color(0xFF1E3A8A), Color(0xFF0F172A)],
+      'icon': Icons.menu_book_rounded,
+      'order': 1,
+    },
+    {
+      'title': 'অনলাইন অধ্যায়ভিত্তিক মক টেস্ট',
+      'subtitle': 'প্রতিটি সেটে অংশগ্রহণ করে নিজের প্রস্তুতি তাৎক্ষণিক যাচাই করুন',
+      'tag': 'MOCK TEST',
+      'redirectUrl': '',
+      'gradientColors': [Color(0xFF065F46), Color(0xFF064E3B)],
+      'icon': Icons.timer_outlined,
+      'order': 2,
+    },
+    {
+      'title': 'বিগত বছরের প্রশ্নপত্র ও সমাধান (PYQ)',
+      'subtitle': 'পরীক্ষায় সর্বোচ্চ নম্বর পেতে প্রিভিয়াস ইয়ার কোশ্চেন অনুশীলন করুন',
+      'tag': 'PYQ ARCHIVE',
+      'redirectUrl': '',
+      'gradientColors': [Color(0xFF4C1D95), Color(0xFF2E1065)],
+      'icon': Icons.quiz_outlined,
+      'order': 3,
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _newsStream = FirebaseFirestore.instance.collection('news').snapshots();
+    _pageController = PageController(viewportFraction: 1.0, initialPage: 1200);
+  }
+
+  void _syncTimer(int count) {
+    if (_itemCount == count) return;
+    _itemCount = count;
+    _sliderTimer?.cancel();
+    if (count > 1) {
+      _sliderTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+        if (_pageController.hasClients && mounted) {
+          _pageController.nextPage(
+            duration: const Duration(milliseconds: 550),
+            curve: Curves.easeInOutCubic,
+          );
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _sliderTimer?.cancel();
+    _pageController.dispose();
+    _currentSlideNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: StreamBuilder<QuerySnapshot>(
+        stream: _newsStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: widget.isDark
+                        ? const Color(0xFF334155)
+                        : const Color(0xFF0F172A).withOpacity(0.18),
+                    width: 1.0,
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: AppShimmer.box(
+                    width: double.infinity,
+                    height: double.infinity,
+                    borderRadius: 0,
+                  ),
+                ),
+              ),
+            );
+          }
+
+          List<Map<String, dynamic>> newsList = [];
+
+          if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+            for (final doc in snapshot.data!.docs) {
+              final data = doc.data() as Map<String, dynamic>? ?? {};
+              final bool isActive = data['isActive'] ?? true;
+              if (!isActive) continue;
+
+              final targetSem = data['targetSemester'];
+              if (targetSem != null &&
+                  targetSem != 0 &&
+                  targetSem != '0' &&
+                  targetSem != 'all' &&
+                  targetSem != widget.currentSem) {
+                continue;
+              }
+
+              final title = (data['title'] ?? '').toString().trim();
+              if (title.isEmpty) continue;
+
+              newsList.add({
+                'id': doc.id,
+                'title': title,
+                'subtitle': (data['subtitle'] ?? data['description'] ?? '').toString().trim(),
+                'tag': (data['tag'] ?? 'LATEST NEWS').toString().toUpperCase().trim(),
+                'redirectUrl': (data['redirectUrl'] ?? data['link'] ?? data['url'] ?? '').toString().trim(),
+                'imageUrl': (data['imageUrl'] ?? data['image'] ?? '').toString().trim(),
+                'imageAsset': (data['imageAsset'] ?? '').toString().trim(),
+                'order': data['order'] is num ? (data['order'] as num).toInt() : 0,
+              });
+            }
+
+            newsList.sort((a, b) => (a['order'] as int).compareTo(b['order'] as int));
+          }
+
+          if (newsList.isEmpty) {
+            newsList = _fallbackSlides;
+          }
+
+          if (_itemCount != newsList.length) {
+            _itemCount = newsList.length;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) _syncTimer(newsList.length);
+            });
+          }
+
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: widget.isDark ? const Color(0xFF1E293B) : Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: widget.isDark
+                          ? const Color(0xFF334155)
+                          : const Color(0xFF0F172A).withOpacity(0.18), // Crisp, thin black stroke
+                      width: 1.0,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(widget.isDark ? 0.35 : 0.05),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: newsList.length == 1
+                        ? _buildBannerCard(newsList[0], widget.isDark)
+                        : PageView.builder(
+                            controller: _pageController,
+                            physics: const BouncingScrollPhysics(),
+                            onPageChanged: (idx) {
+                              final actualIndex = ((idx % newsList.length) + newsList.length) % newsList.length;
+                              if (_currentSlideNotifier.value != actualIndex) {
+                                _currentSlideNotifier.value = actualIndex;
+                              }
+                            },
+                            itemBuilder: (context, virtualIndex) {
+                              final index = ((virtualIndex % newsList.length) + newsList.length) % newsList.length;
+                              return _buildBannerCard(newsList[index], widget.isDark);
+                            },
+                          ),
+                  ),
+                ),
+              ),
+
+              // Animated Indicator Dots (Smooth, isolated rebuilds only)
+              if (newsList.length > 1) ...[
+                const SizedBox(height: 10),
+                ValueListenableBuilder<int>(
+                  valueListenable: _currentSlideNotifier,
+                  builder: (context, activeIndex, _) {
+                    final safeIndex = activeIndex >= newsList.length ? 0 : activeIndex;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(newsList.length, (idx) {
+                        final isSelected = safeIndex == idx;
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 250),
+                          curve: Curves.easeOut,
+                          width: isSelected ? 16 : 6,
+                          height: 6,
+                          margin: const EdgeInsets.symmetric(horizontal: 3),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
+                            color: isSelected
+                                ? const Color(0xFF0070F3) // Royal Blue
+                                : (widget.isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
+                            boxShadow: isSelected
+                                ? [
+                                    BoxShadow(
+                                      color: const Color(0xFF0070F3).withOpacity(0.35),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 1),
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                        );
+                      }),
+                    );
+                  },
+                ),
+              ],
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildBannerCard(Map<String, dynamic> item, bool isDark) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => widget.onNewsTap(item),
+        child: _buildBannerContent(item, isDark),
+      ),
+    );
+  }
+
+  Widget _buildBannerContent(Map<String, dynamic> item, bool isDark) {
+    final imageUrl = (item['imageUrl'] ?? '').toString().trim();
+
+    if (imageUrl.isNotEmpty) {
+      if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+        return CachedNetworkImage(
+          imageUrl: imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          memCacheWidth: 800,
+          memCacheHeight: 450,
+          fadeInDuration: const Duration(milliseconds: 200),
+          placeholder: (context, url) => AppShimmer.box(
+            width: double.infinity,
+            height: double.infinity,
+            borderRadius: 0,
+          ),
+          errorWidget: (context, url, error) => _buildBannerFallback(item, isDark),
+        );
+      } else {
+        return Image.asset(
+          imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          cacheWidth: 800,
+          errorBuilder: (_, __, ___) => _buildBannerFallback(item, isDark),
+        );
+      }
+    }
+
+    return _buildBannerFallback(item, isDark);
+  }
+
+  Widget _buildBannerFallback(Map<String, dynamic> item, bool isDark) {
+    final title = item['title'] ?? '';
+    final subtitle = item['subtitle'] ?? '';
+    final tag = (item['tag'] ?? 'ES BANGLA').toString().toUpperCase();
+    final List<Color> gradientColors = item['gradientColors'] is List<Color>
+        ? (item['gradientColors'] as List<Color>)
+        : const [Color(0xFF1E3A8A), Color(0xFF0F172A)];
+    final IconData iconData = item['icon'] is IconData
+        ? (item['icon'] as IconData)
+        : Icons.school_rounded;
+
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: gradientColors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Stack(
+        children: [
+          // Decorative Subtle Watermark Icon
+          Positioned(
+            right: -8,
+            bottom: -12,
+            child: Icon(
+              iconData,
+              size: 110,
+              color: Colors.white.withOpacity(0.07),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF59E0B),
+                        borderRadius: BorderRadius.circular(6),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFF59E0B).withOpacity(0.35),
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        tag,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0F172A),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        height: 1.25,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (subtitle.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white70,
+                          height: 1.2,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.22),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.white.withOpacity(0.12), width: 0.8),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text(
+                        'বিস্তারিত জানতে ট্যাপ করুন',
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          color: Color(0xFFFCD34D),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(Icons.arrow_forward_rounded, size: 11, color: Color(0xFFFCD34D)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
