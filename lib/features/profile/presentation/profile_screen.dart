@@ -9,6 +9,7 @@ import 'mock_analytics_screen.dart';
 import 'activity_streak_screen.dart';
 import 'saved_questions_screen.dart';
 import 'help_support_screen.dart';
+import '../../../core/widgets/academic_selection_modal.dart';
 import '../../auth/presentation/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -240,52 +241,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _changeSemester() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'Select Academic Semester',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              title: const Text('Semester 3 (Higher Secondary)', style: TextStyle(fontWeight: FontWeight.w600)),
-              leading: Radio<int>(
-                value: 3,
-                groupValue: _currentSemester,
-                activeColor: const Color(0xFF2563EB),
-                onChanged: (val) {
-                  if (val != null) {
-                    setState(() => _currentSemester = val);
-                    _storage.semester = val;
-                    widget.onSemesterChanged();
-                    Navigator.pop(ctx);
-                  }
-                },
-              ),
-            ),
-            ListTile(
-              title: const Text('Semester 4 (Board Preparation)', style: TextStyle(fontWeight: FontWeight.w600)),
-              leading: Radio<int>(
-                value: 4,
-                groupValue: _currentSemester,
-                activeColor: const Color(0xFF2563EB),
-                onChanged: (val) {
-                  if (val != null) {
-                    setState(() => _currentSemester = val);
-                    _storage.semester = val;
-                    widget.onSemesterChanged();
-                    Navigator.pop(ctx);
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+    AcademicSelectionModal.show(
+      context,
+      isDismissible: true,
+      onSaved: (val) {
+        if (mounted) setState(() => _currentSemester = val);
+        widget.onSemesterChanged();
+      },
     );
   }
 

@@ -65,25 +65,25 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.49
-          name: "Es Bangla v1.3.49 (Highlighted WhatsApp VIP Card, Official Social Links & Card Outlines Removed)"
+          tag_name: v1.3.50
+          name: "Es Bangla v1.3.50 (Class 12 & Semester 3/4 Onboarding Selection, Single-Semester UI Mode & Icon Fix)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.49 Release Highlights:
-            - **Highlighted Official WhatsApp Community Card**:
-              - Prominent featured horizontal card with emerald green styling, 'OFFICIAL' badge, and green 'যুক্ত হন' button.
-              - Connected directly to the official WhatsApp Channel (`https://whatsapp.com/channel/0029VbDzZ5105MUnpKlW3C3r`).
-            - **Refined Official Social Channels**:
-              - Clean side-by-side layout for YouTube (`https://youtube.com/@esbanglayt?si=4UbAYWoKCgKRj6JJ`) and Telegram (`https://t.me/EsBanglaofficial`).
-              - Instagram completely removed as requested.
-              - Clean, minimal cards without subtitles or clutter.
-            - **New 3D Icons**:
-              - Semester 3 & Semester 4: Upgraded with new 3D open book icon on circular background.
-              - Previous Years Questions (PYQ): Upgraded with new hand holding pencil exam writing icon.
-            - **Cleaner Card Aesthetics**:
-              - Removed border outlines from Semester 3, Semester 4, PYQ, and Premium Store cards while keeping the luxurious bottom drop elevation shadow.
-              - Removed right chevron arrow buttons from Semester 3, Semester 4, PYQ, and Premium Store cards (kept only on Study Reminder and Notepad).
+            ### Es Bangla v1.3.50 Release Highlights:
+            - **Class 12 & Semester 3/4 Onboarding & Selection Modal**:
+              - Prompts guests and authenticated users upon entering the app to select Class 12 and their active Semester (Semester 3 or Semester 4).
+              - Seamlessly remembered in local storage with instant real-time synchronization.
+              - Interactive top-bar semester switcher chip allows changing semesters at any time with 1 tap.
+            - **Personalized Single-Semester App Experience**:
+              - **Home Screen**: Displays only the active semester's card (Semester 3 or Semester 4).
+              - **Library Screen**: Displays only the active semester's video classes & subjects.
+              - **Mock Test Screen**: Automatically adapts and loads quizzes for the active semester.
+              - **Previous Years Questions (PYQ)**: Displays only the active semester card.
+            - **Fixed Semester Icon Background**:
+              - Completely removed the duplicate outer circular background from the semester book icon, allowing the icon's native circular badge to fit perfectly without double borders.
+            - **Frictionless Auth**:
+              - Removed class/semester questions from the login/signup form; class and semester are selected inside the app as requested.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

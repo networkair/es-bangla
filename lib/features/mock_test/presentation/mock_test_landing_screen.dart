@@ -13,46 +13,47 @@ class MockTestLandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentSem = LocalStorageService().semester;
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        title: const Text(
-          'Mock Test',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        centerTitle: false,
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 16),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-            decoration: BoxDecoration(
-              color: const Color(0xFFEFF6FF),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFBFDBFE), width: 1),
+    return ValueListenableBuilder<int>(
+      valueListenable: LocalStorageService().semesterNotifier,
+      builder: (context, currentSem, _) {
+        return Scaffold(
+          backgroundColor: const Color(0xFFF8FAFC),
+          appBar: AppBar(
+            title: const Text(
+              'Mock Test',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.school_rounded, size: 14, color: Color(0xFF2563EB)),
-                const SizedBox(width: 5),
-                Text(
-                  'Semester $currentSem',
-                  style: const TextStyle(
-                    color: Color(0xFF2563EB),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
+            centerTitle: false,
+            actions: [
+              Container(
+                margin: const EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF6FF),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFFBFDBFE), width: 1),
                 ),
-              ],
-            ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.school_rounded, size: 14, color: Color(0xFF2563EB)),
+                    const SizedBox(width: 5),
+                    Text(
+                      'Semester $currentSem',
+                      style: const TextStyle(
+                        color: Color(0xFF2563EB),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(18, 12, 18, 32),
-        physics: const BouncingScrollPhysics(),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(18, 12, 18, 32),
+            physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -88,6 +89,8 @@ class MockTestLandingScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+      },
     );
   }
 

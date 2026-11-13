@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/storage/local_storage_service.dart';
 import 'library_subjects_screen.dart';
 
 class LibraryMainScreen extends StatelessWidget {
@@ -9,41 +10,46 @@ class LibraryMainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 1. Top Banner
-              _buildTopBanner(context, isDark),
-              const SizedBox(height: 18),
+    return ValueListenableBuilder<int>(
+      valueListenable: LocalStorageService().semesterNotifier,
+      builder: (context, currentSem, _) {
+        return Scaffold(
+          backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 1. Top Banner
+                  _buildTopBanner(context, isDark),
+                  const SizedBox(height: 18),
 
-              // 2. Semester 3 3D Card (Ice Blue Theme)
-              _buildSemesterCard(
-                context: context,
-                semesterTitle: 'Semester 3',
-                subtitle: 'All Subjects Video Lectures & Classes',
-                semester: 3,
-                isDark: isDark,
+                  // 2. Active Semester 3D Card (Shows only the selected semester)
+                  if (currentSem == 3) ...[
+                    _buildSemesterCard(
+                      context: context,
+                      semesterTitle: 'Semester 3',
+                      subtitle: 'All Subjects Video Lectures & Classes',
+                      semester: 3,
+                      isDark: isDark,
+                    ),
+                  ] else ...[
+                    _buildSemesterCard(
+                      context: context,
+                      semesterTitle: 'Semester 4',
+                      subtitle: 'All Subjects Video Lectures & Classes',
+                      semester: 4,
+                      isDark: isDark,
+                    ),
+                  ],
+                ],
               ),
-              const SizedBox(height: 16),
-
-              // 3. Semester 4 3D Card (Warm Peach/Amber Theme)
-              _buildSemesterCard(
-                context: context,
-                semesterTitle: 'Semester 4',
-                subtitle: 'All Subjects Video Lectures & Classes',
-                semester: 4,
-                isDark: isDark,
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

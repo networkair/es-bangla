@@ -14,6 +14,7 @@ import '../../notepad/presentation/notepad_screen.dart';
 import '../../notifications/presentation/notification_inbox_screen.dart';
 import '../../book_notes/presentation/book_notes_screen.dart';
 import '../../../core/widgets/app_shimmer.dart';
+import '../../../core/widgets/academic_selection_modal.dart';
 import '../../../core/notifications/app_notification_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -181,6 +182,57 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
+          // Dynamic Semester Switcher Pill (Interactive)
+          GestureDetector(
+            onTap: () {
+              AcademicSelectionModal.show(
+                context,
+                isDismissible: true,
+                onSaved: (_) {
+                  if (mounted) setState(() {});
+                  widget.onSemesterChanged();
+                },
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5.5),
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: isDark ? const Color(0xFF334155) : const Color(0xFFBFDBFE),
+                  width: 1.0,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.school_rounded,
+                    size: 13,
+                    color: currentSem == 3 ? const Color(0xFF0070F3) : const Color(0xFFD97706),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Sem $currentSem',
+                    style: TextStyle(
+                      fontFamily: 'sans-serif',
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w800,
+                      color: currentSem == 3 ? const Color(0xFF0070F3) : const Color(0xFFD97706),
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  Icon(
+                    Icons.arrow_drop_down_rounded,
+                    size: 16,
+                    color: currentSem == 3 ? const Color(0xFF0070F3) : const Color(0xFFD97706),
+                  ),
+                ],
+              ),
+            ),
+          ),
           IconButton(
             onPressed: () {
               Navigator.push(
@@ -243,25 +295,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   _buildQuickActionCardsRow(isDark),
                   const SizedBox(height: 12),
 
-                  // 3. Semester 3 Card (Wide Horizontal Card)
-                  _buildSemesterTile(
-                    title: 'SEMESTER 3',
-                    semester: 3,
-                    iconAsset: 'assets/icons/ic_sem3.png',
-                    buttonBgColor: const Color(0xFFE0F2FE),
-                    buttonIconColor: const Color(0xFF0070F3),
-                  ),
-                  const SizedBox(height: 13),
-
-                  // 4. Semester 4 Card (Wide Horizontal Card)
-                  _buildSemesterTile(
-                    title: 'SEMESTER 4',
-                    semester: 4,
-                    iconAsset: 'assets/icons/ic_sem4.png',
-                    buttonBgColor: const Color(0xFFFFEDD5),
-                    buttonIconColor: const Color(0xFFD97706),
-                  ),
-                  const SizedBox(height: 13),
+                  // 3. Active Semester Card (Shows only the selected semester)
+                  if (currentSem == 3) ...[
+                    _buildSemesterTile(
+                      title: 'SEMESTER 3',
+                      semester: 3,
+                      iconAsset: 'assets/icons/ic_sem3.png',
+                      buttonBgColor: const Color(0xFFE0F2FE),
+                      buttonIconColor: const Color(0xFF0070F3),
+                    ),
+                    const SizedBox(height: 13),
+                  ] else ...[
+                    _buildSemesterTile(
+                      title: 'SEMESTER 4',
+                      semester: 4,
+                      iconAsset: 'assets/icons/ic_sem4.png',
+                      buttonBgColor: const Color(0xFFFFEDD5),
+                      buttonIconColor: const Color(0xFFD97706),
+                    ),
+                    const SizedBox(height: 13),
+                  ],
 
                   // 4. Previous Year Questions (PYQ) Horizontal Card
                   _buildActionTile(
@@ -985,19 +1038,15 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
               child: Row(
                 children: [
-                  // Left: Circular Logo Wrap
-                  Container(
-                    width: 78,
-                    height: 78,
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF334155) : buttonBgColor,
-                      shape: BoxShape.circle,
-                    ),
+                  // Left: 3D Semester Book Icon (uses icon's own circular badge, no duplicate background)
+                  SizedBox(
+                    width: 76,
+                    height: 76,
                     child: Center(
                       child: Image.asset(
                         iconAsset,
-                        width: 54,
-                        height: 54,
+                        width: 76,
+                        height: 76,
                         fit: BoxFit.contain,
                       ),
                     ),

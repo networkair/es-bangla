@@ -22,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
-  int _selectedSemester = 3;
   bool _isLoading = false;
   bool _isGoogleLoading = false;
   String? _errorMessage;
@@ -63,20 +62,21 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           password: password,
         );
 
+        final storage = LocalStorageService();
+        final currentSem = storage.semester;
+
         await FirebaseFirestore.instance.collection('users').doc(userCred.user!.uid).set({
           'name': name,
           'email': email,
           'provider': 'password',
           'class': '12',
-          'semester': _selectedSemester,
+          'semester': currentSem,
           'createdAt': FieldValue.serverTimestamp(),
           'lastLoginAt': FieldValue.serverTimestamp(),
         });
 
-        final storage = LocalStorageService();
         storage.userName = name;
         storage.userEmail = email;
-        storage.semester = _selectedSemester;
       } else {
         userCred = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
@@ -508,54 +508,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 icon: Icons.person_outline_rounded,
                                 isDark: isDark,
                               ),
-                            ),
-                            const SizedBox(height: 14),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                                    decoration: BoxDecoration(
-                                      color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: Text(
-                                      'Class 12',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: isDark ? Colors.white : const Color(0xFF0F172A),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                                    decoration: BoxDecoration(
-                                      color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton<int>(
-                                        value: _selectedSemester,
-                                        dropdownColor: isDark ? const Color(0xFF1E293B) : Colors.white,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: isDark ? Colors.white : const Color(0xFF0F172A),
-                                        ),
-                                        items: const [
-                                          DropdownMenuItem(value: 3, child: Text('Semester 3')),
-                                          DropdownMenuItem(value: 4, child: Text('Semester 4')),
-                                        ],
-                                        onChanged: (val) {
-                                          if (val != null) setState(() => _selectedSemester = val);
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
                             ),
                             const SizedBox(height: 14),
                           ],

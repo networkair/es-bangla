@@ -10,6 +10,7 @@ class LocalStorageService {
   late SharedPreferences _prefs;
   final ValueNotifier<ThemeMode> themeModeNotifier = ValueNotifier<ThemeMode>(ThemeMode.light);
   final ValueNotifier<String> userAvatarNotifier = ValueNotifier<String>('');
+  final ValueNotifier<int> semesterNotifier = ValueNotifier<int>(3);
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
@@ -18,14 +19,19 @@ class LocalStorageService {
     themeModeNotifier.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
     localNotificationsNotifier.value = getLocalNotifications();
     userAvatarNotifier.value = userAvatar;
+    semesterNotifier.value = semester;
   }
 
   // User Profile & Academic Info
   static const String _keyDarkMode = 'is_dark_mode';
   static const String _keySemester = 'user_semester';
   static const String _keyClass = 'user_class';
+  static const String _keyAcademicSelected = 'has_selected_academic_info';
   static const String _keyUserName = 'user_name';
   static const String _keyUserAvatar = 'user_avatar_path';
+
+  bool get hasSelectedAcademicInfo => _prefs.getBool(_keyAcademicSelected) ?? false;
+  set hasSelectedAcademicInfo(bool value) => _prefs.setBool(_keyAcademicSelected, value);
 
   bool get isDarkMode => _prefs.getBool(_keyDarkMode) ?? false;
   set isDarkMode(bool value) {
@@ -42,7 +48,10 @@ class LocalStorageService {
   static const String _keyEntitlements = 'user_entitlements';
 
   int get semester => _prefs.getInt(_keySemester) ?? 3;
-  set semester(int value) => _prefs.setInt(_keySemester, value);
+  set semester(int value) {
+    _prefs.setInt(_keySemester, value);
+    semesterNotifier.value = value;
+  }
 
   String get userClass => _prefs.getString(_keyClass) ?? '12';
   set userClass(String value) => _prefs.setString(_keyClass, value);
