@@ -65,17 +65,25 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.48
-          name: "Es Bangla v1.3.48 (Refined 2x2 Clean Social Media Hub & Card Redesign)"
+          tag_name: v1.3.49
+          name: "Es Bangla v1.3.49 (Highlighted WhatsApp VIP Card, Official Social Links & Card Outlines Removed)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.48 Release Highlights:
-            - **Clean Symmetrical 2x2 Social Media Hub**:
-              - Completely redesigned the Social Media section into a balanced 2x2 grid of official channel cards (WhatsApp, Telegram, YouTube, Instagram).
-              - Removed all subtitle texts ('ফ্রি PDF', 'ভিডিও ক্লাস', 'টিপস ও রিলস') as requested for a clean, minimal, uncluttered design.
-              - Completely discarded the competitor reference structure (no duplicate green banner, divider, or footer badge).
-              - Cards now use Es Bangla's signature clean white/dark canvas, smooth 22px corners, 3-tier bottom drop shadow, and circular action arrows matching the app's design language.
+            ### Es Bangla v1.3.49 Release Highlights:
+            - **Highlighted Official WhatsApp Community Card**:
+              - Prominent featured horizontal card with emerald green styling, 'OFFICIAL' badge, and green 'যুক্ত হন' button.
+              - Connected directly to the official WhatsApp Channel (`https://whatsapp.com/channel/0029VbDzZ5105MUnpKlW3C3r`).
+            - **Refined Official Social Channels**:
+              - Clean side-by-side layout for YouTube (`https://youtube.com/@esbanglayt?si=4UbAYWoKCgKRj6JJ`) and Telegram (`https://t.me/EsBanglaofficial`).
+              - Instagram completely removed as requested.
+              - Clean, minimal cards without subtitles or clutter.
+            - **New 3D Icons**:
+              - Semester 3 & Semester 4: Upgraded with new 3D open book icon on circular background.
+              - Previous Years Questions (PYQ): Upgraded with new hand holding pencil exam writing icon.
+            - **Cleaner Card Aesthetics**:
+              - Removed border outlines from Semester 3, Semester 4, PYQ, and Premium Store cards while keeping the luxurious bottom drop elevation shadow.
+              - Removed right chevron arrow buttons from Semester 3, Semester 4, PYQ, and Premium Store cards (kept only on Study Reminder and Notepad).
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

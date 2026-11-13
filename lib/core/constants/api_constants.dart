@@ -24,9 +24,9 @@ class ApiConstants {
 
   // Social & Support links
   static const String defaultWhatsappNumber = '+91 8972788016';
-  static const String whatsappUrl = 'https://wa.me/918972788016';
-  static const String youtubeChannelUrl = 'https://youtube.com/@EsBangla';
+  static const String whatsappUrl = 'https://whatsapp.com/channel/0029VbDzZ5105MUnpKlW3C3r';
+  static const String youtubeChannelUrl = 'https://youtube.com/@esbanglayt?si=4UbAYWoKCgKRj6JJ';
   static const String facebookPageUrl = 'https://facebook.com/EsBangla';
   static const String instagramUrl = 'https://instagram.com/EsBangla';
-  static const String telegramChannelUrl = 'https://t.me/EsBangla';
+  static const String telegramChannelUrl = 'https://t.me/EsBanglaofficial';
 }

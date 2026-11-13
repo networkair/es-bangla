@@ -968,10 +968,6 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE8EDF4),
-          width: 1.0,
-        ),
         boxShadow: _buildPremiumCardShadow(isDark),
       ),
       child: ClipRRect(
@@ -1071,24 +1067,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(width: 12),
-
-                  // Right: Action Arrow Circle
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF334155) : buttonBgColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 14,
-                        color: buttonIconColor,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -1114,10 +1092,6 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE8EDF4),
-          width: 1.0,
-        ),
         boxShadow: _buildPremiumCardShadow(isDark),
       ),
       child: ClipRRect(
@@ -1178,24 +1152,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(width: 12),
-
-                  // Right: Action Arrow Circle matching demo
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF334155) : buttonBgColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 14,
-                        color: buttonIconColor,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -1247,17 +1203,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
 
-        // Row 1: WhatsApp (Left) & Telegram (Right)
+        // 1. Prominent Highlighted WhatsApp VIP Card
+        _buildHighlightedWhatsAppCard(isDark),
+        const SizedBox(height: 12),
+
+        // 2. Row: YouTube (Left) & Telegram (Right)
         Row(
           children: [
             Expanded(
               child: _buildSocialPillCard(
-                name: 'WhatsApp',
-                iconAsset: 'assets/icons/ic_whatsapp.png',
-                iconBgColor: isDark ? const Color(0xFF064E3B).withOpacity(0.4) : const Color(0xFFDCFCE7),
-                arrowColor: const Color(0xFF16A34A),
-                arrowBgColor: isDark ? const Color(0xFF064E3B).withOpacity(0.3) : const Color(0xFFDCFCE7),
-                url: ApiConstants.whatsappUrl,
+                name: 'YouTube',
+                iconAsset: 'assets/icons/ic_youtube.png',
+                iconBgColor: isDark ? const Color(0xFF7F1D1D).withOpacity(0.4) : const Color(0xFFFEE2E2),
+                arrowColor: const Color(0xFFDC2626),
+                arrowBgColor: isDark ? const Color(0xFF7F1D1D).withOpacity(0.3) : const Color(0xFFFEE2E2),
+                url: ApiConstants.youtubeChannelUrl,
                 isDark: isDark,
               ),
             ),
@@ -1275,37 +1235,147 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
-
-        // Row 2: YouTube (Left) & Instagram (Right)
-        Row(
-          children: [
-            Expanded(
-              child: _buildSocialPillCard(
-                name: 'YouTube',
-                iconAsset: 'assets/icons/ic_youtube.png',
-                iconBgColor: isDark ? const Color(0xFF7F1D1D).withOpacity(0.4) : const Color(0xFFFEE2E2),
-                arrowColor: const Color(0xFFDC2626),
-                arrowBgColor: isDark ? const Color(0xFF7F1D1D).withOpacity(0.3) : const Color(0xFFFEE2E2),
-                url: ApiConstants.youtubeChannelUrl,
-                isDark: isDark,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildSocialPillCard(
-                name: 'Instagram',
-                iconAsset: 'assets/icons/ic_instagram.png',
-                iconBgColor: isDark ? const Color(0xFF701A75).withOpacity(0.4) : const Color(0xFFFCE7F3),
-                arrowColor: const Color(0xFFC026D3),
-                arrowBgColor: isDark ? const Color(0xFF701A75).withOpacity(0.3) : const Color(0xFFFCE7F3),
-                url: ApiConstants.instagramUrl,
-                isDark: isDark,
-              ),
-            ),
-          ],
-        ),
       ],
+    );
+  }
+
+  Widget _buildHighlightedWhatsAppCard(bool isDark) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark ? const Color(0xFF059669).withOpacity(0.45) : const Color(0xFF86EFAC),
+          width: 1.2,
+        ),
+        boxShadow: _buildPremiumCardShadow(isDark),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => SecurityManager.openExternalUrl(ApiConstants.whatsappUrl),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+              child: Row(
+                children: [
+                  // WhatsApp 3D Icon wrap with subtle green glow
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF064E3B).withOpacity(0.5) : const Color(0xFFDCFCE7),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/icons/ic_whatsapp.png',
+                        width: 32,
+                        height: 32,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+
+                  // Texts: Title + Subtitle
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                'WhatsApp Channel',
+                                style: TextStyle(
+                                  fontFamily: 'sans-serif',
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 0.2,
+                                  color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF16A34A),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Text(
+                                'OFFICIAL',
+                                style: TextStyle(
+                                  fontSize: 8.5,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'সবার আগে আপডেট ও নোটস পেতে যুক্ত হন',
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w600,
+                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+
+                  // Highlighted Action Button (Green Pill)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF16A34A),
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF16A34A).withOpacity(0.3),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Text(
+                          'যুক্ত হন',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Icon(
+                          Icons.arrow_forward_rounded,
+                          size: 13,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
