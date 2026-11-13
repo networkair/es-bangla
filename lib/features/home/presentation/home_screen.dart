@@ -10,6 +10,7 @@ import '../../../core/utils/security_manager.dart';
 import '../../pdf_notes/presentation/notes_subjects_screen.dart';
 import '../../pdf_notes/presentation/pyq_screen.dart';
 import '../../reminder/presentation/reminder_screen.dart';
+import '../../notepad/presentation/notepad_screen.dart';
 import '../../notifications/presentation/notification_inbox_screen.dart';
 import '../../book_notes/presentation/book_notes_screen.dart';
 import '../../../core/widgets/app_shimmer.dart';
@@ -65,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _sliderController = PageController(
-      viewportFraction: 0.86,
+      viewportFraction: 1.0,
       initialPage: 1200,
     );
   }
@@ -234,13 +235,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // Content Area with Clean, Balanced Spacing & Matching Canvas
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 32),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 2. Study Reminder Pill Button
-                  _buildStudyReminderTile(),
-                  const SizedBox(height: 20),
+                  // 2. Quick Action Cards (Notepad + Study Reminder)
+                  _buildQuickActionCardsRow(isDark),
+                  const SizedBox(height: 12),
 
                   // 3. Semester 3 Card (Wide Horizontal Card)
                   _buildSemesterTile(
@@ -250,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonBgColor: const Color(0xFFE0F2FE),
                     buttonIconColor: const Color(0xFF0070F3),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 13),
 
                   // 4. Semester 4 Card (Wide Horizontal Card)
                   _buildSemesterTile(
@@ -260,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     buttonBgColor: const Color(0xFFFFEDD5),
                     buttonIconColor: const Color(0xFFD97706),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 13),
 
                   // 4. Previous Year Questions (PYQ) Horizontal Card
                   _buildActionTile(
@@ -277,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 13),
 
                   // 5. Premium Store Horizontal Card
                   _buildActionTile(
@@ -294,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 13),
 
                   // 6. Authentic Es Bangla Social Media Hub
                   _buildSocialMediaSection(),
@@ -313,13 +314,15 @@ class _HomeScreenState extends State<HomeScreen> {
       stream: FirebaseFirestore.instance.collection('news').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: AppShimmer.box(
-              width: double.infinity,
-              height: 160,
-              borderRadius: 18,
-            ),
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final sliderHeight = constraints.maxWidth * (9.0 / 16.0);
+              return AppShimmer.box(
+                width: double.infinity,
+                height: sliderHeight,
+                borderRadius: 0,
+              );
+            },
           );
         }
 
@@ -370,24 +373,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return LayoutBuilder(
           builder: (context, constraints) {
-            // Responsive slider height matching ~2.15:1 aspect ratio of the banner cards
-            final cardWidth = constraints.maxWidth * 0.86;
-            final sliderHeight = (cardWidth / 2.1).clamp(142.0, 185.0);
+            // Exact 16:9 widescreen aspect ratio flush to screen edges
+            final sliderHeight = constraints.maxWidth * (9.0 / 16.0);
 
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 8),
                 SizedBox(
+                  width: double.infinity,
                   height: sliderHeight,
                   child: newsList.length == 1
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 18),
-                          child: _buildBannerCard(newsList[0], isDark),
-                        )
+                      ? _buildBannerCard(newsList[0], isDark)
                       : PageView.builder(
                           controller: _sliderController,
-                          clipBehavior: Clip.none,
                           onPageChanged: (idx) {
                             final actualIndex = ((idx % newsList.length) + newsList.length) % newsList.length;
                             if (_currentSlide != actualIndex) {
@@ -397,32 +395,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (context, virtualIndex) {
                             final index = ((virtualIndex % newsList.length) + newsList.length) % newsList.length;
                             final item = newsList[index];
-
-                            return AnimatedBuilder(
-                              animation: _sliderController,
-                              builder: (context, child) {
-                                double diff = 0.0;
-                                if (_sliderController.position.haveDimensions) {
-                                  final page = _sliderController.page ?? _sliderController.initialPage.toDouble();
-                                  diff = (page - virtualIndex).abs();
-                                } else {
-                                  diff = (virtualIndex == _sliderController.initialPage) ? 0.0 : 1.0;
-                                }
-                                final scale = (1.0 - (diff * 0.07)).clamp(0.93, 1.0);
-                                return Transform.scale(
-                                  scale: scale,
-                                  child: child,
-                                );
-                              },
-                              child: _buildBannerCard(item, isDark),
-                            );
+                            return _buildBannerCard(item, isDark);
                           },
                         ),
                 ),
 
                 // Indicator Dots (Centered Royal Blue Dots Below Slider matching mockup)
                 if (newsList.length > 1) ...[
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(newsList.length, (idx) {
@@ -462,24 +442,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBannerCard(Map<String, dynamic> item, bool isDark) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      width: double.infinity,
+      height: double.infinity,
+      margin: EdgeInsets.zero,
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE8EDF4),
-          width: 1.0,
-        ),
-        boxShadow: _buildPremiumCardShadow(isDark),
+        borderRadius: BorderRadius.zero,
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(26),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => _showNewsDetailsModal(item),
-            child: _buildBannerImage(item, isDark),
-          ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => _showNewsDetailsModal(item),
+          child: _buildBannerImage(item, isDark),
         ),
       ),
     );
@@ -498,7 +472,7 @@ class _HomeScreenState extends State<HomeScreen> {
           placeholder: (context, url) => AppShimmer.box(
             width: double.infinity,
             height: double.infinity,
-            borderRadius: 17,
+            borderRadius: 0,
           ),
           errorWidget: (context, url, error) => _buildBannerFallback(item, isDark),
         );
@@ -803,81 +777,173 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
-  // ==================== 2. STUDY REMINDER CARD ====================
-  Widget _buildStudyReminderTile() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFE8EDF4),
-          width: 1.0,
+  // ==================== 2. QUICK ACTION CARDS (NOTEPAD & STUDY REMINDER) ====================
+  Widget _buildQuickActionCardsRow(bool isDark) {
+    return Row(
+      children: [
+        // Left: Study Notepad Card
+        Expanded(
+          child: _buildQuickActionCard(
+            titleLine1: 'STUDY',
+            titleLine2: 'NOTEPAD',
+            icon: Icons.edit_note_rounded,
+            iconColor: const Color(0xFF0070F3),
+            iconBgColor: isDark ? const Color(0xFF334155) : Colors.white,
+            cardBgColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+            borderColor: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+            arrowColor: const Color(0xFF0070F3),
+            arrowBgColor: isDark ? const Color(0xFF334155) : Colors.white,
+            isDark: isDark,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const NotepadScreen()),
+              );
+            },
+          ),
         ),
-        boxShadow: _buildPremiumCardShadow(isDark),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
+        const SizedBox(width: 12),
+
+        // Right: Set Study Reminder Card
+        Expanded(
+          child: _buildQuickActionCard(
+            titleLine1: 'SET STUDY',
+            titleLine2: 'REMINDER',
+            icon: Icons.notifications_active_rounded,
+            iconColor: const Color(0xFFD97706),
+            iconBgColor: isDark ? const Color(0xFF334155) : Colors.white,
+            cardBgColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFFFFBEB),
+            borderColor: isDark ? const Color(0xFF334155) : const Color(0xFFFDE68A).withOpacity(0.7),
+            arrowColor: const Color(0xFFD97706),
+            arrowBgColor: isDark ? const Color(0xFF334155) : Colors.white,
+            isDark: isDark,
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const ReminderScreen()),
               );
             },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuickActionCard({
+    required String titleLine1,
+    required String titleLine2,
+    required IconData icon,
+    required Color iconColor,
+    required Color iconBgColor,
+    required Color cardBgColor,
+    required Color borderColor,
+    required Color arrowColor,
+    required Color arrowBgColor,
+    required bool isDark,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: cardBgColor,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: borderColor,
+          width: 1.0,
+        ),
+        boxShadow: _buildPremiumCardShadow(isDark),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(22),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
               child: Row(
                 children: [
-                  // Left: Circular container with golden ringing bell
+                  // Icon Circle
                   Container(
-                    width: 52,
-                    height: 52,
+                    width: 38,
+                    height: 38,
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF334155) : const Color(0xFFFEF3C7),
+                      color: iconBgColor,
                       shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1.5),
+                        ),
+                      ],
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Icon(
-                        Icons.notifications_active_rounded,
-                        color: Color(0xFFF59E0B), // Golden amber bell
-                        size: 26,
+                        icon,
+                        color: iconColor,
+                        size: 20,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 8),
 
-                  // Center: Title
+                  // Title (2 lines)
                   Expanded(
-                    child: Text(
-                      'SET STUDY REMINDER',
-                      style: TextStyle(
-                        fontFamily: 'sans-serif',
-                        fontSize: 15.5,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 0.5,
-                        color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          titleLine1,
+                          style: TextStyle(
+                            fontFamily: 'sans-serif',
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.3,
+                            height: 1.15,
+                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          titleLine2,
+                          style: TextStyle(
+                            fontFamily: 'sans-serif',
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.3,
+                            height: 1.15,
+                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 4),
 
-                  // Right: Action Arrow Circle
+                  // Small chevron arrow button
                   Container(
-                    width: 44,
-                    height: 44,
+                    width: 26,
+                    height: 26,
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF334155) : const Color(0xFFFEF3C7),
+                      color: arrowBgColor,
                       shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 3,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Icon(
                         Icons.arrow_forward_ios_rounded,
-                        size: 14,
-                        color: Color(0xFFD97706),
+                        size: 10,
+                        color: arrowColor,
                       ),
                     ),
                   ),

@@ -37,6 +37,7 @@ class LocalStorageService {
   static const String _keySavedQuestions = 'saved_questions';
   static const String _keyAttemptHistory = 'attempt_history';
   static const String _keyStudyReminders = 'study_reminders';
+  static const String _keyStudyNotes = 'study_notes';
   static const String _keyApiManifest = 'api_manifest_cache';
   static const String _keyEntitlements = 'user_entitlements';
 
@@ -124,6 +125,22 @@ class LocalStorageService {
 
   Future<void> saveStudyReminders(List<Map<String, dynamic>> reminders) async {
     await _prefs.setString(_keyStudyReminders, jsonEncode(reminders));
+  }
+
+  // Student Quick Study Notepad
+  List<Map<String, dynamic>> getStudyNotes() {
+    final raw = _prefs.getString(_keyStudyNotes);
+    if (raw == null || raw.isEmpty) return [];
+    try {
+      final List decoded = jsonDecode(raw);
+      return decoded.map((e) => Map<String, dynamic>.from(e)).toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> saveStudyNotes(List<Map<String, dynamic>> notes) async {
+    await _prefs.setString(_keyStudyNotes, jsonEncode(notes));
   }
 
   // Cached API Data with stale-while-revalidate

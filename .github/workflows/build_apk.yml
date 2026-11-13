@@ -65,16 +65,22 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.45
-          name: "Es Bangla v1.3.45 (Stacked Wide Semester 3 & 4 Cards — Horizontal Layout)"
+          tag_name: v1.3.46
+          name: "Es Bangla v1.3.46 (16:9 Flush News Slider + Study Notepad & Reminder Row + Optimized Card Spacing)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.45 Release Highlights:
-            - **Stacked Wide Semester 3 & 4 Cards**:
-              - Transformed Semester 3 and Semester 4 from narrow side-by-side cards to full-width, spacious horizontal cards stacked one below the other.
-              - Positioned 3D logo in circular container on the left, clear bold semester title and '99% Common' badge in the middle, and circular action arrow on the right.
-              - Applied 30px smooth corner radius, 1px subtle border, and 3-tier bottom drop shadow matching the premium card design system.
+            ### Es Bangla v1.3.46 Release Highlights:
+            - **16:9 Flush Edge-to-Edge News Slider**:
+              - Updated News Slider to exact 16:9 widescreen ratio (`width * 9 / 16`) for perfect banner display without clipping.
+              - Straight square corners (`borderRadius: BorderRadius.zero`) flush with app edges for an edge-to-edge cinematic banner feel.
+            - **Side-by-Side Quick Action Cards (Notepad + Study Reminder)**:
+              - Added brand-new **STUDY NOTEPAD** feature alongside **SET STUDY REMINDER** in a compact, balanced side-by-side row.
+              - Designed with comfortable, standard alternative pastel colors (soft slate cool for Notepad, soft warm honey for Reminder).
+              - Full-featured persistent offline Study Notepad with notes search, color tags, editing, timestamps, and note cards.
+            - **Optimized Vertical Card Spacing**:
+              - Significantly reduced the excess gap below the Study Reminder / Notepad row (12px).
+              - Reduced spacing between all subsequent cards (Semester 3, Semester 4, PYQ, Store, Social) to 13px for a sleek, cohesive look.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
