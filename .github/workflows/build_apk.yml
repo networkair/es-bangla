@@ -65,22 +65,21 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.46
-          name: "Es Bangla v1.3.46 (16:9 Flush News Slider + Study Notepad & Reminder Row + Optimized Card Spacing)"
+          tag_name: v1.3.47
+          name: "Es Bangla v1.3.47 (New 3D Icons & Elevated Social Media Hub Redesign)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.46 Release Highlights:
-            - **16:9 Flush Edge-to-Edge News Slider**:
-              - Updated News Slider to exact 16:9 widescreen ratio (`width * 9 / 16`) for perfect banner display without clipping.
-              - Straight square corners (`borderRadius: BorderRadius.zero`) flush with app edges for an edge-to-edge cinematic banner feel.
-            - **Side-by-Side Quick Action Cards (Notepad + Study Reminder)**:
-              - Added brand-new **STUDY NOTEPAD** feature alongside **SET STUDY REMINDER** in a compact, balanced side-by-side row.
-              - Designed with comfortable, standard alternative pastel colors (soft slate cool for Notepad, soft warm honey for Reminder).
-              - Full-featured persistent offline Study Notepad with notes search, color tags, editing, timestamps, and note cards.
-            - **Optimized Vertical Card Spacing**:
-              - Significantly reduced the excess gap below the Study Reminder / Notepad row (12px).
-              - Reduced spacing between all subsequent cards (Semester 3, Semester 4, PYQ, Store, Social) to 13px for a sleek, cohesive look.
+            ### Es Bangla v1.3.47 Release Highlights:
+            - **Brand-New 3D Icons with Transparent Cutouts**:
+              - Applied crisp 3D spiral notepad with pencil icon for **STUDY NOTEPAD**.
+              - Applied crisp 3D checklist & target bullseye icon for **SET STUDY REMINDER**.
+              - Applied clean 3D stacked hardcover books icon for **SEMESTER 3** & **SEMESTER 4** cards.
+              - Applied high-resolution transparent cutouts for **WhatsApp**, **Instagram**, **YouTube**, and **Telegram**.
+            - **Elevated Social Media Hub Redesign**:
+              - **WhatsApp VIP Community Card**: Soft emerald pastel container with 3D WhatsApp badge and vibrant 'JOIN NOW' button.
+              - **Official Channels Row**: Dedicated YouTube (ভিডিও ক্লাস), Telegram (ফ্রি PDF নোটস), and Instagram (টিপস ও রিলস) cards with comfortable pastel backgrounds and direct links.
+              - **Student Trust & Security Badge**: Verified blue shield badge with West Bengal student community trust message and 4.9 star rating.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

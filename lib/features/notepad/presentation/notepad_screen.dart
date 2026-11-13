@@ -453,17 +453,18 @@ class _NotepadScreenState extends State<NotepadScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            width: 80,
-                            height: 80,
+                            width: 88,
+                            height: 88,
                             decoration: BoxDecoration(
                               color: isDark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF),
                               shape: BoxShape.circle,
                             ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.edit_note_rounded,
-                                size: 44,
-                                color: AppColors.primary,
+                            child: Center(
+                              child: Image.asset(
+                                'assets/icons/ic_notepad.png',
+                                width: 56,
+                                height: 56,
+                                fit: BoxFit.contain,
                               ),
                             ),
                           ),
