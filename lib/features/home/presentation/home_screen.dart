@@ -1212,408 +1212,189 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 1. WhatsApp VIP Updates Banner (Top Hero Card with JOIN NOW button)
-        _buildWhatsappHeroCard(isDark),
-        const SizedBox(height: 14),
-
-        // 2. Stylish Section Divider
-        Row(
-          children: [
-            Expanded(
-              child: Divider(
-                color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-                thickness: 1.0,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                'FOLLOW US ON',
-                style: TextStyle(
-                  fontFamily: 'sans-serif',
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.2,
-                  color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+        // Clean Section Header
+        Padding(
+          padding: const EdgeInsets.only(left: 2, bottom: 12),
+          child: Row(
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF334155) : const Color(0xFFE0F2FE),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.public_rounded,
+                    size: 16,
+                    color: Color(0xFF0070F3),
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Divider(
-                color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-                thickness: 1.0,
+              const SizedBox(width: 10),
+              Text(
+                'OFFICIAL SOCIAL MEDIA',
+                style: TextStyle(
+                  fontFamily: 'sans-serif',
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.4,
+                  color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        const SizedBox(height: 14),
 
-        // 3. Row of 3 Official Social Channels (YouTube, Telegram, Instagram)
+        // Row 1: WhatsApp (Left) & Telegram (Right)
         Row(
           children: [
-            // YouTube Card
             Expanded(
-              child: _buildSocialChannelCard(
-                iconAsset: 'assets/icons/ic_youtube.png',
-                name: 'YouTube',
-                desc: 'ভিডিও ক্লাস',
-                bgColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFFEF2F2),
-                borderColor: isDark ? const Color(0xFF334155) : const Color(0xFFFECACA),
-                url: ApiConstants.youtubeChannelUrl,
+              child: _buildSocialPillCard(
+                name: 'WhatsApp',
+                iconAsset: 'assets/icons/ic_whatsapp.png',
+                iconBgColor: isDark ? const Color(0xFF064E3B).withOpacity(0.4) : const Color(0xFFDCFCE7),
+                arrowColor: const Color(0xFF16A34A),
+                arrowBgColor: isDark ? const Color(0xFF064E3B).withOpacity(0.3) : const Color(0xFFDCFCE7),
+                url: ApiConstants.whatsappUrl,
                 isDark: isDark,
               ),
             ),
-            const SizedBox(width: 10),
-
-            // Telegram Card
+            const SizedBox(width: 12),
             Expanded(
-              child: _buildSocialChannelCard(
-                iconAsset: 'assets/icons/ic_telegram.png',
+              child: _buildSocialPillCard(
                 name: 'Telegram',
-                desc: 'ফ্রি PDF নোটস',
-                bgColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFF0F9FF),
-                borderColor: isDark ? const Color(0xFF334155) : const Color(0xFFBAE6FD),
+                iconAsset: 'assets/icons/ic_telegram.png',
+                iconBgColor: isDark ? const Color(0xFF0C4A6E).withOpacity(0.4) : const Color(0xFFE0F2FE),
+                arrowColor: const Color(0xFF0284C7),
+                arrowBgColor: isDark ? const Color(0xFF0C4A6E).withOpacity(0.3) : const Color(0xFFE0F2FE),
                 url: ApiConstants.telegramChannelUrl,
                 isDark: isDark,
               ),
             ),
-            const SizedBox(width: 10),
+          ],
+        ),
+        const SizedBox(height: 12),
 
-            // Instagram Card
+        // Row 2: YouTube (Left) & Instagram (Right)
+        Row(
+          children: [
             Expanded(
-              child: _buildSocialChannelCard(
-                iconAsset: 'assets/icons/ic_instagram.png',
+              child: _buildSocialPillCard(
+                name: 'YouTube',
+                iconAsset: 'assets/icons/ic_youtube.png',
+                iconBgColor: isDark ? const Color(0xFF7F1D1D).withOpacity(0.4) : const Color(0xFFFEE2E2),
+                arrowColor: const Color(0xFFDC2626),
+                arrowBgColor: isDark ? const Color(0xFF7F1D1D).withOpacity(0.3) : const Color(0xFFFEE2E2),
+                url: ApiConstants.youtubeChannelUrl,
+                isDark: isDark,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildSocialPillCard(
                 name: 'Instagram',
-                desc: 'টিপস ও রিলস',
-                bgColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFFDF2F8),
-                borderColor: isDark ? const Color(0xFF334155) : const Color(0xFFFBCFE8),
+                iconAsset: 'assets/icons/ic_instagram.png',
+                iconBgColor: isDark ? const Color(0xFF701A75).withOpacity(0.4) : const Color(0xFFFCE7F3),
+                arrowColor: const Color(0xFFC026D3),
+                arrowBgColor: isDark ? const Color(0xFF701A75).withOpacity(0.3) : const Color(0xFFFCE7F3),
                 url: ApiConstants.instagramUrl,
                 isDark: isDark,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 14),
-
-        // 4. Trust & Security Badge Card
-        _buildTrustBadgeCard(isDark),
       ],
     );
   }
 
-  Widget _buildWhatsappHeroCard(bool isDark) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF064E3B).withOpacity(0.35) : const Color(0xFFF0FDF4),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isDark ? const Color(0xFF065F46) : const Color(0xFFBBF7D0),
-          width: 1.0,
-        ),
-        boxShadow: _buildPremiumCardShadow(isDark),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => SecurityManager.openExternalUrl(ApiConstants.whatsappUrl),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              child: Row(
-                children: [
-                  // WhatsApp 3D icon container
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF16A34A).withOpacity(0.18),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/icons/ic_whatsapp.png',
-                        width: 32,
-                        height: 32,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-
-                  // Middle text: Header & Subtitle
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'WHATSAPP COMMUNITY',
-                          style: TextStyle(
-                            fontFamily: 'sans-serif',
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 0.3,
-                            color: isDark ? const Color(0xFFF0FDF4) : const Color(0xFF064E3B),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'সবার আগে সব গুরুত্বপূর্ণ আপডেট পান',
-                          style: TextStyle(
-                            fontSize: 11.5,
-                            fontWeight: FontWeight.w600,
-                            color: isDark ? const Color(0xFF86EFAC) : const Color(0xFF15803D),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
-                  // Action Button: Green Pill 'JOIN NOW'
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF16A34A), Color(0xFF15803D)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF16A34A).withOpacity(0.35),
-                          blurRadius: 6,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'JOIN NOW',
-                          style: TextStyle(
-                            fontFamily: 'sans-serif',
-                            fontSize: 11.0,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 0.4,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialChannelCard({
-    required String iconAsset,
+  Widget _buildSocialPillCard({
     required String name,
-    required String desc,
-    required Color bgColor,
-    required Color borderColor,
+    required String iconAsset,
+    required Color iconBgColor,
+    required Color arrowColor,
+    required Color arrowBgColor,
     required String url,
     required bool isDark,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(20),
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(22),
         border: Border.all(
-          color: borderColor,
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE8EDF4),
           width: 1.0,
         ),
         boxShadow: _buildPremiumCardShadow(isDark),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(22),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: () => SecurityManager.openExternalUrl(url),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              child: Row(
                 children: [
-                  // Icon container
+                  // Icon container with comfortable pastel tint
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 38,
+                    height: 38,
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF334155) : Colors.white,
+                      color: iconBgColor,
                       shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
-                          blurRadius: 4,
-                          offset: const Offset(0, 1.5),
-                        ),
-                      ],
                     ),
                     child: Center(
                       child: Image.asset(
                         iconAsset,
-                        width: 26,
-                        height: 26,
+                        width: 25,
+                        height: 25,
                         fit: BoxFit.contain,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 7),
+                  const SizedBox(width: 10),
 
-                  // Channel Name
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontFamily: 'sans-serif',
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w800,
-                      color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                  // Channel Name (Clean, single bold line, strictly NO subtitles)
+                  Expanded(
+                    child: Text(
+                      name,
+                      style: TextStyle(
+                        fontFamily: 'sans-serif',
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.2,
+                        color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(width: 4),
 
-                  // Purpose description
-                  Text(
-                    desc,
-                    style: TextStyle(
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.w600,
-                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                  // Small right circular arrow button
+                  Container(
+                    width: 26,
+                    height: 26,
+                    decoration: BoxDecoration(
+                      color: arrowBgColor,
+                      shape: BoxShape.circle,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    child: Center(
+                      child: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 10,
+                        color: arrowColor,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildTrustBadgeCard(bool isDark) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF0F7FF),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isDark ? const Color(0xFF1E3A8A).withOpacity(0.5) : const Color(0xFFBAE6FD),
-          width: 1.0,
-        ),
-        boxShadow: _buildPremiumCardShadow(isDark),
-      ),
-      child: Row(
-        children: [
-          // Blue Shield Icon
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1E293B) : Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF0070F3).withOpacity(0.15),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: const Center(
-              child: Icon(
-                Icons.verified_user_rounded,
-                color: Color(0xFF0070F3),
-                size: 21,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-
-          // Trust Text
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Trusted Educational Platform',
-                  style: TextStyle(
-                    fontFamily: 'sans-serif',
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w700,
-                    color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF475569),
-                  ),
-                ),
-                const SizedBox(height: 1),
-                Text(
-                  'পশ্চিমবঙ্গের ৫০,০০০+ ছাত্র-ছাত্রীদের ভরসা',
-                  style: TextStyle(
-                    fontSize: 13.0,
-                    fontWeight: FontWeight.w900,
-                    color: isDark ? const Color(0xFF60A5FA) : const Color(0xFF0070F3),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Star Rating Badge
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1E293B) : Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: const Color(0xFFF59E0B).withOpacity(0.4),
-                width: 1.0,
-              ),
-            ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.star_rounded,
-                  color: Color(0xFFF59E0B),
-                  size: 14,
-                ),
-                SizedBox(width: 3),
-                Text(
-                  '4.9',
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w900,
-                    color: Color(0xFFD97706),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

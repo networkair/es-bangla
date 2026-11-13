@@ -65,21 +65,17 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.47
-          name: "Es Bangla v1.3.47 (New 3D Icons & Elevated Social Media Hub Redesign)"
+          tag_name: v1.3.48
+          name: "Es Bangla v1.3.48 (Refined 2x2 Clean Social Media Hub & Card Redesign)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.47 Release Highlights:
-            - **Brand-New 3D Icons with Transparent Cutouts**:
-              - Applied crisp 3D spiral notepad with pencil icon for **STUDY NOTEPAD**.
-              - Applied crisp 3D checklist & target bullseye icon for **SET STUDY REMINDER**.
-              - Applied clean 3D stacked hardcover books icon for **SEMESTER 3** & **SEMESTER 4** cards.
-              - Applied high-resolution transparent cutouts for **WhatsApp**, **Instagram**, **YouTube**, and **Telegram**.
-            - **Elevated Social Media Hub Redesign**:
-              - **WhatsApp VIP Community Card**: Soft emerald pastel container with 3D WhatsApp badge and vibrant 'JOIN NOW' button.
-              - **Official Channels Row**: Dedicated YouTube (ভিডিও ক্লাস), Telegram (ফ্রি PDF নোটস), and Instagram (টিপস ও রিলস) cards with comfortable pastel backgrounds and direct links.
-              - **Student Trust & Security Badge**: Verified blue shield badge with West Bengal student community trust message and 4.9 star rating.
+            ### Es Bangla v1.3.48 Release Highlights:
+            - **Clean Symmetrical 2x2 Social Media Hub**:
+              - Completely redesigned the Social Media section into a balanced 2x2 grid of official channel cards (WhatsApp, Telegram, YouTube, Instagram).
+              - Removed all subtitle texts ('ফ্রি PDF', 'ভিডিও ক্লাস', 'টিপস ও রিলস') as requested for a clean, minimal, uncluttered design.
+              - Completely discarded the competitor reference structure (no duplicate green banner, divider, or footer badge).
+              - Cards now use Es Bangla's signature clean white/dark canvas, smooth 22px corners, 3-tier bottom drop shadow, and circular action arrows matching the app's design language.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
