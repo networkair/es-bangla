@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
@@ -50,6 +53,131 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  Future<void> _pickImageFromGallery() async {
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 88,
+      );
+
+      if (pickedFile == null) return;
+
+      // Ensure directory exists in local app storage permanently
+      final appDir = await getApplicationDocumentsDirectory();
+      final profileDir = Directory('${appDir.path}/profile');
+      if (!await profileDir.exists()) {
+        await profileDir.create(recursive: true);
+      }
+
+      // Copy image permanently to local storage
+      final fileName = 'avatar_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final savedFile = await File(pickedFile.path).copy('${profileDir.path}/$fileName');
+
+      // Update storage and state
+      if (mounted) {
+        setState(() {
+          _userAvatar = savedFile.path;
+        });
+        _storage.userAvatar = savedFile.path;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+                SizedBox(width: 8),
+                Expanded(child: Text('প্রোফাইল ছবি সফলভাবে আপডেট করা হয়েছে!')),
+              ],
+            ),
+            backgroundColor: Color(0xFF16A34A),
+            duration: Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('ছবি নির্বাচন ব্যর্থ হয়েছে: $e'),
+            backgroundColor: const Color(0xFFE11D48),
+            duration: const Duration(seconds: 3),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+
+  Widget _buildAvatarWidget(String avatarPath, String displayName, {double size = 66}) {
+    final initial = displayName.isNotEmpty ? displayName[0].toUpperCase() : 'S';
+
+    if (avatarPath.isEmpty) {
+      return Center(
+        child: Text(
+          initial,
+          style: TextStyle(
+            fontSize: size * 0.4,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+          ),
+        ),
+      );
+    }
+
+    if (avatarPath.startsWith('assets/')) {
+      return Transform.scale(
+        scale: 1.12,
+        child: Image.asset(
+          avatarPath,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => Center(
+            child: Text(
+              initial,
+              style: TextStyle(
+                fontSize: size * 0.4,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    final file = File(avatarPath);
+    if (!file.existsSync()) {
+      return Center(
+        child: Text(
+          initial,
+          style: TextStyle(
+            fontSize: size * 0.4,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+          ),
+        ),
+      );
+    }
+
+    return Image.file(
+      file,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => Center(
+        child: Text(
+          initial,
+          style: TextStyle(
+            fontSize: size * 0.4,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
   void _showAvatarPicker() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -60,6 +188,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (ctx) {
         return StatefulBuilder(
           builder: (modalContext, setModalState) {
+            final isCustomAvatar = _userAvatar.isNotEmpty && !_userAvatar.startsWith('assets/');
+
             return Container(
               padding: const EdgeInsets.fromLTRB(20, 14, 20, 28),
               decoration: BoxDecoration(
@@ -95,7 +225,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: const Color(0xFF2563EB).withOpacity(0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(Icons.face_rounded, color: Color(0xFF2563EB), size: 22),
+                        child: const Icon(Icons.add_a_photo_rounded, color: Color(0xFF2563EB), size: 22),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -103,18 +233,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Choose Your Avatar',
+                              'Profile Photo (প্রোফাইল ছবি)',
                               style: TextStyle(
-                                fontSize: 17,
+                                fontSize: 16.5,
                                 fontWeight: FontWeight.bold,
                                 color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                               ),
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'Select an avatar for your profile',
+                              'Select from gallery or choose an avatar',
                               style: TextStyle(
-                                fontSize: 12.5,
+                                fontSize: 12,
                                 color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
                               ),
                             ),
@@ -142,7 +272,123 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 18),
+
+                  // 1. Choose from Gallery Button
+                  InkWell(
+                    onTap: () async {
+                      Navigator.pop(ctx);
+                      await _pickImageFromGallery();
+                    },
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF2563EB).withOpacity(0.32),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.photo_library_rounded, color: Colors.white, size: 21),
+                          SizedBox(width: 10),
+                          Text(
+                            'Choose from Gallery (গ্যালারি থেকে ফটো দিন)',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Active Custom Photo Status (if gallery photo is selected)
+                  if (isCustomAvatar) ...[
+                    const SizedBox(height: 14),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: const Color(0xFF2563EB).withOpacity(0.4),
+                          width: 1.2,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 38,
+                            height: 38,
+                            decoration: const BoxDecoration(shape: BoxShape.circle),
+                            clipBehavior: Clip.antiAlias,
+                            child: Image.file(
+                              File(_userAvatar),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Current Device Photo',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                                ),
+                                SizedBox(height: 1),
+                                Text(
+                                  'Saved locally in internal storage',
+                                  style: TextStyle(fontSize: 11, color: Color(0xFF16A34A), fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.check_circle_rounded, color: Color(0xFF2563EB), size: 20),
+                        ],
+                      ),
+                    ),
+                  ],
+
+                  const SizedBox(height: 18),
+
+                  // Divider with label
+                  Row(
+                    children: [
+                      Expanded(child: Divider(color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0))),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          'OR CHOOSE AN AVATAR',
+                          style: TextStyle(
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.8,
+                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                          ),
+                        ),
+                      ),
+                      Expanded(child: Divider(color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0))),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+
                   // Grid of 10 avatars
                   GridView.builder(
                     shrinkWrap: true,
@@ -897,34 +1143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   child: ClipOval(
-                    child: _userAvatar.isNotEmpty
-                        ? Transform.scale(
-                            scale: 1.12,
-                            child: Image.asset(
-                              _userAvatar,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Center(
-                                child: Text(
-                                  displayName.isNotEmpty ? displayName[0].toUpperCase() : 'S',
-                                  style: const TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Center(
-                            child: Text(
-                              displayName.isNotEmpty ? displayName[0].toUpperCase() : 'S',
-                              style: const TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                    child: _buildAvatarWidget(_userAvatar, displayName, size: 66),
                   ),
                 ),
                 Positioned(
@@ -944,10 +1163,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Icon(
-                        Icons.add_rounded,
-                        size: 16,
+                        _userAvatar.isNotEmpty ? Icons.camera_alt_rounded : Icons.add_rounded,
+                        size: 13,
                         color: Colors.white,
                       ),
                     ),

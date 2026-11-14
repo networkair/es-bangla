@@ -1,7 +1,7 @@
 name: es_bangla
 description: "Es Bangla - Class 12 Study & Mock Test App (Semester 3 & 4)"
 publish_to: "none"
-version: 1.3.58+89
+version: 1.3.59+90
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -33,10 +33,12 @@ dependencies:
   shared_preferences: ^2.2.3
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  path_provider: ^2.1.4
 
   # Media, PDF & Viewer
   cached_network_image: ^3.3.1
   pdfrx: ^1.0.67
+  image_picker: ^1.1.2
 
   # Notifications & Alarms
   flutter_local_notifications: ^17.1.2

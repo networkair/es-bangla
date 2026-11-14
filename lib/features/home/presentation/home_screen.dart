@@ -226,11 +226,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 13),
 
-                  // 5. Es Store Horizontal Card
+                  // 5. Study Material Horizontal Card
                   RepaintBoundary(
                     child: _buildActionTile(
-                      title: 'Es Store',
-                      iconAsset: 'assets/icons/ic_store.png',
+                      title: 'STUDY MATERIAL',
+                      iconAsset: 'assets/icons/ic_study_material.png',
                       accentLineColor: const Color(0xFFF59E0B),
                       buttonBgColor: const Color(0xFFFFEDD5),
                       buttonIconColor: const Color(0xFFD97706),
@@ -744,11 +744,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Center(
                     child: Image.asset(
                       iconAsset,
-                      width: 54,
-                      height: 54,
+                      width: 56,
+                      height: 56,
                       fit: BoxFit.contain,
-                      cacheWidth: 160,
-                      cacheHeight: 160,
+                      cacheWidth: 170,
+                      cacheHeight: 170,
                     ),
                   ),
                 ),
@@ -770,6 +770,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 1.22,
                           color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F1E36),
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 6),
                       Container(
