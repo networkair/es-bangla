@@ -55,31 +55,33 @@ jobs:
           echo "=========================================="
 
 
+      - name: Extract App Version
+        id: app_version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' ')
+          BUILD_NUM=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f2 | tr -d ' ')
+          echo "version=v$VERSION" >> $GITHUB_OUTPUT
+          echo "build_num=$BUILD_NUM" >> $GITHUB_OUTPUT
+          echo "App Version: v$VERSION (Build $BUILD_NUM)"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.3.53
-          name: "Es Bangla v1.3.53 (Suggestion Store, Note Reader Detail Page, PDF Landscape Mode & Slider Animation)"
+          tag_name: ${{ steps.app_version.outputs.version }}
+          name: "Es Bangla ${{ steps.app_version.outputs.version }} (Encrypted Offline Mock Test Bundles & 0ms Instant Loading)"
           draft: false
           prerelease: false
           body: |
-            ### Es Bangla v1.3.53 Release Highlights:
-            - **Suggestion Store Renamed**:
-              - Renamed the store card on the Home Screen from "PREMIUM STORE" to "সাজেশন Store".
-            - **Dedicated Note Reader Detail Screen**:
-              - Tapping any note now navigates to a dedicated distraction-free reading page (`NoteDetailScreen`).
-              - Selectable note text with word counts, date badges, quick clipboard copy, in-place edit modal, and safe deletion.
-            - **PDF Viewer Portrait & Landscape Rotation**:
-              - Added instant orientation toggle between Portrait and Landscape modes in both the top header and floating controls.
-              - Enhanced reading experience for wide pages, tables, questions, and notes.
-            - **Smooth News Slider Auto-Slide Animation**:
-              - Fixed auto-slide initialization and transition animation with `650ms` cubic ease curve.
-              - Added auto-timer reset upon manual touch interaction for silky smooth experience.
-            - **WhatsApp Card Action Polish**:
-              - Updated action button to "Join Channel" with matching typography.
-            - **Academic & Profile Screen Cleanups**:
-              - Cleaned semester selection modal to pure English without clutter subtitles.
-              - Removed subtitles from Help & Support and Privacy Policy in Profile screen.
+            ### Es Bangla ${{ steps.app_version.outputs.version }} Release Highlights:
+            - **Offline-First Encrypted Mock Test Bundles**:
+              - All 1,126 mock test sets across 9 subjects (over 11,260 questions & answers) are now securely bundled and encrypted.
+              - Instant 0ms question paper loading, zero loading spinners, and resilient to slow 2G/3G internet connections.
+            - **Background Silent OTA Cloud Sync**:
+              - Question and answer corrections are silently fetched in the background over the air without requiring Play Store app updates.
+            - **Background Isolate Parsing**:
+              - All bundle decryption and JSON parsing are executed on background isolates to guarantee 60/120 FPS buttery smooth UI.
+            - **Preserved Online Security**:
+              - Full Firebase Auth, Cloud Firestore real-time premium entitlement locks, and Telegram reporting remain strictly online-authoritative.
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
