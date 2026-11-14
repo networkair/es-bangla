@@ -263,39 +263,58 @@ class MockTestRepository {
     String subjectId,
     String setFile, {
     String? version,
+    void Function(TestPaperModel updatedPaper)? onLiveUpdate,
   }) async {
     final cacheKey = 'test_${semester}_${subjectId}_$setFile';
+
+    TestPaperModel? initialPaper;
+    String? currentRawJson;
 
     // 1. Check in-memory session cache (0ms instant)
     if (_memoryCache.containsKey(cacheKey)) {
       final cached = _memoryCache[cacheKey];
       if (cached is TestPaperModel) {
-        _silentSyncTestPaper(semester, subjectId, setFile, cacheKey, currentVersion: cached.metadata.version, version: version);
-        return cached;
+        initialPaper = cached;
       }
     }
 
     // 2. Check disk cache (previously synced or cached update)
-    final localJson = _storage.getCachedResponse(cacheKey);
-    if (localJson != null) {
-      try {
-        final paper = await compute(_parseTestPaperJson, localJson);
-        _memoryCache[cacheKey] = paper;
-        _silentSyncTestPaper(semester, subjectId, setFile, cacheKey, currentVersion: paper.metadata.version, version: version);
-        return paper;
-      } catch (_) {}
+    if (initialPaper == null) {
+      final localJson = _storage.getCachedResponse(cacheKey);
+      if (localJson != null) {
+        try {
+          initialPaper = await compute(_parseTestPaperJson, localJson);
+          currentRawJson = localJson;
+          _memoryCache[cacheKey] = initialPaper;
+        } catch (_) {}
+      }
     }
 
     // 3. Check bundled pre-packaged encrypted offline bundle (0ms instant, works 100% offline!)
-    try {
-      final bundledMap = await _bundleService.getBundledTestPaper(semester, subjectId, setFile);
-      if (bundledMap != null) {
-        final paper = await compute(_parseTestPaperJson, bundledMap);
-        _memoryCache[cacheKey] = paper;
-        _silentSyncTestPaper(semester, subjectId, setFile, cacheKey, currentVersion: paper.metadata.version, version: version);
-        return paper;
-      }
-    } catch (_) {}
+    if (initialPaper == null) {
+      try {
+        final bundledMap = await _bundleService.getBundledTestPaper(semester, subjectId, setFile);
+        if (bundledMap != null) {
+          initialPaper = await compute(_parseTestPaperJson, bundledMap);
+          currentRawJson = jsonEncode(bundledMap);
+          _memoryCache[cacheKey] = initialPaper;
+        }
+      } catch (_) {}
+    }
+
+    // If local version exists, return immediately in 0ms and trigger background OTA check!
+    if (initialPaper != null) {
+      _silentSyncTestPaper(
+        semester,
+        subjectId,
+        setFile,
+        cacheKey,
+        currentVersion: initialPaper.metadata.version,
+        currentRawJson: currentRawJson,
+        onLiveUpdate: onLiveUpdate,
+      );
+      return initialPaper;
+    }
 
     // 4. Fallback network fetch if set was not found locally (e.g. brand new set added to cloud after app release)
     final url = ApiConstants.testSetUrl(semester, subjectId, setFile, version: version);
@@ -317,29 +336,35 @@ class MockTestRepository {
     String setFile,
     String cacheKey, {
     String? currentVersion,
-    String? version,
+    String? currentRawJson,
+    void Function(TestPaperModel updatedPaper)? onLiveUpdate,
   }) {
     // Run in background without awaiting or blocking the UI
     Future.microtask(() async {
       try {
-        // If version hash matches current version, no need to re-download!
-        if (version != null && currentVersion != null && version == currentVersion) {
-          return;
-        }
-        final url = ApiConstants.testSetUrl(semester, subjectId, setFile, version: version);
+        // Cache-busting timestamp parameter to ensure fresh cloud copy
+        final t = DateTime.now().millisecondsSinceEpoch;
+        final baseUrl = ApiConstants.testSetUrl(semester, subjectId, setFile);
+        final url = baseUrl.contains('?') ? '$baseUrl&_t=$t' : '$baseUrl?_t=$t';
+
         final response = await _dio.get(
           url,
           options: Options(
-            receiveTimeout: const Duration(seconds: 6),
-            sendTimeout: const Duration(seconds: 4),
+            receiveTimeout: const Duration(seconds: 8),
+            sendTimeout: const Duration(seconds: 5),
           ),
         );
         if (response.statusCode == 200) {
           final rawString = response.data is String ? response.data : jsonEncode(response.data);
           final updatedPaper = await compute(_parseTestPaperJson, rawString);
-          if (currentVersion == null || updatedPaper.metadata.version != currentVersion) {
+
+          final bool hasChanged = (currentVersion != null && updatedPaper.metadata.version != currentVersion) ||
+              (currentRawJson != null && rawString.trim() != currentRawJson.trim());
+
+          if (hasChanged) {
             await _storage.setCachedResponse(cacheKey, rawString);
             _memoryCache[cacheKey] = updatedPaper;
+            onLiveUpdate?.call(updatedPaper);
           }
         }
       } catch (_) {

@@ -54,6 +54,27 @@ class _QuizScreenState extends State<QuizScreen> {
         widget.subjectId,
         widget.setFile,
         version: widget.version,
+        onLiveUpdate: (updatedPaper) {
+          if (mounted && _userAnswers.isEmpty) {
+            setState(() {
+              _testPaper = updatedPaper;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Row(
+                  children: [
+                    Icon(Icons.cloud_done_rounded, color: Colors.white, size: 18),
+                    SizedBox(width: 8),
+                    Expanded(child: Text('✨ নতুন প্রশ্নের আপডেট পেয়েছি!')),
+                  ],
+                ),
+                backgroundColor: Color(0xFF16A34A),
+                duration: Duration(seconds: 2),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        },
       );
       if (mounted) {
         setState(() {
