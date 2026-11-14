@@ -1210,7 +1210,7 @@ class _HomeNewsSliderState extends State<_HomeNewsSlider> {
                   border: Border.all(
                     color: widget.isDark
                         ? const Color(0xFF334155)
-                        : const Color(0xFF0F172A).withOpacity(0.18),
+                        : const Color(0xFFE2E8F0),
                     width: 1.0,
                   ),
                 ),
@@ -1284,7 +1284,7 @@ class _HomeNewsSliderState extends State<_HomeNewsSlider> {
                     border: Border.all(
                       color: widget.isDark
                           ? const Color(0xFF334155)
-                          : const Color(0xFF0F172A).withOpacity(0.18), // Crisp, thin black stroke
+                          : const Color(0xFFE2E8F0),
                       width: 1.0,
                     ),
                     boxShadow: [

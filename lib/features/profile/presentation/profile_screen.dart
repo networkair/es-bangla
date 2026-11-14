@@ -233,9 +233,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Profile Photo (প্রোফাইল ছবি)',
+                              'Profile Photo',
                               style: TextStyle(
-                                fontSize: 16.5,
+                                fontSize: 17,
                                 fontWeight: FontWeight.bold,
                                 color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
                               ),
@@ -305,9 +305,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Icon(Icons.photo_library_rounded, color: Colors.white, size: 21),
                           SizedBox(width: 10),
                           Text(
-                            'Choose from Gallery (গ্যালারি থেকে ফটো দিন)',
+                            'Choose from Gallery',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.5,
                               fontWeight: FontWeight.w800,
                               color: Colors.white,
                               letterSpacing: 0.2,
@@ -345,19 +345,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           const SizedBox(width: 12),
                           const Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Current Device Photo',
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                                ),
-                                SizedBox(height: 1),
-                                Text(
-                                  'Saved locally in internal storage',
-                                  style: TextStyle(fontSize: 11, color: Color(0xFF16A34A), fontWeight: FontWeight.w600),
-                                ),
-                              ],
+                            child: Text(
+                              'Current Photo',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
                             ),
                           ),
                           const Icon(Icons.check_circle_rounded, color: Color(0xFF2563EB), size: 20),

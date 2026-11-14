@@ -225,7 +225,9 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
         Expanded(
           child: GridView.builder(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-            physics: const BouncingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
+            addRepaintBoundaries: true,
+            addAutomaticKeepAlives: false,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 0.85,
@@ -350,69 +352,65 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
     final theme = _getSubjectTheme(subject);
     final displayName = _getCleanDisplayName(subject.name, subject.subjectId);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: widget.isPremiumMode
-              ? const Color(0xFFFDE68A)
-              : (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
-          width: widget.isPremiumMode ? 1.4 : 1.2,
+    return RepaintBoundary(
+      child: Container(
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E293B) : Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: widget.isPremiumMode
+                ? const Color(0xFFFDE68A)
+                : (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
+            width: widget.isPremiumMode ? 1.4 : 1.2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.25 : 0.04),
+              offset: const Offset(0, 4),
+              blurRadius: 10,
+            ),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.35 : 0.05),
-            offset: const Offset(0, 8),
-            blurRadius: 18,
-            spreadRadius: -2,
-          ),
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F1E36)).withOpacity(isDark ? 0.15 : 0.02),
-            offset: const Offset(0, 2),
-            blurRadius: 4,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MockTopicsSetsScreen(
-                    subject: subject,
-                    isPremiumMode: widget.isPremiumMode,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => MockTopicsSetsScreen(
+                      subject: subject,
+                      isPremiumMode: widget.isPremiumMode,
+                    ),
                   ),
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(14, 16, 12, 14),
-              child: Column(
-                children: [
-                  // 1. Top Section: Large 3D Subject Icon directly on card
-                  Expanded(
-                    child: Center(
-                      child: Image.asset(
-                        _getSubjectAsset(subject),
-                        width: 88,
-                        height: 88,
-                        fit: BoxFit.contain,
-                        errorBuilder: (_, __, ___) => Icon(
-                          theme.icon,
-                          size: 54,
-                          color: theme.color,
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(14, 16, 12, 14),
+                child: Column(
+                  children: [
+                    // 1. Top Section: Large 3D Subject Icon directly on card (Hardware accelerated with downscaled raster cache)
+                    Expanded(
+                      child: Center(
+                        child: Image.asset(
+                          _getSubjectAsset(subject),
+                          width: 88,
+                          height: 88,
+                          cacheWidth: 220,
+                          cacheHeight: 220,
+                          fit: BoxFit.contain,
+                          errorBuilder: (_, __, ___) => Icon(
+                            theme.icon,
+                            size: 54,
+                            color: theme.color,
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
                   // 2. Bottom Row: Subject Name on Left, Double Arrow Button on Right
                   Row(
@@ -455,8 +453,9 @@ class _MockSubjectSelectScreenState extends State<MockSubjectSelectScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   _SubjectTheme _getSubjectTheme(SubjectModel subject) {
     final id = subject.subjectId.toLowerCase();

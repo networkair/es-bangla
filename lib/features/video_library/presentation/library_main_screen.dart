@@ -57,14 +57,15 @@ class LibraryMainScreen extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
-          color: isDark ? const Color(0xFF334155) : const Color(0xFFBAE6FD).withOpacity(0.6),
-          width: 1.5,
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0284C7)).withOpacity(isDark ? 0.25 : 0.08),
+            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.05),
             blurRadius: 10,
             spreadRadius: -1,
             offset: const Offset(0, 4),
@@ -74,10 +75,11 @@ class LibraryMainScreen extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(21),
         child: AspectRatio(
-          aspectRatio: 1672 / 941,
+          aspectRatio: 4 / 3,
           child: Image.asset(
             'assets/images/library_banner.png',
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
+            cacheWidth: 800,
             errorBuilder: (context, error, stackTrace) {
               return Container(
                 decoration: BoxDecoration(

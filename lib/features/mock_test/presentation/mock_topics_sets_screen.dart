@@ -283,6 +283,9 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
 
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 30),
+      physics: const ClampingScrollPhysics(),
+      addRepaintBoundaries: true,
+      addAutomaticKeepAlives: false,
       itemCount: validTopics.length,
       itemBuilder: (context, index) {
         final topic = validTopics[index];
@@ -337,8 +340,11 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
               SizedBox(
                 height: 172,
                 child: ListView.separated(
-                  clipBehavior: Clip.none,
+                  clipBehavior: Clip.hardEdge,
                   scrollDirection: Axis.horizontal,
+                  physics: const ClampingScrollPhysics(),
+                  addRepaintBoundaries: true,
+                  addAutomaticKeepAlives: false,
                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
                   itemCount: setsToShow.length,
                   separatorBuilder: (_, __) => const SizedBox(width: 14),
@@ -360,32 +366,26 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
     final isUnlocked = _isSetAccessible(set);
     final isDedicated = _isDedicatedPremium(set);
 
-    return Container(
-      width: 148,
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isUnlocked
-              ? (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0).withOpacity(0.8))
-              : AppColors.premiumGold.withOpacity(0.4),
-          width: 1.0,
+    return RepaintBoundary(
+      child: Container(
+        width: 148,
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E293B) : Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: isUnlocked
+                ? (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0).withOpacity(0.8))
+                : AppColors.premiumGold.withOpacity(0.4),
+            width: 1.0,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.25 : 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-        boxShadow: [
-          // Soft bottom-only drop shadow matching user reference image
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.35 : 0.08),
-            blurRadius: 20,
-            spreadRadius: -2,
-            offset: const Offset(0, 10),
-          ),
-          BoxShadow(
-            color: (isDark ? Colors.black : const Color(0xFF0F172A)).withOpacity(isDark ? 0.15 : 0.03),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -572,6 +572,7 @@ class _MockTopicsSetsScreenState extends State<MockTopicsSetsScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
