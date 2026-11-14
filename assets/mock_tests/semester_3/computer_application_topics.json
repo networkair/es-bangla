@@ -1,0 +1,570 @@
+{
+  "schema_version": 1,
+  "subject_id": "computer_application",
+  "topics": [
+    {
+      "topic_id": "topic_python_programming",
+      "name": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম",
+      "order": 1,
+      "sets": [
+        {
+          "set_file": "python_programming_set_1",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "72dc1565"
+        },
+        {
+          "set_file": "python_programming_set_2",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e900b447"
+        },
+        {
+          "set_file": "python_programming_set_3",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b370c1dd"
+        },
+        {
+          "set_file": "python_programming_set_4",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b7d38560"
+        },
+        {
+          "set_file": "python_programming_set_5",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c94dc306"
+        },
+        {
+          "set_file": "python_programming_set_6",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5fed89de"
+        },
+        {
+          "set_file": "python_programming_set_7",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b779abb2"
+        },
+        {
+          "set_file": "python_programming_set_8",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "709bdebb"
+        },
+        {
+          "set_file": "python_programming_set_9",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "74307354"
+        },
+        {
+          "set_file": "python_programming_set_10",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6d441700"
+        },
+        {
+          "set_file": "python_programming_set_11",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d716211f"
+        },
+        {
+          "set_file": "python_programming_set_12",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bf3be01e"
+        },
+        {
+          "set_file": "python_programming_set_13",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a82c9762"
+        },
+        {
+          "set_file": "python_programming_set_14",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "178b4a92"
+        },
+        {
+          "set_file": "python_programming_set_15",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2c9a1d67"
+        },
+        {
+          "set_file": "python_programming_set_16",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 16",
+          "set_number": 16,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6e7045d9"
+        },
+        {
+          "set_file": "python_programming_set_17",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 17",
+          "set_number": 17,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8bad438c"
+        },
+        {
+          "set_file": "python_programming_set_18",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 18",
+          "set_number": 18,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f4c3c016"
+        },
+        {
+          "set_file": "python_programming_set_19",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 19",
+          "set_number": 19,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0349fafb"
+        },
+        {
+          "set_file": "python_programming_set_20",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 20",
+          "set_number": 20,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "680f6a68"
+        },
+        {
+          "set_file": "python_programming_set_21",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 21",
+          "set_number": 21,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "aec8b460"
+        },
+        {
+          "set_file": "python_programming_set_22",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 22",
+          "set_number": 22,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fd534ad2"
+        },
+        {
+          "set_file": "python_programming_set_23",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 23",
+          "set_number": 23,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "828c6bfe"
+        },
+        {
+          "set_file": "python_programming_set_24",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 24",
+          "set_number": 24,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "05eac724"
+        },
+        {
+          "set_file": "python_programming_set_25",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 25",
+          "set_number": 25,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d1ab689e"
+        },
+        {
+          "set_file": "python_programming_set_26",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 26",
+          "set_number": 26,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "943c2bfb"
+        },
+        {
+          "set_file": "python_programming_set_27",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 27",
+          "set_number": 27,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "637b68c6"
+        },
+        {
+          "set_file": "python_programming_set_28",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 28",
+          "set_number": 28,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "346c4cc7"
+        },
+        {
+          "set_file": "python_programming_set_29",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 29",
+          "set_number": 29,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0debd30f"
+        },
+        {
+          "set_file": "python_programming_set_30",
+          "title": "পাইথন প্রোগ্রামিং ও অ্যালগরিদম – মক টেস্ট 30",
+          "set_number": 30,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2cb13d5b"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_ecommerce",
+      "name": "ই-কমার্স ও ই-গভর্ন্যান্স",
+      "order": 2,
+      "sets": [
+        {
+          "set_file": "ecommerce_set_1",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b8e68edb"
+        },
+        {
+          "set_file": "ecommerce_set_2",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3f4c5319"
+        },
+        {
+          "set_file": "ecommerce_set_3",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a5efad29"
+        },
+        {
+          "set_file": "ecommerce_set_4",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "73e8985d"
+        },
+        {
+          "set_file": "ecommerce_set_5",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "971d9096"
+        },
+        {
+          "set_file": "ecommerce_set_6",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1bad4fc2"
+        },
+        {
+          "set_file": "ecommerce_set_7",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a281f407"
+        },
+        {
+          "set_file": "ecommerce_set_8",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e5eae1f4"
+        },
+        {
+          "set_file": "ecommerce_set_9",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "79d77cab"
+        },
+        {
+          "set_file": "ecommerce_set_10",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "62f5c951"
+        },
+        {
+          "set_file": "ecommerce_set_11",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "328f2e68"
+        },
+        {
+          "set_file": "ecommerce_set_12",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c8683cfd"
+        },
+        {
+          "set_file": "ecommerce_set_13",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f5f3ea29"
+        },
+        {
+          "set_file": "ecommerce_set_14",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0dc98e8d"
+        },
+        {
+          "set_file": "ecommerce_set_15",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f1ac2eef"
+        },
+        {
+          "set_file": "ecommerce_set_16",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 16",
+          "set_number": 16,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ab5bbd59"
+        },
+        {
+          "set_file": "ecommerce_set_17",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 17",
+          "set_number": 17,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3f7e3e6b"
+        },
+        {
+          "set_file": "ecommerce_set_18",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 18",
+          "set_number": 18,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6bddbf69"
+        },
+        {
+          "set_file": "ecommerce_set_19",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 19",
+          "set_number": 19,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2a1466b8"
+        },
+        {
+          "set_file": "ecommerce_set_20",
+          "title": "ই-কমার্স ও ই-গভর্ন্যান্স – মক টেস্ট 20",
+          "set_number": 20,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "da22d7f6"
+        }
+      ]
+    }
+  ]
+}

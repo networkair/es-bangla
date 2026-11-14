@@ -1,0 +1,1415 @@
+{
+  "schema_version": 1,
+  "subject_id": "philosophy",
+  "topics": [
+    {
+      "topic_id": "topic_substance",
+      "name": "পাশ্চাত্য দর্শন : দ্রব্য (দেকার্ত, স্পিনোজা, লাইবনিজ, লক, বার্কলে ও হিউম)",
+      "order": 1,
+      "sets": [
+        {
+          "set_file": "substance_set_1",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "631f8f10"
+        },
+        {
+          "set_file": "substance_set_2",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "919afa77"
+        },
+        {
+          "set_file": "substance_set_3",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "12b6d020"
+        },
+        {
+          "set_file": "substance_set_4",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ff082f72"
+        },
+        {
+          "set_file": "substance_set_5",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bc49b4d8"
+        },
+        {
+          "set_file": "substance_set_6",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e509b7d9"
+        },
+        {
+          "set_file": "substance_set_7",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1387aa67"
+        },
+        {
+          "set_file": "substance_set_8",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "acece0d1"
+        },
+        {
+          "set_file": "substance_set_9",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ed7e329b"
+        },
+        {
+          "set_file": "substance_set_10",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e18dee62"
+        },
+        {
+          "set_file": "substance_set_11",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5d660f21"
+        },
+        {
+          "set_file": "substance_set_12",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "03552614"
+        },
+        {
+          "set_file": "substance_set_13",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "49015654"
+        },
+        {
+          "set_file": "substance_set_14",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a7c7b4b2"
+        },
+        {
+          "set_file": "substance_set_15",
+          "title": "পাশ্চাত্য দর্শন : দ্রব্য – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bd4a3299"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_causality",
+      "name": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ (সতত সংযোগতত্ত্ব ও প্রসক্তিতত্ত্ব)",
+      "order": 2,
+      "sets": [
+        {
+          "set_file": "causality_set_1",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f5301d93"
+        },
+        {
+          "set_file": "causality_set_2",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ee5103f5"
+        },
+        {
+          "set_file": "causality_set_3",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "210184f4"
+        },
+        {
+          "set_file": "causality_set_4",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "98d54184"
+        },
+        {
+          "set_file": "causality_set_5",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "94dc5f5e"
+        },
+        {
+          "set_file": "causality_set_6",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "89ee5640"
+        },
+        {
+          "set_file": "causality_set_7",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a8ea003e"
+        },
+        {
+          "set_file": "causality_set_8",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ddc886bb"
+        },
+        {
+          "set_file": "causality_set_9",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8d1ef8a7"
+        },
+        {
+          "set_file": "causality_set_10",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8fb30af2"
+        },
+        {
+          "set_file": "causality_set_11",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "148895b4"
+        },
+        {
+          "set_file": "causality_set_12",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b2b5b720"
+        },
+        {
+          "set_file": "causality_set_13",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ee7f917c"
+        },
+        {
+          "set_file": "causality_set_14",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0d812e30"
+        },
+        {
+          "set_file": "causality_set_15",
+          "title": "পাশ্চাত্য দর্শন : কার্যকারণ সম্বন্ধ – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "eeee9633"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_mind_body",
+      "name": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা (ক্রিয়া-প্রতিক্রিয়াবাদ ও সমান্তরালবাদ)",
+      "order": 3,
+      "sets": [
+        {
+          "set_file": "mind_body_set_1",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4783a68c"
+        },
+        {
+          "set_file": "mind_body_set_2",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "cf94d392"
+        },
+        {
+          "set_file": "mind_body_set_3",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e3ea3e34"
+        },
+        {
+          "set_file": "mind_body_set_4",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "51bf000d"
+        },
+        {
+          "set_file": "mind_body_set_5",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "10317791"
+        },
+        {
+          "set_file": "mind_body_set_6",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c1fd6e65"
+        },
+        {
+          "set_file": "mind_body_set_7",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4485ab32"
+        },
+        {
+          "set_file": "mind_body_set_8",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a559229a"
+        },
+        {
+          "set_file": "mind_body_set_9",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "95b9d2f5"
+        },
+        {
+          "set_file": "mind_body_set_10",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b9cdb50b"
+        },
+        {
+          "set_file": "mind_body_set_11",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "543c2c1b"
+        },
+        {
+          "set_file": "mind_body_set_12",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2c33adc2"
+        },
+        {
+          "set_file": "mind_body_set_13",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "65dc65d8"
+        },
+        {
+          "set_file": "mind_body_set_14",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "da686adb"
+        },
+        {
+          "set_file": "mind_body_set_15",
+          "title": "পাশ্চাত্য দর্শন : দেহ-মনের সমস্যা – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a7dbee8a"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_vedanta_basic",
+      "name": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা",
+      "order": 4,
+      "sets": [
+        {
+          "set_file": "vedanta_basic_set_1",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bb6a112b"
+        },
+        {
+          "set_file": "vedanta_basic_set_2",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "49dbda17"
+        },
+        {
+          "set_file": "vedanta_basic_set_3",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6a5815c3"
+        },
+        {
+          "set_file": "vedanta_basic_set_4",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6e497016"
+        },
+        {
+          "set_file": "vedanta_basic_set_5",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8b4744b3"
+        },
+        {
+          "set_file": "vedanta_basic_set_6",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "701011f3"
+        },
+        {
+          "set_file": "vedanta_basic_set_7",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bd600a60"
+        },
+        {
+          "set_file": "vedanta_basic_set_8",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0634fd45"
+        },
+        {
+          "set_file": "vedanta_basic_set_9",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "64f3cbd2"
+        },
+        {
+          "set_file": "vedanta_basic_set_10",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3fa37c86"
+        },
+        {
+          "set_file": "vedanta_basic_set_11",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "505b102d"
+        },
+        {
+          "set_file": "vedanta_basic_set_12",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7721a433"
+        },
+        {
+          "set_file": "vedanta_basic_set_13",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7c80c2d9"
+        },
+        {
+          "set_file": "vedanta_basic_set_14",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2b97be3d"
+        },
+        {
+          "set_file": "vedanta_basic_set_15",
+          "title": "ভারতীয় অধিবিদ্যা : বেদান্ত-এর প্রাথমিক ধারণা – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6026fdc1"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_brahman_maya",
+      "name": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া",
+      "order": 5,
+      "sets": [
+        {
+          "set_file": "brahman_maya_set_1",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "acc85e92"
+        },
+        {
+          "set_file": "brahman_maya_set_2",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ab126ecc"
+        },
+        {
+          "set_file": "brahman_maya_set_3",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6703bf39"
+        },
+        {
+          "set_file": "brahman_maya_set_4",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "82319edc"
+        },
+        {
+          "set_file": "brahman_maya_set_5",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "78d34ebb"
+        },
+        {
+          "set_file": "brahman_maya_set_6",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b7a249fe"
+        },
+        {
+          "set_file": "brahman_maya_set_7",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "20903d38"
+        },
+        {
+          "set_file": "brahman_maya_set_8",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4a267699"
+        },
+        {
+          "set_file": "brahman_maya_set_9",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "de15bfff"
+        },
+        {
+          "set_file": "brahman_maya_set_10",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "db95b094"
+        },
+        {
+          "set_file": "brahman_maya_set_11",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b4496d00"
+        },
+        {
+          "set_file": "brahman_maya_set_12",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ade52ae3"
+        },
+        {
+          "set_file": "brahman_maya_set_13",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b16958a1"
+        },
+        {
+          "set_file": "brahman_maya_set_14",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "451b4d64"
+        },
+        {
+          "set_file": "brahman_maya_set_15",
+          "title": "ভারতীয় অধিবিদ্যা : শঙ্করাচার্যের মতে ব্রহ্ম ও মায়া – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "82cea852"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_society_state_law",
+      "name": "সমাজ ও রাষ্ট্রদর্শন : সমাজ, সম্প্রদায়, সংঘ, প্রতিষ্ঠান, রাষ্ট্র ও আইন",
+      "order": 6,
+      "sets": [
+        {
+          "set_file": "society_state_law_set_1",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fa5e0bd6"
+        },
+        {
+          "set_file": "society_state_law_set_2",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4cdd9ea2"
+        },
+        {
+          "set_file": "society_state_law_set_3",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5030af2a"
+        },
+        {
+          "set_file": "society_state_law_set_4",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a0337f56"
+        },
+        {
+          "set_file": "society_state_law_set_5",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3e39a13d"
+        },
+        {
+          "set_file": "society_state_law_set_6",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "caca0240"
+        },
+        {
+          "set_file": "society_state_law_set_7",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "535595f4"
+        },
+        {
+          "set_file": "society_state_law_set_8",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f3dbcc11"
+        },
+        {
+          "set_file": "society_state_law_set_9",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5866e3c4"
+        },
+        {
+          "set_file": "society_state_law_set_10",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "107e6108"
+        },
+        {
+          "set_file": "society_state_law_set_11",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0f043431"
+        },
+        {
+          "set_file": "society_state_law_set_12",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4474bd80"
+        },
+        {
+          "set_file": "society_state_law_set_13",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ef731dc8"
+        },
+        {
+          "set_file": "society_state_law_set_14",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9a4b697d"
+        },
+        {
+          "set_file": "society_state_law_set_15",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "daf74a5f"
+        },
+        {
+          "set_file": "society_state_law_set_16",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 16",
+          "set_number": 16,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f3d11a87"
+        },
+        {
+          "set_file": "society_state_law_set_17",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 17",
+          "set_number": 17,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "926bf1f2"
+        },
+        {
+          "set_file": "society_state_law_set_18",
+          "title": "সমাজ ও রাষ্ট্রদর্শন – মক টেস্ট 18",
+          "set_number": 18,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3a00a58a"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_suicide_euthanasia",
+      "name": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা",
+      "order": 7,
+      "sets": [
+        {
+          "set_file": "suicide_euthanasia_set_1",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "710a0337"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_2",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b9c15470"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_3",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b9a97232"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_4",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "422f2830"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_5",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "41048238"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_6",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "15960d31"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_7",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ddf03c13"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_8",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "de73d300"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_9",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4bfa49fa"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_10",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "26d18efa"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_11",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "02fa0db0"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_12",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4fad824f"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_13",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "082984b4"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_14",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "561f064f"
+        },
+        {
+          "set_file": "suicide_euthanasia_set_15",
+          "title": "ব্যবহারিক নীতিবিদ্যা : আত্মহত্যা ও কৃপাহত্যা – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1a8b60df"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_environmental_ethics",
+      "name": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা (বিষয়বস্তু ও পরিধি)",
+      "order": 8,
+      "sets": [
+        {
+          "set_file": "environmental_ethics_set_1",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "85826cba"
+        },
+        {
+          "set_file": "environmental_ethics_set_2",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3fc522ca"
+        },
+        {
+          "set_file": "environmental_ethics_set_3",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8d29a1dc"
+        },
+        {
+          "set_file": "environmental_ethics_set_4",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f8762094"
+        },
+        {
+          "set_file": "environmental_ethics_set_5",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1edf598c"
+        },
+        {
+          "set_file": "environmental_ethics_set_6",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2be46f13"
+        },
+        {
+          "set_file": "environmental_ethics_set_7",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1e672188"
+        },
+        {
+          "set_file": "environmental_ethics_set_8",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "be3f4d52"
+        },
+        {
+          "set_file": "environmental_ethics_set_9",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a16a5cb2"
+        },
+        {
+          "set_file": "environmental_ethics_set_10",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "dc5e4ebd"
+        },
+        {
+          "set_file": "environmental_ethics_set_11",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9f2e6f5d"
+        },
+        {
+          "set_file": "environmental_ethics_set_12",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9910a56c"
+        },
+        {
+          "set_file": "environmental_ethics_set_13",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8f4fc2d1"
+        },
+        {
+          "set_file": "environmental_ethics_set_14",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9432464c"
+        },
+        {
+          "set_file": "environmental_ethics_set_15",
+          "title": "ব্যবহারিক নীতিবিদ্যা : পরিবেশগত নীতিবিদ্যা – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9371c59c"
+        }
+      ]
+    }
+  ]
+}

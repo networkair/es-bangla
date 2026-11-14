@@ -1,0 +1,1407 @@
+{
+  "schema_version": 1,
+  "subject_id": "education",
+  "topics": [
+    {
+      "topic_id": "topic_swadhin_bharater_commission",
+      "name": "স্বাধীনোত্তর যুগে ভারতের শিক্ষাপদ্ধতি : কমিশনসমূহ",
+      "order": 1,
+      "sets": [
+        {
+          "set_file": "swadhin_bharater_commission_set_1",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5a049d6b"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_2",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0dfdd9c8"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_3",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a7da574f"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_4",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d660018d"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_5",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f71ba8a5"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_6",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c0616cfd"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_7",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f45cdba8"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_8",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1e4697da"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_9",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6ca55fb1"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_10",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1856ba95"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_11",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fadd6cfe"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_12",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "19431fb6"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_13",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b6c68f73"
+        },
+        {
+          "set_file": "swadhin_bharater_commission_set_14",
+          "title": "স্বাধীন ভারতের গুরুত্বপূর্ণ কমিশনসমূহ - মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "68a31e06"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_jatiyo_shikshaniti",
+      "name": "জাতীয় শিক্ষানীতি 1986 এবং 2020 — প্রধান বৈশিষ্ট্য",
+      "order": 2,
+      "sets": [
+        {
+          "set_file": "jatiyo_shikshaniti_set_1",
+          "title": "জাতীয় শিক্ষানীতি – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4713bb46"
+        },
+        {
+          "set_file": "jatiyo_shikshaniti_set_2",
+          "title": "জাতীয় শিক্ষানীতি – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f213bccb"
+        },
+        {
+          "set_file": "jatiyo_shikshaniti_set_3",
+          "title": "জাতীয় শিক্ষানীতি – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ed5c9ab9"
+        },
+        {
+          "set_file": "jatiyo_shikshaniti_set_4",
+          "title": "জাতীয় শিক্ষানীতি – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8c475868"
+        },
+        {
+          "set_file": "jatiyo_shikshaniti_set_5",
+          "title": "জাতীয় শিক্ষানীতি – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e011bc4e"
+        },
+        {
+          "set_file": "jatiyo_shikshaniti_set_6",
+          "title": "জাতীয় শিক্ষানীতি – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b34b2c42"
+        },
+        {
+          "set_file": "jatiyo_shikshaniti_set_7",
+          "title": "জাতীয় শিক্ষানীতি – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "111ef97e"
+        },
+        {
+          "set_file": "jatiyo_shikshaniti_set_8",
+          "title": "জাতীয় শিক্ষানীতি – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "54b50045"
+        },
+        {
+          "set_file": "jatiyo_shikshaniti_set_9",
+          "title": "জাতীয় শিক্ষানীতি – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3540d7c4"
+        },
+        {
+          "set_file": "jatiyo_shikshaniti_set_10",
+          "title": "জাতীয় শিক্ষানীতি – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2b2e31a0"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_shomokalin_shikkhar_shomoshya",
+      "name": "নারীশিক্ষার সমস্যা, তপশিলি জাতি, উপজাতি ও অনগ্রসরদের শিক্ষায় সমসুযোগ",
+      "order": 3,
+      "sets": [
+        {
+          "set_file": "shomokalin_shikkhar_shomoshya_set_1",
+          "title": "শিক্ষাক্ষেত্রে সমকালীন সমস্যা – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f80220b6"
+        },
+        {
+          "set_file": "shomokalin_shikkhar_shomoshya_set_2",
+          "title": "শিক্ষাক্ষেত্রে সমকালীন সমস্যা – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8670b32a"
+        },
+        {
+          "set_file": "shomokalin_shikkhar_shomoshya_set_3",
+          "title": "শিক্ষাক্ষেত্রে সমকালীন সমস্যা – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e466fedc"
+        },
+        {
+          "set_file": "shomokalin_shikkhar_shomoshya_set_4",
+          "title": "শিক্ষাক্ষেত্রে সমকালীন সমস্যা – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0655f52b"
+        },
+        {
+          "set_file": "shomokalin_shikkhar_shomoshya_set_5",
+          "title": "শিক্ষাক্ষেত্রে সমকালীন সমস্যা – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0d48d90d"
+        },
+        {
+          "set_file": "shomokalin_shikkhar_shomoshya_set_6",
+          "title": "শিক্ষাক্ষেত্রে সমকালীন সমস্যা – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "99af9810"
+        },
+        {
+          "set_file": "shomokalin_shikkhar_shomoshya_set_7",
+          "title": "শিক্ষাক্ষেত্রে সমকালীন সমস্যা – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7d8ef877"
+        },
+        {
+          "set_file": "shomokalin_shikkhar_shomoshya_set_8",
+          "title": "শিক্ষাক্ষেত্রে সমকালীন সমস্যা – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5a6476e5"
+        },
+        {
+          "set_file": "shomokalin_shikkhar_shomoshya_set_9",
+          "title": "শিক্ষাক্ষেত্রে সমকালীন সমস্যা – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0d579b1f"
+        },
+        {
+          "set_file": "shomokalin_shikkhar_shomoshya_set_10",
+          "title": "শিক্ষাক্ষেত্রে সমকালীন সমস্যা – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "245dd353"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_bharatio_shikhabid",
+      "name": "মহান শিক্ষাবিদ : ভারতীয় শিক্ষাবিদ (ঠাকুর, বিবেকানন্দ ও গান্ধীজি)",
+      "order": 4,
+      "sets": [
+        {
+          "set_file": "bharatio_shikhabid_set_1",
+          "title": "ভারতীয় শিক্ষাবিদ (রবীন্দ্রনাথ ঠাকুর) – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "dc8e1ac6"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_2",
+          "title": "ভারতীয় শিক্ষাবিদ (রবীন্দ্রনাথ ঠাকুর) – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0fec645b"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_3",
+          "title": "ভারতীয় শিক্ষাবিদ (রবীন্দ্রনাথ ঠাকুর) – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "372fe76f"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_4",
+          "title": "ভারতীয় শিক্ষাবিদ (রবীন্দ্রনাথ ঠাকুর) – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f6d9c2b0"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_5",
+          "title": "ভারতীয় শিক্ষাবিদ (রবীন্দ্রনাথ ঠাকুর) – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "535a03ff"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_6",
+          "title": "ভারতীয় শিক্ষাবিদ (রবীন্দ্রনাথ ঠাকুর) – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f1afffc4"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_7",
+          "title": "ভারতীয় শিক্ষাবিদ (রবীন্দ্রনাথ ঠাকুর) – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "27d20434"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_8",
+          "title": "ভারতীয় শিক্ষাবিদ (স্বামী বিবেকানন্দ) – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fcfab93e"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_9",
+          "title": "ভারতীয় শিক্ষাবিদ (স্বামী বিবেকানন্দ) – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "53b3356a"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_10",
+          "title": "ভারতীয় শিক্ষাবিদ (স্বামী বিবেকানন্দ) – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5d5e6247"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_11",
+          "title": "ভারতীয় শিক্ষাবিদ (স্বামী বিবেকানন্দ) – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e5b1e66f"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_12",
+          "title": "ভারতীয় শিক্ষাবিদ (স্বামী বিবেকানন্দ) – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f9ff3c75"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_13",
+          "title": "ভারতীয় শিক্ষাবিদ (স্বামী বিবেকানন্দ) – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "66dae8fd"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_14",
+          "title": "ভারতীয় শিক্ষাবিদ (স্বামী বিবেকানন্দ) – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0c174673"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_15",
+          "title": "ভারতীয় শিক্ষাবিদ (মহাত্মা গান্ধী) – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "64f5bd56"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_16",
+          "title": "ভারতীয় শিক্ষাবিদ (মহাত্মা গান্ধী) – মক টেস্ট 16",
+          "set_number": 16,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5309d73c"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_17",
+          "title": "ভারতীয় শিক্ষাবিদ (মহাত্মা গান্ধী) – মক টেস্ট 17",
+          "set_number": 17,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "839b615f"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_18",
+          "title": "ভারতীয় শিক্ষাবিদ (মহাত্মা গান্ধী) – মক টেস্ট 18",
+          "set_number": 18,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1bc8cbd9"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_19",
+          "title": "ভারতীয় শিক্ষাবিদ (মহাত্মা গান্ধী) – মক টেস্ট 19",
+          "set_number": 19,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "66488574"
+        },
+        {
+          "set_file": "bharatio_shikhabid_set_20",
+          "title": "ভারতীয় শিক্ষাবিদ (মহাত্মা গান্ধী) – মক টেস্ট 20",
+          "set_number": 20,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c4e0538a"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_pashchatya_shikhabid",
+      "name": "মহান শিক্ষাবিদ : পাশ্চাত্য শিক্ষাবিদ (রুশো ও ডিউই)",
+      "order": 5,
+      "sets": [
+        {
+          "set_file": "pashchatya_shikhabid_set_1",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জ্যাঁ-জ্যাক রুশো) – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f66c81bc"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_2",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জ্যাঁ-জ্যাক রুশো) – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ffcf8868"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_3",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জ্যাঁ-জ্যাক রুশো) – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "54eaaa1a"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_4",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জ্যাঁ-জ্যাক রুশো) – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a3dd01a0"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_5",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জ্যাঁ-জ্যাক রুশো) – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "273d5d7c"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_6",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জ্যাঁ-জ্যাক রুশো) – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "795320b2"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_7",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জ্যাঁ-জ্যাক রুশো) – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b4e8193c"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_8",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জ্যাঁ-জ্যাক রুশো) – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e6d963dc"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_9",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জন ডিউই) – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1eac6633"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_10",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জন ডিউই) – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b45dc7f3"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_11",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জন ডিউই) – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3b767721"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_12",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জন ডিউই) – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0c23a5b5"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_13",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জন ডিউই) – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7083d7e5"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_14",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জন ডিউই) – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5c560df4"
+        },
+        {
+          "set_file": "pashchatya_shikhabid_set_15",
+          "title": "পাশ্চাত্য শিক্ষাবিদ (জন ডিউই) – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "af63dea7"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_bhinno_shokkhom_shishu",
+      "name": "ভিন্ন সক্ষমতাসম্পন্ন (বিশেষ চাহিদাসম্পন্ন) শিশুদের শিক্ষা ও শ্রেণিবিভাগ",
+      "order": 6,
+      "sets": [
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_1",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c6a8a96b"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_2",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e3a57bf5"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_3",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f460107c"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_4",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "886b7cf2"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_5",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6bdbca41"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_6",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9693dc81"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_7",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "806306ce"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_8",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f860bad2"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_9",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b6ebe5ff"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_10",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f0963d44"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_11",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d213568d"
+        },
+        {
+          "set_file": "bhinno_shokkhom_shishu_set_12",
+          "title": "ভিন্ন সক্ষমতাসম্পন্ন শিশুদের শিক্ষা – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4a895648"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_antorbhuktir_shikkha",
+      "name": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজগঠনে সংস্থাগুলির ভূমিকা",
+      "order": 7,
+      "sets": [
+        {
+          "set_file": "antorbhuktir_shikkha_set_1",
+          "title": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজ – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "705578c6"
+        },
+        {
+          "set_file": "antorbhuktir_shikkha_set_2",
+          "title": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজ – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0f4eb436"
+        },
+        {
+          "set_file": "antorbhuktir_shikkha_set_3",
+          "title": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজ – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4f5f6f63"
+        },
+        {
+          "set_file": "antorbhuktir_shikkha_set_4",
+          "title": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজ – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8c0549ae"
+        },
+        {
+          "set_file": "antorbhuktir_shikkha_set_5",
+          "title": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজ – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "df2f22d8"
+        },
+        {
+          "set_file": "antorbhuktir_shikkha_set_6",
+          "title": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজ – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bc30d8fb"
+        },
+        {
+          "set_file": "antorbhuktir_shikkha_set_7",
+          "title": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজ – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d2275d5c"
+        },
+        {
+          "set_file": "antorbhuktir_shikkha_set_8",
+          "title": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজ – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "42bd6169"
+        },
+        {
+          "set_file": "antorbhuktir_shikkha_set_9",
+          "title": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজ – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "95736ba7"
+        },
+        {
+          "set_file": "antorbhuktir_shikkha_set_10",
+          "title": "অন্তর্ভুক্তিমূলক শিক্ষা ও সমাজ – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "af3408f0"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_delors_commission",
+      "name": "একবিংশ শতাব্দীর প্রেক্ষাপটে শিক্ষা (ডেলরস কমিশন)",
+      "order": 8,
+      "sets": [
+        {
+          "set_file": "delors_commission_set_1",
+          "title": "একবিংশ শতাব্দীর শিক্ষা ও ডেলরস কমিশন – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5dcfab23"
+        },
+        {
+          "set_file": "delors_commission_set_2",
+          "title": "একবিংশ শতাব্দীর শিক্ষা ও ডেলরস কমিশন – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fd4b1d94"
+        },
+        {
+          "set_file": "delors_commission_set_3",
+          "title": "একবিংশ শতাব্দীর শিক্ষা ও ডেলরস কমিশন – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ec66acb6"
+        },
+        {
+          "set_file": "delors_commission_set_4",
+          "title": "একবিংশ শতাব্দীর শিক্ষা ও ডেলরস কমিশন – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "69b16821"
+        },
+        {
+          "set_file": "delors_commission_set_5",
+          "title": "একবিংশ শতাব্দীর শিক্ষা ও ডেলরস কমিশন – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e0a01d2f"
+        },
+        {
+          "set_file": "delors_commission_set_6",
+          "title": "একবিংশ শতাব্দীর শিক্ষা ও ডেলরস কমিশন – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4cbd2c52"
+        },
+        {
+          "set_file": "delors_commission_set_7",
+          "title": "একবিংশ শতাব্দীর শিক্ষা ও ডেলরস কমিশন – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "57988814"
+        },
+        {
+          "set_file": "delors_commission_set_8",
+          "title": "একবিংশ শতাব্দীর শিক্ষা ও ডেলরস কমিশন – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "cbf1a045"
+        },
+        {
+          "set_file": "delors_commission_set_9",
+          "title": "একবিংশ শতাব্দীর শিক্ষা ও ডেলরস কমিশন – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ace02ea9"
+        },
+        {
+          "set_file": "delors_commission_set_10",
+          "title": "একবিংশ শতাব্দীর শিক্ষা ও ডেলরস কমিশন – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "286064bb"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_shokoler_jonno_shikkha",
+      "name": "সকলের জন্য শিক্ষা : ভারতবর্ষে সার্বজনীন প্রাথমিক শিক্ষা",
+      "order": 9,
+      "sets": [
+        {
+          "set_file": "shokoler_jonno_shikkha_set_1",
+          "title": "সকলের জন্য শিক্ষা ও সর্বশিক্ষা অভিযান – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "87e04c02"
+        },
+        {
+          "set_file": "shokoler_jonno_shikkha_set_2",
+          "title": "সকলের জন্য শিক্ষা ও সর্বশিক্ষা অভিযান – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3cd41d5b"
+        },
+        {
+          "set_file": "shokoler_jonno_shikkha_set_3",
+          "title": "সকলের জন্য শিক্ষা ও সর্বশিক্ষা অভিযান – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8d178673"
+        },
+        {
+          "set_file": "shokoler_jonno_shikkha_set_4",
+          "title": "সকলের জন্য শিক্ষা ও সর্বশিক্ষা অভিযান – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8e973ea2"
+        },
+        {
+          "set_file": "shokoler_jonno_shikkha_set_5",
+          "title": "সকলের জন্য শিক্ষা ও সর্বশিক্ষা অভিযান – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5aa98120"
+        },
+        {
+          "set_file": "shokoler_jonno_shikkha_set_6",
+          "title": "সকলের জন্য শিক্ষা ও সর্বশিক্ষা অভিযান – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d37c9b47"
+        },
+        {
+          "set_file": "shokoler_jonno_shikkha_set_7",
+          "title": "সকলের জন্য শিক্ষা ও সর্বশিক্ষা অভিযান – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "471877bd"
+        },
+        {
+          "set_file": "shokoler_jonno_shikkha_set_8",
+          "title": "সকলের জন্য শিক্ষা ও সর্বশিক্ষা অভিযান – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9dcbc534"
+        },
+        {
+          "set_file": "shokoler_jonno_shikkha_set_9",
+          "title": "সকলের জন্য শিক্ষা ও সর্বশিক্ষা অভিযান – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c73305f1"
+        },
+        {
+          "set_file": "shokoler_jonno_shikkha_set_10",
+          "title": "সকলের জন্য শিক্ষা ও সর্বশিক্ষা অভিযান – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0db3cf86"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_positive_psychology",
+      "name": "আধুনিক শিক্ষার ক্ষেত্রে ইতিবাচক মনোবিজ্ঞানের ভূমিকা",
+      "order": 10,
+      "sets": [
+        {
+          "set_file": "positive_psychology_set_1",
+          "title": "ইতিবাচক মনোবিজ্ঞান ও শিক্ষা – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d5af1e94"
+        },
+        {
+          "set_file": "positive_psychology_set_2",
+          "title": "ইতিবাচক মনোবিজ্ঞান ও শিক্ষা – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "53700a55"
+        },
+        {
+          "set_file": "positive_psychology_set_3",
+          "title": "ইতিবাচক মনোবিজ্ঞান ও শিক্ষা – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "020a8bce"
+        },
+        {
+          "set_file": "positive_psychology_set_4",
+          "title": "ইতিবাচক মনোবিজ্ঞান ও শিক্ষা – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a3ad3373"
+        },
+        {
+          "set_file": "positive_psychology_set_5",
+          "title": "ইতিবাচক মনোবিজ্ঞান ও শিক্ষা – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "28304000"
+        },
+        {
+          "set_file": "positive_psychology_set_6",
+          "title": "ইতিবাচক মনোবিজ্ঞান ও শিক্ষা – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d2dbd7f4"
+        },
+        {
+          "set_file": "positive_psychology_set_7",
+          "title": "ইতিবাচক মনোবিজ্ঞান ও শিক্ষা – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4f98bc90"
+        },
+        {
+          "set_file": "positive_psychology_set_8",
+          "title": "ইতিবাচক মনোবিজ্ঞান ও শিক্ষা – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "51b32249"
+        },
+        {
+          "set_file": "positive_psychology_set_9",
+          "title": "ইতিবাচক মনোবিজ্ঞান ও শিক্ষা – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5b55a68d"
+        },
+        {
+          "set_file": "positive_psychology_set_10",
+          "title": "ইতিবাচক মনোবিজ্ঞান ও শিক্ষা – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c262f8ab"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,895 @@
+{
+  "schema_version": 1,
+  "subject_id": "political_science",
+  "topics": [
+    {
+      "topic_id": "topic_post_war_ir",
+      "name": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক",
+      "order": 1,
+      "sets": [
+        {
+          "set_file": "post_war_ir_set_1",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9b461fdc"
+        },
+        {
+          "set_file": "post_war_ir_set_2",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "55ad7075"
+        },
+        {
+          "set_file": "post_war_ir_set_3",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d7b25fd5"
+        },
+        {
+          "set_file": "post_war_ir_set_4",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "756def5b"
+        },
+        {
+          "set_file": "post_war_ir_set_5",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5e59a633"
+        },
+        {
+          "set_file": "post_war_ir_set_6",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "684922a0"
+        },
+        {
+          "set_file": "post_war_ir_set_7",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7253168d"
+        },
+        {
+          "set_file": "post_war_ir_set_8",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8196de82"
+        },
+        {
+          "set_file": "post_war_ir_set_9",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2846c807"
+        },
+        {
+          "set_file": "post_war_ir_set_10",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2e43c8f6"
+        },
+        {
+          "set_file": "post_war_ir_set_11",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "30cf9d45"
+        },
+        {
+          "set_file": "post_war_ir_set_12",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7334b092"
+        },
+        {
+          "set_file": "post_war_ir_set_13",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "30072d2a"
+        },
+        {
+          "set_file": "post_war_ir_set_14",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d992ea3c"
+        },
+        {
+          "set_file": "post_war_ir_set_15",
+          "title": "দ্বিতীয় বিশ্বযুদ্ধোত্তর পর্বে আন্তর্জাতিক সম্পর্ক - মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "67d97012"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_international_organizations",
+      "name": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ",
+      "order": 2,
+      "sets": [
+        {
+          "set_file": "intl_org_set_1",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c7c85524"
+        },
+        {
+          "set_file": "intl_org_set_2",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c9d2157a"
+        },
+        {
+          "set_file": "intl_org_set_3",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5cf2dd49"
+        },
+        {
+          "set_file": "intl_org_set_4",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d77913a6"
+        },
+        {
+          "set_file": "intl_org_set_5",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d0b3dd7e"
+        },
+        {
+          "set_file": "intl_org_set_6",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d9071438"
+        },
+        {
+          "set_file": "intl_org_set_7",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d89efca4"
+        },
+        {
+          "set_file": "intl_org_set_8",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f655ad18"
+        },
+        {
+          "set_file": "intl_org_set_9",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3f27b561"
+        },
+        {
+          "set_file": "intl_org_set_10",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "69c66275"
+        },
+        {
+          "set_file": "intl_org_set_11",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "704570c5"
+        },
+        {
+          "set_file": "intl_org_set_12",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ad62fad5"
+        },
+        {
+          "set_file": "intl_org_set_13",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2e6502ee"
+        },
+        {
+          "set_file": "intl_org_set_14",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "20cdd75d"
+        },
+        {
+          "set_file": "intl_org_set_15",
+          "title": "আন্তর্জাতিক সংগঠন এবং প্রতিষ্ঠানসমূহ - মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "85233266"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_security_concepts",
+      "name": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ",
+      "order": 3,
+      "sets": [
+        {
+          "set_file": "security_concepts_set_1",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "521d753c"
+        },
+        {
+          "set_file": "security_concepts_set_2",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "43e38fa5"
+        },
+        {
+          "set_file": "security_concepts_set_3",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b8fbae9f"
+        },
+        {
+          "set_file": "security_concepts_set_4",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "96512349"
+        },
+        {
+          "set_file": "security_concepts_set_5",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ee9695d7"
+        },
+        {
+          "set_file": "security_concepts_set_6",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4d8f55e6"
+        },
+        {
+          "set_file": "security_concepts_set_7",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d3c2876f"
+        },
+        {
+          "set_file": "security_concepts_set_8",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9a7c7f75"
+        },
+        {
+          "set_file": "security_concepts_set_9",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "99b7c49a"
+        },
+        {
+          "set_file": "security_concepts_set_10",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b04468da"
+        },
+        {
+          "set_file": "security_concepts_set_11",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8b194403"
+        },
+        {
+          "set_file": "security_concepts_set_12",
+          "title": "সমকালীন বিশ্বে নিরাপত্তার ধারণাসমূহ - মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1ce4b671"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_nation_building",
+      "name": "জাতি গঠনের আহ্বান",
+      "order": 4,
+      "sets": [
+        {
+          "set_file": "nation_building_set_1",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "15e3d779"
+        },
+        {
+          "set_file": "nation_building_set_2",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "851d6099"
+        },
+        {
+          "set_file": "nation_building_set_3",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2e31504e"
+        },
+        {
+          "set_file": "nation_building_set_4",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6d95a854"
+        },
+        {
+          "set_file": "nation_building_set_5",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "93bbac20"
+        },
+        {
+          "set_file": "nation_building_set_6",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f2a260ba"
+        },
+        {
+          "set_file": "nation_building_set_7",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bad6b56c"
+        },
+        {
+          "set_file": "nation_building_set_8",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "573c6dbc"
+        },
+        {
+          "set_file": "nation_building_set_9",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b1ea0436"
+        },
+        {
+          "set_file": "nation_building_set_10",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "125ddfad"
+        },
+        {
+          "set_file": "nation_building_set_11",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3489cfa9"
+        },
+        {
+          "set_file": "nation_building_set_12",
+          "title": "জাতি গঠনের আহ্বান - মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6b86276e"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_party_system",
+      "name": "রাজনৈতিক দল এবং দলব্যবস্থা",
+      "order": 5,
+      "sets": [
+        {
+          "set_file": "party_system_set_1",
+          "title": "রাজনৈতিক দল এবং দলব্যবস্থা - মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e1ac9415"
+        },
+        {
+          "set_file": "party_system_set_2",
+          "title": "রাজনৈতিক দল এবং দলব্যবস্থা - মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d1475f15"
+        },
+        {
+          "set_file": "party_system_set_3",
+          "title": "রাজনৈতিক দল এবং দলব্যবস্থা - মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ff4a7848"
+        },
+        {
+          "set_file": "party_system_set_4",
+          "title": "রাজনৈতিক দল এবং দলব্যবস্থা - মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6bb8310e"
+        },
+        {
+          "set_file": "party_system_set_5",
+          "title": "রাজনৈতিক দল এবং দলব্যবস্থা - মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "339fb8a3"
+        },
+        {
+          "set_file": "party_system_set_6",
+          "title": "রাজনৈতিক দল এবং দলব্যবস্থা - মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "26bcfd54"
+        },
+        {
+          "set_file": "party_system_set_7",
+          "title": "রাজনৈতিক দল এবং দলব্যবস্থা - মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3fdb2b3c"
+        },
+        {
+          "set_file": "party_system_set_8",
+          "title": "রাজনৈতিক দল এবং দলব্যবস্থা - মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "23200263"
+        },
+        {
+          "set_file": "party_system_set_9",
+          "title": "রাজনৈতিক দল এবং দলব্যবস্থা - মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "74faea99"
+        },
+        {
+          "set_file": "party_system_set_10",
+          "title": "রাজনৈতিক দল এবং দলব্যবস্থা - মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "84ff5511"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_foreign_policy",
+      "name": "ভারতের পররাষ্ট্রনীতি",
+      "order": 6,
+      "sets": [
+        {
+          "set_file": "foreign_policy_set_1",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b3a26aa1"
+        },
+        {
+          "set_file": "foreign_policy_set_2",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "81218dbf"
+        },
+        {
+          "set_file": "foreign_policy_set_3",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "77beaf0f"
+        },
+        {
+          "set_file": "foreign_policy_set_4",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "abe1d6c0"
+        },
+        {
+          "set_file": "foreign_policy_set_5",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f92f6e35"
+        },
+        {
+          "set_file": "foreign_policy_set_6",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "576cca61"
+        },
+        {
+          "set_file": "foreign_policy_set_7",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6e82273b"
+        },
+        {
+          "set_file": "foreign_policy_set_8",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3e8b9a85"
+        },
+        {
+          "set_file": "foreign_policy_set_9",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d25f3b5b"
+        },
+        {
+          "set_file": "foreign_policy_set_10",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2aa0bd40"
+        },
+        {
+          "set_file": "foreign_policy_set_11",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "351024cd"
+        },
+        {
+          "set_file": "foreign_policy_set_12",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ac7a2a61"
+        },
+        {
+          "set_file": "foreign_policy_set_13",
+          "title": "ভারতের পররাষ্ট্রনীতি - মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3ddd4fac"
+        }
+      ]
+    }
+  ]
+}

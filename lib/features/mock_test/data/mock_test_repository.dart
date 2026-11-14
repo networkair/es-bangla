@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/storage/local_storage_service.dart';
 import '../domain/mock_test_models.dart';
+import 'mock_bundle_service.dart';
 
 class MockTestRepository {
   final Dio _dio = Dio(BaseOptions(
@@ -18,6 +19,7 @@ class MockTestRepository {
   ));
 
   final LocalStorageService _storage = LocalStorageService();
+  final MockBundleService _bundleService = MockBundleService();
 
   // In-memory session cache for ultra-fast screen transitions
   final Map<String, dynamic> _memoryCache = {};
@@ -33,32 +35,49 @@ class MockTestRepository {
     return null;
   }
 
-  /// Fetch Subjects for current semester with stale-while-revalidate
+  /// Fetch Subjects for current semester with instant 0ms offline-first loading and background sync
   Future<List<SubjectModel>> getSubjects(int semester, {String? version}) async {
     final cacheKey = 'subjects_sem_$semester';
 
-    // 1. Check memory cache first
+    // 1. Check memory cache first (0ms)
     if (_memoryCache.containsKey(cacheKey)) {
       return (_memoryCache[cacheKey] as List)
           .map((s) => SubjectModel.fromJson(s))
           .toList();
     }
 
-    // 2. Check disk cache
+    // 2. Check disk cache (0ms)
     final localJson = _storage.getCachedResponse(cacheKey);
-    List<SubjectModel>? diskSubjects;
+    List<SubjectModel>? localSubjects;
     if (localJson != null) {
       try {
         final decoded = jsonDecode(localJson);
         final list = (decoded['subjects'] as List? ?? [])
             .map((s) => SubjectModel.fromJson(s))
             .toList();
-        diskSubjects = list;
-        _memoryCache[cacheKey] = decoded['subjects'];
+        if (list.isNotEmpty) {
+          localSubjects = list;
+          _memoryCache[cacheKey] = decoded['subjects'];
+        }
       } catch (_) {}
     }
 
-    // 3. Network fetch (background or direct)
+    // 3. Check bundled pre-packaged offline assets (0ms, 100% reliable)
+    if (localSubjects == null || localSubjects.isEmpty) {
+      final bundled = await _bundleService.getBundledSubjects(semester);
+      if (bundled != null && bundled.isNotEmpty) {
+        localSubjects = bundled;
+        _memoryCache[cacheKey] = bundled.map((s) => s.toJson()).toList();
+      }
+    }
+
+    // If we have local or bundled subjects, return immediately in 0ms and trigger silent background sync!
+    if (localSubjects != null && localSubjects.isNotEmpty) {
+      _silentSyncSubjects(semester, cacheKey, version: version);
+      return localSubjects;
+    }
+
+    // 4. Fallback network fetch if no local or bundled data was found
     try {
       final url = ApiConstants.subjectsUrl(semester, version: version);
       final response = await _dio.get(url);
@@ -72,7 +91,7 @@ class MockTestRepository {
         return list;
       }
     } catch (e) {
-      if (diskSubjects != null && diskSubjects.isNotEmpty) return diskSubjects;
+      // 5. Final fallback to content manifest
       try {
         final manifestStr = await rootBundle.loadString('assets/manifest/content_manifest.json');
         final data = jsonDecode(manifestStr);
@@ -91,36 +110,77 @@ class MockTestRepository {
           return fallbackList;
         }
       } catch (_) {}
-      if (diskSubjects != null) return diskSubjects;
       rethrow;
     }
 
-    return diskSubjects ?? [];
+    return [];
   }
 
-  /// Fetch Topics & Sets of a subject
+  void _silentSyncSubjects(int semester, String cacheKey, {String? version}) {
+    Future.microtask(() async {
+      try {
+        final url = ApiConstants.subjectsUrl(semester, version: version);
+        final response = await _dio.get(
+          url,
+          options: Options(receiveTimeout: const Duration(seconds: 6)),
+        );
+        if (response.statusCode == 200) {
+          final data = response.data is String ? jsonDecode(response.data) : response.data;
+          await _storage.setCachedResponse(cacheKey, jsonEncode(data));
+          _memoryCache[cacheKey] = data['subjects'];
+        }
+      } catch (_) {}
+    });
+  }
+
+  /// Fetch Topics & Sets of a subject with instant 0ms offline-first loading and background sync
   Future<List<TopicModel>> getTopics(int semester, String subjectId, {String? version}) async {
     final cacheKey = 'topics_sem_${semester}_$subjectId';
 
+    // 1. Check memory cache first (0ms)
     if (_memoryCache.containsKey(cacheKey)) {
       return (_memoryCache[cacheKey] as List)
           .map((t) => TopicModel.fromJson(t))
           .toList();
     }
 
+    // 2. Check disk cache (0ms)
     final localJson = _storage.getCachedResponse(cacheKey);
-    List<TopicModel>? diskTopics;
+    List<TopicModel>? localTopics;
     if (localJson != null) {
       try {
         final decoded = jsonDecode(localJson);
         final list = (decoded['topics'] as List? ?? [])
             .map((t) => TopicModel.fromJson(t))
             .toList();
-        diskTopics = list;
-        _memoryCache[cacheKey] = decoded['topics'];
+        if (list.isNotEmpty) {
+          localTopics = list;
+          _memoryCache[cacheKey] = decoded['topics'];
+        }
       } catch (_) {}
     }
 
+    // 3. Check bundled pre-packaged offline assets (0ms, 100% reliable)
+    if (localTopics == null || localTopics.isEmpty) {
+      final bundled = await _bundleService.getBundledTopics(semester, subjectId);
+      if (bundled != null && bundled.isNotEmpty) {
+        localTopics = bundled;
+        _memoryCache[cacheKey] = bundled.map((t) => {
+          'topic_id': t.topicId,
+          'name': t.name,
+          'order': t.order,
+          'sets': t.sets.map((s) => s.toJson()).toList(),
+        }).toList();
+      }
+    }
+
+    // If we have local or bundled topics, return immediately in 0ms and trigger silent background sync!
+    if (localTopics != null && localTopics.isNotEmpty) {
+      _silentSyncTopics(semester, subjectId, cacheKey, version: version);
+      return localTopics;
+    }
+
+    // 4. Fallback network fetch
     try {
       final url = ApiConstants.topicsUrl(semester, subjectId, version: version);
       final response = await _dio.get(url);
@@ -134,7 +194,7 @@ class MockTestRepository {
         return list;
       }
     } catch (e) {
-      if (diskTopics != null && diskTopics.isNotEmpty) return diskTopics;
+      // 5. Final fallback to content manifest
       try {
         final manifestStr = await rootBundle.loadString('assets/manifest/content_manifest.json');
         final data = jsonDecode(manifestStr);
@@ -161,39 +221,6 @@ class MockTestRepository {
                 durationMinutes: 10,
                 version: '1',
               ),
-              TestSetModel(
-                setFile: 'set2',
-                title: 'Set 2',
-                setNumber: 2,
-                questionCount: 10,
-                totalMarks: 10,
-                isPremium: true,
-                hasTimer: true,
-                durationMinutes: 10,
-                version: '1',
-              ),
-              TestSetModel(
-                setFile: 'set3',
-                title: 'Set 3',
-                setNumber: 3,
-                questionCount: 10,
-                totalMarks: 10,
-                isPremium: true,
-                hasTimer: true,
-                durationMinutes: 10,
-                version: '1',
-              ),
-              TestSetModel(
-                setFile: 'set4',
-                title: 'Set 4',
-                setNumber: 4,
-                questionCount: 10,
-                totalMarks: 10,
-                isPremium: true,
-                hasTimer: true,
-                durationMinutes: 10,
-                version: '1',
-              ),
             ],
           )).toList();
           if (fallbackTopics.isNotEmpty) {
@@ -207,14 +234,30 @@ class MockTestRepository {
           }
         }
       } catch (_) {}
-      if (diskTopics != null) return diskTopics;
       rethrow;
     }
 
-    return diskTopics ?? [];
+    return [];
   }
 
-  /// Fetch and parse Test Paper with background isolate parsing
+  void _silentSyncTopics(int semester, String subjectId, String cacheKey, {String? version}) {
+    Future.microtask(() async {
+      try {
+        final url = ApiConstants.topicsUrl(semester, subjectId, version: version);
+        final response = await _dio.get(
+          url,
+          options: Options(receiveTimeout: const Duration(seconds: 6)),
+        );
+        if (response.statusCode == 200) {
+          final data = response.data is String ? jsonDecode(response.data) : response.data;
+          await _storage.setCachedResponse(cacheKey, jsonEncode(data));
+          _memoryCache[cacheKey] = data['topics'];
+        }
+      } catch (_) {}
+    });
+  }
+
+  /// Fetch and parse Test Paper with instant 0ms offline-first loading and background sync
   Future<TestPaperModel> getTestPaper(
     int semester,
     String subjectId,
@@ -223,19 +266,38 @@ class MockTestRepository {
   }) async {
     final cacheKey = 'test_${semester}_${subjectId}_$setFile';
 
+    // 1. Check in-memory session cache (0ms instant)
     if (_memoryCache.containsKey(cacheKey)) {
-      return _memoryCache[cacheKey] as TestPaperModel;
+      final cached = _memoryCache[cacheKey];
+      if (cached is TestPaperModel) {
+        _silentSyncTestPaper(semester, subjectId, setFile, cacheKey, currentVersion: cached.metadata.version, version: version);
+        return cached;
+      }
     }
 
+    // 2. Check disk cache (previously synced or cached update)
     final localJson = _storage.getCachedResponse(cacheKey);
     if (localJson != null) {
       try {
         final paper = await compute(_parseTestPaperJson, localJson);
         _memoryCache[cacheKey] = paper;
+        _silentSyncTestPaper(semester, subjectId, setFile, cacheKey, currentVersion: paper.metadata.version, version: version);
         return paper;
       } catch (_) {}
     }
 
+    // 3. Check bundled pre-packaged encrypted offline bundle (0ms instant, works 100% offline!)
+    try {
+      final bundledMap = await _bundleService.getBundledTestPaper(semester, subjectId, setFile);
+      if (bundledMap != null) {
+        final paper = await compute(_parseTestPaperJson, bundledMap);
+        _memoryCache[cacheKey] = paper;
+        _silentSyncTestPaper(semester, subjectId, setFile, cacheKey, currentVersion: paper.metadata.version, version: version);
+        return paper;
+      }
+    } catch (_) {}
+
+    // 4. Fallback network fetch if set was not found locally (e.g. brand new set added to cloud after app release)
     final url = ApiConstants.testSetUrl(semester, subjectId, setFile, version: version);
     final response = await _dio.get(url);
     if (response.statusCode == 200) {
@@ -247,6 +309,43 @@ class MockTestRepository {
     }
 
     throw Exception('Failed to load test paper');
+  }
+
+  void _silentSyncTestPaper(
+    int semester,
+    String subjectId,
+    String setFile,
+    String cacheKey, {
+    String? currentVersion,
+    String? version,
+  }) {
+    // Run in background without awaiting or blocking the UI
+    Future.microtask(() async {
+      try {
+        // If version hash matches current version, no need to re-download!
+        if (version != null && currentVersion != null && version == currentVersion) {
+          return;
+        }
+        final url = ApiConstants.testSetUrl(semester, subjectId, setFile, version: version);
+        final response = await _dio.get(
+          url,
+          options: Options(
+            receiveTimeout: const Duration(seconds: 6),
+            sendTimeout: const Duration(seconds: 4),
+          ),
+        );
+        if (response.statusCode == 200) {
+          final rawString = response.data is String ? response.data : jsonEncode(response.data);
+          final updatedPaper = await compute(_parseTestPaperJson, rawString);
+          if (currentVersion == null || updatedPaper.metadata.version != currentVersion) {
+            await _storage.setCachedResponse(cacheKey, rawString);
+            _memoryCache[cacheKey] = updatedPaper;
+          }
+        }
+      } catch (_) {
+        // Background sync failure is completely silent to the user
+      }
+    });
   }
 
   /// Submit Question Report or Feedback directly to dedicated Report API
@@ -332,8 +431,11 @@ class MockTestRepository {
   }
 }
 
-// Background isolate JSON parser to maintain 60 FPS
-TestPaperModel _parseTestPaperJson(dynamic jsonStr) {
-  final decoded = jsonDecode(jsonStr as String);
+// Background isolate JSON parser to maintain 60/120 FPS
+TestPaperModel _parseTestPaperJson(dynamic jsonSource) {
+  if (jsonSource is Map) {
+    return TestPaperModel.fromJson(Map<String, dynamic>.from(jsonSource));
+  }
+  final decoded = jsonDecode(jsonSource as String);
   return TestPaperModel.fromJson(Map<String, dynamic>.from(decoded));
 }

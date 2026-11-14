@@ -1,0 +1,1726 @@
+{
+  "schema_version": 1,
+  "subject_id": "sanskrit",
+  "topics": [
+    {
+      "topic_id": "topic_rajavahanacaritam",
+      "name": "গদ্যাংশ : রাজবাহনচরিতম্ (দণ্ডী রচিত 'দশকুমারচরিতম্' থেকে)",
+      "order": 1,
+      "sets": [
+        {
+          "set_file": "rajavahana_set_1",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "092313d3"
+        },
+        {
+          "set_file": "rajavahana_set_2",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "90a7b215"
+        },
+        {
+          "set_file": "rajavahana_set_3",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e88aa61a"
+        },
+        {
+          "set_file": "rajavahana_set_4",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f273b50a"
+        },
+        {
+          "set_file": "rajavahana_set_5",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6878d9d1"
+        },
+        {
+          "set_file": "rajavahana_set_6",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e858c1df"
+        },
+        {
+          "set_file": "rajavahana_set_7",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "945301a8"
+        },
+        {
+          "set_file": "rajavahana_set_8",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d419b101"
+        },
+        {
+          "set_file": "rajavahana_set_9",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7b61606b"
+        },
+        {
+          "set_file": "rajavahana_set_10",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "87b6eb49"
+        },
+        {
+          "set_file": "rajavahana_set_11",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fc933ef1"
+        },
+        {
+          "set_file": "rajavahana_set_12",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2aeeb34c"
+        },
+        {
+          "set_file": "rajavahana_set_13",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "91732fb5"
+        },
+        {
+          "set_file": "rajavahana_set_14",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "089f3486"
+        },
+        {
+          "set_file": "rajavahana_set_15",
+          "title": "গদ্যাংশ : রাজবাহনচরিতম্ – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "814c3451"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_yogah_karmasu_kaushalam",
+      "name": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ (শ্রীমদ্ভগবদ্গীতা)",
+      "order": 2,
+      "sets": [
+        {
+          "set_file": "yoga_karmasu_set_1",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "55f79604"
+        },
+        {
+          "set_file": "yoga_karmasu_set_2",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7b7342fd"
+        },
+        {
+          "set_file": "yoga_karmasu_set_3",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0d68be93"
+        },
+        {
+          "set_file": "yoga_karmasu_set_4",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fe4a0a30"
+        },
+        {
+          "set_file": "yoga_karmasu_set_5",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7ebe6ab0"
+        },
+        {
+          "set_file": "yoga_karmasu_set_6",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4808a03f"
+        },
+        {
+          "set_file": "yoga_karmasu_set_7",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3eb3acdf"
+        },
+        {
+          "set_file": "yoga_karmasu_set_8",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1fe22f2a"
+        },
+        {
+          "set_file": "yoga_karmasu_set_9",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "00d76453"
+        },
+        {
+          "set_file": "yoga_karmasu_set_10",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e979a44e"
+        },
+        {
+          "set_file": "yoga_karmasu_set_11",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c4a1387a"
+        },
+        {
+          "set_file": "yoga_karmasu_set_12",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4c1f49fd"
+        },
+        {
+          "set_file": "yoga_karmasu_set_13",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "01d55350"
+        },
+        {
+          "set_file": "yoga_karmasu_set_14",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "495a5d90"
+        },
+        {
+          "set_file": "yoga_karmasu_set_15",
+          "title": "পদ্যাংশ : যোগঃ কর্মসু কৌশলম্ – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "20c751ef"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_durbasasah_abhishapah",
+      "name": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ (মহাকবি কালিদাস রচিত 'অভিজ্ঞানশকুন্তলম্')",
+      "order": 3,
+      "sets": [
+        {
+          "set_file": "durbasa_abhishapa_set_1",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e88157e3"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_2",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9c16368b"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_3",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3ae398ab"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_4",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9dbc05e3"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_5",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8a9c42cd"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_6",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1fe92c2e"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_7",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f6c24454"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_8",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3618f0b0"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_9",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "13b1e959"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_10",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fd449349"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_11",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0180d803"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_12",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "dda3a776"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_13",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "096766af"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_14",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7521b95d"
+        },
+        {
+          "set_file": "durbasa_abhishapa_set_15",
+          "title": "নাট্যাংশ : দুর্বাসসঃ অভিশাপঃ – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "af25b3eb"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_karak_vibhakti",
+      "name": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি",
+      "order": 4,
+      "sets": [
+        {
+          "set_file": "karak_vibhakti_set_1",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "71402d89"
+        },
+        {
+          "set_file": "karak_vibhakti_set_2",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "dc403bcf"
+        },
+        {
+          "set_file": "karak_vibhakti_set_3",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bb9e3ee2"
+        },
+        {
+          "set_file": "karak_vibhakti_set_4",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "cc0e3d17"
+        },
+        {
+          "set_file": "karak_vibhakti_set_5",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b95120f9"
+        },
+        {
+          "set_file": "karak_vibhakti_set_6",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a5a35d4e"
+        },
+        {
+          "set_file": "karak_vibhakti_set_7",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "35ff26e3"
+        },
+        {
+          "set_file": "karak_vibhakti_set_8",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bfc10edd"
+        },
+        {
+          "set_file": "karak_vibhakti_set_9",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fafb2a3f"
+        },
+        {
+          "set_file": "karak_vibhakti_set_10",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4216a830"
+        },
+        {
+          "set_file": "karak_vibhakti_set_11",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "14cd8e79"
+        },
+        {
+          "set_file": "karak_vibhakti_set_12",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d8d175b1"
+        },
+        {
+          "set_file": "karak_vibhakti_set_13",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "64fe05e1"
+        },
+        {
+          "set_file": "karak_vibhakti_set_14",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8cd7e630"
+        },
+        {
+          "set_file": "karak_vibhakti_set_15",
+          "title": "সংস্কৃত ব্যাকরণ : কারক ও বিভক্তি – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d4244b75"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_samasa",
+      "name": "সংস্কৃত ব্যাকরণ : সমাস (অব্যয়ীভাব ও তৎপুরুষ)",
+      "order": 5,
+      "sets": [
+        {
+          "set_file": "samasa_set_1",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b33598e4"
+        },
+        {
+          "set_file": "samasa_set_2",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "99de6a93"
+        },
+        {
+          "set_file": "samasa_set_3",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0d9ea200"
+        },
+        {
+          "set_file": "samasa_set_4",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0ea24eb6"
+        },
+        {
+          "set_file": "samasa_set_5",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "97d312f8"
+        },
+        {
+          "set_file": "samasa_set_6",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d272031f"
+        },
+        {
+          "set_file": "samasa_set_7",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d1d0c7fd"
+        },
+        {
+          "set_file": "samasa_set_8",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d7a92160"
+        },
+        {
+          "set_file": "samasa_set_9",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5a54b482"
+        },
+        {
+          "set_file": "samasa_set_10",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ea6467d5"
+        },
+        {
+          "set_file": "samasa_set_11",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "79229efb"
+        },
+        {
+          "set_file": "samasa_set_12",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "8f73002c"
+        },
+        {
+          "set_file": "samasa_set_13",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "dd995241"
+        },
+        {
+          "set_file": "samasa_set_14",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "516edd69"
+        },
+        {
+          "set_file": "samasa_set_15",
+          "title": "সংস্কৃত ব্যাকরণ : সমাস – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "1be3fc04"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_taddhita_pratyaya",
+      "name": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয়",
+      "order": 6,
+      "sets": [
+        {
+          "set_file": "taddhita_pratyaya_set_1",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5f2ca67a"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_2",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a6f1c594"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_3",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9852c96e"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_4",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7c69ae19"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_5",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e09fa303"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_6",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e4c97bb5"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_7",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "64039c27"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_8",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0b63c0c4"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_9",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "312c3ca7"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_10",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7ec54e70"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_11",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6c3e95c2"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_12",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "dcd4607d"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_13",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "0862d933"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_14",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "61924ccd"
+        },
+        {
+          "set_file": "taddhita_pratyaya_set_15",
+          "title": "সংস্কৃত ব্যাকরণ : তদ্ধিত প্রত্যয় – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ad2ccc5a"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_namadhatu_pratyaya",
+      "name": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয়",
+      "order": 7,
+      "sets": [
+        {
+          "set_file": "namadhatu_pratyaya_set_1",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b283cf64"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_2",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "aa0ab2b4"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_3",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c17252a6"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_4",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "417fe79d"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_5",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "5ec20f56"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_6",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "258fe87d"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_7",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "970e524a"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_8",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "63253c30"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_9",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a5b8492c"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_10",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b641f540"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_11",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3068843a"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_12",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e769821e"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_13",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fad538e9"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_14",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e8ef1e09"
+        },
+        {
+          "set_file": "namadhatu_pratyaya_set_15",
+          "title": "সংস্কৃত ব্যাকরণ : নামধাতু-প্রত্যয় – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d02a6aa6"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_purana_parichay",
+      "name": "সংস্কৃত সাহিত্যের ইতিহাস : পুরাণের সংক্ষিপ্ত পরিচয়",
+      "order": 8,
+      "sets": [
+        {
+          "set_file": "purana_intro_set_1",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "f1c8bd22"
+        },
+        {
+          "set_file": "purana_intro_set_2",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3f9ffa84"
+        },
+        {
+          "set_file": "purana_intro_set_3",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7ed2977f"
+        },
+        {
+          "set_file": "purana_intro_set_4",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "12334a00"
+        },
+        {
+          "set_file": "purana_intro_set_5",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "37d72559"
+        },
+        {
+          "set_file": "purana_intro_set_6",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a9f9fed6"
+        },
+        {
+          "set_file": "purana_intro_set_7",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4b7552f2"
+        },
+        {
+          "set_file": "purana_intro_set_8",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "01f8149b"
+        },
+        {
+          "set_file": "purana_intro_set_9",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "51bfb102"
+        },
+        {
+          "set_file": "purana_intro_set_10",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2c73c4e8"
+        },
+        {
+          "set_file": "purana_intro_set_11",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "6794f656"
+        },
+        {
+          "set_file": "purana_intro_set_12",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "889115d9"
+        },
+        {
+          "set_file": "purana_intro_set_13",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3dcc1799"
+        },
+        {
+          "set_file": "purana_intro_set_14",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b5b2787f"
+        },
+        {
+          "set_file": "purana_intro_set_15",
+          "title": "পুরাণের সংক্ষিপ্ত পরিচয় – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "eba66d41"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_bhasa_kalidasa_bhavabhuti",
+      "name": "সংস্কৃত সাহিত্যের ইতিহাস : ভাস, কালিদাস ও ভবভূতির সাহিত্যকৃতি",
+      "order": 9,
+      "sets": [
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_1",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "4c3db6cc"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_2",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2e83591b"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_3",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "25199262"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_4",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e6e596f9"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_5",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d97af11c"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_6",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "c34c4367"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_7",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bad0b2e3"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_8",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "2e21fc87"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_9",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "65bb466a"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_10",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "b1be725a"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_11",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "617941a7"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_12",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "57b74c6d"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_13",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "44015607"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_14",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "d545c900"
+        },
+        {
+          "set_file": "bhasa_kalidasa_bhavabhuti_set_15",
+          "title": "ভাস, কালিদাস ও ভবভূতি – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "ba84108d"
+        }
+      ]
+    },
+    {
+      "topic_id": "topic_aryabhata_brahmagupta",
+      "name": "সংস্কৃত সাহিত্যের ইতিহাস : প্রাচীন ভারতীয় বিজ্ঞানচর্চা (আর্যভট্ট ও ব্রহ্মগুপ্ত)",
+      "order": 10,
+      "sets": [
+        {
+          "set_file": "aryabhata_brahmagupta_set_1",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 1",
+          "set_number": 1,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "467a571a"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_2",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 2",
+          "set_number": 2,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "138caac0"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_3",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 3",
+          "set_number": 3,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "081a6d2b"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_4",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 4",
+          "set_number": 4,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "276d3111"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_5",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 5",
+          "set_number": 5,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "7c9c6299"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_6",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 6",
+          "set_number": 6,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "e421aedb"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_7",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 7",
+          "set_number": 7,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "bccd5c4c"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_8",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 8",
+          "set_number": 8,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "3a6d249d"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_9",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 9",
+          "set_number": 9,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "56a30de9"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_10",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 10",
+          "set_number": 10,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "95b383ea"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_11",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 11",
+          "set_number": 11,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "46ef3fd8"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_12",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 12",
+          "set_number": 12,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "a68685ee"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_13",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 13",
+          "set_number": 13,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "40d8bc99"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_14",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 14",
+          "set_number": 14,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "9021e558"
+        },
+        {
+          "set_file": "aryabhata_brahmagupta_set_15",
+          "title": "আর্যভট্ট ও ব্রহ্মগুপ্ত – মক টেস্ট 15",
+          "set_number": 15,
+          "question_count": 10,
+          "total_marks": 10,
+          "is_premium": false,
+          "has_timer": false,
+          "duration_minutes": 0,
+          "version": "fc14086e"
+        }
+      ]
+    }
+  ]
+}
