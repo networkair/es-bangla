@@ -696,10 +696,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-
-                  // Right: Black circular arrow button
-                  const SizedBox(width: 10),
-                  _buildRightArrowButton(isDark),
                 ],
               ),
             ),
@@ -787,46 +783,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-
-                // Right: Black circular arrow button
-                const SizedBox(width: 10),
-                _buildRightArrowButton(isDark),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  /// Compact, premium circular arrow button for wide action cards
-  Widget _buildRightArrowButton(bool isDark) {
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.black,
-        border: isDark
-            ? Border.all(color: Colors.white.withOpacity(0.12), width: 1.0)
-            : null,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.35 : 0.08),
-            blurRadius: 5,
-            offset: const Offset(0, 1.5),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Image.asset(
-          'assets/icons/ic_arrow_btn.png',
-          width: 36,
-          height: 36,
-          fit: BoxFit.contain,
-          cacheWidth: 108,
-          cacheHeight: 108,
-          filterQuality: FilterQuality.medium,
         ),
       ),
     );
