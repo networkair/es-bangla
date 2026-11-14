@@ -207,7 +207,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 13),
 
-                  // 4. Previous Year Questions (PYQ) Horizontal Card
+                  // 4. Es Store Horizontal Card
+                  RepaintBoundary(
+                    child: _buildActionTile(
+                      title: 'Es Store',
+                      iconAsset: 'assets/icons/ic_store.png',
+                      accentLineColor: const Color(0xFFF59E0B),
+                      buttonBgColor: const Color(0xFFFFEDD5),
+                      buttonIconColor: const Color(0xFFD97706),
+                      isTwoLineTitle: false,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const BookNotesScreen()),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 13),
+
+                  // 5. Previous Year Questions (PYQ) Horizontal Card
                   RepaintBoundary(
                     child: _buildActionTile(
                       title: 'PREVIOUS YEARS\nQUESTIONS',
@@ -220,25 +239,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => const PyqScreen()),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 13),
-
-                  // 5. Premium Store Horizontal Card
-                  RepaintBoundary(
-                    child: _buildActionTile(
-                      title: 'সাজেশন Store',
-                      iconAsset: 'assets/icons/ic_store.png',
-                      accentLineColor: const Color(0xFFF59E0B),
-                      buttonBgColor: const Color(0xFFFFEDD5),
-                      buttonIconColor: const Color(0xFFD97706),
-                      isTwoLineTitle: false,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const BookNotesScreen()),
                         );
                       },
                     ),
@@ -431,10 +431,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(width: 12),
 
-        // Right: Set Study Reminder Card
+        // Right: Study Reminder Card
         Expanded(
           child: _buildQuickActionCard(
-            titleLine1: 'SET STUDY',
+            titleLine1: 'STUDY',
             titleLine2: 'REMINDER',
             iconAsset: 'assets/icons/ic_reminder_goal.png',
             iconBgColor: isDark ? const Color(0xFF334155) : Colors.white,
@@ -955,7 +955,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Join for latest notes & updates',
+                        'Suggestions, Notes & Study Updates',
                         style: TextStyle(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w600,
@@ -971,7 +971,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 // Highlighted Action Button (Green Pill)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7.5),
                   decoration: BoxDecoration(
                     color: const Color(0xFF16A34A),
                     borderRadius: BorderRadius.circular(18),
@@ -987,11 +987,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: const [
                       Text(
-                        'Join Channel',
+                        'Join',
                         style: TextStyle(
-                          fontSize: 11.5,
+                          fontSize: 12.0,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
+                          letterSpacing: 0.3,
                         ),
                       ),
                       SizedBox(width: 4),
