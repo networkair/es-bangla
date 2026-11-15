@@ -29,4 +29,9 @@ class ApiConstants {
   static const String facebookPageUrl = 'https://facebook.com/EsBangla';
   static const String instagramUrl = 'https://instagram.com/EsBangla';
   static const String telegramChannelUrl = 'https://t.me/EsBanglaofficial';
+
+  // App Update & Releases
+  static const String githubLatestReleaseUrl = 'https://github.com/networkair/es-bangla/releases/latest';
+  static const String githubLatestApiEndpoint = 'https://api.github.com/repos/networkair/es-bangla/releases/latest';
+  static const String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.rkson.esbangla';
 }

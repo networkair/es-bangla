@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import '../../../core/services/entitlement_service.dart';
+import '../../../core/services/app_update_service.dart';
 import 'mock_analytics_screen.dart';
 import 'activity_streak_screen.dart';
 import 'saved_questions_screen.dart';
@@ -856,7 +857,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  // App Name & Version (replacing 'উচ্চমাধ্যমিক সেমিস্টার সহায়িকা')
+                  // App Name & Version
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -879,7 +880,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       Text(
-                        'Version 1.3.29',
+                        'Version ${AppUpdateService.currentVersion}',
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
@@ -887,6 +888,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Check for Updates Button
+                  InkWell(
+                    onTap: () {
+                      AppUpdateService.checkForUpdate(
+                        context,
+                        showToastIfLatest: true,
+                        forcePrompt: true,
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0070F3).withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: const Color(0xFF0070F3).withOpacity(0.25),
+                          width: 1,
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.system_update_rounded, size: 13, color: Color(0xFF0070F3)),
+                          SizedBox(width: 6),
+                          Text(
+                            'Check for Updates',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF0070F3),
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/storage/local_storage_service.dart';
 import '../../../core/services/entitlement_service.dart';
+import '../../../core/services/app_update_service.dart';
 import '../../../core/widgets/academic_selection_modal.dart';
 import 'home_screen.dart';
 import '../../video_library/presentation/library_main_screen.dart';
@@ -41,6 +42,7 @@ class MainShellScreenState extends State<MainShellScreen> with WidgetsBindingObs
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAcademicOnboarding();
+      _checkForAppUpdate();
     });
   }
 
@@ -55,6 +57,14 @@ class MainShellScreenState extends State<MainShellScreen> with WidgetsBindingObs
         },
       );
     }
+  }
+
+  void _checkForAppUpdate() {
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        AppUpdateService.checkForUpdate(context);
+      }
+    });
   }
 
   @override
