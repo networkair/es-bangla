@@ -26,8 +26,8 @@ class AppUpdateInfo {
 }
 
 class AppUpdateService {
-  static const String currentVersion = '1.3.62';
-  static const int currentBuildNumber = 93;
+  static const String currentVersion = '1.3.63';
+  static const int currentBuildNumber = 94;
 
   static const String _prefDismissedVersionKey = 'last_dismissed_update_version';
   static bool _hasPromptedThisSession = false;
@@ -79,10 +79,8 @@ class AppUpdateService {
           return AppUpdateInfo(
             latestVersion: remoteVer.isNotEmpty ? remoteVer : 'v$remoteBuild',
             latestBuildNumber: remoteBuild,
-            title: title.isNotEmpty ? title : 'A Brand New Update is Ready! 🎁',
-            message: message.isNotEmpty
-                ? message
-                : 'A new update with exciting performance and study content is waiting for you.',
+            title: title.isNotEmpty ? title : 'Exciting Update\nReady For You 🚀 !',
+            message: message,
             updateUrl: updateUrl.isNotEmpty ? updateUrl : ApiConstants.githubLatestReleaseUrl,
             isForce: isForce,
             enabled: enabled,
@@ -103,14 +101,13 @@ class AppUpdateService {
       if (response.statusCode == 200 && response.data is Map) {
         final data = response.data as Map;
         final tagName = (data['tag_name'] ?? '').toString().trim();
-        final releaseName = (data['name'] ?? '').toString().trim();
         final htmlUrl = (data['html_url'] ?? ApiConstants.githubLatestReleaseUrl).toString().trim();
 
         if (isVersionNewer(tagName, currentVersion)) {
           return AppUpdateInfo(
             latestVersion: tagName.isNotEmpty ? tagName : 'Latest',
-            title: releaseName.isNotEmpty ? releaseName : 'A Brand New Update is Ready! 🎁',
-            message: 'A fresh new version of Es Bangla has been released. Update now for the best experience!',
+            title: 'Exciting Update\nReady For You 🚀 !',
+            message: '',
             updateUrl: htmlUrl.isNotEmpty ? htmlUrl : ApiConstants.githubLatestReleaseUrl,
             isForce: false,
             enabled: true,
