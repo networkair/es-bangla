@@ -231,7 +231,7 @@ class AppUpdateDialog extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             shadowColor: Colors.transparent,
-                            shape: RoundedCornerShape(
+                            shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),

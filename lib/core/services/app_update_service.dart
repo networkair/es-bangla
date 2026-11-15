@@ -178,7 +178,7 @@ class AppUpdateService {
           ),
           backgroundColor: const Color(0xFF10B981),
           behavior: SnackBarBehavior.floating,
-          shape: RoundedCornerShape(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           duration: const Duration(seconds: 3),
         ),
       );
